@@ -70,19 +70,24 @@ const FAQSection = () => {
             Our travel experts are available 24/7 to help you plan the perfect safe journey
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="https://wanderon.in/contact"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => {
+                // Copy to clipboard
+                navigator.clipboard.writeText('+919090403075');
+                // Open phone dialer
+                window.location.href = 'tel:+919090403075';
+              }}
               className="bg-[#FEE60B] hover:bg-[#e5d00a] text-[#015F74] px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
             >
-              Contact Travel Expert
-            </a>
+              Speak to Our Experts: +91-9090403075
+            </button>
             <a
-              href="tel:+919090403075"
+              href="https://api.whatsapp.com/send?phone=919090403075&text=Hi%20WanderOn%2C%20I%20have%20a%20query!"
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white border-2 border-white/50 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300"
             >
-              Call: +91-9090403075
+              Chat on WhatsApp
             </a>
           </div>
         </div>
