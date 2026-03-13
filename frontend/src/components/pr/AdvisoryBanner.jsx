@@ -70,12 +70,10 @@ const AdvisoryBanner = () => {
                   View Safe Alternatives
                 </button>
                 <a 
-                  href="https://wanderon.in/contact" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
+                  href="tel:+919090403075" 
                   className="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white border-2 border-white/50 px-8 py-3 rounded-full font-bold transition-all duration-300"
                 >
-                  Talk to Expert
+                  Call: +91-9090403075
                 </a>
               </div>
             </div>

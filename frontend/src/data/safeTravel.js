@@ -246,10 +246,6 @@ export const faqs = [
   {
     question: "Can I customize my itinerary?",
     answer: "Absolutely! We offer both fixed group departures and customized private tours. Contact our travel experts to create a personalized itinerary based on your preferences and budget."
-  },
-  {
-    question: "What is the cancellation policy?",
-    answer: "Cancellation policies vary by package. Generally, cancellations 30+ days before departure receive 80-90% refund, 15-30 days receive 50-60%, and less than 15 days are non-refundable. Travel insurance is highly recommended."
   }
 ];
 
