@@ -138,7 +138,7 @@ const PRFooter = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Company Info */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-light mb-4 tracking-wide">WANDERON EXPERIENCES PVT LTD</h2>
+          <h2 className="text-3xl font-bold mb-4 tracking-wide">WANDERON EXPERIENCES PVT LTD</h2>
           <p className="text-white/70 text-sm mb-4">CIN-U63040HR2019PTC118957</p>
           <p className="text-white/80 text-base">
             3rd Floor, Building No-436, Phase IV, Udyog Vihar, Sector-18, Gurugram, Haryana-122015
