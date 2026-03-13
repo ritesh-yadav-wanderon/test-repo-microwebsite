@@ -5,9 +5,9 @@ const TripCard = ({ trip }) => {
   const tripUrl = `https://wanderon.in/trip/${trip.slug}`;
 
   return (
-    <div className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 cursor-pointer transform hover:-translate-y-2">
+    <div className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 cursor-pointer transform hover:-translate-y-2 flex flex-col h-full">
       {/* Image */}
-      <div className="relative h-56 overflow-hidden">
+      <div className="relative h-56 overflow-hidden flex-shrink-0">
         <img
           src={trip.image}
           alt={trip.title}
@@ -37,19 +37,20 @@ const TripCard = ({ trip }) => {
       </div>
 
       {/* Content */}
-      <div className="p-6">
-        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-[#01AFD1] transition-colors duration-300">
+      <div className="p-6 flex flex-col flex-grow">
+        {/* Title - Fixed height */}
+        <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#01AFD1] transition-colors duration-300 h-14 line-clamp-2 overflow-hidden">
           {trip.title}
         </h3>
 
         {/* Duration */}
         <div className="flex items-center text-gray-600 mb-4">
-          <Clock size={18} className="mr-2 text-[#01AFD1]" />
+          <Clock size={18} className="mr-2 text-[#01AFD1] flex-shrink-0" />
           <span className="font-medium">{trip.duration}</span>
         </div>
 
-        {/* Highlights */}
-        <div className="mb-4">
+        {/* Highlights - Fixed height */}
+        <div className="mb-4 flex-grow">
           <div className="flex flex-wrap gap-2">
             {trip.highlights.slice(0, 3).map((highlight, index) => (
               <span
@@ -67,8 +68,8 @@ const TripCard = ({ trip }) => {
           </div>
         </div>
 
-        {/* Price and CTA */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+        {/* Price and CTA - Fixed at bottom */}
+        <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
           <div>
             <span className="text-gray-500 text-sm">Starting from</span>
             <div className="text-2xl font-bold text-[#01AFD1]">{trip.price}</div>
