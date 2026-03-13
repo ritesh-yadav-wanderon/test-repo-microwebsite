@@ -24,8 +24,8 @@ const PRHero = () => {
         </div>
 
         {/* Main Heading */}
-        <h1 className="text-5xl md:text-7xl font-black text-white leading-tight mb-6">
-          This Summer, Choose
+        <h1 className="font-black !text-4xl mb-6 text-white">
+          Your Europe plans changed. Your summer doesn't have to.
           <br />
           <span className="text-[#FEE60B]">Safety Over Uncertainty</span>
         </h1>
@@ -65,16 +65,16 @@ const PRHero = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button 
+          <Button
             onClick={scrollToDestinations}
-            className="bg-[#FEE60B] hover:bg-[#e5d00a] text-[#015F74] px-10 py-7 rounded-full font-bold text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
-          >
+            className="bg-[#FEE60B] hover:bg-[#e5d00a] text-[#015F74] px-10 py-7 rounded-full font-bold text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105">
+
             Explore Safe Destinations
           </Button>
-          <Button 
+          <Button
             onClick={() => document.getElementById('advisory')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white border-2 border-white/30 px-10 py-7 rounded-full font-bold text-lg shadow-lg transition-all duration-300"
-          >
+            className="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white border-2 border-white/30 px-10 py-7 rounded-full font-bold text-lg shadow-lg transition-all duration-300">
+
             Read Full Advisory
           </Button>
         </div>
@@ -91,8 +91,8 @@ const PRHero = () => {
           <div className="w-1 h-3 bg-white/70 rounded-full"></div>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 };
 
 export default PRHero;
