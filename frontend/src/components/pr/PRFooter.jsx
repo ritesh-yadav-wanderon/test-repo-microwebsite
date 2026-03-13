@@ -1,179 +1,208 @@
 import React from 'react';
-import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Youtube } from 'lucide-react';
 
 const PRFooter = () => {
   const currentYear = new Date().getFullYear();
 
+  const internationalTrips = [
+    { name: 'Europe', url: 'https://wanderon.in/international-trips/europe-tour-packages' },
+    { name: 'Bali', url: 'https://wanderon.in/international-trips/bali-tour-packages' },
+    { name: 'Vietnam', url: 'https://wanderon.in/international-trips/vietnam-tour-packages' },
+    { name: 'Thailand', url: 'https://wanderon.in/international-trips/thailand-tour-packages' },
+    { name: 'Kazakhstan', url: 'https://wanderon.in/international-trips/kazakhstan-tour-packages' },
+    { name: 'Singapore', url: 'https://wanderon.in/international-trips/singapore-tour-packages' },
+    { name: 'Bhutan', url: 'https://wanderon.in/international-trips/bhutan-tour-packages' },
+    { name: 'Maldives', url: 'https://wanderon.in/international-trips/maldives-tour-packages' },
+    { name: 'Dubai', url: 'https://wanderon.in/international-trips/dubai-tour-packages' },
+    { name: 'Malaysia', url: 'https://wanderon.in/international-trips/malaysia-tour-packages' }
+  ];
+
+  const indiaTrips = [
+    { name: 'Ladakh', url: 'https://wanderon.in/india-trips/leh-ladakh-tour-packages' },
+    { name: 'Spiti Valley', url: 'https://wanderon.in/india-trips/spiti-valley-tour-packages' },
+    { name: 'Meghalaya', url: 'https://wanderon.in/india-trips/meghalaya-tour-packages' },
+    { name: 'Kashmir', url: 'https://wanderon.in/india-trips/kashmir-tour-packages' },
+    { name: 'Himachal Pradesh', url: 'https://wanderon.in/india-trips/himachal-pradesh-tour-packages' },
+    { name: 'Andaman', url: 'https://wanderon.in/india-trips/andaman-tour-packages' },
+    { name: 'Kerala', url: 'https://wanderon.in/india-trips/kerala-tour-packages' },
+    { name: 'Rajasthan', url: 'https://wanderon.in/india-trips/rajasthan-tour-packages' },
+    { name: 'Nagaland', url: 'https://wanderon.in/india-trips/nagaland-tour-packages' }
+  ];
+
+  const wanderonSpecial = [
+    { name: 'Community Trips', url: 'https://wanderon.in/upcoming-community-trips' },
+    { name: 'Honeymoon Trips', url: 'https://wanderon.in/honeymoon-packages' },
+    { name: 'Corporate Trips', url: 'https://wanderon.in/corporate-tours' },
+    { name: 'Weekend Getaways', url: 'https://wanderon.in/weekend-getaways' }
+  ];
+
+  const quickLinks = [
+    { name: 'About Us', url: 'https://wanderon.in/about-us' },
+    { name: 'Privacy Policy', url: 'https://wanderon.in/privacy-policy' },
+    { name: 'Terms & Conditions', url: 'https://wanderon.in/terms-condition' },
+    { name: 'Customer Success & Support', url: 'https://wanderon.in/customer-success-&-support' },
+    { name: 'Disclaimer', url: 'https://wanderon.in/disclaimer' },
+    { name: 'Careers', url: 'https://wanderon.in/careers' },
+    { name: 'Blogs', url: 'https://wanderon.in/blogs' },
+    { name: 'Payments', url: 'https://wanderon.in/payment' },
+    { name: 'Investor Relations', url: 'https://wanderon.in/investor-relations' }
+  ];
+
   return (
-    <footer className="bg-gradient-to-br from-[#015F74] to-[#003d4d] text-white">
+    <footer className="bg-[#1a2e35] text-white">
       {/* Main Footer */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Company Info */}
+          {/* International Trips */}
           <div>
-            <img 
-              src="https://wanderon.in/_next/image?url=%2Fassets%2Fimages%2Fwanderon-logo-white.webp&w=256&q=75" 
-              alt="WanderOn" 
-              className="h-10 mb-6"
-            />
-            <p className="text-white/80 leading-relaxed mb-6">
-              Your trusted partner for safe and unforgettable travel experiences. Explore the world with confidence.
-            </p>
-            {/* Social Links */}
-            <div className="flex items-center space-x-4">
-              <a
-                href="https://facebook.com/wanderon"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white/10 hover:bg-[#01AFD1] p-2 rounded-lg transition-colors duration-300"
-              >
-                <Facebook size={20} />
-              </a>
-              <a
-                href="https://twitter.com/wanderon"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white/10 hover:bg-[#01AFD1] p-2 rounded-lg transition-colors duration-300"
-              >
-                <Twitter size={20} />
-              </a>
-              <a
-                href="https://instagram.com/wanderon"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white/10 hover:bg-[#01AFD1] p-2 rounded-lg transition-colors duration-300"
-              >
-                <Instagram size={20} />
-              </a>
-              <a
-                href="https://youtube.com/wanderon"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white/10 hover:bg-[#01AFD1] p-2 rounded-lg transition-colors duration-300"
-              >
-                <Youtube size={20} />
-              </a>
-            </div>
+            <h3 className="text-xl font-light mb-6 text-white">International Trips</h3>
+            <ul className="space-y-3">
+              {internationalTrips.map((trip) => (
+                <li key={trip.name}>
+                  <a
+                    href={trip.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/80 hover:text-white transition-colors duration-300 font-light text-base"
+                  >
+                    {trip.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* India Trips */}
+          <div>
+            <h3 className="text-xl font-light mb-6 text-white">India Trips</h3>
+            <ul className="space-y-3">
+              {indiaTrips.map((trip) => (
+                <li key={trip.name}>
+                  <a
+                    href={trip.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/80 hover:text-white transition-colors duration-300 font-light text-base"
+                  >
+                    {trip.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* WanderOn Special */}
+          <div>
+            <h3 className="text-xl font-light mb-6 text-white">WanderOn Special</h3>
+            <ul className="space-y-3">
+              {wanderonSpecial.map((item) => (
+                <li key={item.name}>
+                  <a
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/80 hover:text-white transition-colors duration-300 font-light text-base"
+                  >
+                    {item.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold mb-6 text-[#FEE60B]">Quick Links</h3>
+            <h3 className="text-xl font-light mb-6 text-white">Quick Links</h3>
             <ul className="space-y-3">
-              <li>
-                <a href="https://wanderon.in/about" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-[#FEE60B] transition-colors duration-300">
-                  About Us
-                </a>
-              </li>
-              <li>
-                <a href="https://wanderon.in/trips" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-[#FEE60B] transition-colors duration-300">
-                  All Trips
-                </a>
-              </li>
-              <li>
-                <a href="https://wanderon.in/blog" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-[#FEE60B] transition-colors duration-300">
-                  Travel Blog
-                </a>
-              </li>
-              <li>
-                <a href="https://wanderon.in/contact" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-[#FEE60B] transition-colors duration-300">
-                  Contact Us
-                </a>
-              </li>
-              <li>
-                <a href="https://wanderon.in/careers" target="_blank" rel="noopener noreferrer" className="text-white/80 hover:text-[#FEE60B] transition-colors duration-300">
-                  Careers
-                </a>
-              </li>
+              {quickLinks.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white/80 hover:text-white transition-colors duration-300 font-light text-base"
+                  >
+                    {link.name}
+                  </a>
+                </li>
+              ))}
             </ul>
-          </div>
-
-          {/* Popular Destinations */}
-          <div>
-            <h3 className="text-lg font-bold mb-6 text-[#FEE60B]">Popular Destinations</h3>
-            <ul className="space-y-3">
-              <li>
-                <a href="#bali" className="text-white/80 hover:text-[#FEE60B] transition-colors duration-300">
-                  Bali Packages
-                </a>
-              </li>
-              <li>
-                <a href="#thailand" className="text-white/80 hover:text-[#FEE60B] transition-colors duration-300">
-                  Thailand Tours
-                </a>
-              </li>
-              <li>
-                <a href="#vietnam" className="text-white/80 hover:text-[#FEE60B] transition-colors duration-300">
-                  Vietnam Trips
-                </a>
-              </li>
-              <li>
-                <a href="#singapore" className="text-white/80 hover:text-[#FEE60B] transition-colors duration-300">
-                  Singapore & Malaysia
-                </a>
-              </li>
-              <li>
-                <a href="#maldives" className="text-white/80 hover:text-[#FEE60B] transition-colors duration-300">
-                  Maldives Holidays
-                </a>
-              </li>
-              <li>
-                <a href="#turkey" className="text-white/80 hover:text-[#FEE60B] transition-colors duration-300">
-                  Turkey Adventures
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h3 className="text-lg font-bold mb-6 text-[#FEE60B]">Contact Us</h3>
-            <div className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <Phone className="text-[#01AFD1] mt-1 flex-shrink-0" size={20} />
-                <div>
-                  <div className="text-white/90">+91 98765 43210</div>
-                  <div className="text-white/70 text-sm">24/7 Support</div>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <Mail className="text-[#01AFD1] mt-1 flex-shrink-0" size={20} />
-                <div>
-                  <div className="text-white/90">support@wanderon.in</div>
-                  <div className="text-white/70 text-sm">info@wanderon.in</div>
-                </div>
-              </div>
-              <div className="flex items-start space-x-3">
-                <MapPin className="text-[#01AFD1] mt-1 flex-shrink-0" size={20} />
-                <div className="text-white/90">
-                  WanderOn Travels Pvt Ltd<br />
-                  New Delhi, India
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-white/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
-            <div className="text-white/70 text-sm">
-              © {currentYear} WanderOn Travels Pvt Ltd. All rights reserved.
-            </div>
-            <div className="flex items-center space-x-6 text-sm">
-              <a href="https://wanderon.in/privacy" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-[#FEE60B] transition-colors duration-300">
-                Privacy Policy
-              </a>
-              <a href="https://wanderon.in/terms" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-[#FEE60B] transition-colors duration-300">
-                Terms & Conditions
-              </a>
-              <a href="https://wanderon.in/cancellation" target="_blank" rel="noopener noreferrer" className="text-white/70 hover:text-[#FEE60B] transition-colors duration-300">
-                Cancellation Policy
-              </a>
-            </div>
-          </div>
+      {/* Divider */}
+      <div className="border-t border-white/10"></div>
+
+      {/* Bottom Section */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Company Info */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-light mb-4 tracking-wide">WANDERON EXPERIENCES PVT LTD</h2>
+          <p className="text-white/70 text-sm mb-4">CIN-U63040HR2019PTC118957</p>
+          <p className="text-white/80 text-base">
+            3rd Floor, Building No-436, Phase IV, Udyog Vihar, Sector-18, Gurugram, Haryana-122015
+          </p>
+        </div>
+
+        {/* Contact Info */}
+        <div className="flex flex-wrap items-center justify-center gap-6 md:gap-12 mb-8 text-white/80">
+          <a
+            href="mailto:hello@wanderon.in"
+            className="hover:text-white transition-colors duration-300"
+          >
+            hello@wanderon.in
+          </a>
+          <a
+            href="tel:+919090403075"
+            className="hover:text-white transition-colors duration-300"
+          >
+            +91-9090403075
+          </a>
+          <a
+            href="https://wanderon.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white transition-colors duration-300"
+          >
+            www.wanderon.in
+          </a>
+        </div>
+
+        {/* Social Media Icons */}
+        <div className="flex items-center justify-center space-x-6">
+          <a
+            href="https://m.facebook.com/wander.on"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors duration-300"
+          >
+            <Facebook size={24} className="text-white" />
+          </a>
+          <a
+            href="https://www.instagram.com/wander.on/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors duration-300"
+          >
+            <Instagram size={24} className="text-white" />
+          </a>
+          <a
+            href="https://www.linkedin.com/company/wanderontravelcommunity"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors duration-300"
+          >
+            <Linkedin size={24} className="text-white" />
+          </a>
+          <a
+            href="https://m.youtube.com/c/WanderOn"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-colors duration-300"
+          >
+            <Youtube size={24} className="text-white" />
+          </a>
         </div>
       </div>
     </footer>
