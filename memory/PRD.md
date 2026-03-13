@@ -61,7 +61,8 @@ Build a landing page similar to wanderon.in that emphasizes safe travel with Wan
 3. **Hero Section** (`/app/frontend/src/components/Hero.jsx`)
    - Updated badge: "Real-Time Global Safety Monitoring"
    - Updated subheading emphasizing "uncertain times"
-   - Search form (destination, date, travelers)
+   - **REMOVED**: Search form (destination, date, travelers selector)
+   - **ADDED**: Two CTA buttons - "Explore Destinations" and "Learn About Safety"
    - Trust indicators (50K+ travelers, 4.8 rating, 100% safety)
    - Scroll indicator animation
 
