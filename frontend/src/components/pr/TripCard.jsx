@@ -5,7 +5,7 @@ const TripCard = ({ trip }) => {
   const tripUrl = `https://wanderon.in/trip/${trip.slug}`;
 
   return (
-    <div className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 cursor-pointer transform hover:-translate-y-2 flex flex-col h-full">
+    <div className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 cursor-pointer transform hover:-translate-y-2 flex flex-col h-full w-full max-w-[350px] mx-auto">
       {/* Image */}
       <div className="relative h-56 overflow-hidden flex-shrink-0">
         <img
