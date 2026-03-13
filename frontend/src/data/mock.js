@@ -90,8 +90,8 @@ export const safetyFeatures = [
   },
   {
     id: 4,
-    title: "COVID-Safe Protocols",
-    description: "Sanitized vehicles, masks, regular health checks, and social distancing measures",
+    title: "Real-Time Safety Monitoring",
+    description: "Live tracking of global events and instant travel advisories for conflict zones and geopolitical situations",
     icon: "Activity"
   },
   {
@@ -102,9 +102,9 @@ export const safetyFeatures = [
   },
   {
     id: 6,
-    title: "Small Group Sizes",
-    description: "Limited group sizes for personalized attention and better safety management",
-    icon: "Users"
+    title: "Geopolitical Risk Assessment",
+    description: "Expert analysis of international situations ensuring safe routes away from conflict-affected regions",
+    icon: "AlertTriangle"
   }
 ];
 

@@ -42,7 +42,7 @@ const Hero = () => {
           <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full px-6 py-2">
             <span className="text-emerald-400 font-semibold">100% Safe Travel</span>
             <span className="text-white/60">|</span>
-            <span className="text-white/90">Trusted by 50,000+ Travelers</span>
+            <span className="text-white/90">Real-Time Global Safety Monitoring</span>
           </div>
 
           {/* Main Heading */}
@@ -54,7 +54,7 @@ const Hero = () => {
 
           {/* Subheading */}
           <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">
-            Experience unforgettable adventures with verified guides, 24/7 support, and comprehensive safety measures
+            Experience unforgettable adventures with verified guides, 24/7 support, and comprehensive safety monitoring in uncertain times
           </p>
 
           {/* Search Box */}

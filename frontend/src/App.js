@@ -2,6 +2,7 @@ import React from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "@/components/Navbar";
+import SafetyAlert from "@/components/SafetyAlert";
 import Hero from "@/components/Hero";
 import SafetyFeatures from "@/components/SafetyFeatures";
 import Destinations from "@/components/Destinations";
@@ -15,6 +16,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
+      <SafetyAlert />
       <Hero />
       <SafetyFeatures />
       <Destinations />

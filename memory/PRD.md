@@ -39,21 +39,42 @@ Build a landing page similar to wanderon.in that emphasizes safe travel with Wan
 ## What's Been Implemented (December 11, 2024)
 
 ### ✅ Frontend Components (Mock Data)
-1. **Navbar** (`/app/frontend/src/components/Navbar.jsx`)
+
+**Latest Update: Geopolitical Safety Features**
+- Removed COVID-19 protocols (outdated)
+- Added Real-Time Safety Monitoring feature
+- Added Geopolitical Risk Assessment feature
+- Created Safety Alert banner addressing Middle East tensions
+- Updated messaging to emphasize global conflict monitoring
+
+1. **Safety Alert Banner** (`/app/frontend/src/components/SafetyAlert.jsx`)
+   - Dismissible alert about global travel safety
+   - Mentions Middle East tensions monitoring
+   - Reassures domestic India tours are unaffected
+   - Real-time advisory information
+
+2. **Navbar** (`/app/frontend/src/components/Navbar.jsx`)
    - Fixed navigation with scroll effects
    - Mobile responsive menu
    - Smooth scroll to sections
 
-2. **Hero Section** (`/app/frontend/src/components/Hero.jsx`)
-   - Stunning background with mountain adventure imagery
+3. **Hero Section** (`/app/frontend/src/components/Hero.jsx`)
+   - Updated badge: "Real-Time Global Safety Monitoring"
+   - Updated subheading emphasizing "uncertain times"
    - Search form (destination, date, travelers)
    - Trust indicators (50K+ travelers, 4.8 rating, 100% safety)
    - Scroll indicator animation
 
-3. **Safety Features** (`/app/frontend/src/components/SafetyFeatures.jsx`)
-   - 6 safety features grid with icons
-   - Hover animations and transitions
-   - CTA section for safety inquiries
+4. **Safety Features** (`/app/frontend/src/components/SafetyFeatures.jsx`)
+   - **NEW**: Real-Time Safety Monitoring - Live tracking of global events and conflict zones
+   - **NEW**: Geopolitical Risk Assessment - Expert analysis ensuring safe routes
+   - **REMOVED**: COVID-Safe Protocols (outdated)
+   - **REMOVED**: Small Group Sizes (replaced)
+   - Verified Travel Guides
+   - 24/7 Emergency Support
+   - Complete Travel Insurance
+   - Quality Accommodations
+   - Updated CTA about geopolitical tensions
 
 4. **Destinations** (`/app/frontend/src/components/Destinations.jsx`)
    - 6 destination cards (Manali, Ladakh, Goa, Kashmir, Andaman, Meghalaya)
