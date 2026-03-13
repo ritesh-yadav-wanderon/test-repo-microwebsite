@@ -21,7 +21,7 @@ const DestinationSection = ({ id, title, description, trips, gradient }) => {
         </div>
 
         {/* Trips Grid */}
-        <div className={`grid grid-cols-1 ${trips.length === 1 ? 'md:grid-cols-1 max-w-2xl mx-auto' : trips.length === 2 ? 'md:grid-cols-2' : 'md:grid-cols-2 lg:grid-cols-3'} gap-6 justify-items-center`}>
+        <div className="flex flex-wrap justify-center gap-6">
           {trips.map((trip, index) => (
             <div
               key={trip.id}
