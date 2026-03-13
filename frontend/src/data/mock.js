@@ -10,7 +10,8 @@ export const destinations = [
     image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw0fHxsYW5kc2NhcGV8ZW58MHx8fHwxNzczNDA2NDY5fDA&ixlib=rb-4.1.0&q=85",
     rating: 4.8,
     reviews: 328,
-    badge: "Bestseller"
+    badge: "Bestseller",
+    region: "India"
   },
   {
     id: 2,
@@ -21,10 +22,35 @@ export const destinations = [
     image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwyfHxsYW5kc2NhcGV8ZW58MHx8fHwxNzczNDA2NDY5fDA&ixlib=rb-4.1.0&q=85",
     rating: 4.9,
     reviews: 445,
-    badge: "Adventure"
+    badge: "Adventure",
+    region: "India"
   },
   {
     id: 3,
+    name: "Bali Island Escape",
+    location: "Bali, Indonesia",
+    duration: "7 Days / 6 Nights",
+    price: "₹35,999",
+    image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800",
+    rating: 4.9,
+    reviews: 892,
+    badge: "Southeast Asia",
+    region: "International"
+  },
+  {
+    id: 4,
+    name: "Phuket Beach Paradise",
+    location: "Phuket, Thailand",
+    duration: "6 Days / 5 Nights",
+    price: "₹32,999",
+    image: "https://images.unsplash.com/photo-1589394815804-964ed0be2eb5?w=800",
+    rating: 4.8,
+    reviews: 756,
+    badge: "Beach",
+    region: "International"
+  },
+  {
+    id: 5,
     name: "Goa Beach Retreat",
     location: "North Goa",
     duration: "4 Days / 3 Nights",
@@ -32,40 +58,20 @@ export const destinations = [
     image: "https://images.unsplash.com/photo-1509233725247-49e657c54213?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHwzfHxiZWFjaHxlbnwwfHx8fDE3NzM0MDY0NzN8MA&ixlib=rb-4.1.0&q=85",
     rating: 4.7,
     reviews: 562,
-    badge: "Beach"
-  },
-  {
-    id: 4,
-    name: "Kashmir Valley",
-    location: "Srinagar, Kashmir",
-    duration: "5 Days / 4 Nights",
-    price: "₹15,999",
-    image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxsYW5kc2NhcGV8ZW58MHx8fHwxNzczNDA2NDY5fDA&ixlib=rb-4.1.0&q=85",
-    rating: 4.8,
-    reviews: 289,
-    badge: "Scenic"
-  },
-  {
-    id: 5,
-    name: "Andaman Islands",
-    location: "Port Blair, Andaman",
-    duration: "7 Days / 6 Nights",
-    price: "₹22,999",
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NjZ8MHwxfHNlYXJjaHwxfHxiZWFjaHxlbnwwfHx8fDE3NzM0MDY0NzN8MA&ixlib=rb-4.1.0&q=85",
-    rating: 4.9,
-    reviews: 412,
-    badge: "Island"
+    badge: "Beach",
+    region: "India"
   },
   {
     id: 6,
-    name: "Meghalaya Explorer",
-    location: "Shillong, Meghalaya",
-    duration: "5 Days / 4 Nights",
-    price: "₹13,999",
-    image: "https://images.pexels.com/photos/30356959/pexels-photo-30356959.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-    rating: 4.7,
-    reviews: 198,
-    badge: "Nature"
+    name: "Vietnam Coastal Tour",
+    location: "Da Nang, Vietnam",
+    duration: "6 Days / 5 Nights",
+    price: "₹38,999",
+    image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800",
+    rating: 4.8,
+    reviews: 634,
+    badge: "Cultural",
+    region: "International"
   }
 ];
 

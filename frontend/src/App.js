@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import SafetyAlert from "@/components/SafetyAlert";
 import Hero from "@/components/Hero";
+import TravelAdvisory from "@/components/TravelAdvisory";
 import SafetyFeatures from "@/components/SafetyFeatures";
 import Destinations from "@/components/Destinations";
 import HowItWorks from "@/components/HowItWorks";
@@ -18,6 +19,7 @@ const Home = () => {
       <Navbar />
       <SafetyAlert />
       <Hero />
+      <TravelAdvisory />
       <SafetyFeatures />
       <Destinations />
       <HowItWorks />

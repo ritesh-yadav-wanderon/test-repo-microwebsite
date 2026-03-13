@@ -40,6 +40,13 @@ Build a landing page similar to wanderon.in that emphasizes safe travel with Wan
 
 ### ✅ Frontend Components (Mock Data)
 
+**Latest Update: Travel Advisory & Southeast Asia Destinations**
+- Added comprehensive Travel Advisory section for European summer travel
+- Highlighted concerns: Extreme heat waves (40°C+), peak season crowds, premium pricing
+- Created Southeast Asia alternative section with 4 destinations
+- Updated main destinations to include international options (Bali, Phuket, Vietnam)
+- Positioned WanderOn as smart travel advisor with data-driven alternatives
+
 **Latest Update: Geopolitical Safety Features**
 - Removed COVID-19 protocols (outdated)
 - Added Real-Time Safety Monitoring feature
@@ -66,7 +73,21 @@ Build a landing page similar to wanderon.in that emphasizes safe travel with Wan
    - Trust indicators (50K+ travelers, 4.8 rating, 100% safety)
    - Scroll indicator animation
 
-4. **Safety Features** (`/app/frontend/src/components/SafetyFeatures.jsx`)
+4. **Travel Advisory Section** (`/app/frontend/src/components/TravelAdvisory.jsx`) - NEW
+   - European Summer Travel Alert with 3 key concerns:
+     * Extreme Heat Waves (40°C+ temperatures)
+     * Peak Season Crowds (overcrowding, long waits)
+     * Premium Pricing (2-3x higher costs)
+   - Smart Alternative banner promoting Southeast Asia
+   - 4 Featured Southeast Asia destinations:
+     * Bali, Indonesia (₹35,999)
+     * Phuket, Thailand (₹32,999)
+     * Da Nang, Vietnam (₹38,999)
+     * Singapore (₹45,999)
+   - Cost savings highlight (40%) and ideal weather (28°C)
+   - Expert planning CTAs
+
+5. **Safety Features** (`/app/frontend/src/components/SafetyFeatures.jsx`)
    - **NEW**: Real-Time Safety Monitoring - Live tracking of global events and conflict zones
    - **NEW**: Geopolitical Risk Assessment - Expert analysis ensuring safe routes
    - **REMOVED**: COVID-Safe Protocols (outdated)
@@ -77,13 +98,14 @@ Build a landing page similar to wanderon.in that emphasizes safe travel with Wan
    - Quality Accommodations
    - Updated CTA about geopolitical tensions
 
-4. **Destinations** (`/app/frontend/src/components/Destinations.jsx`)
-   - 6 destination cards (Manali, Ladakh, Goa, Kashmir, Andaman, Meghalaya)
-   - Star ratings and review counts
-   - Pricing and booking CTAs
+6. **Destinations** (`/app/frontend/src/components/Destinations.jsx`)
+   - **UPDATED**: Now includes international destinations
+   - Mix of India (Manali, Ladakh, Goa) and International (Bali, Phuket, Vietnam)
+   - 6 destination cards with pricing, ratings, and booking CTAs
+   - Regional badges (India/International)
    - Image hover effects
 
-5. **How It Works** (`/app/frontend/src/components/HowItWorks.jsx`)
+7. **How It Works** (`/app/frontend/src/components/HowItWorks.jsx`)
    - 4-step timeline with visual connectors
    - Numbered steps with descriptions
    - Bottom CTA section
