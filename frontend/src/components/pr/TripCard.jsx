@@ -2,7 +2,7 @@ import React from 'react';
 import { ExternalLink, Star, Clock, TrendingUp } from 'lucide-react';
 
 const TripCard = ({ trip }) => {
-  const tripUrl = `https://wanderon.in/trips/${trip.slug}`;
+  const tripUrl = `https://wanderon.in/trip/${trip.slug}`;
 
   return (
     <div className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 cursor-pointer transform hover:-translate-y-2">

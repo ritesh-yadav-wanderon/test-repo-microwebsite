@@ -49,13 +49,9 @@ const StickyNav = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
             <img 
-              src="https://d2qa7yhd82vfb6.cloudfront.net/storage/v1/object/public/assets/wanderon-logo.png" 
+              src="https://wanderon.in/_next/image?url=%2Fassets%2Fimages%2Fwanderon-logo-blue.avif&w=256&q=75" 
               alt="WanderOn" 
               className="h-8"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = 'https://via.placeholder.com/150x40/01AFD1/FFFFFF?text=WanderOn';
-              }}
             />
             <span className="hidden md:block text-sm font-medium text-gray-600">
               Safe Destinations 2026

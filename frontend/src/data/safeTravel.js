@@ -55,7 +55,7 @@ export const vietnamTrips = [
   {
     id: "vietnam-ultimate",
     title: "The Ultimate 7-Day Vietnam Tour Package",
-    slug: "new-trip-slug-demo-rk",
+    slug: "vietnam-tour-package-with-flight-6n-7d",
     duration: "6N / 7D",
     price: "₹59,999",
     image: "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800",

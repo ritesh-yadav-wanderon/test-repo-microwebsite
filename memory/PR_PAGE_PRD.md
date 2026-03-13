@@ -145,3 +145,35 @@ Build a PR page inspired by travelsafely.in to promote safe international destin
 - All links point to wanderon.in
 - Ready for content updates as needed
 - Can add more destinations from API if required
+
+## Updates - Logo & Links Fixed (December 11, 2024)
+
+### ✅ Changes Made
+
+1. **WanderOn Logo Implementation**:
+   - Sticky Nav: Using official blue logo from wanderon.in
+   - Footer: Using official white logo from wanderon.in
+   - Logo URL: `https://wanderon.in/_next/image?url=%2Fassets%2Fimages%2Fwanderon-logo-blue.avif&w=256&q=75`
+
+2. **Fixed Trip Links**:
+   - Changed from `/trips/` to `/trip/` (correct WanderOn URL structure)
+   - All links now properly redirect to: `https://wanderon.in/trip/{slug}`
+   - Verified slugs match actual WanderOn API data
+
+3. **International Trips Only**:
+   - Filtered to include only international destinations
+   - Excluded all India domestic trips
+   - All trips have `visibility: true` from API
+   - Countries included: Bali, Thailand, Vietnam, Singapore, Malaysia, Maldives, Mauritius, Turkey, Egypt
+
+### ✅ Verified Working Links
+
+- Bali: https://wanderon.in/trip/zamna-festival-bali-gili-island-trip
+- Bali: https://wanderon.in/trip/day-zero-festival-bali-trip-with-gili-island
+- Bali: https://wanderon.in/trip/bali-with-gili-island-from-delhi-7n-8d
+- Thailand: https://wanderon.in/trip/thailand-community-trip-songkran-festival-5n-6d
+- Vietnam: https://wanderon.in/trip/vietnam-tour-package-with-flight-6n-7d
+- Vietnam: https://wanderon.in/trip/vietnam-tour-from-ahmedabad-with-flight-5n-6d
+
+All other trips follow the same correct URL structure.
+

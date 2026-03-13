@@ -12,13 +12,9 @@ const PRFooter = () => {
           {/* Company Info */}
           <div>
             <img 
-              src="https://d2qa7yhd82vfb6.cloudfront.net/storage/v1/object/public/assets/wanderon-logo-white.png" 
+              src="https://wanderon.in/_next/image?url=%2Fassets%2Fimages%2Fwanderon-logo-white.webp&w=256&q=75" 
               alt="WanderOn" 
               className="h-10 mb-6"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = 'https://via.placeholder.com/150x40/015F74/FFFFFF?text=WanderOn';
-              }}
             />
             <p className="text-white/80 leading-relaxed mb-6">
               Your trusted partner for safe and unforgettable travel experiences. Explore the world with confidence.
