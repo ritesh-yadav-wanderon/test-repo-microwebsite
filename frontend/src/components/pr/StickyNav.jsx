@@ -48,11 +48,13 @@ const StickyNav = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
-            <img 
-              src="https://wanderon.in/_next/image?url=%2Fassets%2Fimages%2Fwanderon-logo-blue.avif&w=256&q=75" 
-              alt="WanderOn" 
-              className="h-8"
-            />
+            <a href="https://wanderon.in" target="_blank" rel="noopener noreferrer">
+              <img 
+                src="https://wanderon.in/_next/image?url=%2Fassets%2Fimages%2Fwanderon-logo-blue.avif&w=256&q=75" 
+                alt="WanderOn" 
+                className="h-12 cursor-pointer hover:opacity-80 transition-opacity duration-300"
+              />
+            </a>
             <span className="hidden md:block text-sm font-medium text-gray-600">
               Safe Destinations 2026
             </span>
