@@ -79,10 +79,10 @@ const FAQSection = () => {
               Contact Travel Expert
             </a>
             <a
-              href="tel:+919876543210"
+              href="tel:+919090403075"
               className="bg-white/10 backdrop-blur-md hover:bg-white/20 text-white border-2 border-white/50 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300"
             >
-              Call: +91 98765 43210
+              Call: +91-9090403075
             </a>
           </div>
         </div>
