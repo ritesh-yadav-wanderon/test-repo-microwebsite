@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+html {
+  width: 100%;
+  max-width: 100vw;
+}
+
+:root {
+  /* Matches Figma frame `About-us 1280px` (189:734) — neutral/100 */
+  --background: #f2f2f2;
+  --foreground: #2d2d2d;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Single light canvas from design system; avoid flipping the marketing layout */
+    --background: #f2f2f2;
+    --foreground: #2d2d2d;
+  }
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
+  background: var(--background);
+  color: var(--foreground);
+}
