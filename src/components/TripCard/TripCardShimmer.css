@@ -1,0 +1,139 @@
+/* TripCard shimmer — mirrors TripCard (Figma 3268:11829).
+   Warm gradient shimmer sweep: light cream → slightly lighter → back. */
+
+.tc-shimmer {
+  flex: 0 0 330px;
+  scroll-snap-align: start;
+  background: #fcf9f3;
+  border: 1px solid #f5f0ea;
+  border-radius: 20px;
+  padding: 8px 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* All shimmer blocks share this animation */
+.tc-sh-bone {
+  background: linear-gradient(90deg, #ece5d8 0%, #f9f4ec 50%, #ece5d8 100%);
+  background-size: 300% 100%;
+  animation: tc-bone-sweep 1.4s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+@keyframes tc-bone-sweep {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* Image */
+.tc-sh-image {
+  width: 100%;
+  height: 260px;
+  border-radius: 16px;
+  margin-bottom: -10px;
+  flex-shrink: 0;
+}
+
+/* Meta pill */
+.tc-sh-pill {
+  width: 270px;
+  align-self: center;
+  background: #fefdfb;
+  border-bottom: 1px solid #e8ddd3;
+  border-radius: 12px;
+  padding: 14px 8px 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+.tc-sh-pill-left {
+  height: 12px;
+  width: 64px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.tc-sh-pill-right {
+  height: 12px;
+  flex: 1;
+  border-radius: 6px;
+}
+
+/* Body */
+.tc-sh-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tc-sh-title {
+  height: 18px;
+  width: 90%;
+}
+
+.tc-sh-itin {
+  height: 28px;
+  width: 100%;
+  border-radius: 12px;
+}
+
+.tc-sh-features {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tc-sh-feat {
+  height: 12px;
+  width: 82%;
+  border-radius: 6px;
+}
+.tc-sh-feat--short {
+  width: 56%;
+}
+
+.tc-sh-batches {
+  height: 12px;
+  width: 72%;
+  border-radius: 6px;
+}
+
+/* Footer */
+.tc-sh-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.tc-sh-price {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+.tc-sh-price-main {
+  height: 20px;
+  width: 100px;
+  border-radius: 6px;
+}
+.tc-sh-price-sub {
+  height: 12px;
+  width: 130px;
+  border-radius: 6px;
+}
+.tc-sh-cta {
+  width: 140px;
+  height: 44px;
+  border-radius: 40px;
+  flex-shrink: 0;
+}
+
+/* Price note */
+.tc-sh-note {
+  height: 12px;
+  width: 88%;
+  border-radius: 6px;
+}

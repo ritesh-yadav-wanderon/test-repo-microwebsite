@@ -1,0 +1,46 @@
+/* PlotBanner — Figma 3014:8182. 390x64 cream band.
+   Title block 141x30 (text 109x30) centered; subtitle row 390x24. */
+
+.plot-banner {
+  width: 100%;
+  height: 64px;
+  background: var(--brand-cream);
+  display: flex;
+  flex-direction: column;
+}
+
+.plot-title-wrap {
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plot-title {
+  font-family: "Caveat", var(--font);
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 30px;
+  color: var(--brand-yellow);
+  letter-spacing: 0;
+  white-space: nowrap;
+  padding-left: 16px; /* matches text x=16 inside title frame */
+}
+
+.plot-sub-wrap {
+  height: 24px;
+  padding: 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plot-sub {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  color: #8a8a8a;
+  text-align: center;
+  white-space: nowrap;
+}

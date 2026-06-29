@@ -1,0 +1,419 @@
+/* SearchBottomSheet — Figma 3014:11251/11249/11248 */
+
+/* ── Overlay ── */
+.sbs-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(0,0,0,0.4));
+}
+
+/* ── Sheet ── */
+.sbs-sheet {
+  position: relative;
+  width: 100%;
+  max-width: var(--app-width);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: sbs-slide-up 0.28s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+}
+
+@keyframes sbs-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+/* ── Close button ── */
+.sbs-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 2px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+/* ── Category strip ── */
+.sbs-cats {
+  height: 76px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 14px 6px 20px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.sbs-cats::-webkit-scrollbar { display: none; }
+
+.sbs-cat {
+  flex: 0 0 73px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 7px;
+  padding-bottom: 2px;
+  position: relative;
+  background: transparent;
+}
+.sbs-cat-ico { width: 40px; height: 40px; object-fit: cover; flex-shrink: 0; }
+.sbs-cat-ico-placeholder { width: 40px; height: 40px; flex-shrink: 0; }
+.sbs-cat-label {
+  font-size: 12px;
+  font-weight: 400;
+  color: #3d3d3d;
+  text-align: center;
+  line-height: 16px;
+}
+.sbs-cat--active .sbs-cat-label { font-weight: 500; color: #202020; }
+.sbs-cat-bar {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: #000;
+  border-radius: 20px;
+}
+
+/* ── Scrollable content ── */
+.sbs-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 16px 16px;
+  overflow-y: auto;
+}
+
+/* ── Base card ── */
+.sbs-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.sbs-card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #202020;
+  letter-spacing: 0.35px;
+  line-height: 16px;
+  margin: 0;
+}
+
+/* ── Collapsed row card (Where / When) ── */
+.sbs-row-card {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 12px;
+  gap: 0;
+  cursor: pointer;
+  padding: 16px;
+}
+.sbs-row-label {
+  font-size: 14px;
+  color: #757575;
+  line-height: 16px;
+  letter-spacing: 0.35px;
+}
+.sbs-row-value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #202020;
+  line-height: 16px;
+  letter-spacing: 0.35px;
+}
+.sbs-row-value--set { color: #015f74; font-weight: 500; }
+
+/* ── Where search input ── */
+.sbs-search-wrap {
+  height: 48px;
+  border: 1px solid #01afd1;
+  border-radius: 30px;
+  background: #fbfbfb;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+}
+.sbs-search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  color: #202020;
+  font-family: inherit;
+}
+.sbs-search-input::placeholder { color: #ababab; }
+
+/* ── Destination suggestions ── */
+.sbs-suggestions {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.sbs-suggestion {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: #202020;
+  line-height: 21px;
+}
+.sbs-suggestion--active {
+  background: #eef2fc;
+  border-color: #586474;
+  border-radius: 6px;
+}
+
+/* ── When card ── */
+.sbs-when-card {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Months / Dates toggle ── */
+.sbs-toggle {
+  display: flex;
+  align-items: center;
+  background: #efecef;
+  border-radius: 30px;
+  padding: 4px;
+  gap: 6px;
+}
+.sbs-toggle-opt {
+  flex: 1;
+  height: 28px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #3a3a3a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  transition: background 0.15s, color 0.15s;
+}
+.sbs-toggle-opt--active {
+  background: #015f74;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 4px 2px rgba(0,0,0,0.08);
+}
+
+/* ── Month picker list ── */
+.sbs-months {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  flex: 1;
+}
+.sbs-month-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 34px;
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  width: 100%;
+  font-size: 14px;
+  color: #202020;
+  line-height: 21px;
+  background: #fff;
+  cursor: pointer;
+}
+.sbs-month-item--active {
+  background: #eef2fc;
+  border-color: #586474;
+  border-radius: 6px;
+}
+
+/* ── Calendar ── */
+.sbs-cal-wrap {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sbs-cal-hint {
+  font-size: 12px;
+  color: #c0392b;
+  margin: 0;
+  line-height: 16px;
+}
+
+.cal-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.cal-day-headers {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding-bottom: 8px;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 2;
+}
+.cal-dh {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: #757575;
+  line-height: 20px;
+}
+
+.cal-month {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 16px;
+}
+.cal-month-name {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #202020;
+  padding: 8px 0 4px;
+  margin: 0;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.cal-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  background: transparent;
+  padding: 0;
+  position: relative;
+}
+.cal-cell--empty { cursor: default; }
+.cal-cell:disabled { cursor: default; }
+
+.cal-day-num {
+  font-size: 14px;
+  color: #202020;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
+}
+
+/* Past dates */
+.cal-cell--past .cal-day-num {
+  color: #c0c0c0;
+  text-decoration: line-through;
+}
+
+/* In range */
+.cal-cell--range {
+  border-radius: 0;
+  background: #e0f4f7;
+}
+.cal-cell--range .cal-day-num { color: #015f74; }
+
+/* Range edge row caps — first/last in a row get half-rounded */
+.cal-cell--sel-start { border-radius: 50% 0 0 50%; }
+.cal-cell--sel-end   { border-radius: 0 50% 50% 0; }
+
+/* Selected (start/end dot) */
+.cal-cell--sel::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: #015f74;
+  z-index: 0;
+}
+.cal-cell--sel .cal-day-num {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── Actions ── */
+.sbs-actions {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.sbs-clear {
+  flex: 1;
+  background: transparent;
+  font-size: 16px;
+  color: #fff;
+  text-align: left;
+  padding: 0;
+  line-height: 24px;
+  letter-spacing: 0.08px;
+  font-family: inherit;
+}
+.sbs-find {
+  background: #01afd1;
+  border-radius: 10px;
+  height: 38px;
+  padding: 0 24px;
+  font-size: 16px;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.08px;
+  line-height: 24px;
+  font-family: inherit;
+  cursor: pointer;
+  flex-shrink: 0;
+}

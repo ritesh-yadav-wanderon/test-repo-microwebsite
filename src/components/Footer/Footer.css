@@ -1,0 +1,141 @@
+/* Footer — node 3014:8983, 390x640.43. Dark bg, top cyan accent (390x4).
+   Inner x=16 w=358 y=40. Accordion rows 358x30, dividers #e5e5e5 @ ~11% opacity.
+   Type: rows/name H2 16/500; address body 12/400 lh15.6; contact 12/400; copy 12/400. */
+
+.footer {
+  position: relative;
+  width: 100%;
+  background: var(--surface-dark, #0f1f1c);
+  color: #fbfbfb;
+  /* leave room above the fixed bottom-nav */
+  padding-bottom: 70px;
+}
+
+/* top accent border (node 3014:9029, 390x4) */
+.ft-accent {
+  width: 100%;
+  height: 4px;
+  background: var(--brand-teal, #17a2c6);
+}
+
+.ft-inner {
+  width: calc(100% - 32px);
+  max-width: 568px;
+  margin: 0 auto;
+  padding-top: 36px;
+}
+
+/* ---- accordion (Frame 1000001770) rows 358x30 ---- */
+.ft-accordion {
+  margin: 0;
+}
+
+.ft-row-wrap + .ft-row-wrap {
+  border-top: 1px solid rgba(229, 229, 229, 0.14);
+}
+
+.ft-row {
+  width: 100%;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fbfbfb;
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 14px;
+}
+
+.ft-chev {
+  display: inline-flex;
+  color: #fbfbfb;
+  opacity: 0.85;
+}
+
+/* ---- company block (Frame 1000001966), centered ---- */
+.ft-company {
+  margin-top: 44px;
+  text-align: center;
+}
+
+.ft-name {
+  font-family: "Roboto", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: 0.2px;
+  color: #fbfbfb;
+}
+
+.ft-address {
+  margin-top: 12px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15.6px;
+  color: #fbfbfb;
+  opacity: 0.85;
+}
+
+.ft-contact {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #fbfbfb;
+}
+.ft-contact a {
+  white-space: nowrap;
+}
+
+/* ---- socials (Frame 1000001775): 4 round icons in a faint pill ---- */
+.ft-socials {
+  margin: 36px auto 0;
+  width: fit-content;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 999px;
+  padding: 0 20px;
+}
+
+.ft-social {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* ---- skyline vector strip (Frame 1000001968, 358x70), faint grey ---- */
+.ft-skyline {
+  display: block;
+  width: 100%;
+  height: 70px;
+  margin-top: 30px;
+  color: rgba(255, 255, 255, 0.16);
+}
+
+/* ---- copyright (Frame 1000001778), centered ---- */
+.ft-copy {
+  margin-top: 14px;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #fbfbfb;
+  opacity: 0.85;
+}

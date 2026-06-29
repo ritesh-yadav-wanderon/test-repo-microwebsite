@@ -1,0 +1,81 @@
+/* DestinationStrip — Figma 3014:8830 / 3014:8870.
+   Frame 390 wide, content inset 16px. Header row 358x21 (title + 200px rule).
+   Grid: 5 tiles/row, each tile 60px wide, 12px gap (72px stride). Label 21px tall. */
+
+.dest-strip {
+  width: 100%;
+  padding: 16px 16px 0;
+  background: #fff;
+}
+
+.dest-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 21px;
+}
+
+.dest-head-title {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 21px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+
+.dest-head-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--grey-2);
+}
+
+.dest-grid {
+  margin-top: 24px; /* header bottom (21) -> grid top (45) */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: 100%;
+}
+
+.dest-item {
+  width: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.dest-ico {
+  width: 49.7px;
+  height: 47.4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--dest-ico-bg, radial-gradient(circle at 50% 42%, #ffffff 0%, #efe2d3 78%));
+}
+
+.dest-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.dest-name {
+  width: 60px;
+  height: 21px;
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  text-align: center;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}

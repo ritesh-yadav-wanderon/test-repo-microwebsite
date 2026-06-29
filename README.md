@@ -1,36 +1,81 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# WanderOn Micro-Website (React)
 
-## Getting Started
+A React (Vite) implementation of the WanderOn **2026** mobile website, built from
+the Figma design `Website - 2026` and wired to the live WanderOn trip/destination
+APIs.
 
-First, run the development server:
+> **Status:** Homepage is built end-to-end (pixel-matched to Figma + wired to real
+> trip data). Destination Landing, Product, and Booking pages are scaffolded next.
+
+## Run it
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:5173
+npm run build    # production build -> dist/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Data sources (read-only)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+All data comes from **GET** endpoints only — no write/mutation endpoints from the
+source codebase are used. Endpoints are defined in `src/api/config.js`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Purpose | Endpoint | Used on |
+|---|---|---|
+| Upcoming group trips (cards) | `GET /upcomingTrips` (CMS backend) | Homepage |
+| Destinations list | `GET /misc/destinations` (LF api) | Homepage strips (wired) |
+| Single trip by slug | `GET /trip/:slug` (CMS backend) | Product page (next) |
 
-## Learn More
+Response shapes mirror the original codebase (`WanderOn-Website/src/utilities/`).
 
-To learn more about Next.js, take a look at the following resources:
+### CORS / local development
+The live `upcomingTrips` API may block cross-origin requests from `localhost`.
+The Vite dev server proxies `/cms-api/*` and `/lf-api/*` to the staging backends
+(see `vite.config.js`) to avoid this. If the API is still unreachable, the UI
+gracefully falls back to bundled sample data in `src/api/sampleData.js` (a small
+"demo data" flag appears next to the Upcoming Group Trips heading).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+  api/            config (endpoints), client with fallback, sample data
+  components/     HeroHeader, UpcomingTrips, TripCard, PlotBanner,
+                  DestinationStrip, OriginalsSection, TribeStories, TheSeat,
+                  CreateMoments, QueryBanner, Footer, BottomNav
+  pages/          Home.jsx + Home.css
+  styles/         global.css (design tokens from Figma variables)
+```
 
-## Deploy on Vercel
+## Design fidelity
+Built from the Figma file `Website - 2026` (node `3014-8007`). Layout, section
+order, copy, colors, and the Roboto type scale are taken directly from the Figma
+metadata, variables, and section renders. Real copy used verbatim, e.g. the hero
+headline *"Trip is the destination. Community is the point!"*, the search field
+*"Search destination, dates, budget…"*, the category tabs (All Trips, Adventure,
+Luxury, Culture, Festival, Wellness, Weekend), and every section heading.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Design tokens live as CSS custom properties in `src/styles/global.css`. The layout
+is a mobile-first 420px canvas centered on larger screens, matching the 390px frame.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Getting the real Figma assets (one command)
+The exact Figma raster assets (logo, monument destination icons, category icons,
+hero) are pulled straight from Figma by a script. They are **not** committed,
+because the authoring environment blocks `figma.com`. Run this once on your
+machine (which has network access):
+
+```bash
+FIGMA_TOKEN=figd_your_token node scripts/fetch-figma-assets.mjs
+```
+
+Get a token at Figma → Settings → Security → Personal access tokens. The script
+downloads the real renders into `public/figma/` (logo, `dest-*` monuments,
+`cat-*` icons, hero) using the exact node IDs from the design.
+
+The components reference these files automatically (`FigmaImg.jsx`). Until the
+script is run, each image **falls back to an inline-SVG recreation** so the UI
+never breaks — but the real Figma assets take over as soon as they're present.
+To add more assets (section photos, etc.), extend the `ASSETS` map in
+`scripts/fetch-figma-assets.mjs` with `name: "nodeId"` pairs.
+
+**Trip-card images come from the live API** (real WanderOn imagery) at runtime.

@@ -1,0 +1,154 @@
+/* Upcoming Group Trips — Figma 3014:8009. Warm gradient bg, cream filter pills. */
+
+.up {
+  background: linear-gradient(
+    180deg,
+    rgba(133, 89, 0, 0.06) 0%,
+    rgba(254, 253, 251, 0.4) 100%
+  );
+  padding: 20px 0 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Header block groups title + filters + tabs with 10px internal gap (Figma 3014:8010) */
+.up-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Section title row */
+.up-header-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+}
+.up-title {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+  color: #4e4e4e;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+}
+.up-flag {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #f2f2f2;
+  color: #8a8a8a;
+  padding: 3px 7px;
+  border-radius: 6px;
+}
+
+/* Filters row */
+.up-filters {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  align-items: center;
+}
+.up-filters::-webkit-scrollbar {
+  display: none;
+}
+
+/* Standard filter pill — cream bg, beige border */
+.up-filter {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--up-pill-bg, #f3efe5);
+  border: 1px solid var(--up-pill-border, #ebe6dd);
+  border-radius: 48px;
+  padding: 8px 10px 8px 14px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #3d3d3d;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* "Add Your Dates" — split pill */
+.up-filter-split {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.up-filter-split-l {
+  display: flex;
+  align-items: center;
+  background: var(--up-pill-bg, #f3eee5);
+  border: 1px solid var(--up-pill-border, #ebe6dd);
+  border-radius: 30px 2px 2px 30px;
+  padding: 8px 10px 8px 14px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #3d3d3d;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.up-filter-split-r {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--up-pill-bg, #f3eee4);
+  border: 1px solid var(--up-pill-border, #ebe6dd);
+  border-radius: 2px 30px 30px 2px;
+  padding: 8px 12px 8px 8px;
+  width: 42px;
+  cursor: pointer;
+}
+
+
+/* Cards carousel */
+.up-cards {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 2px 16px 4px;
+  scrollbar-width: none;
+}
+.up-cards::-webkit-scrollbar {
+  display: none;
+}
+
+/* Scroll progress indicator: 120x6 track, 33px active fill */
+.up-progress {
+  display: flex;
+  justify-content: center;
+  padding: 0 16px;
+}
+.up-progress-track {
+  position: relative;
+  width: 120px;
+  height: 6px;
+  border-radius: 32px;
+  background: #fbfbfb;
+  border: 1px solid #e5e5e5;
+}
+.up-progress-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 33px;
+  border-radius: 32px;
+  background: var(--up-progress-fill, #ae957e);
+}
+
+/* Empty state */
+.up-empty {
+  font-size: 14px;
+  color: #8a8a8a;
+  padding: 20px 16px;
+  text-align: center;
+  width: 100%;
+}

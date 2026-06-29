@@ -1,0 +1,78 @@
+/* Category tab row (node 3014:9055, 390x60; inner component 390x50 at y=10). */
+
+.cat-strip {
+  width: 100%;
+  height: 60px;
+  background: #ffffff;
+  display: flex;
+  align-items: flex-end;
+}
+
+.cat-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  height: 50px;
+  width: 100%;
+  padding: 0 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.cat-row::-webkit-scrollbar {
+  display: none;
+}
+
+.cat-item {
+  position: relative;
+  flex: 0 0 auto;
+  min-width: 50px;
+  height: 50px;
+  padding: 6px 8px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  border-radius: 12px 12px 0 0;
+  background: transparent;
+}
+
+.cat-ico {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+}
+.cat-img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
+.cat-label {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  color: #8a8a8a;
+  white-space: nowrap;
+}
+
+/* short accent underline (Figma rect 50x4); hidden unless active */
+.cat-underline {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 4px;
+  border-radius: 4px 4px 0 0;
+  background: transparent;
+}
+
+/* Active tab bg and underline are set via inline styles per-theme.
+   Only label weight/color are static. */
+.cat-item--active .cat-label {
+  color: var(--text-secondary);
+  font-weight: 700;
+}

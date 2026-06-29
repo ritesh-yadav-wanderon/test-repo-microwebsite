@@ -1,0 +1,9 @@
+/* Page-level styles only.
+   Each homepage section now ships its own scoped CSS file (imported by its
+   component), rebuilt frame-by-frame from the Figma design. */
+
+.home {
+  position: relative;
+  display: block;
+  scrollbar-width: none;
+}
