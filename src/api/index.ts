@@ -47,12 +47,55 @@ function isRecord(value: unknown): value is Record<string, unknown> {
  * Real shape: [{ title, year, month, tripsArray: [trip, ...] }]
  * Falls back to bundled sample data if the API is unreachable.
  */
+function resolveImage(trip: Record<string, unknown>): string {
+  const images2 = trip.images2;
+  if (isRecord(images2)) {
+    const card = images2.card;
+    if (isRecord(card) && typeof card.link === "string" && card.link.startsWith("http")) return card.link;
+    const cover = images2.cover;
+    if (isRecord(cover) && typeof cover.link === "string" && cover.link.startsWith("http")) return cover.link;
+  }
+  const img = trip.image;
+  if (typeof img === "string" && img.startsWith("http")) return img;
+  return "";
+}
+
+
+function formatPrice(raw: unknown): string {
+  const toRupee = (n: number) => "₹" + n.toLocaleString("en-IN");
+  if (typeof raw === "number" && !isNaN(raw)) {
+    // Values < 1000 are stored in thousands (e.g. 10 = ₹10,000)
+    return toRupee(raw < 1000 ? raw * 1000 : raw);
+  }
+  if (typeof raw === "string" && raw.trim()) {
+    const s = raw.trim();
+    if (s.startsWith("₹")) return s;
+    const n = Number(s.replace(/,/g, ""));
+    if (!isNaN(n)) return toRupee(n < 1000 ? n * 1000 : n);
+    return s;
+  }
+  return "";
+}
+
+function normalizeTripGroups(groups: unknown[]): TripGroup[] {
+  return groups.map((g) => {
+    if (!isRecord(g)) return g as TripGroup;
+    const tripsArray = Array.isArray(g.tripsArray)
+      ? g.tripsArray.map((t: unknown) => {
+          if (!isRecord(t)) return t;
+          return { ...t, image: resolveImage(t), startingPrice: formatPrice(t.startingPrice) };
+        })
+      : [];
+    return { ...g, tripsArray } as TripGroup;
+  });
+}
+
 export async function getUpcomingTrips(): Promise<ApiResult<TripGroup[]>> {
   try {
     const data = await getJSON(ENDPOINTS.upcomingTrips);
     const groups = Array.isArray(data) ? data : isRecord(data) && Array.isArray(data.data) ? data.data : [];
     if (!groups.length) throw new Error("empty upcomingTrips");
-    return { data: groups as TripGroup[], source: "live" };
+    return { data: normalizeTripGroups(groups), source: "live" };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     console.warn("[getUpcomingTrips] using sample data:", message);

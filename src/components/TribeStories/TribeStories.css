@@ -1,118 +1,291 @@
+/* Reviews / TribeStories — Figma 3760:6280 */
+
 .tribe {
   width: 100%;
-  background: #fbfbfb;
-  padding: 0 0 14px;
+  background: #fff;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
 }
 
+/* ── Rating block ── */
+.tribe-rating-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: min(252px, 100%);
+}
 
-
-/* Horizontal scroll row of 265px cards */
-.tribe-row {
+.tribe-stars-row {
   display: flex;
   align-items: center;
-  gap: 20px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding: 27px 62px;
+  gap: 9.4px;
+  justify-content: center;
 }
-.tribe-row::-webkit-scrollbar {
-  display: none;
+
+.tribe-laurel {
+  display: block;
+  width: 54px;
+  height: 80px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.tribe-laurel--flip {
+  transform: scaleY(-1) rotate(180deg);
+}
+
+.tribe-score {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 38px;
+  line-height: 38px;
+  color: #3d3d3d;
+  padding-bottom: 0;
+}
+
+.tribe-review-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.tribe-google-row {
+  display: flex;
+  align-items: center;
+  gap: 3.8px;
+}
+
+.tribe-review-count {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #333;
+}
+
+.tribe-wanderers {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #333;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ── Body: tabs + cards + CTA ── */
+.tribe-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+/* ── Filter tabs ── */
+.tribe-tabs {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.tribe-tabs::-webkit-scrollbar { display: none; }
+
+.tribe-tab {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 100px;
+  border: 1px solid #3d3d3d;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  color: #3d3d3d;
+  white-space: nowrap;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.tribe-tab--active {
+  background: #015f74;
+  color: #fff;
+  border-color: #015f74;
+  font-weight: 500;
+}
+
+/* ── Review cards ── */
+.tribe-cards {
+  display: flex;
+  align-items: stretch;
+  overflow-x: auto;
+  width: 100%;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.tribe-cards::-webkit-scrollbar { display: none; }
+
+/* Each card + optional divider */
+.tribe-card-wrap {
+  display: flex;
+  align-items: stretch;
+  flex-shrink: 0;
 }
 
 .tribe-card {
-  position: relative;
-  flex: 0 0 265px;
-  width: 265px;
-  height: 340px;
-  border-radius: 18px;
-  overflow: hidden;
-  scroll-snap-align: center;
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  filter: drop-shadow(0px 2px 10px rgba(0,0,0,0.06));
 }
 
-.tribe-card--active {
-  height: 394px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
-}
-
-.tribe-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.tribe-shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0) 45%,
-    rgba(0, 0, 0, 0.75) 100%
-  );
-}
-
-.tribe-play {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: 2px solid #fff;
+/* Vertical divider between cards */
+.tribe-divider {
+  width: 20px;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  align-self: stretch;
+}
+.tribe-divider img {
+  display: block;
+  width: 1px;
+  height: 100%;
+  object-fit: fill;
 }
 
-.tribe-cap {
+/* Card header: avatar + name/stars */
+.tribe-card-header {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+/* Stacked avatar — outer ring + inner photo */
+.tribe-avatar-stack {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.tribe-avatar-outer {
   position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: 20px;
+  inset: 0;
+  width: 60px;
+  height: 60px;
+  display: block;
+  object-fit: cover;
+}
+
+.tribe-avatar-inner {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 58px;
+  height: 58px;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* Name + stars + date */
+.tribe-card-meta {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  text-align: left;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
 }
 
-.tribe-cap strong {
-  font-family: "Roboto", sans-serif;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 24px;
-  color: #fff;
-}
-
-.tribe-cap span {
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
+.tribe-reviewer {
+  margin: 0;
+  font-family: var(--font);
   font-size: 14px;
-  line-height: 18px;
-  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  line-height: 18.2px;
+  letter-spacing: 0.014px;
+  color: #202020;
+  white-space: nowrap;
 }
 
-/* Progress indicator: 140 x 14, centred */
-.tribe-progress {
+.tribe-stars-date {
   display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.tribe-stars-date img {
+  display: block;
+  flex-shrink: 0;
+}
+
+.tribe-date {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  color: #4e4e4e;
+  letter-spacing: 0.058px;
+  white-space: nowrap;
+}
+
+/* Review text */
+.tribe-text {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.035px;
+  color: #4e4e4e;
+}
+
+/* Read More */
+.tribe-read-more {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.07px;
+  color: #202020;
+  text-decoration: underline;
+  text-align: right;
+  align-self: flex-end;
+  cursor: pointer;
+}
+
+/* ── "Show all 42 reviews" CTA ── */
+.tribe-view-all {
+  display: flex;
+  align-items: center;
   justify-content: center;
-  margin-top: 6px;
-}
-
-.tribe-track {
-  position: relative;
-  width: 140px;
-  height: 4px;
-  border-radius: 999px;
-  background: var(--grey-2);
-}
-
-.tribe-fill {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  width: 46px;
-  border-radius: 999px;
-  background: var(--brand-accent);
+  width: 100%;
+  height: 44px;
+  border-radius: 8px;
+  background: #f2f2f2;
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 500;
+  color: #3d3d3d;
+  text-decoration: none;
+  flex-shrink: 0;
 }

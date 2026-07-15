@@ -1,147 +1,114 @@
-/* Bottom nav — Figma 3244:13173, 390×70 */
+/* Bottom nav — Figma 5068:18463 */
 
 .bottom-nav {
   position: fixed;
   bottom: 0;
-  left: 0px;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   max-width: var(--app-width);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px 8px 0px;
+  z-index: 1000;
+  will-change: transform;
+  contain: layout style;
+  padding: 0 12px 10px;
+  box-sizing: border-box;
 }
 
-/* Left pill — 272×50, gradient, rounded on the right edge only */
-.bn-main {
-  position: relative;
-  flex: 1 1 0;
-  min-width: 0;
+/* Single pill */
+.bn-pill {
+  width: 100%;
   height: 60px;
   display: flex;
-  align-items: stretch;
-  border-radius: 0 30px 30px 0;
-  overflow: hidden;
-  box-shadow: inset 0 0 12px 0 #000;
-}
-
-.bn-main-bg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #ddd;
+  border-radius: 60px;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
-  background:
-    linear-gradient(270deg, rgb(140, 106, 139) 0%, rgba(60, 63, 94, 0) 40%),
-    linear-gradient(90deg, rgb(54, 54, 54) 0%, rgb(54, 54, 54) 100%);
+  padding: 4px;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
+/* Nav item — shared by NavLink and button */
 .bn-item {
-  position: relative;
-  z-index: 1;
   flex: 1 1 0;
   min-width: 0;
   height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 8px 15px;
-  color: #fff;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 2px;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  border-radius: 56px;
+  transition: background 0.15s ease;
 }
 
-.bn-item--muted {
-  color: var(--grey-2, #e5e5e5);
+/* Center logo button — background only applies when active via bn-item--active */
+.bn-item--logo {
 }
 
+/* Active route highlight */
+.bn-item--active {
+  background: #f0f0f0;
+}
+
+/* Icon wrapper */
 .bn-ico {
-  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  color: inherit;
 }
 
+.bn-ico img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Larger logo icon */
+.bn-ico--logo {
+  width: 40px;
+  height: 40px;
+}
+
+/* Label */
 .bn-label {
   font-family: var(--font);
   font-size: 12px;
   font-weight: 400;
-  line-height: 14px;
-  text-align: center;
+  line-height: 12px;
+  color: #4d4d4d;
   white-space: nowrap;
-  color: inherit;
 }
 
-/* Right pill — 96×50, call + WhatsApp */
-.bn-actions {
-  position: relative;
-  flex: 0 0 auto;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 8px;
-  border-radius: 30px;
-  overflow: hidden;
-  box-shadow: inset 0 0 12px 0 #000;
-}
-
-.bn-actions-bg {
+/* Compare count badge */
+.bn-badge {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: #363636;
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-}
-
-.bn-call,
-.bn-whatsapp {
-  position: relative;
-  z-index: 1;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  top: 2px;
+  left: calc(50% + 12px);
+  width: 20px;
+  height: 20px;
+  background: #fff2c2;
+  border-radius: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
-  flex-shrink: 0;
-}
-
-.bn-call {
-  background: #01afd1;
-}
-
-.bn-whatsapp {
-  background: transparent;
-  padding: 0;
-}
-
-/* NavLink resets */
-.bn-item {
-  text-decoration: none;
-}
-
-/* Active state — brighter + dot indicator */
-.bn-item--active {
-  color: #fff;
-}
-
-.bn-item--active .bn-label {
-  font-weight: 500;
-}
-
-.bn-item--active .bn-ico::after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: #fff;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 12px;
+  color: #332900;
 }

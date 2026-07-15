@@ -1,141 +1,278 @@
-/* Footer — node 3014:8983, 390x640.43. Dark bg, top cyan accent (390x4).
-   Inner x=16 w=358 y=40. Accordion rows 358x30, dividers #e5e5e5 @ ~11% opacity.
-   Type: rows/name H2 16/500; address body 12/400 lh15.6; contact 12/400; copy 12/400. */
+/* Footer — Figma 5135:5828. Light bg, destination tabs, quick links, company. */
 
-.footer {
-  position: relative;
+.ft-root {
   width: 100%;
-  background: var(--surface-dark, #0f1f1c);
-  color: #fbfbfb;
-  /* leave room above the fixed bottom-nav */
-  padding-bottom: 70px;
-}
-
-/* top accent border (node 3014:9029, 390x4) */
-.ft-accent {
-  width: 100%;
-  height: 4px;
-  background: var(--brand-teal, #17a2c6);
+  background: #f7f7f7;
 }
 
 .ft-inner {
-  width: calc(100% - 32px);
-  max-width: 568px;
-  margin: 0 auto;
-  padding-top: 36px;
-}
-
-/* ---- accordion (Frame 1000001770) rows 358x30 ---- */
-.ft-accordion {
-  margin: 0;
-}
-
-.ft-row-wrap + .ft-row-wrap {
-  border-top: 1px solid rgba(229, 229, 229, 0.14);
-}
-
-.ft-row {
   width: 100%;
-  height: 38px;
+  padding: 40px 16px 120px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* ── Section wrapper ── */
+.ft-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* ── Section titles ── */
+.ft-title-lg {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #4e4e4e;
+  letter-spacing: 0.5px;
+  line-height: 24px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.ft-title-sm {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #4e4e4e;
+  letter-spacing: 0.5px;
+  line-height: 24px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  text-transform: capitalize;
+}
+
+/* ── Destination tabs ── */
+.ft-dest {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.ft-tabs-wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.ft-tabs {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #fbfbfb;
+  height: 40px;
+  width: 100%;
+}
+
+.ft-tab {
+  position: relative;
+  height: 100%;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
   font-family: "Roboto", sans-serif;
-  font-weight: 500;
   font-size: 14px;
-  line-height: 14px;
-}
-
-.ft-chev {
-  display: inline-flex;
-  color: #fbfbfb;
-  opacity: 0.85;
-}
-
-/* ---- company block (Frame 1000001966), centered ---- */
-.ft-company {
-  margin-top: 44px;
-  text-align: center;
-}
-
-.ft-name {
-  font-family: "Roboto", sans-serif;
   font-weight: 500;
-  font-size: 16px;
-  line-height: 16px;
-  letter-spacing: 0.2px;
-  color: #fbfbfb;
+  color: #757575;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.ft-address {
-  margin-top: 12px;
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 15.6px;
-  color: #fbfbfb;
-  opacity: 0.85;
+.ft-tab--active {
+  color: #3d3d3d;
 }
 
-.ft-contact {
-  margin-top: 28px;
+.ft-tab--active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: #3d3d3d;
+  border-radius: 100px 100px 0 0;
+}
+
+.ft-tab-sep {
+  width: 100%;
+  height: 1px;
+  background: #ccc;
+  opacity: 0.4;
+}
+
+/* ── 3-column destination grid ── */
+.ft-dest-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+}
+
+.ft-dest-cell {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 30px;
+  height: 40px;
   font-family: "Roboto", sans-serif;
+  font-size: 14px;
   font-weight: 400;
-  font-size: 12px;
-  line-height: 16px;
-  color: #fbfbfb;
+  color: #757575;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.ft-contact a {
+
+.ft-dest-cell:hover {
+  color: #3d3d3d;
+}
+
+/* ── Quick Links ── */
+.ft-section-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.ft-sep {
+  width: 100%;
+  height: 1px;
+  background: #ccc;
+  opacity: 0.4;
+}
+
+.ft-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.ft-link {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #757575;
+  text-decoration: none;
   white-space: nowrap;
 }
 
-/* ---- socials (Frame 1000001775): 4 round icons in a faint pill ---- */
-.ft-socials {
-  margin: 36px auto 0;
-  width: fit-content;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 999px;
-  padding: 0 20px;
+.ft-link:hover {
+  color: #3d3d3d;
 }
 
-.ft-social {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+/* ── Company section ── */
+.ft-company {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+}
+
+.ft-company-top {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.ft-company-identity {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.ft-company-name {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #3d3d3d;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+
+
+/* Social pill */
+.ft-social-pill {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  color: #fff;
+  gap: 16px;
+  background: #e6e6e6;
+  border-radius: 30px;
+  padding: 8px 20px;
+  width: max-content;
+}
+
+.ft-social-icon {
+  display: block;
+  object-fit: contain;
   flex-shrink: 0;
 }
 
-/* ---- skyline vector strip (Frame 1000001968, 358x70), faint grey ---- */
-.ft-skyline {
-  display: block;
-  width: 100%;
-  height: 70px;
-  margin-top: 30px;
-  color: rgba(255, 255, 255, 0.16);
+.ft-social-icon--sm {
+  width: 18px;
+  height: 18px;
 }
 
-/* ---- copyright (Frame 1000001778), centered ---- */
-.ft-copy {
-  margin-top: 14px;
-  text-align: center;
+.ft-social-icon--xs {
+  width: 16px;
+  height: 16px;
+}
+
+.ft-social-icon--md {
+  width: 30px;
+  height: 30px;
+}
+
+/* LinkedIn wrapper: 16px wide container, icon centered */
+.ft-social-icon--linkedin-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+/* Contact row */
+.ft-contact {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 30px;
+  width: 100%;
+}
+
+.ft-contact span {
   font-family: "Roboto", sans-serif;
-  font-weight: 400;
   font-size: 12px;
+  font-weight: 400;
+  color: #757575;
+  white-space: nowrap;
+}
+
+/* Copyright */
+.ft-copy {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #757575;
   line-height: 16px;
-  color: #fbfbfb;
-  opacity: 0.85;
 }

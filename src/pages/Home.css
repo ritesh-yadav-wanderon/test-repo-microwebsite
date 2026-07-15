@@ -7,3 +7,14 @@
   display: block;
   scrollbar-width: none;
 }
+
+/* ── Homepage inter-section spacing: 40px between every section ── */
+.dest-section,
+.up,
+.orig,
+.tribe,
+.plot,
+.qb,
+.fm {
+  margin-top: 40px;
+}

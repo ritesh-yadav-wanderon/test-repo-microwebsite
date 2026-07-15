@@ -1,0 +1,377 @@
+/* LoginSheet — Figma 3709:12077 / 3709:11376 / 3709:12859 */
+
+/* ── Backdrop ── */
+.ls-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1099;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.ls-backdrop--open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Sheet ── */
+.ls-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: 100%;
+  max-width: var(--app-width, 460px);
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.ls-sheet--open {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Teal stripe ── */
+.ls-stripe {
+  height: 10px;
+  background: #01afd1;
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 16px 16px 0 0;
+}
+.ls-stripe-pattern {
+  position: absolute;
+  inset: 0;
+  background-image: url('/figma/login-sheet/pattern.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.34;
+}
+
+/* ── Header ── */
+.ls-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 12px 16px 12px 12px;
+  box-sizing: border-box;
+  overflow: hidden;
+  backdrop-filter: blur(2px);
+  flex-shrink: 0;
+  width: 100%;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Background graphic blobs ── */
+.ls-hbg {
+  position: absolute;
+  right: -20px;
+  top: -28px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  pointer-events: none;
+}
+.ls-hbg-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.ls-hbg-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.ls-blob {
+  width: 60px;
+  height: 60px;
+  background: rgba(187, 222, 229, 0.3);
+  flex-shrink: 0;
+}
+.ls-blob--sq-tr { border-radius: 30px 0   30px 30px; }
+.ls-blob--sq-br { border-radius: 30px 30px 0   30px; }
+.ls-blob--sq-tl { border-radius: 0   30px 30px 30px; }
+.ls-blob--sq-bl { border-radius: 30px 30px 30px 0;   }
+
+/* ── Logo ── */
+.ls-logo {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ls-logo-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  display: block;
+}
+
+/* ── Close button ── */
+.ls-close {
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.ls-close img { display: block; width: 100%; height: 100%; }
+
+/* ── Body ── */
+.ls-body {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 16px 16px 24px;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Title + description block ── */
+.ls-text-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ls-title {
+  font-family: var(--font);
+  font-size: 20px;
+  font-weight: 500;
+  color: #3d3d3d;
+  margin: 0;
+  line-height: 24px;
+  letter-spacing: 0.05px;
+}
+.ls-desc {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  color: #757575;
+  margin: 0;
+  line-height: 15.6px;
+}
+
+/* ── Shared action button ── */
+.ls-action-btn {
+  width: 100%;
+  height: 48px;
+  background: #01afd1;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  color: #fbfbfb;
+  cursor: pointer;
+  line-height: 18.2px;
+  flex-shrink: 0;
+}
+
+/* ── Step 1 ── */
+.ls-step1 {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ls-phone-label {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  color: #757575;
+  margin: 0;
+  line-height: 15.6px;
+}
+.ls-step1-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Step 2 ── */
+.ls-step2 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Phone display row */
+.ls-phone-row {
+  display: flex;
+  gap: 10px;
+  height: 48px;
+}
+.ls-phone-code {
+  width: 56px;
+  height: 100%;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  color: #015f74;
+  flex-shrink: 0;
+}
+.ls-phone-num {
+  flex: 1;
+  height: 100%;
+  border: 1px solid #01afd1;
+  border-radius: 8px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  color: #015f74;
+  letter-spacing: 0.035px;
+  white-space: nowrap;
+}
+
+/* OTP section */
+.ls-otp-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ls-otp-hint {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  color: #757575;
+  margin: 0;
+  text-align: center;
+  line-height: 15.6px;
+}
+.ls-otp-boxes {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.ls-otp-box {
+  width: 50px;
+  height: 48px;
+  border: 1px solid #01afd1;
+  border-radius: 8px;
+  box-sizing: border-box;
+  text-align: center;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  color: #015f74;
+  outline: none;
+  background: #fff;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.ls-otp-box:focus {
+  border-color: #015f74;
+}
+
+/* Step 2 action area */
+.ls-step2-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.ls-timer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.ls-timer {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+  line-height: 18.2px;
+  white-space: nowrap;
+}
+.ls-resend {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  color: #ccc;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: default;
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  text-underline-position: from-font;
+  line-height: 18.2px;
+}
+.ls-resend:not(.ls-resend--disabled) {
+  color: #01afd1;
+  cursor: pointer;
+}
+
+/* ── Legal text ── */
+.ls-legal {
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 400;
+  color: #9e9e9e;
+  margin: 0;
+  line-height: 13px;
+  padding: 8px 0 0;
+}
+.ls-legal-link {
+  color: #9e9e9e;
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+  text-underline-position: from-font;
+}
+
+/* ── OTP error state ── */
+.ls-otp-box--error {
+  border-color: #bb6262;
+  color: #bb6262;
+}
+.ls-otp-error {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 400;
+  color: #bb6262;
+  margin: 0;
+  text-align: center;
+  line-height: 14px;
+}
+
+/* ── Dev hint (dummy OTP) ── */
+.ls-otp-dev-hint {
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 400;
+  color: #ababab;
+  margin: 0;
+  text-align: center;
+  line-height: 14px;
+}
+.ls-otp-dev-hint strong {
+  color: #757575;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}

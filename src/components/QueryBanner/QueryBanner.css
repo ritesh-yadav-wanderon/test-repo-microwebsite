@@ -1,96 +1,90 @@
-/* QueryBanner — node 3113:9934, 393x402. Poster collage bg, dark scrim toward bottom,
-   centered circular monument icon, badge (14/500), heading "Have a query?" (22/700 bold),
-   "Enquire Now" pill (teal->blue gradient), white text. neutral #fbfbfb. */
+/* Enquire Now / QueryBanner — Figma 4593:11271 */
 
-.query {
-  position: relative;
+.qb {
   width: 100%;
-  height: 402px;
-  overflow: hidden;
+  padding: 20px 16px;
+  box-sizing: border-box;
+  background: #fff;
 }
 
-.query-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  filter: saturate(1.05);
-}
-
-/* darken lower half so white text + pill read clearly */
-.query-scrim {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.05) 0%,
-    rgba(0, 0, 0, 0.1) 40%,
-    rgba(0, 0, 0, 0.55) 78%,
-    rgba(0, 0, 0, 0.7) 100%
-  );
-}
-
-/* circular monument icon, centered around vertical mid */
-.query-icon {
-  position: absolute;
-  top: 96px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
-  z-index: 2;
-}
-.query-icon img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.query-content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 56px;
-  z-index: 2;
+.qb-card {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 10px;
+  padding-bottom: 20px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Animation video */
+.qb-illustration {
+  width: 100%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.qb-video {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Text + button */
+.qb-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.qb-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
   text-align: center;
-  color: var(--text-on-dark, #fbfbfb);
 }
 
-.query-badge {
-  font-family: "Roboto", sans-serif;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 18.2px;
-  color: #fbfbfb;
-}
-
-.query-title {
-  margin-top: 4px;
-  font-family: "Roboto", sans-serif;
+.qb-title {
+  margin: 0;
+  font-family: var(--font);
   font-weight: 700;
   font-size: 22px;
   line-height: 22px;
-  letter-spacing: 0;
-  color: #fbfbfb;
+  color: #121212;
 }
 
-.query-cta {
-  margin-top: 16px;
-  min-width: 168px;
-  height: 40px;
-  padding: 0 28px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #17a2c6 0%, #3a8df0 100%);
-  color: #ffffff;
-  font-family: "Roboto", sans-serif;
+.qb-sub {
+  margin: 0;
+  font-family: var(--font);
   font-weight: 500;
   font-size: 14px;
-  line-height: 1;
-  box-shadow: 0 4px 12px rgba(23, 162, 198, 0.4);
+  line-height: 18.2px;
+  color: #757575;
+}
+
+/* Gradient button */
+.qb-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 44px;
+  border-radius: 8px;
+  background: linear-gradient(26.4deg, #0093b0 16.5%, #667eff 83.5%);
+  box-shadow: 0px 0.571px 0.714px rgba(0, 0, 0, 0.25),
+              inset 0px 0px 1.713px rgba(0, 0, 0, 0.25);
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 21px;
+  color: #fbfbfb;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0;
 }

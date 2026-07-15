@@ -12,7 +12,7 @@ export const SAMPLE_UPCOMING_TRIPS: TripGroup[] = [
     month: "4",
     tripsArray: [
       {
-        slug: "europe-paris-to-budapest",
+        slug: "europe-group-trip-paris-to-budapest-14n-15d",
         title: "15-Day Europe Group Trip 2026: Paris to Budapest",
         type: "International",
         image: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=900&q=70&auto=format&fit=crop",
@@ -29,7 +29,7 @@ export const SAMPLE_UPCOMING_TRIPS: TripGroup[] = [
         categories: ["Culture", "Luxury"],
       },
       {
-        slug: "europe-paris-to-vienna",
+        slug: "europe-group-tour-paris-to-vienna-11n-12d",
         title: "12 Days Europe Group Tour: Paris to Vienna",
         type: "International",
         image: "https://images.unsplash.com/photo-1505761671935-60b3a7427bad?w=900&q=70&auto=format&fit=crop",
@@ -53,7 +53,7 @@ export const SAMPLE_UPCOMING_TRIPS: TripGroup[] = [
     month: "5",
     tripsArray: [
       {
-        slug: "bali-island-escape",
+        slug: "bali-with-gili-island",
         title: "7-Day Bali Group Escape: Beaches & Volcanoes",
         type: "International",
         image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=900&q=70&auto=format&fit=crop",
@@ -70,7 +70,7 @@ export const SAMPLE_UPCOMING_TRIPS: TripGroup[] = [
         categories: ["Wellness", "Adventure", "Weekend"],
       },
       {
-        slug: "ladakh-bike-expedition",
+        slug: "srinagar-leh-hanle-manali",
         title: "9-Day Leh Ladakh Bike Expedition",
         type: "Domestic",
         image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=900&q=70&auto=format&fit=crop",

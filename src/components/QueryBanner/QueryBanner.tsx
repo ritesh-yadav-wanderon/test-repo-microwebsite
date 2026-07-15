@@ -1,33 +1,41 @@
+import { useState } from "react";
 import "./QueryBanner.css";
+import ContactFormSheet from "../ContactFormSheet/ContactFormSheet";
 
 export default function QueryBanner() {
+  const [formOpen, setFormOpen] = useState(false);
+
   return (
-    <section className="query">
-      <div
-        className="query-bg"
-        style={{
-          backgroundImage:
-            "url(https://images.unsplash.com/photo-1499781350541-7783f6c6a0c8?w=900&q=70&auto=format&fit=crop)",
-        }}
-        aria-hidden
-      />
-      <div className="query-scrim" aria-hidden />
+    <>
+      <section className="qb">
+        <div className="qb-card">
+          <div className="qb-illustration">
+            <video
+              className="qb-video"
+              src="/figma/enquire/contact-animation.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          </div>
+          <div className="qb-body">
+            <div className="qb-text">
+              <p className="qb-title">Have a query?</p>
+              <p className="qb-sub">We are here for You!</p>
+            </div>
+            <button
+              className="qb-btn"
+              type="button"
+              onClick={() => setFormOpen(true)}
+            >
+              Enquire Now
+            </button>
+          </div>
+        </div>
+      </section>
 
-      <div className="query-icon">
-        <img
-          src="https://images.unsplash.com/photo-1617581629397-a72507c3de9e?w=300&q=70&auto=format&fit=crop"
-          alt=""
-          loading="lazy"
-        />
-      </div>
-
-      <div className="query-content">
-        <span className="query-badge">We are here for You!</span>
-        <h3 className="query-title">Have a query?</h3>
-        <button className="query-cta" type="button">
-          Enquire Now
-        </button>
-      </div>
-    </section>
+      <ContactFormSheet isOpen={formOpen} onClose={() => setFormOpen(false)} />
+    </>
   );
 }

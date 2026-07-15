@@ -61,7 +61,7 @@
 /* ── Hero ── */
 .dp-hero {
   position: relative;
-  height: 340px;
+  height: 440px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -96,13 +96,16 @@
   flex-direction: column;
   gap: 16px;
   width: 100%;
+  padding: 36px 16px 16px;
+  backdrop-filter: blur(8px);
+  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.4));
 }
 
 .dp-hero-body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 0 16px;
+  padding: 0;
 }
 
 .dp-hero-title {
@@ -123,76 +126,37 @@
 
 /* ── Destination city carousel bar ── */
 .dp-city-bar {
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 0 0 12px 12px;
-  height: 50px;
   width: 100%;
-  position: relative;
   overflow: hidden;
-  flex-shrink: 0;
 }
 
 .dp-city-scroll {
   display: flex;
   align-items: center;
-  height: calc(100% - 6px);
+  height: 26px;
   overflow-x: auto;
   scrollbar-width: none;
-  padding: 0 8px 0 12px;
+  gap: 0;
 }
 .dp-city-scroll::-webkit-scrollbar { display: none; }
 
-.dp-city-label {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  color: #e6e6e6;
-  font-size: 12px;
+.dp-city-name {
   font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  white-space: nowrap;
-  flex-shrink: 0;
-  padding-right: 10px;
-}
-
-.dp-city-tab {
-  flex-shrink: 0;
-  width: 80px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-size: 14px;
-  font-weight: 400;
-  font-family: "Roboto", sans-serif;
-  color: #e6e6e6;
-  background: none;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
-  padding: 0;
-}
-
-.dp-city-tab {
-  position: relative;
-}
-
-.dp-city-tab--active {
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.dp-city-tab--active::after {
-  content: "";
-  position: absolute;
-  bottom: -3px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 3px;
-  background: #fee60b;
-  border-radius: 30px;
   font-weight: 500;
+  color: #ffffff;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 0 12px;
+}
+
+.dp-city-dot {
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
 }
 
 /* ── Info section ── */
@@ -201,86 +165,128 @@
   padding: 20px 16px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 }
 
-.dp-info-heading {
+/* Breadcrumb */
+.dp-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dp-bc-sep {
   font-family: "Roboto", sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #757575;
+  line-height: 1.5;
 }
-
-.dp-info-tags {
+.dp-bc-dest {
   font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  color: #666666;
-  margin: 0;
-  line-height: 1.6;
+  font-size: 14px;
+  font-weight: 400;
+  color: #757575;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
 }
 
-.dp-info-sep {
-  border: none;
-  border-top: 1px dashed #d0d0d0;
-  margin: 2px 0;
-}
-
-.dp-attrs {
+/* Tags + best month card */
+.dp-tags-card {
+  border: 1px solid #ababab;
+  border-radius: 12px;
+  padding: 12px 8px 12px 12px;
   display: flex;
   flex-direction: column;
-  background: #f7f9fc;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid #eef0f4;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
-
-.dp-attr-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 11px 12px;
-  border-bottom: 1px solid #eef0f4;
-}
-.dp-attr-row:last-child { border-bottom: none; }
-
-.dp-attr-label {
-  display: flex;
-  align-items: center;
-  gap: 7px;
+.dp-tags-text {
   font-family: "Roboto", sans-serif;
-  font-size: 13px;
-  color: #555555;
-}
-
-.dp-attr-val {
-  font-family: "Roboto", sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  color: #1a1a1a;
+  color: #666666;
+  margin: 0;
+  line-height: 1.33;
+  letter-spacing: 0.03px;
 }
-
-.dp-price-row {
+.dp-bestmonth-row {
   display: flex;
   align-items: center;
+  gap: 4px;
+}
+.dp-bestmonth-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #4e4e4e;
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
+/* Bottom row — women pill + price */
+.dp-info-bottom {
+  display: flex;
+  align-items: flex-end;
   justify-content: space-between;
-  margin-top: 2px;
+}
+.dp-info-bottom-left {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.dp-price-label {
+/* Women pill */
+.dp-women-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  background: #faf1ff;
+  border: 1px solid #e7c0fc;
+  border-radius: 30px;
+  padding-left: 4px;
+  padding-right: 8px;
+}
+.dp-women-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #c458fe;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Discount row */
+.dp-discount-row {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
+}
+.dp-discount-text {
   font-family: "Roboto", sans-serif;
-  font-size: 13px;
-  color: #555555;
+  font-size: 12px;
+  font-weight: 400;
+  color: #575757;
+  white-space: nowrap;
 }
 
-.dp-price-val {
+/* Price value */
+.dp-info-price {
   font-family: "Roboto", sans-serif;
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 500;
   color: #01afd1;
+  white-space: nowrap;
+  line-height: 1.44;
+}
+
+.dp-deco-strip {
+  width: 100%;
+  height: 8px;
+  background: #f5f5f5;
+  flex-shrink: 0;
 }
 
 /* ── Upcoming trips ── */
@@ -372,7 +378,7 @@
 
 .dp-cust-eyebrow {
   font-family: "Roboto", sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: rgba(255, 255, 255, 0.7);
   letter-spacing: 1.2px;
@@ -400,101 +406,7 @@
   cursor: pointer;
 }
 
-/* ── Stats + related ── */
-.dp-stats {
-  background: #ffffff;
-  padding: 20px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  border-bottom: 8px solid #f5f5f5;
-}
 
-.dp-stats-row {
-  display: flex;
-  align-items: center;
-}
-
-.dp-stat { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-
-.dp-stat-women {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.dp-stat-divider {
-  width: 1px;
-  height: 40px;
-  background: #e5e5e5;
-  margin: 0 16px;
-  flex-shrink: 0;
-}
-
-.dp-stat-batch {
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #1a1a1a;
-  margin: 0;
-}
-
-.dp-stat-month {
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  color: #666666;
-  margin: 0;
-}
-
-/* Related destination */
-.dp-related { display: flex; flex-direction: column; gap: 8px; }
-
-.dp-related-label {
-  font-family: "Roboto", sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: #666666;
-}
-
-.dp-related-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border: 1px solid #e5e5e5;
-  border-radius: 10px;
-  padding: 10px 12px;
-  background: #fafafa;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-}
-
-.dp-related-thumb {
-  width: 48px;
-  height: 48px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #c8e6f0, #01afd1);
-  flex-shrink: 0;
-}
-
-.dp-related-info { flex: 1; display: flex; flex-direction: column; gap: 3px; }
-
-.dp-related-name {
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #1a1a1a;
-}
-
-.dp-related-date {
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  color: #888888;
-}
 
 /* ── Testimonials ── */
 .dp-testimonials {
@@ -521,7 +433,7 @@
   letter-spacing: 1.5px;
 }
 
-.dp-test-diamond { font-size: 9px; color: #c8a96e; }
+.dp-test-diamond { font-size: 12px; color: #c8a96e; }
 
 .dp-rating {
   display: flex;
@@ -600,7 +512,7 @@
 
 .dp-test-text {
   font-family: "Roboto", sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   color: #444444;
   line-height: 1.65;
   margin: 0;
@@ -608,7 +520,7 @@
 
 .dp-test-footer { display: flex; align-items: center; justify-content: space-between; }
 
-.dp-test-date { font-family: "Roboto", sans-serif; font-size: 12px; color: #888888; }
+.dp-test-date { font-family: "Roboto", sans-serif; font-size: 14px; color: #888888; }
 
 .dp-test-read {
   font-family: "Roboto", sans-serif;
@@ -636,57 +548,163 @@
   border-radius: 4px;
 }
 
-/* ── Culture & Local Voices ── */
+/* ── Cultural and Local Voices (Figma 4518:29298) ── */
 .dp-culture {
-  background: #fafafa;
-  padding: 24px 16px 32px;
+  background: #fff;
+  padding: 28px 0 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
+}
+
+.dp-culture-head {
+  text-align: center;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .dp-culture-title {
   font-family: "Roboto", sans-serif;
   font-size: 18px;
-  font-weight: 700;
-  color: #1a1a1a;
+  font-weight: 600;
+  color: #4e4e4e;
   margin: 0;
+  letter-spacing: 0.2px;
 }
 
-.dp-culture-photos {
+.dp-culture-sub {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #757575;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.dp-culture-row {
   display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding: 8px 0 16px;
+  gap: 12px;
+  justify-content: center;
   align-items: flex-start;
-}
-.dp-culture-photos::-webkit-scrollbar { display: none; }
-
-.dp-polaroid {
-  flex: 0 0 155px;
-  background: #ffffff;
-  padding: 8px 8px 14px;
-  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.14);
+  padding: 0 16px;
 }
 
-.dp-polaroid--tilt {
-  transform: rotate(2.5deg);
-  margin-top: 16px;
+.dp-culture-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.dp-polaroid-img {
+.dp-culture-card--tilt {
+  transform: rotate(-3deg);
+  margin-top: 24px;
+}
+
+.dp-culture-polaroid {
+  position: relative;
+  background: #fff;
+  padding: 7px 7px 26px;
+  box-shadow: 1px 4px 16px rgba(0, 0, 0, 0.16);
+  width: 148px;
+}
+
+.dp-culture-polaroid--lg {
+  width: 200px;
+  padding: 8px 8px 30px;
+}
+
+.dp-culture-photo {
   width: 100%;
-  height: 115px;
-  background-size: cover;
-  background-position: center;
-  filter: grayscale(100%);
+  display: block;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
 }
 
-.dp-polaroid-caption {
+.dp-culture-photo--lg {
+  aspect-ratio: 4 / 5;
+}
+
+.dp-culture-label {
+  position: absolute;
+  bottom: 30px;
+  left: 10px;
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+
+.dp-culture-desc {
   font-family: "Roboto", sans-serif;
   font-size: 10px;
-  color: #555555;
+  color: #3d3d3d;
+  margin: 0;
+  line-height: 1.5;
+  max-width: 148px;
+}
+
+.dp-culture-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+}
+
+.dp-culture-center-desc {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  color: #3d3d3d;
+  margin: 0;
+  line-height: 1.5;
+  text-align: center;
+  max-width: 220px;
+}
+
+.dp-culture-quote {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #202020;
+  margin: 0;
   line-height: 1.55;
-  margin: 8px 0 0;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.dp-culture-landscape {
+  width: 100%;
+  overflow: hidden;
+}
+
+.dp-culture-landscape-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.dp-culture-stack {
+  width: 100%;
+  padding: 0 0 8px;
+}
+
+/* ── Best Summer Deals trip strip (Figma 4518:27539) ── */
+.dp-trip-strip {
+  padding: 0 16px;
+}
+.dp-trip-strip .up-header-row {
+  padding: 0;
+  margin-bottom: 4px;
+}
+
+/* ── Section divider (Figma 4544:31916) ── */
+.dp-section-div {
+  width: 100%;
+  height: 8px;
+  background: #f5f5f5;
+  flex-shrink: 0;
 }

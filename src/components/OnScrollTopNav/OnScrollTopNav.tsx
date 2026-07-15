@@ -1,8 +1,3 @@
-import arrowBackIcon     from "../../assets/on-scroll-nav/arrow-back.svg";
-import locationOnIcon    from "../../assets/on-scroll-nav/location-on.svg";
-import calendarIcon      from "../../assets/on-scroll-nav/calendar-month.svg";
-import searchBtnIcon     from "../../assets/on-scroll-nav/search-btn.svg";
-import listAltAddIcon    from "../../assets/on-scroll-nav/list-alt-add.svg";
 import "./OnScrollTopNav.css";
 
 export interface OnScrollTopNavProps {
@@ -10,9 +5,10 @@ export interface OnScrollTopNavProps {
   isHome: boolean;
   onBack?: () => void;
   onSearch?: () => void;
+  onBurger?: () => void;
 }
 
-export default function OnScrollTopNav({ visible, isHome, onBack, onSearch }: OnScrollTopNavProps) {
+export default function OnScrollTopNav({ visible, isHome, onBack, onSearch, onBurger }: OnScrollTopNavProps) {
   const tab = visible ? 0 : -1;
 
   return (
@@ -29,11 +25,11 @@ export default function OnScrollTopNav({ visible, isHome, onBack, onSearch }: On
           tabIndex={tab}
           onClick={onBack}
         >
-          <img src={arrowBackIcon} width={24} height={24} alt="" aria-hidden />
+          <img src="/figma/nav/arrow-back.svg" width={24} height={24} alt="" aria-hidden />
         </button>
       )}
 
-      {/* Search pill: location pane | date pane | teal search btn */}
+      {/* Search pill */}
       <button
         className="ostn-pill"
         type="button"
@@ -41,29 +37,36 @@ export default function OnScrollTopNav({ visible, isHome, onBack, onSearch }: On
         tabIndex={tab}
         onClick={onSearch}
       >
+        {/* Location pane */}
         <div className="ostn-pane">
-          <img src={locationOnIcon} width={16} height={16} alt="" aria-hidden />
+          <img src="/figma/listing/location-on.svg" width={16} height={16} alt="" aria-hidden />
           <span className="ostn-pane-text">Where to?</span>
         </div>
 
+        {/* Vertical divider */}
+        <div className="ostn-divider" aria-hidden />
+
+        {/* Date pane */}
         <div className="ostn-pane">
-          <img src={calendarIcon} width={16} height={16} alt="" aria-hidden />
+          <img src="/figma/listing/calendar-month.svg" width={16} height={16} alt="" aria-hidden />
           <span className="ostn-pane-text">When?</span>
         </div>
 
-        <span className="ostn-search-btn">
-          <img src={searchBtnIcon} width={40} height={40} alt="" aria-hidden />
-        </span>
+        {/* Teal search circle */}
+        <div className="ostn-search-circle" aria-hidden>
+          <img src="/figma/nav/search-teal.svg" width={40} height={40} alt="" />
+        </div>
       </button>
 
-      {/* List-alt-add */}
+      {/* Burger menu */}
       <button
-        className="ostn-list-btn"
+        className="ostn-burger"
         type="button"
-        aria-label="Add to list"
+        aria-label="Open menu"
         tabIndex={tab}
+        onClick={onBurger}
       >
-        <img src={listAltAddIcon} alt="" aria-hidden />
+        <img src="/figma/nav/burger-menu.svg" width={24} height={12} alt="" aria-hidden />
       </button>
     </header>
   );

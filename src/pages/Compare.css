@@ -1,0 +1,337 @@
+/* Compare trips — Figma 3032:20973 — cpt- prefix */
+
+.cpt-page {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--app-width);
+  height: 100svh;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  z-index: 1100;
+}
+
+/* ── Header ── */
+.cpt-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.cpt-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cpt-header-title {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #121212;
+  letter-spacing: 0.42px;
+}
+
+.cpt-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── AI Banner ── */
+.cpt-ai-banner {
+  margin: 12px 16px 8px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, #f4f1f9 0%, #e8faff 100%);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.cpt-ai-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #1b0052;
+}
+
+.cpt-ai-text {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  color: #3d3d3d;
+  line-height: 16px;
+}
+
+/* ── Scroll area ── */
+.cpt-scroll-area {
+  overflow-x: auto;
+  padding-bottom: 20px;
+  scrollbar-width: none;
+}
+.cpt-scroll-area::-webkit-scrollbar {
+  display: none;
+}
+
+.cpt-cards-row {
+  display: flex;
+  align-items: stretch;
+  min-width: max-content;
+  padding: 10px 16px 0;
+  gap: 0;
+}
+
+/* wrapper holds [card + leading-divider] */
+.cpt-card-wrap {
+  display: flex;
+  align-items: stretch;
+}
+
+/* Vertical divider between cards — Figma imgLine91 */
+.cpt-divider {
+  width: 1px;
+  background: #e5e5e5;
+  flex-shrink: 0;
+  align-self: stretch;
+  margin: 0 8px;
+}
+
+/* ── Trip card ── */
+.cpt-card {
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+/* ── Hero image — Figma: h-60, rounded-8 ── */
+.cpt-card-img-wrap {
+  position: relative;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cpt-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Bin button — Figma: white bg, p-6, rounded-75px, bottom-6 right-6 */
+.cpt-card-delete {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background: #ffffff;
+  border-radius: 75px;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Card info block: title + price + route ── */
+.cpt-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0;
+}
+
+.cpt-card-title {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  color: #202020;
+  line-height: 20px;
+  width: 100%;
+}
+
+/* Price row: [discount icon + "Starting Price:"] + [price] */
+.cpt-card-price-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cpt-card-price-prefix {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.cpt-card-price-label {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  color: #757575;
+  letter-spacing: 0.06px;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.cpt-card-price {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  color: #757575;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.cpt-card-route {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  color: #202020;
+  line-height: 16px;
+}
+
+/* ── Sections ── */
+.cpt-section {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Section grey header — Figma: bg-#f5f5f5, h-40, px-4 */
+.cpt-section-hd {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: #f5f5f5;
+  height: 40px;
+  padding: 0 4px 0 12px;
+  width: 100%;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  color: #757575;
+  letter-spacing: 0.06px;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+/* Bullet list — Figma: gap-4, 12px Regular #202020, ms-18 */
+.cpt-bullet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 18px;
+  list-style: disc;
+}
+
+.cpt-bullet-list li {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  color: #202020;
+  line-height: 16px;
+}
+
+/* ── Service / Exclusion rows ── */
+.cpt-service-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px 4px;
+}
+
+/* Each row: pill on left, description text on right */
+.cpt-service-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+/* Green inclusion pill — Figma: border #e8f7f3, h-16, px-4, rounded-30 */
+.cpt-service-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 20px;
+  padding: 0 10px 0 6px;
+  border-radius: 30px;
+  overflow: hidden;
+  flex-shrink: 0;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.cpt-service-pill--green {
+  border: 1px solid #e8f7f3;
+  color: #139b79;
+}
+
+/* Grey exclusion pill — Figma: bg rgba(245,245,245,0.6), border #f0f0f0, pl-4 pr-8 */
+.cpt-service-pill--grey {
+  background: rgba(245, 245, 245, 0.6);
+  border: 1px solid #f0f0f0;
+  color: #9c9c9c;
+  padding: 0 10px 0 6px;
+}
+
+/* Description text beside pill — Figma: 12px Regular #202020, w-204 */
+.cpt-service-desc {
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  color: #202020;
+  line-height: 16px;
+  width: 204px;
+  flex-shrink: 0;
+}
+
+/* ── Book Trip CTA — Figma: bg #fee60b, h-38, rounded-73px ── */
+.cpt-book-btn {
+  width: 100%;
+  height: 48px;
+  background: #fee60b;
+  border-radius: 73px;
+  border: none;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #202020;
+  cursor: pointer;
+  flex-shrink: 0;
+}

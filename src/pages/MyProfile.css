@@ -1,0 +1,428 @@
+/* MyProfile — Figma 3626:10342 */
+
+.mprf-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  background: #fff;
+  max-width: var(--app-width, 460px);
+  margin: 0 auto;
+}
+
+/* ── Header ── */
+.mprf-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 16px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+.mprf-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.mprf-header-back {
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mprf-header-back img { display: block; width: 100%; height: 100%; }
+.mprf-header-title {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 400;
+  color: #202020;
+  line-height: 24px;
+  letter-spacing: 0.08px;
+  white-space: nowrap;
+}
+.mprf-header-bell {
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mprf-header-bell img { display: block; width: 100%; height: 100%; }
+
+/* ── Scrollable content ── */
+.mprf-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  padding: 20px 20px 40px;
+  box-sizing: border-box;
+  width: 100%;
+  overflow-y: auto;
+}
+
+/* ── Avatar + name ── */
+.mprf-user-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.mprf-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 60px;
+  background: #f8f0d3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mprf-avatar-initial {
+  font-family: var(--font);
+  font-size: 24px;
+  font-weight: 400;
+  color: #755d05;
+  line-height: 24px;
+  letter-spacing: 0.06px;
+}
+.mprf-name {
+  font-size: 16px;
+  color: #202020;
+  margin: 0;
+  letter-spacing: 0.04px;
+  white-space: nowrap;
+}
+.mprf-name-hi   { font-weight: 400; }
+.mprf-name-user { font-weight: 500; letter-spacing: 0.08px; }
+
+/* ── Email confirmation banner ── */
+.mprf-email-banner {
+  width: 100%;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+.mprf-banner-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+.mprf-banner-icon {
+  flex-shrink: 0;
+  display: block;
+  margin-top: 2px;
+}
+.mprf-banner-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.mprf-banner-title {
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 400;
+  color: #3d3d3d;
+  line-height: 24px;
+  margin: 0;
+  white-space: nowrap;
+}
+.mprf-banner-sub {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  color: #757575;
+  line-height: 21px;
+  margin: 0;
+  letter-spacing: 0.056px;
+}
+.mprf-banner-close {
+  width: 18px;
+  height: 20px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mprf-banner-close img { display: block; }
+.mprf-confirm-btn {
+  width: 100%;
+  height: 48px;
+  background: #fff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.04);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  color: #3d3d3d;
+  cursor: pointer;
+  line-height: 21px;
+}
+
+/* ── Form section ── */
+.mprf-form-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex-shrink: 0;
+}
+.mprf-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.mprf-section-head-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.mprf-section-title {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  color: #202020;
+  line-height: 18.2px;
+}
+.mprf-edit-btn {
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mprf-edit-btn img { display: block; }
+
+/* ── Fields list ── */
+.mprf-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* ── Floating label field wrapper ── */
+.mprf-field-wrap {
+  position: relative;
+  height: 48px;
+  width: 100%;
+  flex-shrink: 0;
+}
+.mprf-field-wrap--flex {
+  flex: 1;
+  min-width: 0;
+  width: auto;
+}
+
+.mprf-field-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  background: #fff;
+  overflow: hidden;
+}
+.mprf-field-inner--filled {
+  border-color: #e6e6e6;
+}
+
+.mprf-float-label {
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  background: #fff;
+  padding: 2px 4px;
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 400;
+  color: #ababab;
+  line-height: 14px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ── Input element ── */
+.mprf-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  color: #3c3c3c;
+  line-height: 20px;
+  letter-spacing: 0.035px;
+  padding: 0;
+}
+.mprf-input::placeholder {
+  font-size: 10px;
+  color: #ababab;
+  line-height: 14px;
+}
+.mprf-input--text {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mprf-input--medium {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.mprf-placeholder {
+  font-size: 10px;
+  color: #ababab;
+  line-height: 14px;
+  font-weight: 400;
+}
+
+.mprf-input-icon {
+  flex-shrink: 0;
+  display: block;
+  object-fit: contain;
+}
+.mprf-input-trailing {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Country pill ── */
+.mprf-country-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 14px 10px;
+  box-sizing: border-box;
+  background: #fff;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.mprf-country-text {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  color: #4e4e4e;
+  line-height: 21px;
+}
+
+/* ── Phone row ── */
+.mprf-phone-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+/* ── Address wrapper ── */
+.mprf-addr-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  flex-shrink: 0;
+}
+.mprf-addr-wrap .mprf-field-inner {
+  position: relative;
+  inset: auto;
+  height: 48px;
+}
+.mprf-addr-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mprf-addr-note img { flex-shrink: 0; display: block; }
+.mprf-addr-note-text {
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 400;
+  color: #757575;
+  margin: 0;
+  line-height: 12px;
+  flex: 1;
+}
+
+/* Address line 2 standalone */
+.mprf-fields > .mprf-field-inner {
+  position: relative;
+  inset: auto;
+  height: 48px;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+/* ── Side-by-side row ── */
+.mprf-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+/* ── Save button ── */
+.mprf-save-btn {
+  width: 100%;
+  height: 48px;
+  background: #01afd1;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  line-height: 21px;
+  flex-shrink: 0;
+}

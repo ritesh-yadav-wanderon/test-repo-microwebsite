@@ -1,0 +1,294 @@
+/* BurgerMenu — full-screen slide-in from right (Figma 3637:9914) */
+
+.bm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1010;
+  pointer-events: none;
+}
+.bm-overlay--open {
+  pointer-events: all;
+}
+
+/* Full-screen white panel slides from right */
+.bm-panel {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  overflow: hidden;
+}
+.bm-panel--open {
+  transform: translateX(0);
+}
+
+/* Header (Figma 3715:4947) — 64px, logo + bubbles + close */
+.bm-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  flex-shrink: 0;
+}
+
+.bm-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Scrollable nav content */
+.bm-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+
+/* Group of nav items */
+.bm-nav-group {
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px;
+}
+
+/* Individual nav item row */
+.bm-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  text-decoration: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.bm-item--about { padding: 0 16px; }
+.bm-item-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+.bm-item-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #4e4e4e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Separator */
+.bm-sep {
+  width: 100%;
+  height: 1px;
+  background: #e8e8e8;
+  flex-shrink: 0;
+  margin: 4px 0;
+}
+
+/* CTA footer */
+.bm-cta-wrap {
+  padding: 0 16px 20px;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+}
+.bm-cta {
+  width: 100%;
+  max-width: 358px;
+  height: 48px;
+  background: #01afd1;
+  border: none;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+
+/* ── Bike Trips sub-panel ── */
+.bm-subpanel {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  pointer-events: none;
+}
+.bm-subpanel--open {
+  transform: translateX(0);
+  pointer-events: all;
+}
+
+/* Sub-panel header — 64px, back + title + close */
+.bm-subheader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 20px;
+  border-bottom: 1px solid #e5e5e5;
+  flex-shrink: 0;
+}
+.bm-subheader-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.bm-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.bm-subheader-title {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: #202020;
+  white-space: nowrap;
+}
+
+/* Sub-panel items list */
+.bm-sub-content {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+}
+.bm-sub-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 16px;
+  flex-shrink: 0;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.bm-sub-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #4e4e4e;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Trending badge */
+.bm-trending {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+  padding: 0 4px;
+  background: rgba(198, 255, 36, 0.2);
+  border: 1px solid #b1da3a;
+  border-radius: 100px;
+  flex-shrink: 0;
+}
+.bm-trending-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #b1da3a;
+  white-space: nowrap;
+}
+
+/* ── Destinations accordion ── */
+.bm-dest-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.bm-dest-region {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+/* Collapsed region header (button) */
+.bm-dest-region-collapsed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 16px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Expanded region header (non-interactive div) */
+.bm-dest-region-header--expanded {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 16px;
+  flex-shrink: 0;
+}
+
+.bm-dest-region-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #3d3d3d;
+  white-space: nowrap;
+  text-align: left;
+}
+
+/* Separator between regions */
+.bm-dest-sep {
+  width: 100%;
+  height: 1px;
+  background: #e8e8e8;
+  flex-shrink: 0;
+}
+
+/* "see more destinations" underline */
+.bm-dest-see-more {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #4e4e4e;
+  text-decoration: underline;
+}

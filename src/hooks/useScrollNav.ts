@@ -1,20 +1,19 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Direction-aware header visibility:
- *  - At top (< 80 px)    → logo header
- *  - Scrolling DOWN       → compact search header
- *  - Scrolling UP         → logo header
+ * Homepage: purely IntersectionObserver-driven.
+ *   - Hero search IN viewport  → logo header visible, compact nav hidden
+ *   - Hero search OUT viewport → compact nav visible, logo header hidden
  *
- * Homepage bonus: IntersectionObserver on [data-hero-search] forces
- * the logo header back whenever the search bar re-enters the viewport.
+ * Non-home pages: scroll-direction-driven.
+ *   - At top (<80px) or scrolling UP  → logo header
+ *   - Scrolling DOWN past threshold    → compact nav
  */
 export function useScrollNav(isHome: boolean) {
   const [compact, setCompact] = useState(false);
   const lastY   = useRef(0);
   const prevIsHome = useRef(isHome);
 
-  // Reset state when the route changes
   useEffect(() => {
     if (prevIsHome.current !== isHome) {
       setCompact(false);
@@ -26,58 +25,54 @@ export function useScrollNav(isHome: boolean) {
     setCompact(false);
     lastY.current = window.scrollY;
 
-    const THRESHOLD = 80;
-    let ticking = false;
-
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const y = window.scrollY;
-        if (y < THRESHOLD) {
-          setCompact(false);
-        } else if (y > lastY.current) {
-          // Scrolling DOWN → show compact header
-          setCompact(true);
-        } else if (y < lastY.current) {
-          // Scrolling UP → show logo header
-          setCompact(false);
-        }
-        lastY.current = y;
-        ticking = false;
-      });
-    };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    // On homepage: also watch the hero search bar.
-    // If it comes back into view while scrolling up, force logo header on.
-    let observer: IntersectionObserver | null = null;
     if (isHome) {
+      // ── Homepage: IntersectionObserver only ──
       const attach = () => {
         const el = document.querySelector("[data-hero-search]");
         if (!el) return false;
-        observer = new IntersectionObserver(
-          ([entry]) => { if (entry.isIntersecting) setCompact(false); },
+        const observer = new IntersectionObserver(
+          ([entry]) => { setCompact(!entry.isIntersecting); },
           { threshold: 0 }
         );
         observer.observe(el);
-        return true;
+        return () => observer.disconnect();
       };
-      if (!attach()) {
-        const raf = requestAnimationFrame(attach);
-        return () => {
-          cancelAnimationFrame(raf);
-          observer?.disconnect();
-          window.removeEventListener("scroll", onScroll);
-        };
-      }
-    }
 
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      observer?.disconnect();
-    };
+      let cleanup: (() => void) | undefined;
+      const raf = requestAnimationFrame(() => {
+        const result = attach();
+        if (typeof result === "function") cleanup = result;
+      });
+
+      return () => {
+        cancelAnimationFrame(raf);
+        if (cleanup) cleanup();
+      };
+    } else {
+      // ── Non-home pages: scroll-direction aware ──
+      const THRESHOLD = 80;
+      let ticking = false;
+
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const y = window.scrollY;
+          if (y < THRESHOLD) {
+            setCompact(false);
+          } else if (y > lastY.current) {
+            setCompact(true);
+          } else if (y < lastY.current) {
+            setCompact(false);
+          }
+          lastY.current = y;
+          ticking = false;
+        });
+      };
+
+      window.addEventListener("scroll", onScroll, { passive: true });
+      return () => window.removeEventListener("scroll", onScroll);
+    }
   }, [isHome]);
 
   return {

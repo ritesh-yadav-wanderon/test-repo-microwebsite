@@ -28,7 +28,7 @@
   --font: "Roboto", system-ui, -apple-system, Segoe UI, sans-serif;
 
   /* Layout */
-  --app-width: 600px;
+  --app-width: 460px;
   --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
@@ -108,7 +108,7 @@ ul {
   background: var(--surface);
   position: relative;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.18);
-  padding-bottom: 70px; /* room for fixed bottom nav (Figma 3244:13173) */
+  /* padding-bottom handled per-page or by last component (e.g. footer) */
 }
 
 .section {
@@ -158,4 +158,14 @@ ul {
   color: var(--text-secondary);
   background: #fff;
   white-space: nowrap;
+}
+
+a, button {
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--brand-teal);
+  outline-offset: 2px;
 }

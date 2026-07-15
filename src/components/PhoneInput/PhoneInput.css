@@ -1,0 +1,225 @@
+/* PhoneInput — Figma 5230:5532 variants */
+
+/* ── Outer wrapper ── */
+.phi-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  position: relative;
+}
+
+/* ── Main row ── */
+/* gap-[6px] h-[48px] items-start */
+.phi-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+}
+
+/* ── Country code pill ── */
+/* bg-white border rounded-[8px] h-[48px] px-[10px] py-[14px] gap-[8px] */
+.phi-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 14px 10px;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.phi-pill-text {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  color: #202020;
+  line-height: 21px;
+  white-space: nowrap;
+}
+
+.phi-chevron {
+  display: block;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+.phi-chevron--open {
+  transform: rotate(180deg);
+}
+
+/* ── Input field outer (for floating label) ── */
+.phi-field-outer {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+
+/* ── Input border box ── */
+/* bg-white border rounded-[8px] h-[48px] px-[12px] py-[8px] */
+.phi-field {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  transition: border-color 0.15s ease;
+  width: 100%;
+}
+
+/* ── Input element ── */
+.phi-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  color: #202020;
+  line-height: 21px;
+  padding: 0;
+}
+.phi-input::placeholder {
+  font-size: 12px;
+  color: #ababab;
+  line-height: 16px;
+}
+
+/* ── Floating label ── */
+/* absolute top-[-10px] left-[10px] bg-white px-[4px] py-[2px] */
+.phi-float-label {
+  position: absolute;
+  top: -10px;
+  left: 10px;
+  background: #fff;
+  padding: 2px 4px;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 15.6px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* ── Error message ── */
+/* text-[#bb6262] text-[10px] leading-[14px] */
+.phi-error {
+  font-family: var(--font);
+  font-size: 10px;
+  font-weight: 400;
+  color: #bb6262;
+  line-height: 14px;
+  margin: 0;
+}
+
+/* ── Country dropdown ── */
+/* bg-white border-[#e6e6e6] rounded-[8px] px-[12px] py-[8px] gap-[8px] */
+.phi-dropdown {
+  width: 100%;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  padding: 4px 0;
+  box-sizing: border-box;
+  max-height: 220px;
+  overflow-y: auto;
+  /* subtle shadow for depth */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.phi-dropdown-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 12px;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  gap: 8px;
+}
+.phi-dropdown-row:hover {
+  background: #f5f5f5;
+}
+
+.phi-dropdown-code {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  color: #202020;
+  line-height: 21px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.phi-dropdown-name {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  color: #ababab;
+  line-height: 21px;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Dropdown search box ── */
+.phi-search-wrap {
+  padding: 8px 8px 4px;
+  border-bottom: 1px solid #f0f0f0;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1;
+}
+.phi-search {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 400;
+  color: #202020;
+  outline: none;
+  background: #fafafa;
+}
+.phi-search:focus {
+  border-color: #757575;
+  background: #fff;
+}
+.phi-search::placeholder {
+  color: #ababab;
+}
+
+/* ── Selected row highlight ── */
+.phi-dropdown-row--selected {
+  background: #f0fafc;
+}
+.phi-dropdown-row--selected .phi-dropdown-code {
+  color: #015f74;
+  font-weight: 500;
+}
+
+/* ── No results ── */
+.phi-no-results {
+  font-family: var(--font);
+  font-size: 13px;
+  color: #ababab;
+  text-align: center;
+  padding: 16px 12px;
+  margin: 0;
+}

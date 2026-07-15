@@ -1,0 +1,337 @@
+/* PaymentSheet — bottom sheet (Figma 3074:9283) */
+
+.psh-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  background: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  overflow: hidden;
+  transition: background 0.3s ease;
+}
+.psh-overlay--open {
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: all;
+}
+
+.psh-sheet {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 100%;
+  max-width: var(--app-width);
+  transform: translate(-50%, 100%);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  background: #ffffff;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.psh-sheet--open {
+  transform: translate(-50%, 0);
+}
+
+/* Body (options) */
+.psh-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 20px 0;
+}
+
+/* ── Option: Book now & pay later ── */
+.psh-later {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #e8f6ec 86%, rgba(255, 255, 255, 0.4));
+}
+.psh-later-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 12px 12px 8px;
+  border: 1px solid #f2f2f2;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0px 4px 8.6px rgba(14, 14, 14, 0.02);
+  text-align: left;
+}
+.psh-later--active .psh-later-card {
+  border-color: #01afd1;
+}
+.psh-later-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 10px;
+  width: 100%;
+}
+.psh-later-head img {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.psh-later-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #202020;
+}
+
+/* Timeline */
+.psh-timeline {
+  display: flex;
+  gap: 14px;
+  align-items: stretch;
+  padding-left: 2px;
+  width: 100%;
+}
+.psh-timeline-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  padding: 2px 0;
+}
+.psh-rail-node {
+  width: 12px;
+  height: 12px;
+  border: 0.5px solid #ababab;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  line-height: 10px;
+  color: #ababab;
+  flex-shrink: 0;
+}
+.psh-rail-line {
+  flex: 1;
+  width: 0;
+  border-left: 1px dashed #ababab;
+  min-height: 16px;
+}
+.psh-timeline-rows {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.psh-timeline-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #202020;
+}
+.psh-timeline-row > span:first-child {
+  flex: 1;
+  min-width: 0;
+}
+.psh-timeline-row > span:last-child {
+  white-space: nowrap;
+}
+
+/* Footer strip */
+.psh-later-foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 32px;
+  padding: 12px;
+}
+.psh-later-foot span {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 12px;
+  color: #25793d;
+  white-space: nowrap;
+}
+.psh-foot-dot {
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #25793d;
+  flex-shrink: 0;
+}
+
+/* ── Option: Pay full amount now ── */
+.psh-full {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  padding: 12px 12px 12px 8px;
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0px 4px 8.6px rgba(14, 14, 14, 0.02);
+  text-align: left;
+}
+.psh-full--active {
+  border-color: #01afd1;
+}
+.psh-full > img {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.psh-full-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.psh-full-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #202020;
+}
+.psh-full-sub {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #202020;
+}
+.psh-full-amount {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #202020;
+  white-space: nowrap;
+  align-self: center;
+}
+
+/* ── CTA ── */
+.psh-cta {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.psh-cta-tags {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 32px;
+  padding: 12px 8px;
+  background: linear-gradient(
+    to right,
+    rgba(254, 230, 11, 0.06),
+    rgba(1, 175, 209, 0.06)
+  );
+}
+.psh-cta-tags img {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.psh-cta-saved-amt {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 15.6px;
+  color: #435c3d;
+}
+.psh-cta-saved-text {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15.6px;
+  color: #316868;
+}
+.psh-cta-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 70px;
+  padding: 8px 16px;
+  background: #ffffff;
+  box-shadow: 0px 0px 6px rgba(0, 0, 0, 0.05);
+}
+.psh-cta-price-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+}
+.psh-cta-price {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 18px;
+  color: #01afd1;
+  white-space: nowrap;
+}
+.psh-cta-fee {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #818181;
+}
+.psh-cta-fee img {
+  width: 16px;
+  height: 16px;
+}
+
+/* Swipe to pay */
+.psh-swipe {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 48px;
+  width: 200px;
+  padding: 4px 16px 4px 8px;
+  border-radius: 56px;
+  background: #01afd1;
+  box-shadow: -3px 2px 4px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+}
+.psh-swipe-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 60px;
+  background: #08677c;
+  box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.25);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+.psh-swipe-label {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0.024px;
+  color: #ffffff;
+  white-space: nowrap;
+  text-align: left;
+}
+.psh-swipe img {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}

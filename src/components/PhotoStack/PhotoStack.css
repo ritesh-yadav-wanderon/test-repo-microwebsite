@@ -1,0 +1,67 @@
+/* Photo Stack — Figma 4518:26092 */
+
+.ps-wrap {
+  position: relative;
+  width: 100%;
+  height: 265px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ps-card {
+  position: absolute;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 3.6px 4px rgba(0, 0, 0, 0.25);
+  aspect-ratio: 726 / 464;
+  transform-origin: center center;
+}
+
+.ps-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.ps-img {
+  position: absolute;
+  top: 0;
+  width: 205%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Tap-to-flip label */
+.ps-hint {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Roboto", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #999;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Sweep-out animation — top card exits to the left */
+@keyframes ps-sweep {
+  0%   { transform: rotate(0deg) translateX(0) translateY(0); opacity: 1; }
+  25%  { opacity: 1; }
+  100% { transform: rotate(-18deg) translateX(-140%) translateY(-12%); opacity: 0; }
+}
+
+.ps-card--sweep {
+  animation: ps-sweep 0.42s cubic-bezier(0.4, 0, 0.8, 0.6) forwards;
+  pointer-events: none;
+}

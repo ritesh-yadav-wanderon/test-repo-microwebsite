@@ -1,131 +1,165 @@
-/* WanderOn Originals — Figma 3014:8910. Warm cream bg, Roboto Condensed, layered panel. */
+/* Inspiring Stories — Figma 3113:9626 / 9862 / 9648 */
 
 .orig {
   width: 100%;
-  background: #f6e7d5;
 }
 
-/* Header */
-.orig-head {
-  padding: 16px 16px 0;
+/* Horizontal scroll row */
+.orig-scroll {
+  display: flex;
+  gap: 16px;
+  padding: 22px 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.orig-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* Card — 358×400, matches Figma frame */
+.orig-card {
+  position: relative;
+  width: 358px;
+  height: 400px;
+  border-radius: 16px;
+  overflow: hidden;
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  cursor: pointer;
+  text-align: left;
+  border: none;
+  padding: 0;
+}
+
+
+/* Content block — top-left, z above images */
+.orig-content {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  width: 200px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
+  gap: 13px;
+  z-index: 2;
+}
+
+.orig-story {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }
 
 .orig-title {
   margin: 0;
   font-family: "Roboto Condensed", "Roboto", sans-serif;
+  font-size: 18px;
   font-weight: 500;
-  font-size: 30px;
-  line-height: 30px;
-  color: #ffd44d;
-  text-shadow: 1px -1px 0 #ffa800, 1px -1px 4px rgba(0, 0, 0, 0.06);
-  text-align: center;
-  white-space: nowrap;
-  text-transform: capitalize;
-}
-
-.orig-sub {
-  margin: 0;
-  font-family: "Roboto Condensed", "Roboto", sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-  color: #c2b292;
-  text-align: center;
-  text-transform: capitalize;
-}
-
-/* 600px panel with layered composition */
-.orig-panel {
-  position: relative;
-  width: 100%;
-  height: 600px;
-  overflow: hidden;
-  margin-top: 16px;
-}
-
-/* Story text top-left */
-.orig-story {
-  position: absolute;
-  top: 60px;
-  left: 16px;
-  width: min(327px, calc(100% - 32px));
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.orig-story-title {
-  margin: 0;
-  font-family: "Roboto Condensed", "Roboto", sans-serif;
-  font-weight: 500;
-  font-size: 20px;
   line-height: 1.2;
   color: #3d3d3d;
 }
 
-.orig-story-body {
+.orig-body {
   margin: 0;
   font-family: "Roboto", sans-serif;
-  font-weight: 500;
   font-size: 14px;
-  line-height: 16px;
+  font-weight: 400;
+  line-height: 21px;
   color: rgba(61, 61, 61, 0.8);
-  text-align: justify;
 }
 
-.orig-progress {
-  display: flex;
-  gap: 10px;
-  margin-top: 4px;
-}
-.orig-bar {
-  width: 44px;
-  height: 4px;
-  border-radius: 999px;
-  background: rgba(194, 178, 146, 0.4);
-}
-.orig-bar--active {
-  background: #846950;
-  opacity: 1;
+/* Explore pill */
+.orig-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 16px;
+  border: 0.667px solid #3d3d3d;
+  border-radius: 32px;
 }
 
-/* Birds illustration */
-.orig-birds {
-  position: absolute;
-  left: 40px;
-  top: 280px;
-  width: 177px;
-  height: 75px;
-  object-fit: contain;
-  z-index: 4;
+.orig-btn span {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: #3d3d3d;
+  white-space: nowrap;
 }
 
-/* Hiker on mountain — bottom 362px, wide */
+/* ── Hiker card images ── */
+
+/* Person on mountain — bottom-right, 260×241 */
 .orig-hiker {
   position: absolute;
   bottom: 0;
-  left: 0.03%;
-  width: 152.09%;
-  height: 362px;
+  right: 0;
+  width: 260px;
+  height: 241px;
   object-fit: cover;
-  object-position: top center;
-  z-index: 2;
+  object-position: left top;
+  pointer-events: none;
+  display: block;
 }
 
-/* Mountain silhouette — bottom, flipped */
+/* Mountain bottom — centered at bottom, horizontally mirrored */
+.orig-mountain-wrap {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 191px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* scaleY(-1) + rotate(180deg) = net scaleX(-1) */
+.orig-mountain-inner {
+  transform: scaleX(-1);
+  width: 260px;
+  height: 191px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
 .orig-mountain {
   position: absolute;
-  bottom: -60px;
-  left: 50%;
-  transform: translateX(-50%) scaleY(-1);
   width: 105.84%;
-  height: 287px;
+  height: 118.84%;
+  left: -4.52%;
+  top: 0.08%;
+  max-width: none;
+  display: block;
+}
+
+/* ── Architecture card images ── */
+
+.orig-arch {
+  position: absolute;
+  width: 260px;
+  pointer-events: none;
+  display: block;
   object-fit: cover;
-  z-index: 1;
-  opacity: 0.55;
+}
+
+/* Roman temple — anchored bottom-right */
+.orig-arch--rome {
+  bottom: 0;
+  right: 0;
+  aspect-ratio: 1192 / 899;
+}
+
+/* Mosque — starts mid-card, right-aligned */
+.orig-arch--mosque {
+  top: 208px;
+  right: 0;
+  aspect-ratio: 1192 / 899;
 }

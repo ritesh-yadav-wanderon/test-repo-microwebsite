@@ -220,27 +220,27 @@ export default function SearchBottomSheet({
           </svg>
         </button>
 
-        {/* Category strip */}
-        <div className="sbs-cats">
-          {CATEGORIES.map((cat, i) => (
-            <button
-              key={i}
-              className={`sbs-cat${i === activeCat ? " sbs-cat--active" : ""}`}
-              onClick={() => setActiveCat(i)}
-            >
-              {cat.img
-                ? <img src={cat.img} className="sbs-cat-ico" alt="" />
-                : <div className="sbs-cat-ico-placeholder" />}
-              <span className="sbs-cat-label">
-                {cat.label[0]}{cat.label[1] ? <><br />{cat.label[1]}</> : null}
-              </span>
-              {i === activeCat && <div className="sbs-cat-bar" />}
-            </button>
-          ))}
-        </div>
-
         {/* Content area */}
         <div className="sbs-content">
+
+          {/* Category strip */}
+          <div className="sbs-cats">
+            {CATEGORIES.map((cat, i) => (
+              <button
+                key={i}
+                className={`sbs-cat${i === activeCat ? " sbs-cat--active" : ""}`}
+                onClick={() => setActiveCat(i)}
+              >
+                {cat.img
+                  ? <img src={cat.img} className="sbs-cat-ico" alt="" />
+                  : <div className="sbs-cat-ico-placeholder" />}
+                <span className="sbs-cat-label">
+                  {cat.label[0]}{cat.label[1] ? <><br />{cat.label[1]}</> : null}
+                </span>
+                {i === activeCat && <div className="sbs-cat-bar" />}
+              </button>
+            ))}
+          </div>
 
           {/* ── Step 1: Where expanded / Step 2: Where collapsed ── */}
           {step === "where" ? (
@@ -255,7 +255,7 @@ export default function SearchBottomSheet({
                   onChange={(e) => setQuery(e.target.value)}
                   autoFocus
                 />
-                <img src={distanceIcon} width={18} height={18} alt="" />
+                <img src="/figma/search/search-icon.svg" width={18} height={18} alt="" />
               </div>
               <ul className="sbs-suggestions" role="listbox">
                 {SUGGESTIONS.map((s) => (

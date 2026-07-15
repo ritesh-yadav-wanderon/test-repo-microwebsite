@@ -1,7 +1,8 @@
 /* TripCard — Figma 3268:11829. 330px card, cream bg, floating meta pill. */
 
 .tc {
-  flex: 0 0 330px;
+  flex: 0 0 min(330px, 86vw);
+  max-width: 86vw;
   scroll-snap-align: start;
   background: #fcf9f3;
   border: 1px solid #f5f0ea;
@@ -349,4 +350,104 @@
 /* recolor the calendar SVG (it uses CSS var --fill-0) */
 .tc--teal .tc-cal-ico {
   --fill-0: #287686;
+}
+
+/* ── Full-width listing variant (Figma 4506:6159) ── */
+.tc--full {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 12px;
+  padding: 0 0 12px;
+}
+
+/* Image fills full card width, rounded top corners only */
+.tc--full .tc-media {
+  height: 160px;
+  border-radius: 12px 12px 0 0;
+  margin-bottom: -10px;
+}
+
+/* Wishlist + Compare side by side in top-right */
+.tc-img-actions {
+  position: absolute;
+  top: 9px;
+  right: 9px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 3;
+}
+.tc-wishlist {
+  width: 30px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.tc-wishlist img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* Body has 8px side padding inside the full-width card */
+.tc--full .tc-body {
+  padding: 8px 8px 0;
+}
+
+/* Itinerary — teal tinted for listing variant */
+.tc--full .tc-itin {
+  background: #eef2f2;
+}
+
+/* Recommended badge adjusted for shorter 160px image */
+.tc--full .tc-recommended {
+  top: 121px;
+}
+
+/* "See All Departures" inline link button */
+.tc-see-all {
+  background: none;
+  border: none;
+  padding: 0 0 0 6px;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #015f74;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ── Full teal — listing color overrides ── */
+.tc--teal.tc--full {
+  background: #fcfcfc;
+  border-color: #ebebeb;
+}
+.tc--teal.tc--full .tc-price-main {
+  color: #121212;
+}
+.tc--teal.tc--full .tc-price-sub,
+.tc--teal.tc--full .tc-price-note {
+  color: #7d7d7d;
+}
+.tc--teal.tc--full .tc-features li {
+  color: #808080;
+}
+.tc--teal.tc--full .tc-feat-dot {
+  background: #808080;
+}
+.tc--teal.tc--full .tc-cta {
+  background: #fee60b;
+  color: #3d3d3d;
+  width: 120px;
+  height: 38px;
+}
+.tc--teal.tc--full .tc-cta .tc-arrow-ico {
+  filter: brightness(0.3);
 }

@@ -1,11 +1,15 @@
-import { useState } from "react";
+import { Fragment } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { SAMPLE_UPCOMING_TRIPS } from "../api/sampleData";
-import TripCard from "../components/TripCard";
 import FooterMessage from "../components/FooterMessage/FooterMessage";
+import TribeStories from "../components/TribeStories";
 import Footer from "../components/Footer";
 import BottomNav from "../components/BottomNav";
+import PlotBanner from "../components/PlotBanner";
+import PhotoStack from "../components/PhotoStack/PhotoStack";
 import "./Destination.css";
+import SiteHeader2 from "../components/SiteHeader2";
+import "../components/UpcomingTrips/UpcomingTrips.css";
 
 interface DestData {
   heroImage: string;
@@ -268,38 +272,11 @@ const DEFAULT_DATA: DestData = {
   cities: ["Adventure", "Wellness", "Culture", "Nature"],
 };
 
-const EXP_TABS = ["First Timer", "Some Experience", "Seasoned Trekker"];
 
-const TESTIMONIALS = [
-  {
-    name: "Shrutika Parab",
-    rating: 5.0,
-    text: "Thank you Team Wanderon for the amazing experience. Right from the point of making the booking to the end of the trip, everything was well organized and perfectly executed.",
-    date: "May, 2023",
-    avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80&auto=format&fit=crop&facepad=2",
-  },
-  {
-    name: "Rahul Sharma",
-    rating: 5.0,
-    text: "The itinerary was perfectly planned. WanderOn team was very supportive throughout the journey. Highly recommend to everyone who loves group travel.",
-    date: "Jun, 2023",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&q=80&auto=format&fit=crop&facepad=2",
-  },
-  {
-    name: "Priya Nair",
-    rating: 5.0,
-    text: "An absolutely wonderful trip! The group was amazing, the experiences were unique, and the WanderOn team took care of every little detail.",
-    date: "Jul, 2023",
-    avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&q=80&auto=format&fit=crop&facepad=2",
-  },
-];
 
 export default function Destination() {
   const { slug = "Europe" } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState(0);
-  const [activeCity, setActiveCity] = useState(0);
-
   const data = DEST_DATA[slug] ?? DEFAULT_DATA;
   const heroTitle = slug in DEST_DATA ? data.heroTitle : `Group trips to ${slug}`;
 
@@ -307,224 +284,324 @@ export default function Destination() {
   const destTrips = allTrips.filter((t) =>
     t.slug.toLowerCase().includes(slug.toLowerCase())
   );
-  const trips = destTrips.length > 0 ? destTrips : allTrips.slice(0, 2);
+  const stripTrips = (destTrips.length > 0 ? destTrips : allTrips).slice(0, 6);
+  const vmImgA = stripTrips[0]?.image ?? "/figma/trips/trip-1.jpg";
+  const vmImgB = stripTrips[1]?.image ?? "/figma/trips/trip-2.jpg";
 
   return (
     <div className="dp-page">
-
-      {/* ── Hero ── */}
+      <SiteHeader2 destination={slug} date={data.relatedDate} showBack onBack={() => navigate(-1)} />
+      {/* ── Hero (Figma 4518:26793) ── */}
       <section className="dp-hero">
-        <img src={data.heroImage} alt={heroTitle} className="dp-hero-img" />
+        <img src={data.heroImage} alt={heroTitle} className="dp-hero-img" loading="lazy" />
         <div className="dp-hero-grad" />
         <div className="dp-hero-bottom">
           <div className="dp-hero-body">
             <h1 className="dp-hero-title">{heroTitle}</h1>
             <div className="dp-hero-line" />
           </div>
+          {/* Scrollable city dots bar */}
           <div className="dp-city-bar">
             <div className="dp-city-scroll">
-              <div className="dp-city-label">
-                <svg viewBox="0 0 12 16" width="10" height="13" fill="currentColor">
-                  <path d="M6 0C2.69 0 0 2.69 0 6c0 4.5 6 10 6 10s6-5.5 6-10c0-3.31-2.69-6-6-6zm0 8.5A2.5 2.5 0 1 1 6 3.5a2.5 2.5 0 0 1 0 5z"/>
-                </svg>
-                <span>Destinations Covered</span>
-              </div>
               {data.cities.map((city, i) => (
-                <button
-                  key={city}
-                  className={`dp-city-tab${activeCity === i ? " dp-city-tab--active" : ""}`}
-                  onClick={() => setActiveCity(i)}
-                >
-                  {city}
-                </button>
+                <Fragment key={city}>
+                  {i > 0 && <span className="dp-city-dot" aria-hidden />}
+                  <span className="dp-city-name">{city}</span>
+                </Fragment>
               ))}
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* ── Is this destination for me? ── */}
+      {/* ── Dates-Costing-General (Figma 4620:23655) ── */}
       <section className="dp-info">
-        <h2 className="dp-info-heading">Is this destination for me?</h2>
-        <p className="dp-info-tags">{data.tags.join(" | ")}</p>
-        <div className="dp-info-sep" />
-        <div className="dp-attrs">
-          <div className="dp-attr-row">
-            <span className="dp-attr-label">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#666" strokeWidth="1.8" strokeLinecap="round">
-                <path d="M12 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM5 22c0-4.4 3.1-7 7-7s7 2.6 7 7" />
-              </svg>
-              Physical Efforts
-            </span>
-            <span className="dp-attr-val">{data.physicalEffort}</span>
-          </div>
-          <div className="dp-attr-row">
-            <span className="dp-attr-label">
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#666" strokeWidth="1.8" strokeLinecap="round">
-                <rect x="3" y="4" width="18" height="16" rx="2" />
-                <line x1="3" y1="9" x2="21" y2="9" />
-                <line x1="8" y1="2" x2="8" y2="6" />
-                <line x1="16" y1="2" x2="16" y2="6" />
-              </svg>
-              Trip Type
-            </span>
-            <span className="dp-attr-val">{data.tripType}</span>
-          </div>
+        {/* Breadcrumb */}
+        <div className="dp-breadcrumb">
+          <svg width="12" height="13" viewBox="0 0 12 13" fill="#757575" aria-hidden>
+            <path d="M10 11.5H8V7.5H4V11.5H2V5.5L6 2.5L10 5.5V11.5ZM0 13H12V5L6 0L0 5V13Z"/>
+          </svg>
+          <span className="dp-bc-sep">{">"}</span>
+          <span className="dp-bc-dest">{slug}</span>
         </div>
-        <div className="dp-price-row">
-          <span className="dp-price-label">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#01afd1" strokeWidth="1.8" strokeLinecap="round">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M12 7v10M9 9h5a2 2 0 0 1 0 4H9" />
+
+        {/* Tags + best month card */}
+        <div className="dp-tags-card">
+          <p className="dp-tags-text">{data.tags.join(" | ")}</p>
+          <div className="dp-bestmonth-row">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4e4e4e" strokeWidth="1.6" strokeLinecap="round" aria-hidden>
+              <rect x="3" y="8" width="18" height="13" rx="2"/>
+              <path d="M8 8V5a2 2 0 0 1 4 0v3M12 8V5a2 2 0 0 1 4 0v3"/>
+              <line x1="3" y1="13" x2="21" y2="13"/>
             </svg>
-            Starting Price (per person):
-          </span>
-          <span className="dp-price-val">{data.startingPrice}</span>
+            <span className="dp-bestmonth-text">Best month to travel: {data.bestMonth}</span>
+          </div>
         </div>
-      </section>
 
-      {/* ── Upcoming trips ── */}
-      <section className="dp-trips">
-        <div className="dp-trips-head">
-          <h2 className="dp-trips-title">{slug} Upcoming Group trips</h2>
-          <p className="dp-trips-sub">{data.tripCount}</p>
-        </div>
-        <div className="dp-exp-tabs">
-          {EXP_TABS.map((tab, i) => (
-            <button
-              key={tab}
-              className={`dp-exp-tab${i === activeTab ? " dp-exp-tab--active" : ""}`}
-              onClick={() => setActiveTab(i)}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-        <div className="dp-trips-list">
-          {trips.map((trip) => (
-            <TripCard key={trip.slug} trip={trip} theme="teal" fullWidth />
-          ))}
-        </div>
-        <button className="dp-view-all">View All Trips</button>
-      </section>
-
-      {/* ── Customise CTA ── */}
-      <section className="dp-customise">
-        <span className="dp-cust-eyebrow">CUSTOMISE {slug.toUpperCase()} TRIPS</span>
-        <h2 className="dp-cust-title">Book travel month and<br />date of your choice</h2>
-        <button className="dp-cust-btn">Contact For Price Details</button>
-      </section>
-
-      {/* ── Stats + related ── */}
-      <section className="dp-stats">
-        <div className="dp-stats-row">
-          <div className="dp-stat">
-            <span className="dp-stat-women">
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="#c06428">
-                <path d="M12 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM5 22c0-4.4 3.1-7 7-7s7 2.6 7 7" />
+        {/* Price + women row */}
+        <div className="dp-info-bottom">
+          <div className="dp-info-bottom-left">
+            {/* Women pill */}
+            <div className="dp-women-pill">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="#c458fe" aria-hidden>
+                <circle cx="12" cy="6" r="4"/>
+                <path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#c458fe" strokeWidth="2" fill="none"/>
+                <circle cx="16" cy="8" r="3" fill="#faf1ff" stroke="#c458fe" strokeWidth="1.5"/>
+                <path d="M14 8l1.5 1.5L18 6" stroke="#c458fe" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
               </svg>
-              {data.womenPct} Women travellers
-            </span>
-          </div>
-          <div className="dp-stat-divider" />
-          <div className="dp-stat">
-            <p className="dp-stat-batch">{data.upcomingBatches}</p>
-            <p className="dp-stat-month">Best month to travel: {data.bestMonth}</p>
-          </div>
-        </div>
-        <div className="dp-related">
-          <span className="dp-related-label">You may also like</span>
-          <button
-            className="dp-related-card"
-            onClick={() => navigate(`/destination/${data.relatedDest}`)}
-          >
-            <div className="dp-related-thumb" />
-            <div className="dp-related-info">
-              <span className="dp-related-name">{data.relatedDest}</span>
-              <span className="dp-related-date">From {data.relatedDate}</span>
+              <span className="dp-women-text">{data.womenPct} Women travellers have joined!</span>
             </div>
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#999" strokeWidth="2" strokeLinecap="round">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
+            {/* Discount + label */}
+            <div className="dp-discount-row">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#575757" aria-hidden>
+                <path d="M12.79 2.79 3.5 12.08A2 2 0 0 0 3 13.5V20a2 2 0 0 0 2 2h6.5a2 2 0 0 0 1.42-.59l9.29-9.29a2 2 0 0 0 0-2.83l-6.5-6.5a2 2 0 0 0-2.92 0z"/>
+                <circle cx="7.5" cy="16.5" r="1.5" fill="#fff"/>
+              </svg>
+              <span className="dp-discount-text">Starting Price (per person):</span>
+            </div>
+          </div>
+          <span className="dp-info-price">{data.startingPrice}</span>
+        </div>
+      </section>
+
+      {/* Section divider */}
+      <div className="dp-section-div" aria-hidden />
+
+      {/* ── Best Summer Deals — horizontal trip strip (Figma 4518:27539) ── */}
+      <section className="up dp-trip-strip">
+        <div className="up-header-row">
+          <p className="up-title">Best Summer Deals</p>
+          <button className="up-header-arrow" type="button" aria-label="View all trips">
+            <img src="/figma/trips/arrow-right.svg" width={16} height={16} alt="" aria-hidden loading="lazy" />
           </button>
         </div>
-      </section>
-
-      {/* ── Testimonials ── */}
-      <section className="dp-testimonials">
-        <div className="dp-test-head">
-          <span className="dp-test-diamond">◆</span>
-          <span className="dp-test-label">TESTIMONIALS</span>
-          <span className="dp-test-diamond">◆</span>
-        </div>
-        <div className="dp-rating">
-          <svg viewBox="0 0 488 512" width="18" height="18">
-            <path fill="#4285F4" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 123 24.5 166.3 64.9l-67.5 64.9C258.5 52.6 94.3 116.6 94.3 256c0 86.5 69.1 156.6 153.7 156.6 98.2 0 135-70.4 140.8-106.9H248v-85.3h236.1c2.3 12.7 3.9 24.9 3.9 41.4z" />
-          </svg>
-          <svg viewBox="0 0 20 20" width="16" height="16" fill="#f5a623">
-            <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" />
-          </svg>
-          <span className="dp-rating-score">4.9 (6626 reviews)</span>
-        </div>
-        <p className="dp-test-sub">Stories of our travellers</p>
-        <div className="dp-test-scroll">
-          {TESTIMONIALS.map((t) => (
-            <div className="dp-test-card" key={t.name}>
-              <div className="dp-test-card-head">
-                <img src={t.avatar} alt={t.name} className="dp-test-avatar" />
-                <div>
-                  <p className="dp-test-name">{t.name}</p>
-                  <div className="dp-test-stars">
-                    {Array.from({ length: Math.floor(t.rating) }).map((_, i) => (
-                      <svg key={i} viewBox="0 0 20 20" width="13" height="13" fill="#f5a623">
-                        <path d="M10 1l2.4 7.4H20l-6.2 4.5 2.4 7.4L10 16l-6.2 4.3 2.4-7.4L0 8.4h7.6z" />
-                      </svg>
-                    ))}
-                    <span className="dp-test-rating">{t.rating.toFixed(1)}</span>
+        <div className="up-cards">
+          {stripTrips.map((trip) => (
+            <a
+              key={trip.slug}
+              className="up-card"
+              href={`/trip/${trip.slug}`}
+              style={{ textDecoration: "none" }}
+            >
+              <div className="up-card-img-wrap">
+                {trip.image
+                  ? <img className="up-card-img" src={trip.image} alt={trip.title} loading="lazy" />
+                  : <div className="up-card-img-placeholder" />
+                }
+                <button
+                  className="up-card-wishlist"
+                  type="button"
+                  aria-label="Add to wishlist"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <img src="/figma/trips/wishlist-default.svg" width={30} height={28} alt="" aria-hidden loading="lazy" />
+                </button>
+              </div>
+              <div className="up-card-info">
+                <p className="up-card-title">{trip.title}</p>
+                {trip.duration && (
+                  <div className="up-card-dur-row">
+                    <img src="/figma/trips/calendar-clock.svg" width={12} height={12} alt="" aria-hidden loading="lazy" />
+                    <span className="up-card-dur">{trip.duration.nights}N/{trip.duration.days}D</span>
                   </div>
-                </div>
+                )}
+                {trip.batches && trip.batches.length > 0 && (
+                  <p className="up-card-batches">
+                    {trip.batches.slice(0, 2).map((b: string) => {
+                      const d = new Date(b + "T00:00:00");
+                      return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                    }).join(", ")}
+                    {trip.batches.length > 2 && <span className="up-card-batches-more">, +{trip.batches.length - 2} More Batches</span>}
+                  </p>
+                )}
+                <p className="up-card-price">₹{Number(trip.startingPrice).toLocaleString("en-IN")}/-</p>
+                <p className="up-card-per-person">Onwards per person</p>
               </div>
-              <p className="dp-test-text">{t.text}</p>
-              <div className="dp-test-footer">
-                <span className="dp-test-date">{t.date}</span>
-                <button className="dp-test-read">Read More</button>
-              </div>
+            </a>
+          ))}
+          {/* View More Trips card */}
+          <a className="up-card up-view-more" href="/search" role="button">
+            <div className="up-vm-img-wrap">
+              <img className="up-vm-img up-vm-back" src={vmImgB} alt="" aria-hidden loading="lazy" />
+              <img className="up-vm-img up-vm-front" src={vmImgA} alt="" aria-hidden loading="lazy" />
             </div>
-          ))}
-        </div>
-        <div className="dp-test-dots">
-          {TESTIMONIALS.map((_, i) => (
-            <span key={i} className={`dp-test-dot${i === 0 ? " dp-test-dot--active" : ""}`} />
-          ))}
+            <p className="up-vm-label">View More Trips</p>
+          </a>
         </div>
       </section>
 
-      {/* ── Culture & Local Voices ── */}
+
+      <div className="dp-section-div" aria-hidden />
+      {/* ── Upcoming Group Trips ── */}
+      <section className="up dp-trip-strip">
+        <div className="up-header-row">
+          <p className="up-title">Upcoming Group Trips</p>
+          <button className="up-header-arrow" type="button" aria-label="View all trips">
+            <img src="/figma/trips/arrow-right.svg" width={16} height={16} alt="" aria-hidden loading="lazy" />
+          </button>
+        </div>
+        <div className="up-cards">
+          {allTrips.slice(0, 6).map((trip) => (
+            <a
+              key={trip.slug + "-upcoming"}
+              className="up-card"
+              href={`/trip/${trip.slug}`}
+              style={{ textDecoration: "none" }}
+            >
+              <div className="up-card-img-wrap">
+                {trip.image
+                  ? <img className="up-card-img" src={trip.image} alt={trip.title} loading="lazy" />
+                  : <div className="up-card-img-placeholder" />
+                }
+                <button
+                  className="up-card-wishlist"
+                  type="button"
+                  aria-label="Add to wishlist"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <img src="/figma/trips/wishlist-default.svg" width={30} height={28} alt="" aria-hidden loading="lazy" />
+                </button>
+              </div>
+              <div className="up-card-info">
+                <p className="up-card-title">{trip.title}</p>
+                {trip.duration && (
+                  <div className="up-card-dur-row">
+                    <img src="/figma/trips/calendar-clock.svg" width={12} height={12} alt="" aria-hidden loading="lazy" />
+                    <span className="up-card-dur">{trip.duration.nights}N/{trip.duration.days}D</span>
+                  </div>
+                )}
+                {trip.batches && trip.batches.length > 0 && (
+                  <p className="up-card-batches">
+                    {trip.batches.slice(0, 2).map((b: string) => {
+                      const d = new Date(b + "T00:00:00");
+                      return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                    }).join(", ")}
+                    {trip.batches.length > 2 && <span className="up-card-batches-more">, +{trip.batches.length - 2} More Batches</span>}
+                  </p>
+                )}
+                <p className="up-card-price">₹{Number(trip.startingPrice).toLocaleString("en-IN")}/-</p>
+                <p className="up-card-per-person">Onwards per person</p>
+              </div>
+            </a>
+          ))}
+          <a className="up-card up-view-more" href="/search" role="button">
+            <div className="up-vm-img-wrap">
+              <img className="up-vm-img up-vm-back" src={vmImgB} alt="" aria-hidden loading="lazy" />
+              <img className="up-vm-img up-vm-front" src={vmImgA} alt="" aria-hidden loading="lazy" />
+            </div>
+            <p className="up-vm-label">View More Trips</p>
+          </a>
+        </div>
+      </section>
+
+      <div className="dp-section-div" aria-hidden />
+      {/* ── Customise Europe Trips ── */}
+      <section className="up dp-trip-strip">
+        <div className="up-header-row">
+          <p className="up-title">Customise {slug} Trips</p>
+          <button className="up-header-arrow" type="button" aria-label="View all trips">
+            <img src="/figma/trips/arrow-right.svg" width={16} height={16} alt="" aria-hidden loading="lazy" />
+          </button>
+        </div>
+        <div className="up-cards">
+          {allTrips.slice(2, 8).map((trip) => (
+            <a
+              key={trip.slug + "-custom"}
+              className="up-card"
+              href={`/trip/${trip.slug}`}
+              style={{ textDecoration: "none" }}
+            >
+              <div className="up-card-img-wrap">
+                {trip.image
+                  ? <img className="up-card-img" src={trip.image} alt={trip.title} loading="lazy" />
+                  : <div className="up-card-img-placeholder" />
+                }
+                <button
+                  className="up-card-wishlist"
+                  type="button"
+                  aria-label="Add to wishlist"
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <img src="/figma/trips/wishlist-default.svg" width={30} height={28} alt="" aria-hidden loading="lazy" />
+                </button>
+              </div>
+              <div className="up-card-info">
+                <p className="up-card-title">{trip.title}</p>
+                {trip.duration && (
+                  <div className="up-card-dur-row">
+                    <img src="/figma/trips/calendar-clock.svg" width={12} height={12} alt="" aria-hidden loading="lazy" />
+                    <span className="up-card-dur">{trip.duration.nights}N/{trip.duration.days}D</span>
+                  </div>
+                )}
+                {trip.batches && trip.batches.length > 0 && (
+                  <p className="up-card-batches">
+                    {trip.batches.slice(0, 2).map((b: string) => {
+                      const d = new Date(b + "T00:00:00");
+                      return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+                    }).join(", ")}
+                    {trip.batches.length > 2 && <span className="up-card-batches-more">, +{trip.batches.length - 2} More Batches</span>}
+                  </p>
+                )}
+                <p className="up-card-price">₹{Number(trip.startingPrice).toLocaleString("en-IN")}/-</p>
+                <p className="up-card-per-person">Onwards per person</p>
+              </div>
+            </a>
+          ))}
+          <a className="up-card up-view-more" href="/search" role="button">
+            <div className="up-vm-img-wrap">
+              <img className="up-vm-img up-vm-back" src={vmImgB} alt="" aria-hidden loading="lazy" />
+              <img className="up-vm-img up-vm-front" src={vmImgA} alt="" aria-hidden loading="lazy" />
+            </div>
+            <p className="up-vm-label">View More Trips</p>
+          </a>
+        </div>
+      </section>
+
+      <TribeStories />
+
+      <div className="dp-section-div" aria-hidden />
+      {/* ── Cultural and Local Voices (Figma 4518:29298) ── */}
       <section className="dp-culture">
-        <h2 className="dp-culture-title">Culture and Local Voices</h2>
-        <div className="dp-culture-photos">
-          <div className="dp-polaroid">
-            <div
-              className="dp-polaroid-img"
-              style={{ backgroundImage: `url(${data.heroImage.replace("w=900", "w=400")})` }}
-            />
-            <p className="dp-polaroid-caption">
-              For millions of travellers, {slug} is the doorway to a world-class travel experience.
-            </p>
+        <div className="dp-culture-head">
+          <h2 className="dp-culture-title">Cultural and Local Voices</h2>
+          <p className="dp-culture-sub">Choose from hundreds of destinations – provided by trusted pros</p>
+        </div>
+
+        {/* Top row: 2 polaroid cards */}
+        <div className="dp-culture-row">
+          <div className="dp-culture-card">
+            <div className="dp-culture-polaroid">
+              <img className="dp-culture-photo" src="/figma/culture/raw-4.png" alt={slug} loading="lazy" />
+              <span className="dp-culture-label">{slug}</span>
+            </div>
+            <p className="dp-culture-desc">doorway to Southeast Asia: a first taste of the region</p>
           </div>
-          <div className="dp-polaroid dp-polaroid--tilt">
-            <div
-              className="dp-polaroid-img"
-              style={{ backgroundImage: `url(https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=400&q=70&auto=format&fit=crop)` }}
-            />
-            <p className="dp-polaroid-caption">
-              Travellers from across the globe discover hidden gems and local culture here.
-            </p>
+          <div className="dp-culture-card dp-culture-card--tilt">
+            <div className="dp-culture-polaroid">
+              <img className="dp-culture-photo" src="/figma/culture/raw-2.png" alt={slug} loading="lazy" />
+              <span className="dp-culture-label">{slug}</span>
+            </div>
           </div>
+        </div>
+
+        {/* Center: tuk-tuk polaroid */}
+        <div className="dp-culture-center">
+          <div className="dp-culture-polaroid dp-culture-polaroid--lg">
+            <img className="dp-culture-photo dp-culture-photo--lg" src="/figma/culture/raw-9.png" alt={`${slug} culture`} loading="lazy" />
+          </div>
+          <p className="dp-culture-center-desc">For millions of travellers, Thailand is the doorway to Southeast Asia: a first taste of the region</p>
+        </div>
+
+        {/* Quote */}
+        <p className="dp-culture-quote">Eastern Thailand is half mountain, half ocean. Although there aren&apos;t many provinces here, it still has a lot of amazing sights and stunning locations to visit.</p>
+
+        {/* Interactive photo stack (Figma 4518:26092) */}
+        <div className="dp-culture-stack">
+          <PhotoStack />
         </div>
       </section>
 
+      <PlotBanner />
       <FooterMessage />
       <Footer />
       <BottomNav />

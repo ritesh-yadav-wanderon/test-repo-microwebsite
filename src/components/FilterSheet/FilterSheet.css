@@ -1,0 +1,678 @@
+/* FilterSheet — bottom drawer filter modal (Figma 3014:11380) */
+
+/* ── Overlay backdrop ── */
+.fs-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1010;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.fs-overlay--open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* ── Sheet — slides up from bottom ── */
+.fs-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 680px;
+  background: #f6f9fa;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 16px 0;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+  overflow: visible;
+}
+.fs-sheet--open {
+  transform: translateY(0);
+}
+
+/* ── Close button — floats above sheet ── */
+.fs-close {
+  position: absolute;
+  top: -58px;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2.75px);
+  -webkit-backdrop-filter: blur(2.75px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 5.5px;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+.fs-close img {
+  width: 33px;
+  height: 33px;
+  display: block;
+}
+
+/* ── Header row ── */
+.fs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+}
+.fs-title {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #202020;
+}
+
+/* ── Main content card ── */
+.fs-card {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  background: #fff;
+  border: 1px solid #e0e8eb;
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ── Left sidebar tabs ── */
+.fs-tabs {
+  width: 100px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid #e0e8eb;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.fs-tab {
+  position: relative;
+  width: 100%;
+  min-height: 38px;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  text-align: left;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  gap: 2px;
+}
+.fs-tab-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #202020;
+  line-height: 1.3;
+  display: block;
+}
+.fs-tab-count {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: #01afd1;
+  background: rgba(1, 175, 209, 0.1);
+  border-radius: 30px;
+  padding: 0 5px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Active tab — gradient bg + teal right bar */
+.fs-tab--active {
+  background: linear-gradient(to left, #ccf7ff, transparent);
+}
+.fs-tab--active .fs-tab-label {
+  color: #015f74;
+  font-weight: 500;
+}
+.fs-tab--active::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 30px;
+  background: #015f74;
+  border-radius: 4px 0 0 4px;
+}
+
+/* ── Right content pane ── */
+.fs-content {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* ── Panel ── */
+.fs-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+}
+
+.fs-section-head {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #202020;
+  padding: 6px 12px 8px;
+}
+
+/* ── Check row ── */
+.fs-check-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.fs-check-row:active {
+  background: rgba(1, 175, 209, 0.04);
+}
+
+.fs-check-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+.fs-check-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fs-check-sub {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  color: #757575;
+}
+
+.fs-check-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+/* Trending badge */
+.fs-trending {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: #b1da3a;
+  background: rgba(198, 255, 36, 0.2);
+  border: 1px solid #b1da3a;
+  border-radius: 100px;
+  height: 22px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Checkbox */
+.fs-checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  border: 1.5px solid #01afd1;
+  background: #fbfbfb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.fs-checkbox--checked {
+  background: #01afd1;
+  border-color: #01afd1;
+}
+
+/* ── Divider ── */
+.fs-divider {
+  height: 1px;
+  background: #e0e8eb;
+  margin: 4px 0;
+}
+
+/* ── See more link ── */
+.fs-see-more {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #01afd1;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  padding: 4px 12px 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+/* ── International region rows ── */
+.fs-region-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 12px;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.fs-region-name {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #3d3d3d;
+}
+.fs-region-arrow {
+  transition: transform 0.2s;
+  opacity: 0.6;
+}
+.fs-region-arrow--open {
+  transform: rotate(90deg);
+}
+.fs-region-items {
+  background: #f8fafb;
+  padding-left: 8px;
+}
+
+/* ── Date & Duration panel ── */
+.fs-panel--date {
+  padding: 8px 10px;
+  gap: 10px;
+}
+
+/* Months / Dates toggle pill */
+.fs-date-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #efecef;
+  border-radius: 30px;
+  padding: 4px;
+  width: 100%;
+  flex-shrink: 0;
+}
+.fs-date-toggle-btn {
+  flex: 1;
+  height: 28px;
+  border-radius: 100px;
+  border: none;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #3a3a3a;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+}
+.fs-date-toggle-btn--active {
+  background: #015f74;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0px 4px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* Month list rows (Months tab) */
+.fs-month-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+.fs-month-row {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  height: 34px;
+  padding: 6px;
+  background: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, border-color 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.fs-month-row--selected {
+  background: #eef2fc;
+  border: 1px solid #586474;
+  border-radius: 6px;
+}
+.fs-month-row-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #202020;
+  line-height: 21px;
+}
+
+/* ── Calendar (Dates tab) ── */
+.fs-cal-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+/* Hint / selection label */
+.fs-cal-hint {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  color: #757575;
+  margin: 0 0 4px;
+  white-space: nowrap;
+}
+
+/* Days of week header */
+.fs-cal-dow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: 36px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+.fs-cal-dow-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #757575;
+  letter-spacing: 0.5px;
+}
+
+/* Months list — parent .fs-content handles scrolling */
+.fs-cal-months {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+/* Month card */
+.fs-cal-month {
+  border-radius: 12px;
+  overflow: hidden;
+  width: 100%;
+  flex-shrink: 0;
+  box-shadow: 0px 5px 15px rgba(93, 68, 248, 0.04);
+}
+.fs-cal-month--active {
+  background: #eef2fc;
+  box-shadow: 0px 5px 30px 1px rgba(93, 68, 248, 0.04);
+  padding-bottom: 8px;
+}
+
+/* Month label row */
+.fs-cal-month-label {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #586474;
+  box-shadow: 0px 5px 15px rgba(93, 68, 248, 0.04);
+}
+
+/* Week row — position:relative for the absolute strip */
+.fs-cal-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: 36px;
+  position: relative;
+}
+
+/* Absolute range strip — #d4def7, 28px tall, vertically centred (top:4px in 36px row) */
+.fs-cal-strip {
+  position: absolute;
+  top: 4px;
+  height: 28px;
+  background: #d4def7;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Day cell — z-index above the strip */
+.fs-cal-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Date circle button */
+.fs-cal-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
+}
+.fs-cal-circle:disabled {
+  cursor: default;
+}
+.fs-cal-circle--selected {
+  background: #586474;
+}
+
+/* Day number text */
+.fs-cal-day {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #3c3c3c;
+  letter-spacing: 0.5px;
+  line-height: 24px;
+  pointer-events: none;
+}
+.fs-cal-day--past {
+  color: #949494;
+  text-decoration: line-through;
+  text-decoration-skip-ink: none;
+}
+.fs-cal-circle--selected .fs-cal-day {
+  color: #fff;
+  font-weight: 500;
+}
+
+/* ── Footer ── */
+.fs-footer {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0 16px;
+  flex-shrink: 0;
+}
+.fs-btn-clear,
+.fs-btn-show {
+  flex: 1;
+  height: 40px;
+  border-radius: 8px;
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.fs-btn-clear {
+  background: #fff;
+  border: 1.5px solid #01afd1;
+  color: #01afd1;
+}
+.fs-btn-show {
+  background: #01afd1;
+  border: none;
+  color: #fff;
+}
+
+/* ── Destination panel rows ── */
+.fs-dest-region-head {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #3d3d3d;
+  height: 48px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.fs-dest-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 12px;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  gap: 8px;
+  flex-shrink: 0;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+.fs-dest-row:active {
+  background: rgba(1, 175, 209, 0.04);
+}
+
+.fs-dest-row-left {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 0;
+  gap: 8px;
+}
+
+.fs-dest-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #4e4e4e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  flex: 1;
+}
+
+.fs-trending-badge {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+  padding: 0 4px;
+  background: rgba(198, 255, 36, 0.2);
+  border: 1px solid #b1da3a;
+  border-radius: 100px;
+  flex-shrink: 0;
+}
+
+.fs-trending-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: #b1da3a;
+  white-space: nowrap;
+}
+
+/* ── Filter option rows (with price/packages subtext) ── */
+.fs-filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 48px;
+  padding: 8px 12px;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.fs-filter-row:active {
+  background: rgba(1, 175, 209, 0.04);
+}
+
+.fs-filter-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.fs-filter-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #333;
+  text-align: left;
+}
+
+.fs-filter-sub {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  color: #757575;
+}
+
+/* ── Destination region separator ── */
+.fs-dest-sep {
+  height: 1px;
+  background: #e0e8eb;
+  flex-shrink: 0;
+}

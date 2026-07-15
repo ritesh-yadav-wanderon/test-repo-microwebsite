@@ -1,0 +1,489 @@
+/* BatchesSheet — full-page sheet (Figma 3044:23808) */
+
+.bsh-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  overflow: hidden;
+  transition: background 0.3s ease;
+}
+
+.bsh-overlay--open {
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: all;
+}
+
+.bsh-sheet {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 100%;
+  max-width: var(--app-width, 600px);
+  height: 100dvh;
+  max-height: 100dvh;
+  background: #ffffff;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  transform: translate(-50%, 100%);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  overflow: hidden;
+}
+
+.bsh-sheet--open {
+  transform: translate(-50%, 0);
+}
+
+/* Header */
+.bsh-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 20px;
+  border-bottom: 1px solid #e5e5e5;
+  flex-shrink: 0;
+  background: #ffffff;
+  z-index: 4;
+}
+
+.bsh-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.bsh-back,
+.bsh-close {
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bsh-back {
+  width: 24px;
+  height: 24px;
+  overflow: clip;
+}
+
+.bsh-back img,
+.bsh-close img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.bsh-close {
+  width: 30px;
+  height: 30px;
+  overflow: clip;
+}
+
+.bsh-title {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.08px;
+  color: #202020;
+  white-space: nowrap;
+}
+
+/* Trip tag bar */
+.bsh-tag-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 8px;
+  background: #f1ebff;
+  backdrop-filter: blur(7px);
+  flex-shrink: 0;
+  z-index: 3;
+}
+
+.bsh-tag-icon {
+  width: 14px;
+  height: 14px;
+  overflow: clip;
+  flex-shrink: 0;
+}
+
+.bsh-tag-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.bsh-tag-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  line-height: 12px;
+  color: #1b0052;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
+}
+
+/* Month filter tabs */
+.bsh-months {
+  display: flex;
+  gap: 10px;
+  padding: 10px 14px;
+  overflow-x: auto;
+  flex-shrink: 0;
+  scrollbar-width: none;
+  border-bottom: 1px solid #f1f1f1;
+  background: #ffffff;
+  z-index: 2;
+}
+
+.bsh-months::-webkit-scrollbar {
+  display: none;
+}
+
+.bsh-month-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 48px;
+  border: 1px solid #adadad;
+  background: transparent;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #3d3d3d;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.bsh-month-tab--active {
+  background: rgba(239, 254, 250, 0.6);
+  border-color: #e8f6f7;
+  color: #015f74;
+  padding-left: 16px;
+  padding-right: 12px;
+  border-radius: 30px;
+}
+
+.bsh-month-clear {
+  display: flex;
+  width: 16px;
+  height: 16px;
+  overflow: clip;
+  flex-shrink: 0;
+}
+
+.bsh-month-clear img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Batch cards list */
+.bsh-cards {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Individual batch card */
+.bsh-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  flex-shrink: 0;
+}
+
+/* Date range row */
+.bsh-card-dates {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.bsh-card-cal-icon {
+  width: 16px;
+  height: 16px;
+  overflow: clip;
+  flex-shrink: 0;
+}
+
+.bsh-card-cal-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.bsh-card-dates-inner {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bsh-card-date-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.bsh-card-date-block--end {
+  text-align: center;
+}
+
+.bsh-card-date-main {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15.6px;
+  color: #3d3d3d;
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+
+.bsh-card-date-day {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #575757;
+  white-space: nowrap;
+}
+
+.bsh-card-dash {
+  flex: 1;
+  min-width: 0;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.bsh-card-dash img {
+  display: block;
+  width: 100%;
+  height: 20px;
+  object-fit: fill;
+}
+
+.bsh-card-sep {
+  width: 100%;
+  height: 1px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.bsh-card-sep img {
+  display: block;
+  width: 100%;
+  height: 1px;
+}
+
+/* Group row */
+.bsh-card-group-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.bsh-card-group-left {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+  overflow: clip;
+  border-radius: 6px;
+}
+
+.bsh-card-groups-icon {
+  width: 16px;
+  height: 16px;
+  overflow: clip;
+  flex-shrink: 0;
+}
+
+.bsh-card-groups-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.bsh-card-group-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #575757;
+  white-space: nowrap;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.bsh-card-badge {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 13px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.bsh-card-badge--available,
+.bsh-card-badge--filling {
+  background: #d3f8d3;
+  color: #005300;
+}
+
+.bsh-card-badge--sold-out {
+  background: #eaeaea;
+  color: #575757;
+}
+
+.bsh-card-filling {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 13px;
+  color: #b70000;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 2px 8px;
+}
+
+/* People interested */
+.bsh-card-people {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.bsh-card-avatars {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.bsh-card-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 30px;
+  background: #ffffff;
+  padding: 2px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.bsh-card-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.bsh-card-people-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #3d3d3d;
+  white-space: nowrap;
+}
+
+/* Card footer: price + CTA */
+.bsh-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+}
+
+.bsh-card-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  border-radius: 24px;
+}
+
+.bsh-card-price-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 12px;
+  color: #575757;
+}
+
+.bsh-card-price-amount {
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #3d3d3d;
+  white-space: nowrap;
+}
+
+.bsh-card-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 38px;
+  padding: 10px;
+  background: #fee60b;
+  border-radius: 8px;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #121212;
+  cursor: pointer;
+  border: none;
+  flex-shrink: 0;
+}
+
+.bsh-card-cta--sold {
+  background: #eaeaea;
+  color: #121212;
+  cursor: default;
+  pointer-events: none;
+}

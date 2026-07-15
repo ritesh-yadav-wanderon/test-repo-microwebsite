@@ -1,0 +1,142 @@
+/* ── Overlay ─────────────────────────────────────────────────── */
+.eps-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 1009;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.eps-overlay--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Sheet ───────────────────────────────────────────────────── */
+.eps {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1010;
+  overflow: visible;
+  background: #fff;
+  border-radius: 12px 12px 0 0;
+  padding: 20px;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 600px;
+  margin: 0 auto;
+}
+.eps--open {
+  transform: translateY(0);
+}
+
+/* ── Floating close ──────────────────────────────────────────── */
+.eps-close {
+  position: absolute;
+  top: -34px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  border-radius: 24px;
+  background: #eee;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* ── Inner card ──────────────────────────────────────────────── */
+.eps-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.04);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* ── Title ───────────────────────────────────────────────────── */
+.eps-title {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  color: #202020;
+  line-height: 18.2px;
+  margin: 0;
+}
+
+/* ── Phone row ───────────────────────────────────────────────── */
+.eps-phone-row {
+  display: flex;
+  gap: 10px;
+  height: 44px;
+  width: 100%;
+}
+.eps-country-code {
+  width: 56px;
+  flex-shrink: 0;
+  height: 100%;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: #757575;
+  letter-spacing: 0.035px;
+  box-sizing: border-box;
+}
+.eps-phone-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #202020;
+  letter-spacing: 0.035px;
+  background: #fff;
+  outline: none;
+  font-family: inherit;
+  box-sizing: border-box;
+}
+.eps-phone-input::placeholder { color: #757575; }
+.eps-phone-input:focus { border-color: #01afd1; }
+
+/* ── Disclaimer ──────────────────────────────────────────────── */
+.eps-disclaimer {
+  width: 100%;
+  font-size: 10px;
+  font-weight: 400;
+  color: #757575;
+  line-height: 13px;
+  margin: 0;
+}
+
+/* ── CTA button ──────────────────────────────────────────────── */
+.eps-cta {
+  width: 100%;
+  height: 44px;
+  background: #01afd1;
+  color: #fbfbfb;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  line-height: 18.2px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.eps-cta:active { background: #019ab8; }

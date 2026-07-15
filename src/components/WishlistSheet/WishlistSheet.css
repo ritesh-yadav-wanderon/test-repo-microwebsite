@@ -1,0 +1,313 @@
+/* WishlistSheet — bottom sheet (Figma 4620:5755) */
+
+.wl-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1010;
+  background: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  overflow: hidden;
+  transition: background 0.3s ease;
+}
+.wl-overlay--open {
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: all;
+}
+
+/* Sheet panel — slides up from bottom */
+.wl-sheet {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-height: 92dvh;
+  background: #fff;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+  overflow: hidden;
+}
+.wl-sheet--open {
+  transform: translateY(0);
+}
+
+/* ── Header (64px) ── */
+.wl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 20px;
+  border-bottom: 1px solid #e5e5e5;
+  flex-shrink: 0;
+  background: #fff;
+  z-index: 4;
+}
+.wl-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.wl-back,
+.wl-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+.wl-back { width: 24px; height: 24px; }
+.wl-close { width: 30px; height: 30px; }
+.wl-title {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #121212;
+  letter-spacing: 0.42px;
+  white-space: nowrap;
+}
+
+/* ── Month tabs bar ── */
+.wl-months-wrap {
+  position: relative;
+  flex-shrink: 0;
+  z-index: 3;
+  background: #fff;
+}
+.wl-months {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.wl-months::-webkit-scrollbar { display: none; }
+
+.wl-months-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #f1f1f1;
+}
+
+.wl-month-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  padding: 8px 16px;
+  border-radius: 48px;
+  border: 1px solid #adadad;
+  background: #fff;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #3d3d3d;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.wl-month-tab--active {
+  background: rgba(239, 254, 250, 0.6);
+  border-color: #e8f6f7;
+  color: #015f74;
+  padding-left: 16px;
+  padding-right: 12px;
+  border-radius: 30px;
+}
+.wl-month-x {
+  filter: invert(20%) sepia(80%) saturate(500%) hue-rotate(150deg);
+  flex-shrink: 0;
+}
+
+/* ── 2-column grid ── */
+.wl-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding: 16px 16px 0;
+  overflow-y: auto;
+  flex: 1;
+  z-index: 2;
+  align-content: start;
+}
+
+/* ── Card ── */
+.wl-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-decoration: none;
+  align-self: start;
+}
+
+/* Square image wrapper */
+.wl-card-img-wrap {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: #fbfbfb;
+  border: 0.5px solid #e5e5e5;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+}
+.wl-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Overlays — absolute, top-right */
+.wl-card-overlays {
+  position: absolute;
+  top: 9.5px;
+  right: 9.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* Heart button */
+.wl-card-heart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 28px;
+  background: rgba(0, 0, 0, 0.35);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Add to Compare pill */
+.wl-card-compare-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 8px;
+  background: rgba(0, 0, 0, 0.12);
+  border: none;
+  border-radius: 30px;
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  letter-spacing: 0.025px;
+  width: 110px;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.wl-card-compare-pill--active {
+  background: rgba(1, 95, 116, 0.7);
+}
+.wl-card-compare-pill img {
+  filter: brightness(0) invert(1);
+  flex-shrink: 0;
+}
+
+/* Card info */
+.wl-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.wl-card-title {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #202020;
+  line-height: 1.5;
+  margin: 0;
+}
+.wl-card-meta-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.wl-card-duration-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.wl-card-duration {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  color: #575757;
+  white-space: nowrap;
+}
+.wl-card-batches {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  color: #575757;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.wl-card-batches-more {
+  font-weight: 500;
+}
+.wl-card-price-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+}
+.wl-card-price {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #015f74;
+  white-space: nowrap;
+}
+.wl-card-price-sub {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  color: #9ab3b6;
+  white-space: nowrap;
+}
+
+/* ── Footer (76px) ── */
+.wl-footer {
+  flex-shrink: 0;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  padding: 6px 16px;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+  box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.16);
+  z-index: 1;
+}
+.wl-compare-btn {
+  width: 100%;
+  height: 44px;
+  background: #f2f2f2;
+  border: none;
+  border-radius: 8px;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #3d3d3d;
+  cursor: pointer;
+}

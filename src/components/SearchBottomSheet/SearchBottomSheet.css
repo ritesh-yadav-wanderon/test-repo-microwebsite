@@ -4,7 +4,7 @@
 .sbs-overlay {
   position: fixed;
   inset: 0;
-  z-index: 200;
+  z-index: 1010;
   display: flex;
   justify-content: center;
   backdrop-filter: blur(10px);
@@ -47,15 +47,14 @@
   flex-shrink: 0;
 }
 
-/* ── Category strip ── */
+/* ── Category strip (now inside sbs-content) ── */
 .sbs-cats {
-  height: 76px;
-  flex-shrink: 0;
   display: flex;
   align-items: flex-end;
-  padding: 0 14px 6px 20px;
+  padding: 0 4px 6px;
   overflow-x: auto;
   scrollbar-width: none;
+  flex-shrink: 0;
 }
 .sbs-cats::-webkit-scrollbar { display: none; }
 
@@ -213,15 +212,16 @@
 /* ── Months / Dates toggle ── */
 .sbs-toggle {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   background: #efecef;
   border-radius: 30px;
   padding: 4px;
   gap: 6px;
+  height: 44px;
+  box-sizing: border-box;
 }
 .sbs-toggle-opt {
   flex: 1;
-  height: 28px;
   border-radius: 100px;
   font-size: 12px;
   font-weight: 400;
@@ -287,15 +287,19 @@
   line-height: 16px;
 }
 
+/* Outer scroll container */
 .cal-wrap {
   display: flex;
   flex-direction: column;
 }
 
+/* Day-of-week header row — sticky */
 .cal-day-headers {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   padding-bottom: 8px;
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 4px;
   position: sticky;
   top: 0;
   background: #fff;
@@ -309,75 +313,116 @@
   line-height: 20px;
 }
 
+/* Month block */
 .cal-month {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  margin-bottom: 16px;
+  gap: 2px;
+  margin-bottom: 20px;
 }
 .cal-month-name {
   text-align: center;
   font-size: 14px;
   font-weight: 500;
   color: #202020;
-  padding: 8px 0 4px;
+  padding: 10px 0 6px;
   margin: 0;
 }
 
+/* 7-column grid — NO column-gap so range band is continuous */
 .cal-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
+  column-gap: 0;
+  row-gap: 4px;
 }
 
+/* Base cell */
 .cal-cell {
+  position: relative;
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
   cursor: pointer;
   background: transparent;
   padding: 0;
-  position: relative;
+  border: none;
+  border-radius: 0;
 }
-.cal-cell--empty { cursor: default; }
+.cal-cell--empty { cursor: default; pointer-events: none; }
 .cal-cell:disabled { cursor: default; }
 
+/* ── Range band via ::before ── */
+/* Full band for in-range cells */
+.cal-cell--range::before {
+  content: '';
+  position: absolute;
+  top: 8%; bottom: 8%;
+  left: 0; right: 0;
+  background: #e0f4f7;
+  z-index: 0;
+}
+
+/* Right half only for range-start cell */
+.cal-cell--sel-start::before {
+  content: '';
+  position: absolute;
+  top: 8%; bottom: 8%;
+  left: 50%; right: 0;
+  background: #e0f4f7;
+  z-index: 0;
+}
+
+/* Left half only for range-end cell */
+.cal-cell--sel-end::before {
+  content: '';
+  position: absolute;
+  top: 8%; bottom: 8%;
+  left: 0; right: 50%;
+  background: #e0f4f7;
+  z-index: 0;
+}
+
+/* Cap range band at row edges (Sunday start / Saturday end) */
+.cal-grid > .cal-cell--range:nth-child(7n+1)::before {
+  border-radius: 50% 0 0 50%;
+}
+.cal-grid > .cal-cell--range:nth-child(7n)::before {
+  border-radius: 0 50% 50% 0;
+}
+
+/* ── Selected circle via ::after ── */
+.cal-cell--sel::after {
+  content: '';
+  position: absolute;
+  width: 76%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #015f74;
+  z-index: 1;
+}
+
+/* Day number */
 .cal-day-num {
   font-size: 14px;
   color: #202020;
   line-height: 1;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 /* Past dates */
+.cal-cell--past { cursor: default; }
 .cal-cell--past .cal-day-num {
-  color: #c0c0c0;
+  color: #c8c8c8;
   text-decoration: line-through;
 }
 
-/* In range */
-.cal-cell--range {
-  border-radius: 0;
-  background: #e0f4f7;
-}
+/* In-range date text */
 .cal-cell--range .cal-day-num { color: #015f74; }
 
-/* Range edge row caps — first/last in a row get half-rounded */
-.cal-cell--sel-start { border-radius: 50% 0 0 50%; }
-.cal-cell--sel-end   { border-radius: 0 50% 50% 0; }
-
-/* Selected (start/end dot) */
-.cal-cell--sel::after {
-  content: "";
-  position: absolute;
-  inset: 2px;
-  border-radius: 50%;
-  background: #015f74;
-  z-index: 0;
-}
+/* Selected (start/end) date text */
 .cal-cell--sel .cal-day-num {
   color: #fff;
   font-weight: 600;
@@ -405,12 +450,14 @@
 .sbs-find {
   background: #01afd1;
   border-radius: 10px;
-  height: 38px;
-  padding: 0 24px;
+  height: 44px;
+  width: 160px;
+  padding: 0;
   font-size: 16px;
   color: #fff;
   display: flex;
   align-items: center;
+  justify-content: center;
   letter-spacing: 0.08px;
   line-height: 24px;
   font-family: inherit;

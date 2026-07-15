@@ -1,12 +1,12 @@
-import searchBtnIcon from "../../assets/on-scroll-nav/search-btn.svg";
 import "./Header.css";
 
 export interface HeaderProps {
   visible: boolean;
   onSearch?: () => void;
+  onMenu?: () => void;
 }
 
-export default function Header({ visible, onSearch }: HeaderProps) {
+export default function Header({ visible, onMenu }: HeaderProps) {
   const tab = visible ? 0 : -1;
 
   return (
@@ -14,41 +14,26 @@ export default function Header({ visible, onSearch }: HeaderProps) {
       className={`site-header${visible ? " site-header--visible" : " site-header--hidden"}`}
       aria-hidden={!visible}
     >
-      <a className="site-header__logo" href="/" aria-label="WanderOn home" tabIndex={tab}>
-        <img src="/figma/logo.png" alt="WanderOn" width="50" height="50" />
+      <a
+        className="site-header__logo"
+        href="/"
+        aria-label="WanderOn home"
+        tabIndex={tab}
+      >
+        <img src="/figma/nav-logo.png" alt="WanderOn" width={50} height={50} />
       </a>
 
       <div className="site-header__actions">
         <button
-          className="site-header__search"
+          className="site-header__menu"
           type="button"
-          aria-label="Search"
+          aria-label="Open menu"
           tabIndex={tab}
-          onClick={onSearch}
+          onClick={onMenu}
         >
-          <img src={searchBtnIcon} width={36} height={36} alt="" aria-hidden />
-        </button>
-
-        <button
-          className="site-header__avatar"
-          type="button"
-          aria-label="Account"
-          tabIndex={tab}
-        >
-          <svg viewBox="0 0 36 36" width="36" height="36" aria-hidden>
-            <circle cx="18" cy="18" r="18" fill="rgba(255,255,255,0.92)" />
-            <circle cx="18" cy="14.6" r="4.4" fill="#3d3d3d" />
-            <path d="M9.8 27c0-4.4 3.9-6.6 8.2-6.6s8.2 2.2 8.2 6.6z" fill="#3d3d3d" />
-          </svg>
+          <img src="/figma/nav-menu.svg" width={32} height={16} alt="" aria-hidden />
         </button>
       </div>
-
-      <img
-        src="/figma/header-bg-graphic.png"
-        alt=""
-        className="site-header__graphic"
-        aria-hidden
-      />
     </header>
   );
 }

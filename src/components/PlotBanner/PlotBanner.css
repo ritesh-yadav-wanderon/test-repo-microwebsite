@@ -1,46 +1,186 @@
-/* PlotBanner — Figma 3014:8182. 390x64 cream band.
-   Title block 141x30 (text 109x30) centered; subtitle row 390x24. */
+/* The Plot — Figma 3014:8918, animated zoom-in-center carousel */
 
-.plot-banner {
+.plot {
   width: 100%;
-  height: 64px;
-  background: var(--brand-cream);
+  background: #fbfbfb;
+  padding: 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
-.plot-title-wrap {
-  height: 30px;
+/* Header */
+.plot-header {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  gap: 4px;
+  padding: 0 16px;
 }
 
 .plot-title {
-  font-family: "Caveat", var(--font);
-  font-weight: 700;
-  font-size: 30px;
-  line-height: 30px;
-  color: var(--brand-yellow);
-  letter-spacing: 0;
-  white-space: nowrap;
-  padding-left: 16px; /* matches text x=16 inside title frame */
-}
-
-.plot-sub-wrap {
-  height: 24px;
-  padding: 0 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: 0;
+  font-family: var(--font);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  color: #4e4e4e;
+  letter-spacing: 0.5px;
+  text-align: center;
+  text-transform: capitalize;
 }
 
 .plot-sub {
+  margin: 0;
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  color: #757575;
+  text-align: center;
+}
+
+/* ── Carousel row ──
+   Side padding = (390 - 265) / 2 = 62.5px so first/last card can center.
+   Vertical padding gives room for the scale(1) card to not clip. */
+.plot-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 30px 63px;
+  scrollbar-width: none;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+.plot-row::-webkit-scrollbar { display: none; }
+
+/* ── Card ──
+   Native size: 265×394px (the max, center size).
+   JS scales it down to 0.864 = 340px when off-center. */
+.plot-card {
+  position: relative;
+  flex: 0 0 265px;
+  width: 265px;
+  height: 394px;
+  border-radius: 24px;
+  overflow: hidden;
+  flex-shrink: 0;
+  transform: scale(0.864);
+  transform-origin: center center;
+  transition: transform 0.25s ease;
+  will-change: transform;
+}
+
+.plot-card > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  border-radius: 24px;
+}
+
+/* ── Overlay: gradient + play + caption ── */
+.plot-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.plot-overlay--on {
+  opacity: 1;
+}
+
+/* Dark gradient from bottom */
+.plot-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: linear-gradient(
+    0.16deg,
+    rgba(0, 0, 0, 0.74) 0%,
+    rgba(0, 0, 0, 0) 60%
+  );
+}
+
+/* Play button */
+.plot-play {
+  position: absolute;
+  top: 173px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: block;
+  width: 46px;
+  height: 47px;
+  object-fit: contain;
+  z-index: 2;
+}
+
+/* Title + subtitle */
+.plot-cap {
+  position: absolute;
+  bottom: 20px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
+
+.plot-cap strong {
   font-family: var(--font);
   font-weight: 500;
-  font-size: 14px;
+  font-size: 20px;
   line-height: 24px;
-  color: #8a8a8a;
-  text-align: center;
-  white-space: nowrap;
+  color: #fff;
+  display: block;
+}
+
+.plot-cap span {
+  font-family: var(--font);
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  color: #d6d6d6;
+  display: block;
+}
+
+/* ── Progress bar ── */
+.plot-progress {
+  display: flex;
+  justify-content: center;
+}
+
+.plot-track {
+  position: relative;
+  width: 120px;
+  height: 6px;
+  border-radius: 32px;
+  background: #fbfbfb;
+  border: 1px solid #e5e5e5;
+}
+
+.plot-fill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 33px;
+  border-radius: 32px;
+  background: #757575;
+  transition: left 0.3s ease;
 }
