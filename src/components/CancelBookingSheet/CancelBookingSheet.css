@@ -1,0 +1,164 @@
+/* ── Overlay ── */
+.cbs-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 1009;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.cbs-overlay--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Sheet ── */
+.cbs {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  padding: 20px 16px;
+  background: #fff;
+  z-index: 1010;
+  border-radius: 12px 12px 0 0;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: var(--app-width);
+  margin: 0 auto;
+}
+.cbs--open {
+  transform: translateY(0);
+}
+
+.cbs-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Header */
+.cbs-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding-top: 4px;
+}
+.cbs-emoji {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 90px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #e6e6e6);
+}
+.cbs-emoji img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+.cbs-title {
+  max-width: 326px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15.6px;
+  color: #3d3d3d;
+  text-align: center;
+}
+
+/* Actions */
+.cbs-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+.cbs-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+.cbs-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin: 0;
+  border: 1px solid #121212;
+  border-radius: 2px;
+  background: #fbfbfb;
+  cursor: pointer;
+  position: relative;
+}
+.cbs-checkbox:checked {
+  background: #01afd1;
+  border-color: #01afd1;
+}
+.cbs-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 1.5px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.cbs-terms > span {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: #575757;
+}
+.cbs-link {
+  color: #3771c8;
+  text-decoration: underline;
+}
+
+.cbs-buttons {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+.cbs-btn {
+  height: 44px;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.cbs-btn--outline {
+  flex-shrink: 0;
+  border: 1px solid #757575;
+  background: #fff;
+  color: #4e4e4e;
+}
+.cbs-btn--outline:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.cbs-btn--primary {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  background: #01afd1;
+  color: #fbfbfb;
+  box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.08);
+}

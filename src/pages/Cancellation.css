@@ -1,0 +1,318 @@
+.cx-page {
+  min-height: 100vh;
+  background: #fff;
+  max-width: var(--app-width);
+  margin: 0 auto;
+  padding-bottom: 96px;
+}
+
+/* ── Top nav ── */
+.cx-nav {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+}
+.cx-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.cx-nav-back,
+.cx-nav-close {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cx-nav-crumb {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+.cx-nav-crumb-root,
+.cx-nav-crumb-sep {
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.08px;
+  color: #202020;
+}
+.cx-nav-crumb-id {
+  font-size: 14px;
+  font-weight: 500;
+  color: #202020;
+}
+
+.cx-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0 0;
+}
+
+/* Trip banner */
+.cx-banner {
+  height: 120px;
+  margin: 0 16px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.cx-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Trip summary */
+.cx-trip {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 16px;
+}
+.cx-trip-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18.2px;
+  color: #202020;
+}
+.cx-trip-duration {
+  font-size: 12px;
+  line-height: 15.6px;
+}
+.cx-trip-duration-label {
+  font-weight: 500;
+  color: #202020;
+}
+.cx-trip-duration-value {
+  color: #4e4e4e;
+}
+.cx-trip-route {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.cx-trip-place {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.cx-trip-place--right {
+  align-items: flex-end;
+  text-align: right;
+}
+.cx-trip-place-name {
+  font-size: 14px;
+  line-height: 19.6px;
+  color: #01afd1;
+}
+.cx-trip-place-date {
+  font-size: 10px;
+  line-height: 13px;
+  color: #4e4e4e;
+}
+.cx-trip-place-tag {
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 13px;
+  color: #202020;
+}
+
+/* Full-bleed grey strip */
+.cx-strip {
+  height: 8px;
+  background: #f5f5f5;
+}
+
+/* Sections */
+.cx-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 16px;
+}
+.cx-section-title {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15.6px;
+  color: #202020;
+}
+.cx-section-title--inline span {
+  font-weight: 500;
+}
+.cx-contact-name {
+  font-size: 12px;
+  line-height: 15.6px;
+  color: #4e4e4e;
+}
+.cx-contact-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  line-height: 15.6px;
+  color: #4e4e4e;
+}
+.cx-contact-row span:last-child {
+  text-align: right;
+}
+
+/* Co-travellers */
+.cx-cotravellers {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.cx-cotraveller {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.cx-cotraveller-rule {
+  height: 1px;
+  width: 100%;
+  background: #ededed;
+  margin-bottom: 4px;
+}
+.cx-cotraveller-name {
+  font-size: 12px;
+  line-height: 15.6px;
+  color: #4e4e4e;
+}
+
+/* Bill summary */
+.cx-billhead {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #202020;
+}
+.cx-billhead img {
+  width: 16px;
+  height: 16px;
+}
+.cx-billhead-sep {
+  width: 1px;
+  height: 12px;
+  background: #d9d9d9;
+  margin: 0 2px;
+}
+.cx-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cx-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #3d3d3d;
+}
+.cx-item-label {
+  flex: 1;
+  min-width: 0;
+}
+.cx-item-value {
+  white-space: nowrap;
+}
+.cx-item--total .cx-item-label,
+.cx-item--total .cx-item-value {
+  font-weight: 500;
+}
+.cx-rule {
+  height: 1px;
+  width: 100%;
+  background: #e5e5e5;
+}
+.cx-totals {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cx-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #3d3d3d;
+}
+
+/* Help card */
+.cx-help {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 16px;
+  padding: 12px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+}
+.cx-help-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #202020;
+}
+.cx-help-actions {
+  flex: 1;
+  display: flex;
+  gap: 10px;
+}
+.cx-help-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 46px;
+  background: #fff;
+}
+.cx-help-btn--call {
+  border: 1px solid #202020;
+}
+.cx-help-btn--wa {
+  border: 1px solid #16b420;
+}
+.cx-help-btn img {
+  width: 18px;
+  height: 18px;
+}
+
+/* Bottom CTA */
+.cx-cta-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--app-width);
+  padding: 20px 16px;
+  background: #fff;
+}
+.cx-cta {
+  height: 44px;
+  width: 100%;
+  border-radius: 8px;
+  background: #fee60b;
+  font-size: 14px;
+  font-weight: 500;
+  color: #202020;
+}

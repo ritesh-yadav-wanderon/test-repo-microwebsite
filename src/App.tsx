@@ -10,6 +10,10 @@ const MyProfile = lazy(() => import("./pages/MyProfile"));
 const Compare = lazy(() => import("./pages/Compare"));
 const Legal   = lazy(() => import("./pages/Legal"));
 const Booking = lazy(() => import("./pages/Booking"));
+const MyBookings = lazy(() => import("./pages/MyBookings"));
+const MyBooking = lazy(() => import("./pages/MyBooking"));
+const Cancellation = lazy(() => import("./pages/Cancellation"));
+const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess"));
 
 export default function App() {
   return (
@@ -26,6 +30,10 @@ export default function App() {
         <Route path="/compare" element={<Compare />} />
         <Route path="/legal" element={<Legal />} />
         <Route path="/booking" element={<Booking />} />
+        <Route path="/bookings" element={<MyBookings />} />
+        <Route path="/bookings/:ref" element={<MyBooking />} />
+        <Route path="/bookings/:ref/success" element={<PaymentSuccess />} />
+        <Route path="/bookings/:ref/cancellation" element={<Cancellation />} />
         <Route path="*" element={<Home />} />
       </Routes>
       </Suspense>

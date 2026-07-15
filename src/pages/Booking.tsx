@@ -48,6 +48,8 @@ export default function Booking() {
   const [notesOpen, setNotesOpen] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [paymentOpen, setPaymentOpen] = useState(false);
+  // Stable per-session reference until a real booking id is available from the PMS.
+  const [bookingReferenceId] = useState(() => `WO-${Date.now()}`);
 
   // Personal details
   const [firstName, setFirstName] = useState("Ruhani");
@@ -625,6 +627,53 @@ export default function Booking() {
       <PaymentSheet
         isOpen={paymentOpen}
         onClose={() => setPaymentOpen(false)}
+        bookingReferenceId={bookingReferenceId}
+        description={data.tripName}
+        prefill={{
+          name: [firstName, middleName, lastName].filter(Boolean).join(" ").trim(),
+          email,
+          contact: phone,
+        }}
+        onPaymentSuccess={(result) => {
+          setPaymentOpen(false);
+          const r = (result || {}) as {
+            amountPaid?: string;
+            dueBalance?: string;
+            paymentMethod?: string;
+          };
+          const now = new Date();
+          const [pickUpDate, dropDate] = data.dateRange
+            .split(" - ")
+            .map((s) => s.trim());
+          // Show the full-page payment confirmation first; it forwards this
+          // same state to the KYC Details view after a short delay.
+          navigate(`/bookings/${bookingReferenceId}/success`, {
+            state: {
+              ref: bookingReferenceId,
+              travellerName: firstName || "Traveller",
+              amountPaid: r.amountPaid ?? "1,09,720",
+              dueBalance: r.dueBalance ?? "0",
+              paymentMethod: r.paymentMethod ?? "UPI",
+              paidAt: now.toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "short",
+              }) + ", " + now.toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true,
+              }),
+              tripTitle: data.tripTitle,
+              tripName: data.tripName,
+              startDate: data.dateRange,
+              durationLabel: data.durationLabel,
+              travelers,
+              pickUp: data.pickUp,
+              drop: data.drop,
+              pickUpDate: pickUpDate || data.dateRange,
+              dropDate: dropDate || "",
+            },
+          });
+        }}
       />
     </div>
   );

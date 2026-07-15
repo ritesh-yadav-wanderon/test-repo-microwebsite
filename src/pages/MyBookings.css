@@ -1,0 +1,254 @@
+.mbl-page {
+  min-height: 100vh;
+  background: #fff;
+  max-width: var(--app-width);
+  margin: 0 auto;
+}
+
+/* ── Top nav ── */
+.mbl-nav {
+  position: sticky;
+  top: 0;
+  z-index: 21;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+}
+.mbl-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.mbl-nav-back,
+.mbl-nav-close {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mbl-nav-title {
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.08px;
+  color: #202020;
+}
+
+/* ── Tabs ── */
+.mbl-tabs {
+  position: sticky;
+  top: 64px;
+  z-index: 20;
+  height: 40px;
+  display: flex;
+  align-items: stretch;
+  padding: 0 20px;
+  background: #fff;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.04);
+}
+.mbl-tab {
+  flex: 1;
+  padding: 10px 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #4e4e4e;
+  border-bottom: 2px solid transparent;
+}
+.mbl-tab--active {
+  font-weight: 500;
+  color: #015f74;
+  border-bottom-color: #015f74;
+}
+
+.mbl-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 20px;
+  padding: 20px 16px;
+}
+
+.mbl-empty {
+  text-align: center;
+  padding: 40px 0;
+  font-size: 14px;
+  color: #757575;
+}
+
+/* ── Booking card ── */
+.mbl-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.06);
+  text-align: left;
+}
+.mbl-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.mbl-card-id,
+.mbl-card-travellers {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #202020;
+}
+.mbl-card-rule {
+  height: 1px;
+  width: 100%;
+  background: #ededed;
+}
+.mbl-card-trip {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.mbl-card-thumb {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.mbl-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mbl-card-title {
+  flex: 1;
+  min-width: 0;
+  align-self: center;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 14px;
+  color: #4e4e4e;
+}
+.mbl-card-dates {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.mbl-card-duration {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  line-height: 14px;
+  color: #4e4e4e;
+}
+.mbl-card-duration img {
+  width: 8px;
+  height: 12px;
+}
+.mbl-card-nights {
+  font-size: 10px;
+  line-height: 14px;
+  color: #4e4e4e;
+}
+.mbl-card-route {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.mbl-card-place {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.mbl-card-place--right {
+  align-items: flex-end;
+  text-align: right;
+}
+.mbl-card-place-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  line-height: 14px;
+  color: #757575;
+}
+.mbl-card-place-tag img {
+  width: 8px;
+  height: 10px;
+}
+.mbl-card-place-name {
+  font-size: 10px;
+  line-height: 14px;
+  color: #4e4e4e;
+}
+.mbl-status {
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 30px;
+  background: #ffebed;
+  font-size: 10px;
+  font-weight: 500;
+  color: #520008;
+}
+.mbl-info-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #fff9e7;
+}
+.mbl-info-tag img {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.mbl-info-tag p {
+  flex: 1;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.048px;
+  color: #a27e17;
+}
+.mbl-cancel-note {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #f4f1f2;
+  font-size: 12px;
+  line-height: 16px;
+  color: #4e4e4e;
+  text-align: center;
+}
+
+/* ── View cancellation request ── */
+.mbl-cancel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 44px;
+  width: 100%;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.04);
+  font-size: 14px;
+  color: #3d3d3d;
+}
+.mbl-cancel-btn img {
+  width: 16px;
+  height: 16px;
+}

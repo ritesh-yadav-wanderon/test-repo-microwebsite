@@ -218,6 +218,62 @@
   align-self: center;
 }
 
+/* ── Custom amount (due mode) ── */
+.psh-custom {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+}
+.psh-custom-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+}
+.psh-custom-head > img {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.psh-custom-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: 24px;
+}
+.psh-custom-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 48px;
+  padding: 0 12px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+}
+.psh-custom-input:focus-within {
+  border-color: #01afd1;
+}
+.psh-custom-rupee {
+  font-size: 16px;
+  color: #202020;
+}
+.psh-custom-input input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: #202020;
+}
+.psh-custom-error {
+  font-size: 12px;
+  line-height: 16px;
+  color: #d0021b;
+}
+
 /* ── CTA ── */
 .psh-cta {
   display: flex;
@@ -294,18 +350,51 @@
 /* Swipe to pay */
 .psh-swipe {
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: 6px;
   height: 48px;
   width: 200px;
-  padding: 4px 16px 4px 8px;
   border-radius: 56px;
   background: #01afd1;
   box-shadow: -3px 2px 4px rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
 }
-.psh-swipe-badge {
+.psh-swipe-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 44px;
+  padding-right: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0.024px;
+  color: #ffffff;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.psh-swipe-hint {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  opacity: 0.7;
+  pointer-events: none;
+  animation: psh-hint 1.4s ease-in-out infinite;
+}
+.psh-swipe-hint img {
+  width: 24px;
+  height: 24px;
+}
+.psh-swipe-thumb {
+  position: absolute;
+  top: 4px;
+  left: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -314,24 +403,104 @@
   border-radius: 60px;
   background: #08677c;
   box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.25);
+  cursor: grab;
+  touch-action: none;
+  z-index: 1;
+}
+.psh-swipe-thumb:active {
+  cursor: grabbing;
+}
+.psh-swipe-badge {
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;
   color: #ffffff;
-  flex-shrink: 0;
 }
-.psh-swipe-label {
-  flex: 1;
-  font-size: 16px;
+.psh-swipe--disabled {
+  opacity: 0.6;
+}
+.psh-swipe--disabled .psh-swipe-thumb {
+  cursor: default;
+}
+.psh-swipe--loading {
+  opacity: 0.85;
+}
+.psh-swipe-spinner {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: psh-spin 0.7s linear infinite;
+}
+@keyframes psh-hint {
+  0%,
+  100% {
+    transform: translate(0, -50%);
+  }
+  50% {
+    transform: translate(4px, -50%);
+  }
+}
+@keyframes psh-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Status messages */
+.psh-status {
+  font-size: 12px;
+  line-height: 16px;
+  padding: 6px 16px;
+  margin: 0;
+}
+.psh-status--error {
+  color: #bb6262;
+  background: #fdf2f2;
+}
+.psh-status--success {
+  color: #25793d;
+  background: #eef8f1;
   font-weight: 500;
-  line-height: 24px;
-  letter-spacing: 0.024px;
-  color: #ffffff;
-  white-space: nowrap;
-  text-align: left;
+  text-align: center;
 }
-.psh-swipe img {
-  width: 30px;
-  height: 30px;
-  flex-shrink: 0;
+
+/* ── Dev-only test card hint (frontend-test payment mode) ── */
+.psh-testcard {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  border: 1px dashed #f0b429;
+  border-radius: 8px;
+  background: #fffaf0;
+  font-size: 12px;
+  color: #7a5a00;
+  cursor: pointer;
+}
+.psh-testcard-tag {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #f0b429;
+  color: #fff;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+.psh-testcard-num {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.psh-testcard-meta {
+  color: #a07c1f;
+}
+.psh-testcard-copy {
+  margin-left: auto;
+  font-weight: 600;
+  color: #01afd1;
 }

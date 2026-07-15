@@ -1,0 +1,123 @@
+.ps-page {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  max-width: var(--app-width);
+  margin: 0 auto;
+  background: linear-gradient(to bottom, #18854c 0%, #ffffff 55%);
+  overflow: hidden;
+}
+.ps-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding-top: 80px;
+  padding-bottom: 104px;
+}
+
+/* Bottom CTA */
+.ps-cta-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+  width: 100%;
+  max-width: var(--app-width);
+  padding: 16px;
+  padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(to top, #ffffff 60%, rgba(255, 255, 255, 0));
+}
+.ps-cta {
+  width: 100%;
+  height: 52px;
+  border-radius: 60px;
+  background: #015f74;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.05s ease;
+}
+.ps-cta:hover {
+  background: #01758f;
+}
+.ps-cta:active {
+  transform: scale(0.99);
+}
+
+.ps-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Overlapping avatars */
+.ps-avatars {
+  display: flex;
+  align-items: flex-start;
+}
+.ps-avatar {
+  width: 40px;
+  height: 40px;
+  padding: 1.25px;
+  border-radius: 50%;
+  background: #005227;
+  border: 0.625px solid #005227;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ps-avatar--check {
+  margin-right: -10px;
+  z-index: 1;
+}
+.ps-avatar-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #3a9766;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.ps-avatar-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ps-avatar--check .ps-avatar-inner img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.ps-name {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+  color: #005227;
+}
+.ps-amount {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  color: #ffffff;
+}
+.ps-meta {
+  color: #005227;
+  font-weight: 500;
+}
+.ps-time {
+  font-size: 10px;
+  line-height: 14px;
+}
+.ps-method {
+  font-size: 12px;
+  line-height: 16px;
+}
