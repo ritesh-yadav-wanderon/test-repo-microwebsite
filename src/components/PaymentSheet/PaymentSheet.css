@@ -285,6 +285,7 @@
   align-items: center;
   gap: 8px;
   height: 32px;
+  margin-top: 20px;
   padding: 12px 8px;
   background: linear-gradient(
     to right,
@@ -324,6 +325,7 @@
   flex-direction: column;
   gap: 4px;
   justify-content: center;
+  flex-shrink: 0;
 }
 .psh-cta-price {
   font-size: 18px;
@@ -350,15 +352,34 @@
 /* Swipe to pay */
 .psh-swipe {
   position: relative;
-  height: 48px;
-  width: 200px;
+  flex: 1 1 0;
+  min-width: 170px;
+  max-width: 240px;
+  height: 52px;
   border-radius: 56px;
-  background: #01afd1;
-  box-shadow: -3px 2px 4px rgba(0, 0, 0, 0.08);
-  flex-shrink: 0;
+  background: #e6f6fa;
+  border: 1px solid #cbecf3;
+  box-shadow: inset 0 1px 2px rgba(1, 100, 120, 0.08);
   overflow: hidden;
   touch-action: none;
   user-select: none;
+  -webkit-user-select: none;
+}
+/* Teal reveal that trails the knob — makes the swipe feel like a real fill. */
+.psh-swipe-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 56px;
+  background: linear-gradient(90deg, #0198bb 0%, #01afd1 100%);
+  pointer-events: none;
+}
+.psh-swipe--dragging .psh-swipe-fill {
+  transition: none;
+}
+.psh-swipe:not(.psh-swipe--dragging) .psh-swipe-fill {
+  transition: width 0.32s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .psh-swipe-label {
   position: absolute;
@@ -367,63 +388,62 @@
   align-items: center;
   justify-content: center;
   padding-left: 44px;
-  padding-right: 12px;
+  padding-right: 16px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   letter-spacing: 0.024px;
-  color: #ffffff;
+  color: #017e97;
   white-space: nowrap;
   pointer-events: none;
 }
-.psh-swipe-hint {
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  opacity: 0.7;
-  pointer-events: none;
-  animation: psh-hint 1.4s ease-in-out infinite;
-}
-.psh-swipe-hint img {
-  width: 24px;
-  height: 24px;
-}
 .psh-swipe-thumb {
   position: absolute;
-  top: 4px;
-  left: 8px;
+  top: 3px;
+  left: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
   border-radius: 60px;
-  background: #08677c;
-  box-shadow: inset 0px 0px 4px rgba(0, 0, 0, 0.25);
+  background: #01afd1;
+  box-shadow: 0 2px 6px rgba(1, 120, 145, 0.35);
   cursor: grab;
   touch-action: none;
-  z-index: 1;
+  z-index: 2;
 }
 .psh-swipe-thumb:active {
   cursor: grabbing;
 }
-.psh-swipe-badge {
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 24px;
+/* Inviting nudge on the arrow while idle, so it reads as "drag me". */
+.psh-swipe--ready:not(.psh-swipe--dragging):not(.psh-swipe--loading) .psh-swipe-arrow {
+  animation: psh-nudge 1.5s ease-in-out infinite;
+}
+.psh-swipe-arrow {
+  display: block;
+  width: 22px;
+  height: 22px;
+}
+.psh-swipe-check {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: #ffffff;
+}
+.psh-swipe--done .psh-swipe-label {
   color: #ffffff;
 }
 .psh-swipe--disabled {
-  opacity: 0.6;
+  opacity: 0.55;
 }
 .psh-swipe--disabled .psh-swipe-thumb {
   cursor: default;
 }
 .psh-swipe--loading {
-  opacity: 0.85;
+  opacity: 0.9;
 }
 .psh-swipe-spinner {
   width: 22px;
@@ -434,18 +454,23 @@
   border-radius: 50%;
   animation: psh-spin 0.7s linear infinite;
 }
-@keyframes psh-hint {
+@keyframes psh-nudge {
   0%,
   100% {
-    transform: translate(0, -50%);
+    transform: translateX(0);
   }
   50% {
-    transform: translate(4px, -50%);
+    transform: translateX(4px);
   }
 }
 @keyframes psh-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .psh-swipe-arrow {
+    animation: none !important;
   }
 }
 

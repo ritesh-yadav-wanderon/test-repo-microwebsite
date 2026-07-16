@@ -1,453 +1,354 @@
-/* TripCard — Figma 3268:11829. 330px card, cream bg, floating meta pill. */
-
 .tc {
-  flex: 0 0 min(330px, 86vw);
-  max-width: 86vw;
-  scroll-snap-align: start;
-  background: #fcf9f3;
-  border: 1px solid #f5f0ea;
-  border-radius: 20px;
-  padding: 8px 8px 16px;
+  --tc-accent: #287686;
   position: relative;
   display: flex;
   flex-direction: column;
   gap: 12px;
-}
-
-/* ── Options Available tab — hangs from card top ── */
-.tc-options {
-  position: absolute;
-  top: 0;
-  left: 30px;
-  z-index: 4;
-  height: 28px;
-  display: inline-flex;
-  align-items: center;
-  background: #fcf9f3;
-  border: 1px solid #f5f0ea;
-  border-top: none;
-  border-radius: 0 0 8px 8px;
-  box-shadow: -3px 4px 12px 2px rgba(0, 0, 0, 0.08);
-  padding: 0 10px;
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  color: #3d3d3d;
-  white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  background: #fcfcfc;
+  border: 1px solid #ebebeb;
+  border-radius: 12px;
   overflow: hidden;
-}
-
-/* ── Recommended badge — left edge at y=222 ── */
-.tc-recommended {
-  position: absolute;
-  left: 0;
-  top: 222px;
-  z-index: 4;
-  height: 30px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: #fee60b;
-  border-left: 1px solid #f5f0ea;
-  border-radius: 0 30px 30px 0;
-  padding: 4px 10px 4px 4px;
   font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  color: #202020;
-  white-space: nowrap;
-  overflow: hidden;
-}
-.tc-rec-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
 }
 
-/* ── Image + meta pill stacking group ── */
-.tc-stack {
+/* ── Media + floating meta pill ── */
+.tc-media-wrap {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  isolation: isolate;
   width: 100%;
+  isolation: isolate;
 }
 
-/* ── Image wrapper — z:2 so it visually overlaps the pill's top 10px ── */
 .tc-media {
   position: relative;
+  z-index: 2;
   width: 100%;
   height: 260px;
-  border-radius: 16px;
+  margin-bottom: -10px;
   background: #fbfbfb;
   border: 0.5px solid #e5e5e5;
+  border-radius: 12px;
   overflow: hidden;
-  margin-bottom: -10px;
-  z-index: 2;
-  flex-shrink: 0;
-  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
 }
-.tc-media > img {
+
+.tc-img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
-/* "Add to Compare" — absolute in top-right of image */
-.tc-compare {
+.tc-media-actions {
   position: absolute;
-  top: 9.5px;
-  right: 9px;
-  width: 110px;
-  height: 28px;
+  top: 11.5px;
+  right: 11.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tc-wish {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.12);
+  color: #fff;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.tc-wish svg {
+  display: block;
+  width: 14px;
+  height: 12px;
+}
+.tc-wish--saved {
+  color: #ffffff;
+}
+.tc-wish--saved svg {
+  width: 16px;
+  height: 16px;
+}
+
+.tc-compare {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(0, 0, 0, 0.12);
+  height: 28px;
+  padding: 0 10px;
+  border: none;
   border-radius: 30px;
-  padding: 0 2px 0 8px;
-  font-family: "Roboto", sans-serif;
+  background: rgba(0, 0, 0, 0.12);
+  color: #fff;
+  font-family: inherit;
   font-size: 12px;
   font-weight: 500;
-  color: #fff;
   letter-spacing: 0.025px;
   white-space: nowrap;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease;
 }
 .tc-compare-ico {
-  width: 14px;
-  height: 12px;
-  flex-shrink: 0;
   display: block;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
 }
 
-/* ── Floating meta pill — z:1, visible below image by 10px ── */
 .tc-meta-pill {
   position: relative;
   z-index: 1;
-  width: 270px;
-  border-bottom: 1px solid;
-  border-radius: 12px;
-  padding: 14px 8px 6px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
+  width: 270px;
+  max-width: calc(100% - 24px);
+  box-sizing: border-box;
+  padding: 14px 8px 6px;
+  background: #fefdfc;
+  border-bottom: 1px solid var(--tc-accent);
+  border-radius: 12px;
 }
-.tc-meta-grp {
-  display: inline-flex;
+
+.tc-meta-dur {
+  display: flex;
   align-items: center;
   gap: 4px;
+  color: var(--tc-accent);
 }
-.tc-cal-ico {
+.tc-meta-dur svg {
+  display: block;
   width: 12px;
   height: 12px;
-  flex-shrink: 0;
-  display: block;
 }
-.tc-meta-bold {
+.tc-meta-dur span {
+  font-size: 12px;
   font-weight: 500;
+  line-height: 12px;
 }
-.tc-meta-reg {
-  font-weight: 400;
-}
+
 .tc-meta-dot {
+  flex-shrink: 0;
   width: 2px;
   height: 2px;
   border-radius: 50%;
-  flex-shrink: 0;
+  background: var(--tc-accent);
 }
 
-/* ── Card body ── */
+.tc-meta-join {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--tc-accent);
+  font-size: 12px;
+  line-height: 12px;
+  white-space: nowrap;
+}
+.tc-meta-join b {
+  font-weight: 500;
+}
+.tc-meta-join span {
+  font-weight: 400;
+}
+
+/* ── Recommended ribbon ── */
+.tc-ribbon {
+  position: absolute;
+  left: -12px;
+  top: 209px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 4px 10px 4px 4px;
+  background: #fee60b;
+  border-left: 1px solid #eaf4f5;
+  border-radius: 0 30px 30px 0;
+  overflow: hidden;
+}
+.tc-ribbon img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.tc-ribbon span {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #202020;
+  white-space: nowrap;
+}
+
+/* ── Body ── */
 .tc-body {
   display: flex;
   flex-direction: column;
   gap: 12px;
   width: 100%;
 }
-
-.tc-details {
+.tc-info {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
 }
 
 .tc-title {
   margin: 0;
-  font-family: "Roboto", sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 21px;
   color: #202020;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Itinerary route box */
-.tc-itin {
-  background: #fefdfb;
-  border-radius: 12px;
-  padding: 6px 8px;
-  font-family: "Roboto", sans-serif;
+.tc-batch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+.tc-batch {
+  overflow: hidden;
   font-size: 12px;
-  font-weight: 400;
   line-height: 14px;
+  color: #575757;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tc-see-all {
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #015f74;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tc-route {
+  padding: 8px 12px;
+  background: #eef2f2;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 16px;
   color: #202020;
 }
 
-/* Features list */
 .tc-features {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  list-style: none;
   margin: 0;
   padding: 0;
+  list-style: none;
 }
 .tc-features li {
   display: flex;
   align-items: center;
   gap: 4px;
   height: 16px;
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 14px;
-  color: #846950;
   overflow: hidden;
+  font-size: 12px;
+  line-height: 14px;
+  color: #808080;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .tc-feat-dot {
+  flex-shrink: 0;
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #846950;
-  flex-shrink: 0;
+  background: #808080;
 }
 
-/* Batches line */
-.tc-batches {
-  margin: 0;
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 14px;
-  color: #575757;
-}
-.tc-batches strong {
-  font-weight: 500;
-}
-
-/* ── Footer row: price + CTA ── */
+/* ── Price + CTA ── */
 .tc-foot {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 12px;
+  width: 100%;
 }
-
-.tc-price {
+.tc-price-col {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  flex: 1;
   min-width: 0;
 }
-.tc-price-main {
-  font-family: "Roboto", sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 24px;
-  color: #202020;
-  white-space: nowrap;
-}
-.tc-price-sub {
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 12px;
-  color: #b6a89a;
-  white-space: nowrap;
-}
-
-.tc-cta {
-  flex: 0 0 140px;
-  width: 140px;
-  height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: #846950;
-  color: #fff;
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 21px;
-  border-radius: 40px;
-  padding: 0 16px;
-  white-space: nowrap;
-  cursor: pointer;
-}
-.tc-arrow-ico {
-  width: 16px;
-  height: 8px;
-  flex-shrink: 0;
-  display: block;
-}
-
-/* Price note — sits below footer */
-.tc-price-note {
-  margin: 0;
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 14px;
-  color: #b6a89a;
-}
-
-/* Full-width variant (search results vertical list) */
-.tc--full {
-  flex: 0 0 auto;
-  width: 100%;
-}
-
-/* Teal color scheme (search results) */
-.tc--teal {
-  background: #f3fbfc;
-  border-color: #eaf4f5;
-}
-.tc--teal .tc-options {
-  background: #f3fbfc;
-  border-color: #eaf4f5;
-}
-.tc--teal .tc-itin {
-  background: #fbfefe;
-}
-.tc--teal .tc-features li {
-  color: #287686;
-}
-.tc--teal .tc-feat-dot {
-  background: #287686;
-}
-.tc--teal .tc-price-main {
-  color: #015f74;
-}
-.tc--teal .tc-price-sub,
-.tc--teal .tc-price-note {
-  color: #9ab3b6;
-}
-.tc--teal .tc-cta {
-  background: #015f74;
-}
-/* recolor the calendar SVG (it uses CSS var --fill-0) */
-.tc--teal .tc-cal-ico {
-  --fill-0: #287686;
-}
-
-/* ── Full-width listing variant (Figma 4506:6159) ── */
-.tc--full {
-  flex: 0 0 auto;
-  width: 100%;
-  max-width: 100%;
-  border-radius: 12px;
-  padding: 0 0 12px;
-}
-
-/* Image fills full card width, rounded top corners only */
-.tc--full .tc-media {
-  height: 160px;
-  border-radius: 12px 12px 0 0;
-  margin-bottom: -10px;
-}
-
-/* Wishlist + Compare side by side in top-right */
-.tc-img-actions {
-  position: absolute;
-  top: 9px;
-  right: 9px;
+.tc-price-row {
   display: flex;
   align-items: center;
   gap: 6px;
-  z-index: 3;
 }
-.tc-wishlist {
-  width: 30px;
-  height: 28px;
+.tc-price-old {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #ababab;
+  text-decoration: line-through;
+}
+.tc-price-now {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #121212;
+}
+.tc-price-sub {
+  font-size: 12px;
+  line-height: 12px;
+  color: #7d7d7d;
+}
+
+.tc-cta {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.12);
-  border-radius: 50%;
-  padding: 0;
-  cursor: pointer;
+  gap: 8px;
   flex-shrink: 0;
-}
-.tc-wishlist img {
-  width: 18px;
-  height: 18px;
-  display: block;
-}
-
-/* Body has 8px side padding inside the full-width card */
-.tc--full .tc-body {
-  padding: 8px 8px 0;
-}
-
-/* Itinerary — teal tinted for listing variant */
-.tc--full .tc-itin {
-  background: #eef2f2;
-}
-
-/* Recommended badge adjusted for shorter 160px image */
-.tc--full .tc-recommended {
-  top: 121px;
-}
-
-/* "See All Departures" inline link button */
-.tc-see-all {
-  background: none;
-  border: none;
-  padding: 0 0 0 6px;
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  color: #015f74;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-/* ── Full teal — listing color overrides ── */
-.tc--teal.tc--full {
-  background: #fcfcfc;
-  border-color: #ebebeb;
-}
-.tc--teal.tc--full .tc-price-main {
-  color: #121212;
-}
-.tc--teal.tc--full .tc-price-sub,
-.tc--teal.tc--full .tc-price-note {
-  color: #7d7d7d;
-}
-.tc--teal.tc--full .tc-features li {
-  color: #808080;
-}
-.tc--teal.tc--full .tc-feat-dot {
-  background: #808080;
-}
-.tc--teal.tc--full .tc-cta {
-  background: #fee60b;
-  color: #3d3d3d;
   width: 120px;
   height: 38px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 40px;
+  background: #fee60b;
+  color: #3d3d3d;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: filter 0.15s ease;
 }
-.tc--teal.tc--full .tc-cta .tc-arrow-ico {
-  filter: brightness(0.3);
+.tc-cta:hover {
+  filter: brightness(0.97);
+}
+.tc-cta svg {
+  display: block;
+  width: 15px;
+  height: 8px;
 }

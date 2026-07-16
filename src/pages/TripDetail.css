@@ -162,7 +162,8 @@
   letter-spacing: 0.03px;
   flex-shrink: 0;
 }
-.tdp2-hero-btn-pill img { display: block; flex-shrink: 0; width: 14px; height: 14px; }
+.tdp2-hero-btn-pill img,
+.tdp2-hero-btn-pill svg { display: block; flex-shrink: 0; width: 14px; height: 14px; }
 .tdp2-hero-btn-wish {
   display: flex;
   align-items: center;
@@ -178,7 +179,8 @@
   cursor: pointer;
   flex-shrink: 0;
 }
-.tdp2-hero-btn-wish img { display: block; width: 20px; height: 20px; flex-shrink: 0; }
+.tdp2-hero-btn-wish img,
+.tdp2-hero-btn-wish svg { display: block; width: 20px; height: 20px; flex-shrink: 0; }
 
 
 
@@ -744,7 +746,7 @@
 
 /* Reviews / Tribe section */
 #section-reviews {
-  margin-bottom: 3git p0px;
+  padding-bottom: 30px;
 }
 
 /* ── Section separator ───────────────────────────────────────────────── */
@@ -1947,30 +1949,48 @@
 .tdp2-more-vm-card {
   flex: 0 0 160px;
   width: 160px;
+  height: 160px;
+  align-self: flex-start;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 17px;
+  padding: 0;
+  background: #fbfbfb;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.16);
+  overflow: hidden;
+  cursor: pointer;
 }
 .tdp2-more-vm-imgs {
-  position: relative;
-  width: 160px;
-  height: 160px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 .tdp2-more-vm-img {
-  position: absolute;
-  width: 88px;
-  height: 106px;
-  border-radius: 8px;
-  object-fit: cover;
-  border: 2px solid #fff;
+  width: 40px;
+  height: 50px;
+  border: 2px solid #e5e5e5;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fbfbfb;
+  display: block;
 }
-.tdp2-more-vm-back { left: 16px; top: 27px; transform: rotate(5deg); z-index: 1; }
-.tdp2-more-vm-front { left: 56px; top: 0; transform: rotate(-5deg); z-index: 2; }
+.tdp2-more-vm-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.tdp2-more-vm-back { transform: rotate(-5deg); margin-right: -12px; z-index: 1; }
+.tdp2-more-vm-front { transform: rotate(5deg); z-index: 2; }
 .tdp2-more-vm-label {
-  font-size: 14px;
+  margin: 0;
+  font-size: 16px;
   font-weight: 500;
+  line-height: 24px;
   color: #4d4d4d;
   text-align: center;
   white-space: nowrap;
@@ -2076,6 +2096,8 @@
   height: 24px;
   flex-shrink: 0;
   object-fit: contain;
+  background: #f5f5f5;
+  border-radius: 60px;
   transition: transform 0.2s ease;
 }
 .tdp2-day-card-chevron.open {
@@ -2654,15 +2676,87 @@
   width: 100%;
   max-width: var(--app-width);
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  box-sizing: border-box;
+  background: #fff;
+  border-top: 1px solid #f0f0f0;
+  box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.16);
+  z-index: 100;
+}
+/* Selected-batch tag row (Figma 5406:15308) */
+.tdp2-sticky-tag {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 32px;
+  padding: 6px 8px;
+  box-sizing: border-box;
+  background: #f1ebff;
+  -webkit-backdrop-filter: blur(7px);
+  backdrop-filter: blur(7px);
+  overflow: hidden;
+}
+.tdp2-sticky-tag-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+.tdp2-sticky-tag-icon {
+  display: block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.tdp2-sticky-tag-title,
+.tdp2-sticky-tag-date {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.36px;
+  color: #1b0052;
+  white-space: nowrap;
+}
+.tdp2-sticky-tag-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tdp2-sticky-tag-date {
+  flex-shrink: 0;
+}
+.tdp2-sticky-tag-dot {
+  flex-shrink: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #1b0052;
+}
+.tdp2-sticky-tag-change {
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.36px;
+  color: #1b0052;
+  text-transform: capitalize;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+.tdp2-sticky-main {
+  display: flex;
   align-items: center;
   gap: 6px;
   padding: 6px 16px;
   box-sizing: border-box;
   min-height: 70px;
-  background: #fff;
-  border-top: 1px solid #f0f0f0;
-  box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.16);
-  z-index: 100;
 }
 .tdp2-sticky-price-col {
   flex: 1 0 0;

@@ -35,7 +35,7 @@
 .hero-rating {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .hero-rating-wreath {
@@ -45,8 +45,8 @@
 }
 
 .hero-laurel {
-  width: 13.5px;
-  height: 19.9px;
+  width: 18px;
+  height: 27px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -57,8 +57,8 @@
 
 .hero-rating-score {
   font-family: var(--font);
-  font-size: 12px;
-  font-weight: 400;
+  font-size: 16px;
+  font-weight: 500;
   color: #fff;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.6);
   white-space: nowrap;
@@ -67,7 +67,7 @@
 
 .hero-rating-label {
   font-family: var(--font);
-  font-size: 12px;
+  font-size: 16px;
   font-weight: 400;
   color: #fff;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.6);

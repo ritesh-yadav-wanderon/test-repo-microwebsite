@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import PaymentSheet from "../components/PaymentSheet/PaymentSheet";
+import Voucher, { type AppliedVoucher } from "../components/Voucher/Voucher";
 import "./Booking.css";
 
 const A = "/figma/booking/";
 const TRIP_THUMB = "/figma/trip-hero/hero-bg.png";
+
+/** Add-on & tax rates used to build the bill dynamically. */
+const FLEX_CANCEL_PP = 5999; // Flexible cancellation, per traveller
+const WANDERON_DISCOUNT = 500; // Flat WanderOn discount when at least one traveller
+const GST_RATE = 0.05;
+const TCS_RATE = 0.05;
+
+const formatINR = (n: number) => Math.round(n).toLocaleString("en-IN");
 
 interface BookingState {
   tripTitle?: string;
@@ -40,11 +49,10 @@ export default function Booking() {
   const data = { ...DEFAULTS, ...state };
 
   const [accommodationOpen, setAccommodationOpen] = useState(true);
-  const [travelers, setTravelers] = useState(data.travelers);
+  const [travelers, setTravelers] = useState(0);
   const [mixedGender, setMixedGender] = useState(false);
   const [privateRoom, setPrivateRoom] = useState(true);
   const [flexibleCancel, setFlexibleCancel] = useState(false);
-  const [couponOpen, setCouponOpen] = useState(false);
   const [notesOpen, setNotesOpen] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [paymentOpen, setPaymentOpen] = useState(false);
@@ -52,7 +60,7 @@ export default function Booking() {
   const [bookingReferenceId] = useState(() => `WO-${Date.now()}`);
 
   // Personal details
-  const [firstName, setFirstName] = useState("Ruhani");
+  const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("");
@@ -63,6 +71,49 @@ export default function Booking() {
   // Who are you booking for
   const [femaleCount, setFemaleCount] = useState(2);
   const [maleCount, setMaleCount] = useState(0);
+
+  // Applied coupon/voucher (drives the bill discount)
+  const [appliedVoucher, setAppliedVoucher] = useState<AppliedVoucher | null>(null);
+
+  // ── Dynamic bill: recomputed from pax + selected services + voucher ──
+  const pricing = useMemo(() => {
+    const perPersonNum = Number(String(data.perPerson).replace(/[^\d]/g, "")) || 0;
+    const perPersonStrikeNum =
+      Number(String(data.perPersonStrike).replace(/[^\d]/g, "")) || 0;
+    const roomSubtotal = perPersonNum * travelers;
+    const flexTotal = flexibleCancel ? FLEX_CANCEL_PP * travelers : 0;
+    const gross = roomSubtotal + flexTotal;
+
+    const voucherDiscount = travelers > 0 ? appliedVoucher?.amount ?? 0 : 0;
+    const wanderOnDiscount = travelers > 0 ? WANDERON_DISCOUNT : 0;
+    const discountTotal = voucherDiscount + wanderOnDiscount;
+
+    // Strike-through savings per traveller (only when the struck price is the
+    // higher original). Guards against placeholder data where strike < price.
+    const strikeSavings =
+      perPersonStrikeNum > perPersonNum
+        ? (perPersonStrikeNum - perPersonNum) * travelers
+        : 0;
+
+    const net = Math.max(0, gross - discountTotal);
+    const gst = Math.round(net * GST_RATE);
+    const tcs = Math.round(net * TCS_RATE);
+    const toPay = net + gst + tcs;
+
+    return {
+      perPersonNum,
+      roomSubtotal,
+      flexTotal,
+      voucherDiscount,
+      wanderOnDiscount,
+      discountTotal,
+      strikeSavings,
+      gst,
+      tcs,
+      toPay,
+      saved: discountTotal + strikeSavings,
+    };
+  }, [data.perPerson, data.perPersonStrike, travelers, flexibleCancel, appliedVoucher]);
 
   return (
     <div className="bkg-page">
@@ -302,8 +353,8 @@ export default function Booking() {
                   <button
                     className="bkg-step-btn"
                     type="button"
-                    aria-label="Decrease travelers"
-                    onClick={() => setTravelers((v) => Math.max(1, v - 1))}
+            aria-label="Decrease travelers"
+            onClick={() => setTravelers((v) => Math.max(0, v - 1))}
                   >
                     <img src={`${A}icon-minus.svg`} width={20} height={20} alt="" aria-hidden />
                   </button>
@@ -490,17 +541,10 @@ export default function Booking() {
 
         {/* ── Coupon + Bill Summary ─────────────────────────── */}
         <section className="bkg-section bkg-section--gap">
-          <button
-            className="bkg-coupon"
-            type="button"
-            onClick={() => setCouponOpen((v) => !v)}
-            aria-expanded={couponOpen}
-          >
-            <span className="bkg-coupon-label">Add Coupon Code</span>
-            <span className={`bkg-caret${couponOpen ? " bkg-caret--open" : ""}`} aria-hidden>
-              <img src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
-            </span>
-          </button>
+          <Voucher
+            onApply={(v) => setAppliedVoucher(v)}
+            onRemove={() => setAppliedVoucher(null)}
+          />
 
           <div className="bkg-bill">
             <div className="bkg-bill-head">
@@ -510,40 +554,48 @@ export default function Booking() {
 
             <div className="bkg-bill-rows">
               <div className="bkg-bill-row">
-                <span>Double Sharing</span>
-                <span>&#8377;26,999/- x 2</span>
+                <span>Hotel - (Double Sharing)</span>
+                <span>&#8377;{formatINR(pricing.perPersonNum)}/- x {travelers}</span>
               </div>
-              <div className="bkg-bill-row">
-                <span>Hostel - (4/6 Bed Mixed Dorm)</span>
-                <span>&#8377;24,999/- x 3</span>
-              </div>
+              {privateRoom && (
+                <div className="bkg-bill-row">
+                  <span>Private Room</span>
+                  <span>+&#8377;0/-</span>
+                </div>
+              )}
+              {flexibleCancel && (
+                <div className="bkg-bill-row">
+                  <span>Flexible Cancellation</span>
+                  <span>+&#8377;{formatINR(pricing.flexTotal)}/-</span>
+                </div>
+              )}
             </div>
 
             <div className="bkg-bill-divider" />
 
             <div className="bkg-bill-rows">
-              <div className="bkg-bill-row">
-                <span>Early Bird Voucher - 5K</span>
-                <span>-&#8377;5,000/-</span>
-              </div>
-              <div className="bkg-bill-row">
-                <span>Coupon Code</span>
-                <span>-&#8377;8,000/-</span>
-              </div>
-              <div className="bkg-bill-row">
-                <span>WanderOn Discount - (Upto &#8377;500 Off)</span>
-                <span>-&#8377;500/-</span>
-              </div>
+              {pricing.voucherDiscount > 0 && appliedVoucher && (
+                <div className="bkg-bill-row">
+                  <span>Voucher - {appliedVoucher.code}</span>
+                  <span>-&#8377;{formatINR(pricing.voucherDiscount)}/-</span>
+                </div>
+              )}
+              {pricing.wanderOnDiscount > 0 && (
+                <div className="bkg-bill-row">
+                  <span>WanderOn Discount - (Upto &#8377;500 Off)</span>
+                  <span>-&#8377;{formatINR(pricing.wanderOnDiscount)}/-</span>
+                </div>
+              )}
               <div className="bkg-bill-row">
                 <span className="bkg-bill-strong">GST @ 5%</span>
-                <span>&#8377;5775/-</span>
+                <span>&#8377;{formatINR(pricing.gst)}/-</span>
               </div>
               <div className="bkg-bill-row">
                 <button className="bkg-bill-tcs" type="button">
                   <span>TCS @ 5%</span>
                   <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
                 </button>
-                <span>&#8377;5,486/-</span>
+                <span>&#8377;{formatINR(pricing.tcs)}/-</span>
               </div>
             </div>
 
@@ -551,14 +603,16 @@ export default function Booking() {
 
             <div className="bkg-bill-total">
               <span>To Pay</span>
-              <span>&#8377;1,09,720/-</span>
+              <span>&#8377;{formatINR(pricing.toPay)}/-</span>
             </div>
 
-            <div className="bkg-saved">
-              <img src={`${A}icon-person.svg`} width={24} height={24} alt="" aria-hidden />
-              <span className="bkg-saved-amt">&#8377;5000/-</span>
-              <span className="bkg-saved-text">saved on this trip.</span>
-            </div>
+            {pricing.saved > 0 && (
+              <div className="bkg-saved">
+                <img src={`${A}icon-person.svg`} width={24} height={24} alt="" aria-hidden />
+                <span className="bkg-saved-amt">&#8377;{formatINR(pricing.saved)}/-</span>
+                <span className="bkg-saved-text">saved on this trip.</span>
+              </div>
+            )}
           </div>
         </section>
 
@@ -601,12 +655,18 @@ export default function Booking() {
           <span className="bkg-cta-tag">{data.tripName}</span>
           <span className="bkg-cta-dot" aria-hidden />
           <span className="bkg-cta-tag">{data.dateRange}</span>
-          <span className="bkg-cta-dot" aria-hidden />
-          <span className="bkg-cta-tag">{travelers} Travellers</span>
+          {travelers > 0 && (
+            <>
+              <span className="bkg-cta-dot" aria-hidden />
+              <span className="bkg-cta-tag">
+                {travelers} {travelers === 1 ? "Traveller" : "Travellers"}
+              </span>
+            </>
+          )}
         </div>
         <div className="bkg-cta-bar">
           <div className="bkg-cta-price-col">
-            <span className="bkg-cta-price">&#8377; 1,09,720/-</span>
+            <span className="bkg-cta-price">&#8377; {formatINR(pricing.toPay)}/-</span>
             <button className="bkg-cta-fee" type="button">
               <span>+</span>
               <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
@@ -619,7 +679,7 @@ export default function Booking() {
             disabled={!agreed}
             onClick={() => setPaymentOpen(true)}
           >
-            <span>Continue to Book</span>
+            <span>Book Now</span>
           </button>
         </div>
       </div>
@@ -627,6 +687,8 @@ export default function Booking() {
       <PaymentSheet
         isOpen={paymentOpen}
         onClose={() => setPaymentOpen(false)}
+        totalAmount={formatINR(pricing.toPay)}
+        savedAmount={String(pricing.saved)}
         bookingReferenceId={bookingReferenceId}
         description={data.tripName}
         prefill={{
@@ -651,7 +713,7 @@ export default function Booking() {
             state: {
               ref: bookingReferenceId,
               travellerName: firstName || "Traveller",
-              amountPaid: r.amountPaid ?? "1,09,720",
+              amountPaid: r.amountPaid ?? formatINR(pricing.toPay),
               dueBalance: r.dueBalance ?? "0",
               paymentMethod: r.paymentMethod ?? "UPI",
               paidAt: now.toLocaleDateString("en-GB", {

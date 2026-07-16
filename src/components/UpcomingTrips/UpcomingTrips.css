@@ -217,7 +217,7 @@
 /* View More Trips card */
 .up-view-more {
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 14px;
 }
 

@@ -139,8 +139,13 @@ export default function PaymentSheet({
       onError: (err) => {
         setStatus("error");
         setErrorMsg(err.message);
+        resetSwipe();
       },
-      // On dismiss we intentionally keep the sheet open so the user can retry.
+      // On dismiss we keep the sheet open so the user can retry — but snap the
+      // swipe thumb back to the start since nothing was paid.
+      onDismiss: () => {
+        resetSwipe();
+      },
     });
   };
 
@@ -155,40 +160,57 @@ export default function PaymentSheet({
   const trackRef = useRef<HTMLDivElement>(null);
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
+  const [maxX, setMaxX] = useState(0);
   const startXRef = useRef(0);
   const maxXRef = useRef(0);
   const confirmedRef = useRef(false);
 
-  const THUMB_SIZE = 40;
-  const TRACK_PAD_L = 8;
-  const TRACK_PAD_R = 16;
-  const canSwipe = !(loading || status === "success" || invalidCustom || payNum <= 0);
+  const resetSwipe = () => {
+    setDragging(false);
+    setDragX(0);
+    confirmedRef.current = false;
+  };
 
-  // Reset the thumb whenever the sheet reopens or a payment errors out.
-  useEffect(() => {
-    if (isOpen) {
-      setDragX(0);
-      confirmedRef.current = false;
-    }
-  }, [isOpen]);
-  useEffect(() => {
-    if (status === "error") {
-      setDragX(0);
-      confirmedRef.current = false;
-    }
-  }, [status]);
+  const THUMB_SIZE = 44;
+  const TRACK_PAD = 4;
+  const canSwipe = !(loading || status === "success" || invalidCustom || payNum <= 0);
+  const progress = maxX > 0 ? Math.min(1, dragX / maxX) : 0;
 
   const measureMax = () => {
     const track = trackRef.current;
     if (!track) return 0;
-    return Math.max(0, track.clientWidth - THUMB_SIZE - TRACK_PAD_L - TRACK_PAD_R);
+    return Math.max(0, track.clientWidth - THUMB_SIZE - TRACK_PAD * 2);
   };
+
+  // Reset the thumb whenever the sheet reopens or a payment errors out.
+  useEffect(() => {
+    if (isOpen) resetSwipe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
+  useEffect(() => {
+    if (status === "error") resetSwipe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [status]);
+
+  // Keep the track measurement fresh so the fill/label progress stay accurate.
+  useEffect(() => {
+    if (!isOpen) return;
+    const measure = () => {
+      const m = measureMax();
+      maxXRef.current = m;
+      setMaxX(m);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [isOpen]);
 
   const onThumbPointerDown = (e: React.PointerEvent) => {
     if (!canSwipe) return;
     setDragging(true);
     confirmedRef.current = false;
     maxXRef.current = measureMax();
+    setMaxX(maxXRef.current);
     startXRef.current = e.clientX - dragX;
     e.currentTarget.setPointerCapture?.(e.pointerId);
   };
@@ -417,30 +439,39 @@ export default function PaymentSheet({
             <div
               ref={trackRef}
               className={`psh-swipe${loading ? " psh-swipe--loading" : ""}${
-                canSwipe ? "" : " psh-swipe--disabled"
+                dragging ? " psh-swipe--dragging" : ""
+              }${status === "success" ? " psh-swipe--done" : ""}${
+                canSwipe ? " psh-swipe--ready" : " psh-swipe--disabled"
               }`}
               role="slider"
               aria-label="Swipe to pay"
               aria-valuemin={0}
               aria-valuemax={100}
-              aria-valuenow={maxXRef.current ? Math.round((dragX / maxXRef.current) * 100) : 0}
+              aria-valuenow={Math.round(progress * 100)}
             >
-              <span className="psh-swipe-label">
+              <span
+                className="psh-swipe-fill"
+                style={{ width: `${TRACK_PAD + dragX + THUMB_SIZE}px` }}
+                aria-hidden
+              />
+              <span
+                className="psh-swipe-label"
+                style={{ opacity: Math.max(0, 1 - progress * 1.6) }}
+              >
                 {status === "success"
                   ? "Paid"
                   : loading
                   ? "Processing…"
                   : "Swipe to Pay"}
               </span>
-              <span className="psh-swipe-hint" aria-hidden>
-                <img src={`${A}icon-arrow-right.svg`} width={24} height={24} alt="" />
-              </span>
               <button
                 type="button"
                 className="psh-swipe-thumb"
                 style={{
                   transform: `translateX(${dragX}px)`,
-                  transition: dragging ? "none" : "transform 0.2s ease",
+                  transition: dragging
+                    ? "none"
+                    : "transform 0.32s cubic-bezier(0.22, 1, 0.36, 1)",
                 }}
                 onPointerDown={onThumbPointerDown}
                 onPointerMove={onThumbPointerMove}
@@ -451,8 +482,17 @@ export default function PaymentSheet({
               >
                 {loading ? (
                   <span className="psh-swipe-spinner" aria-hidden />
+                ) : status === "success" ? (
+                  <span className="psh-swipe-check" aria-hidden>&#10003;</span>
                 ) : (
-                  <span className="psh-swipe-badge">&#8377;</span>
+                  <img
+                    className="psh-swipe-arrow"
+                    src={`${A}icon-arrow-right.svg`}
+                    width={22}
+                    height={22}
+                    alt=""
+                    aria-hidden
+                  />
                 )}
               </button>
             </div>

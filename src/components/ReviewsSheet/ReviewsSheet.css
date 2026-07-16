@@ -10,7 +10,7 @@
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  max-width: 600px;
+  max-width: var(--app-width);
   margin: 0 auto;
   -webkit-overflow-scrolling: touch;
 }
@@ -199,6 +199,16 @@
   color: #3d3d3d;
   line-height: 15.6px;
 }
+.rsh-dest-btn--selected {
+  border-color: #01afd1;
+  color: #01afd1;
+  max-width: 100%;
+}
+.rsh-dest-btn--selected span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .rsh-dest-arrow { width: 16px; height: 16px; display: block; }
 
 /* Filter tabs */
@@ -289,7 +299,10 @@
   background: none; border: none; padding: 0; cursor: pointer; text-align: right; width: 100%;
 }
 
-.rsh-card-photos { display: flex; flex-wrap: wrap; gap: 10px; }
+.rsh-card-photos {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  width: 100%; padding: 0; background: none; border: none; cursor: pointer;
+}
 .rsh-card-photo {
   position: relative; width: 80px; height: 80px;
   border-radius: 6px; overflow: hidden; flex-shrink: 0; cursor: pointer;

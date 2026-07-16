@@ -1,0 +1,360 @@
+/* ── Events listing page (Figma 4518:23820) — dark theme ── */
+.ev-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: #0a0a0a;
+  color: #fff;
+  padding-bottom: 110px; /* clear the fixed bottom nav */
+}
+
+/* ── Top navigation (Figma 5036:7100) ── */
+.ev-top {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 12px 12px;
+  /* Subtle top-down gradient over the dark page (opaque base prevents bleed) */
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0) 100%), #0a0a0a;
+}
+
+.ev-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  filter: drop-shadow(0px 4px 2px rgba(0, 0, 0, 0.3));
+}
+
+.ev-logo img {
+  display: block;
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.ev-menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 50px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ev-menu-icon {
+  display: block;
+  width: 32px;
+  height: 16px;
+}
+
+.ev-main {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Category chips (Figma 4518:23823) ── */
+.ev-cats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 16px 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ev-cats::-webkit-scrollbar { display: none; }
+
+.ev-cat {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 8px 12px;
+  background: #121212;
+  border: 1px solid #ababab;
+  border-radius: 8px;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  color: #c9c9c9;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ev-cat--active {
+  border-color: #c9c9c9;
+  font-weight: 500;
+}
+
+.ev-cat-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #c9c9c9;
+}
+
+/* ── Section title with gradient rule lines (Figma 4518:23825) ── */
+.ev-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.ev-sec-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.ev-sec-line {
+  flex: 1 0 0;
+  min-width: 1px;
+  height: 1px;
+}
+
+.ev-sec-line--l {
+  background: linear-gradient(to right, #1f1f1f 0%, #ffffff 100%);
+}
+
+.ev-sec-line--r {
+  background: linear-gradient(to right, #ffffff 0%, #1f1f1f 100%);
+}
+
+.ev-sec-label {
+  flex-shrink: 0;
+  padding: 0 10px;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* ── Horizontal card rows (artists / founders) ── */
+.ev-hscroll {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 12px 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.ev-hscroll::-webkit-scrollbar { display: none; }
+
+.ev-artist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  width: 120px;
+  margin: 0;
+}
+
+.ev-artist--wide {
+  width: 120px;
+}
+
+.ev-artist-media {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 24px;
+  overflow: hidden;
+  filter: drop-shadow(0px 2px 6px rgba(0, 0, 0, 0.08));
+}
+
+.ev-artist-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ev-artist-name {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.ev-artist-name--multi {
+  white-space: normal;
+  text-align: center;
+  width: 100%;
+}
+
+/* Tomorrowland tile: festival gradient behind photo + centered logo */
+.ev-fc-media--gradient {
+  background: linear-gradient(180deg, #015f74 0%, #fee60b 50%, #01afd1 100%);
+}
+
+.ev-fc-bg {
+  opacity: 0.9;
+}
+
+.ev-fc-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+/* Primewise tile: logo contained on black */
+.ev-fc-media--dark {
+  background: #000;
+}
+
+.ev-fc-contain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+/* ── Carousel indicator (Figma 4518:23843) ── */
+.ev-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 4px 0;
+}
+
+.ev-dot {
+  border-radius: 50%;
+  background: #757575;
+}
+.ev-dot--1 { width: 2px; height: 2px; }
+.ev-dot--2 { width: 4px; height: 4px; }
+.ev-dot--3 { width: 6px; height: 6px; background: #fff; }
+
+/* ── Featured event card (Figma 4518:23849) ── */
+.ev-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 24px;
+  padding: 20px 0;
+}
+
+.ev-card-media {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.ev-card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ev-card-shade {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0px 4px 10px 0px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+.ev-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 12px;
+}
+
+.ev-card-loc {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ev-card-pin {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.ev-card-loc span {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.4px;
+  color: #fff;
+}
+
+.ev-card-title {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 22px;
+  color: #fff;
+}
+
+.ev-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ev-card-date {
+  padding: 6px 8px;
+  background: #f2f2f2;
+  border-radius: 25px;
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 13px;
+  color: #202020;
+  white-space: nowrap;
+}
+
+.ev-card-price {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0.08px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+@media (max-width: 360px) {
+  .ev-card-date { font-size: 9px; }
+}

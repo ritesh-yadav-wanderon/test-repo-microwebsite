@@ -20,6 +20,7 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
   const [country, setCountry] = useState<Country>(COUNTRIES[0]);
   const [countryOpen, setCountryOpen] = useState(false);
   const countryRef = useRef<HTMLDivElement>(null);
+  const destRef = useRef<HTMLDivElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
@@ -64,17 +65,23 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
     }
   }, [isOpen]);
 
-  // Close the country dropdown on outside click.
+  // Only one selector open at a time: close whichever dropdown the pointer lands
+  // outside of. Clicking any other field (name, phone) sits outside both, so both
+  // collapse.
   useEffect(() => {
-    if (!countryOpen) return;
+    if (!countryOpen && !destOpen) return;
     function onOutside(e: MouseEvent) {
-      if (countryRef.current && !countryRef.current.contains(e.target as Node)) {
+      const t = e.target as Node;
+      if (countryOpen && countryRef.current && !countryRef.current.contains(t)) {
         setCountryOpen(false);
+      }
+      if (destOpen && destRef.current && !destRef.current.contains(t)) {
+        setDestOpen(false);
       }
     }
     document.addEventListener("mousedown", onOutside);
     return () => document.removeEventListener("mousedown", onOutside);
-  }, [countryOpen]);
+  }, [countryOpen, destOpen]);
 
   if (!hasOpened) return null;
 
@@ -150,6 +157,7 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
                 placeholder="enter your name"
                 value={name}
                 onChange={e => setName(e.target.value)}
+                onFocus={() => { setCountryOpen(false); setDestOpen(false); }}
                 autoComplete="name"
                 onKeyDown={e => {
                   if (e.key === "Enter") {
@@ -165,7 +173,7 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
                   <button
                     type="button"
                     className="cfs-country-code"
-                    onClick={() => setCountryOpen(v => !v)}
+                    onClick={() => { setCountryOpen(v => !v); setDestOpen(false); }}
                     aria-haspopup="listbox"
                     aria-expanded={countryOpen}
                     aria-label={`Country code: ${country.name} ${country.code}`}
@@ -187,7 +195,7 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
                     placeholder="enter your phone number"
                     value={phone}
                     onChange={e => setPhone(e.target.value.replace(/\D/g, ""))}
-                    onFocus={() => setCountryOpen(false)}
+                    onFocus={() => { setCountryOpen(false); setDestOpen(false); }}
                     autoComplete="tel"
                     onKeyDown={e => {
                       if (e.key === "Enter") {
@@ -220,11 +228,11 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
               </div>
 
               {/* Destination */}
-              <div className="cfs-dest">
+              <div className="cfs-dest" ref={destRef}>
                 <button
                   type="button"
                   className={`cfs-dest-trigger${destination ? " cfs-dest-trigger--filled" : ""}`}
-                  onClick={() => setDestOpen(v => !v)}
+                  onClick={() => { setDestOpen(v => !v); setCountryOpen(false); }}
                   aria-haspopup="listbox"
                   aria-expanded={destOpen}
                 >

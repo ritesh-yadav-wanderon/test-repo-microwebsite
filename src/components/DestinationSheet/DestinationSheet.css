@@ -1,0 +1,169 @@
+/* DestinationSheet — bottom sheet reusing the burger menu destination design */
+
+.dsh-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.dsh-overlay--open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.dsh-sheet {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 100%;
+  max-width: var(--app-width);
+  max-height: 80vh;
+  background: #ffffff;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-50%) translateY(100%);
+  transition: transform 0.32s cubic-bezier(0.32, 0.72, 0, 1);
+  overflow: hidden;
+}
+.dsh-sheet--open {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Header */
+.dsh-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 16px 0 20px;
+  border-bottom: 1px solid #e5e5e5;
+  flex-shrink: 0;
+}
+.dsh-title {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #202020;
+}
+.dsh-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* Scrollable accordion */
+.dsh-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+
+.dsh-region {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.dsh-region-collapsed {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 16px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.dsh-region-header--expanded {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 16px;
+  flex-shrink: 0;
+}
+
+.dsh-region-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #3d3d3d;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.dsh-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 16px;
+  flex-shrink: 0;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.dsh-item-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #4e4e4e;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dsh-see-more {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #4e4e4e;
+  text-decoration: underline;
+}
+
+.dsh-sep {
+  width: 100%;
+  height: 1px;
+  background: #e8e8e8;
+  flex-shrink: 0;
+}
+
+/* Trending badge */
+.dsh-trending {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 24px;
+  padding: 0 4px;
+  background: rgba(198, 255, 36, 0.2);
+  border: 1px solid #b1da3a;
+  border-radius: 100px;
+  flex-shrink: 0;
+}
+.dsh-trending-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #b1da3a;
+  white-space: nowrap;
+}

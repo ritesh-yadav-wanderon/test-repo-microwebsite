@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { useCompare } from "../context/CompareContext";
 import "./TripDetail.css";
 import SiteHeader2 from "../components/SiteHeader2";
 import TribeStories from "../components/TribeStories/TribeStories";
 import QueryBanner from "../components/QueryBanner";
 import GallerySheet from "../components/GallerySheet/GallerySheet";
+import ShareSheet from "../components/ShareSheet/ShareSheet";
 import BatchesSheet from "../components/BatchesSheet/BatchesSheet";
+import LoginSheet from "../components/LoginSheet/LoginSheet";
+import { useAuth } from "../context/AuthContext";
 import FooterMessage from "../components/FooterMessage/FooterMessage";
 import Footer from "../components/Footer";
 
@@ -751,7 +755,49 @@ function DayCard({ day, index, isOpen, onToggle }: {
 export default function TripDetail() {
   const data = STATIC_DATA;
   const navigate = useNavigate();
+  const location = useLocation();
+  const { slug: routeSlug } = useParams();
+  const stickyTitle = data.breadcrumbs?.[1] ? `${data.breadcrumbs[1]} Trip` : data.tripTypeLabel;
+  const navState = location.state as
+    | { from?: string; selectedBatch?: { dateRange: string; price: string } }
+    | null;
+  const [selectedBatch, setSelectedBatch] = useState<{ dateRange: string; price: string } | null>(
+    navState?.from === "batches" ? navState.selectedBatch ?? null : null
+  );
+  const { isLoggedIn } = useAuth();
+  const [loginOpen, setLoginOpen] = useState(false);
 
+  const buildBookingState = () => ({
+    tripTitle: stickyTitle,
+    tripName: stickyTitle,
+    dateRange: selectedBatch?.dateRange ?? "",
+    durationLabel: "7N/8D",
+    perPerson: (selectedBatch?.price ?? "").replace("/-", ""),
+    travelers: 2,
+  });
+  const handleContinueBook = () => {
+    if (isLoggedIn) {
+      navigate("/booking", { state: buildBookingState() });
+    } else {
+      setLoginOpen(true);
+    }
+  };
+  const handleLoginSuccess = () => {
+    setLoginOpen(false);
+    navigate("/booking", { state: buildBookingState() });
+  };
+  const compareSlug = routeSlug ?? "current-trip";
+  const { isInCompare, toggle: toggleCompareTrip } = useCompare();
+  const inCompare = isInCompare(compareSlug);
+  const toggleCompare = () =>
+    toggleCompareTrip({
+      slug: compareSlug,
+      title: data.title,
+      image: data.heroImages[0],
+      price: String(data.displayPrice ?? ""),
+    });
+
+  const [wishlisted, setWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [activeDay, setActiveDay] = useState(0);
   const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set([0]));
@@ -766,6 +812,9 @@ export default function TripDetail() {
 
   // Batches sheet
   const [batchesOpen, setBatchesOpen] = useState(false);
+
+  // Share sheet
+  const [shareOpen, setShareOpen] = useState(false);
 
   const openGallery = (imgs: string[], idx = 0) => {
     setGalleryImages(imgs);
@@ -849,14 +898,40 @@ export default function TripDetail() {
 
         {/* Bottom action bar (Figma 4518:31828) */}
         <div className="tdp2-hero-bar">
-          <button className="tdp2-hero-btn-wish" type="button" aria-label="Add to wishlist">
-            <img src="/figma/trip-hero/icon-heart.svg" alt="" aria-hidden loading="lazy" />
+          <button
+            className={`tdp2-hero-btn-wish${wishlisted ? " tdp2-hero-btn-wish--saved" : ""}`}
+            type="button"
+            aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+            aria-pressed={wishlisted}
+            onClick={() => setWishlisted((w) => !w)}
+          >
+            {wishlisted ? (
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                  fill="#FFFFFF"
+                />
+              </svg>
+            ) : (
+              <img src="/figma/trip-hero/icon-heart.svg" alt="" aria-hidden loading="lazy" />
+            )}
           </button>
-          <button className="tdp2-hero-btn-pill" type="button">
-            <img src="/figma/trip-hero/icon-compare.svg" alt="" width={14} height={14} aria-hidden loading="lazy" />
-            Add to Compare
+          <button
+            className="tdp2-hero-btn-pill"
+            type="button"
+            aria-pressed={inCompare}
+            onClick={toggleCompare}
+          >
+            {inCompare ? (
+              <svg width={14} height={14} viewBox="0 0 14 14" fill="none" aria-hidden>
+                <path d="M3 3L11 11M11 3L3 11" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <img src="/figma/trip-hero/icon-compare.svg" alt="" width={14} height={14} aria-hidden loading="lazy" />
+            )}
+            {inCompare ? "Remove from Compare" : "Add to Compare"}
           </button>
-          <button className="tdp2-hero-btn-pill" type="button">
+          <button className="tdp2-hero-btn-pill" type="button" onClick={() => setShareOpen(true)}>
             <img src="/figma/trip-hero/icon-share.svg" alt="" width={14} height={14} loading="lazy" />
             Share
           </button>
@@ -1011,6 +1086,7 @@ export default function TripDetail() {
         )}
         {(() => {
           const nodes: React.ReactNode[] = [];
+          const lastDayIdx = data.itinerary.length - 1;
           let dayOffset = 0;
           data.cityStrip.forEach((entry, i) => {
             const nightCount = parseInt(entry.match(/^(\d+)N/i)?.[1] ?? "1");
@@ -1036,7 +1112,7 @@ export default function TripDetail() {
                           return s;
                         })}
                       />
-                      <div className="tdp2-itin-day-divider"/>
+                      {gIdx !== lastDayIdx && <div className="tdp2-itin-day-divider"/>}
                     </React.Fragment>
                   );
                 })}
@@ -1059,14 +1135,16 @@ export default function TripDetail() {
                 })}
               />
             );
-            nodes.push(<div key={`tail-div-${gIdx}`} className="tdp2-itin-day-divider"/>);
+            if (gIdx !== lastDayIdx) {
+              nodes.push(<div key={`tail-div-${gIdx}`} className="tdp2-itin-day-divider"/>);
+            }
           });
           return nodes;
         })()}
-      </section>
 
-      {/* ── End of the Journey (Figma 3097:2065) ───────────────── */}
-      <p className="tdp2-end-journey">End of the Journey</p>
+        {/* ── End of the Journey (Figma 3097:2065) ───────────────── */}
+        <p className="tdp2-end-journey">End of the Journey</p>
+      </section>
 
       {/* ── Download Itinerary (Figma 3014:13922) ───────────────── */}
       <div className="tdp2-dl-itin-wrap">
@@ -1257,13 +1335,27 @@ export default function TripDetail() {
               </div>
             </a>
           ))}
-          <div className="tdp2-more-vm-card">
+          <button
+            className="tdp2-more-vm-card"
+            type="button"
+            onClick={() =>
+              navigate(
+                `/search?destination=${encodeURIComponent(
+                  data.breadcrumbs[data.breadcrumbs.length - 1] ?? ""
+                )}`
+              )
+            }
+          >
             <div className="tdp2-more-vm-imgs">
-              <img src={MORE_TRIP_B} alt="" className="tdp2-more-vm-img tdp2-more-vm-back" loading="lazy"/>
-              <img src={MORE_TRIP_A} alt="" className="tdp2-more-vm-img tdp2-more-vm-front" loading="lazy"/>
+              <span className="tdp2-more-vm-img tdp2-more-vm-back">
+                <img src={MORE_TRIP_B} alt="" loading="lazy"/>
+              </span>
+              <span className="tdp2-more-vm-img tdp2-more-vm-front">
+                <img src={MORE_TRIP_A} alt="" loading="lazy"/>
+              </span>
             </div>
             <p className="tdp2-more-vm-label">View More Trips</p>
-          </div>
+          </button>
         </div>
       </section>
 
@@ -1274,22 +1366,50 @@ export default function TripDetail() {
       <FooterMessage />
       <Footer />
 
-      {/* ── Sticky Bottom Nav (Figma 4518:15125) ────────────────────── */}
+      {/* ── Sticky Bottom Nav (Figma 4518:15125 / 5406:15308) ───────── */}
       <div className="tdp2-sticky-nav">
-        <div className="tdp2-sticky-price-col">
-          <div className="tdp2-sticky-top-row">
-            <span className="tdp2-sticky-amount">&#8377;{data.displayPrice}</span>
-            <div className="tdp2-sticky-discount">-10%</div>
+        {selectedBatch && (
+          <div className="tdp2-sticky-tag">
+            <div className="tdp2-sticky-tag-left">
+              <img
+                className="tdp2-sticky-tag-icon"
+                src="/figma/batches/icon-your-trips.svg"
+                alt=""
+                aria-hidden
+              />
+              <span className="tdp2-sticky-tag-title">{stickyTitle}</span>
+              <span className="tdp2-sticky-tag-dot" aria-hidden />
+              <span className="tdp2-sticky-tag-date">{selectedBatch.dateRange}</span>
+            </div>
+            <button
+              className="tdp2-sticky-tag-change"
+              type="button"
+              onClick={() => setBatchesOpen(true)}
+            >
+              Change Batch
+            </button>
           </div>
-          <span className="tdp2-sticky-label">Starting price per person</span>
+        )}
+        <div className="tdp2-sticky-main">
+          <div className="tdp2-sticky-price-col">
+            <div className="tdp2-sticky-top-row">
+              <span className="tdp2-sticky-amount">
+                &#8377;{selectedBatch ? selectedBatch.price : data.displayPrice}
+              </span>
+              <div className="tdp2-sticky-discount">-10%</div>
+            </div>
+            <span className="tdp2-sticky-label">Starting price per person</span>
+          </div>
+          <button
+            className="tdp2-sticky-btn"
+            type="button"
+            onClick={selectedBatch ? handleContinueBook : () => setBatchesOpen(true)}
+          >
+            <span className="tdp2-sticky-btn-label">
+              {selectedBatch ? "Continue to Book" : "View Batches"}
+            </span>
+          </button>
         </div>
-        <button
-          className="tdp2-sticky-btn"
-          type="button"
-          onClick={() => setBatchesOpen(true)}
-        >
-          <span className="tdp2-sticky-btn-label">View Batches</span>
-        </button>
       </div>
 
       <GallerySheet
@@ -1301,11 +1421,45 @@ export default function TripDetail() {
         tags={["Bali", "Ubud", "Kintamani Waterfalls", "Nusa Penida", "Kuta", "Uluwatu Temple"]}
       />
 
+      <ShareSheet
+        isOpen={shareOpen}
+        onClose={() => setShareOpen(false)}
+        title={data.title}
+        image={data.heroImages[0]}
+        duration={data.duration}
+        price={data.displayPrice}
+      />
+
       <BatchesSheet
         isOpen={batchesOpen}
         onClose={() => setBatchesOpen(false)}
-        tripTitle={data.breadcrumbs?.[1] ? `${data.breadcrumbs[1]} Trip` : data.tripTypeLabel}
+        tripTitle={stickyTitle}
         nights={7}
+        ctaLabel={selectedBatch ? "Select Batch" : "Book Trip"}
+        onSelectBatch={
+          selectedBatch
+            ? (batch, start, end) => {
+                const fmt = (d: Date, withYear: boolean) =>
+                  d.toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    ...(withYear ? { year: "numeric" } : {}),
+                  });
+                const price = Number(String(batch.price).replace(/,/g, "")).toLocaleString("en-IN");
+                setSelectedBatch({
+                  dateRange: `${fmt(start, false)} - ${fmt(end, true)}`,
+                  price: `${price}/-`,
+                });
+                setBatchesOpen(false);
+              }
+            : undefined
+        }
+      />
+
+      <LoginSheet
+        isOpen={loginOpen}
+        onClose={() => setLoginOpen(false)}
+        onSuccess={handleLoginSuccess}
       />
     </div>
   );

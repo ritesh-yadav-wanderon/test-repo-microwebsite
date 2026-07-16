@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { BookingProvider } from "./context/BookingContext";
+import { CompareProvider } from "./context/CompareContext";
 import App from "./App";
 import "./styles/global.css";
 
@@ -14,7 +15,9 @@ createRoot(root).render(
     <BrowserRouter>
       <AuthProvider>
         <BookingProvider>
-          <App />
+          <CompareProvider>
+            <App />
+          </CompareProvider>
         </BookingProvider>
       </AuthProvider>
     </BrowserRouter>

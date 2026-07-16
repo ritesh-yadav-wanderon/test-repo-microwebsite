@@ -8,7 +8,7 @@ import BottomNav from "../components/BottomNav";
 import SearchBottomSheet from "../components/SearchBottomSheet/SearchBottomSheet";
 import FilterSheet from "../components/FilterSheet/FilterSheet";
 import BurgerMenu from "../components/BurgerMenu/BurgerMenu";
-import TripDatesSheet from "../components/TripDatesSheet/TripDatesSheet";
+import BatchesSheet from "../components/BatchesSheet/BatchesSheet";
 import SiteHeader2 from "../components/SiteHeader2";
 import "./SearchResults.css";
 
@@ -165,7 +165,7 @@ export default function SearchResults() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [datesTrip, setDatesTrip] = useState<import("../types").Trip | null>(null);
+  const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   useEffect(() => {
@@ -221,7 +221,34 @@ export default function SearchResults() {
 
       <BurgerMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
 
-      <TripDatesSheet isOpen={!!datesTrip} onClose={() => setDatesTrip(null)} trip={datesTrip} />
+      <BatchesSheet
+        isOpen={!!batchesTrip}
+        onClose={() => setBatchesTrip(null)}
+        tripTitle={batchesTrip?.title}
+        nights={batchesTrip?.duration?.nights ?? 7}
+        ctaLabel="View Trip"
+        onSelectBatch={(batch, start, end) => {
+          const slug = batchesTrip?.slug;
+          setBatchesTrip(null);
+          if (!slug) return;
+          const fmt = (d: Date, withYear: boolean) =>
+            d.toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "short",
+              ...(withYear ? { year: "numeric" } : {}),
+            });
+          const price = Number(String(batch.price).replace(/,/g, "")).toLocaleString("en-IN");
+          navigate(`/trip/${slug}`, {
+            state: {
+              from: "batches",
+              selectedBatch: {
+                dateRange: `${fmt(start, false)} - ${fmt(end, true)}`,
+                price: `${price}/-`,
+              },
+            },
+          });
+        }}
+      />
 
       <SiteHeader2 destination={destinationLabel} date={dateLabel} showBack onBack={() => navigate(-1)} />
 
@@ -343,7 +370,7 @@ export default function SearchResults() {
                 theme="teal"
                 fullWidth
                 eager={i === 0}
-                onSeeAllDates={() => setDatesTrip(trip)}
+                onSeeAllDates={() => setBatchesTrip(trip)}
               />
             ))}
           </div>

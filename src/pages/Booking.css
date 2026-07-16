@@ -557,17 +557,23 @@
 .bkg-step-btn {
   width: 24px;
   height: 24px;
-  padding: 2px;
+  padding: 0;
   border: 1.5px solid #ababab;
-  border-radius: 47px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #ffffff;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 .bkg-step-btn img {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
+}
+.bkg-step-btn img[src*="icon-plus"] {
+  width: 12px;
+  height: 12px;
 }
 .bkg-step-count {
   font-size: 14px;

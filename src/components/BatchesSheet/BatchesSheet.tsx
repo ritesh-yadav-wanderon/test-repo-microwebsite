@@ -22,6 +22,14 @@ interface BatchesSheetProps {
   tripTitle?: string;
   batches?: BatchItem[];
   nights?: number;
+  /** Label for the per-batch CTA button (default "Book Trip"). */
+  ctaLabel?: string;
+  /**
+   * When provided, selecting a batch calls this instead of the internal
+   * login/booking flow. Used to carry the chosen batch to another screen
+   * (e.g. "View Trip" from the listing) or to update a selected date.
+   */
+  onSelectBatch?: (batch: BatchItem, startDate: Date, endDate: Date) => void;
 }
 
 const WEEK_DAYS = [
@@ -96,10 +104,12 @@ function BatchCard({
   batch,
   nights,
   onBook,
+  ctaLabel,
 }: {
   batch: BatchItem;
   nights: number;
   onBook: (batch: BatchItem, startDate: Date, endDate: Date) => void;
+  ctaLabel: string;
 }) {
   const startDate = new Date(batch.startDate + "T00:00:00");
   const endDate = batch.endDate
@@ -197,7 +207,7 @@ function BatchCard({
           disabled={isSoldOut}
           onClick={() => onBook(batch, startDate, endDate)}
         >
-          Book Trip
+          {ctaLabel}
         </button>
       </div>
     </div>
@@ -210,6 +220,8 @@ export default function BatchesSheet({
   tripTitle = "Ladakh Trip",
   batches = DEFAULT_BATCHES,
   nights = 10,
+  ctaLabel = "Book Trip",
+  onSelectBatch,
 }: BatchesSheetProps) {
   const navigate = useNavigate();
   const { isLoggedIn } = useAuth();
@@ -223,6 +235,12 @@ export default function BatchesSheet({
   };
 
   const handleBook = (batch: BatchItem, startDate: Date, endDate: Date) => {
+    // Custom flow (e.g. "View Trip" from listing, or "modify date"): let the
+    // caller decide what to do with the chosen batch.
+    if (onSelectBatch) {
+      onSelectBatch(batch, startDate, endDate);
+      return;
+    }
     const fmtShort = (d: Date) =>
       d.toLocaleDateString("en-GB", {
         day: "numeric",
@@ -388,6 +406,7 @@ export default function BatchesSheet({
               batch={batch}
               nights={nights}
               onBook={handleBook}
+              ctaLabel={ctaLabel}
             />
           ))}
         </div>

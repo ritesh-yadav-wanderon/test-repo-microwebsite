@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import FooterMessage from "../components/FooterMessage/FooterMessage";
 import "./Compare.css";
 
 const P = "/figma/compare/";
@@ -200,8 +199,6 @@ export default function Compare() {
           ))}
         </div>
       </div>
-
-      <FooterMessage />
     </div>
   );
 }

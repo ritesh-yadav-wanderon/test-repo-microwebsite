@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./ReviewsSheet.css";
-import GallerySheet from "../GallerySheet/GallerySheet";
+import DestinationSheet, { type DestinationSelection } from "../DestinationSheet/DestinationSheet";
+import ReviewGallery from "../ReviewGallery/ReviewGallery";
 
 const R = "/figma/reviews/";
 
@@ -26,12 +27,17 @@ const DEST_TAGS = ["Bali","Ubud","Kintamani Waterfalls","Nusa Penida","Kuta","Ul
 
 const REVIEW_TEXT = "It was an amazing trip. I recently went to Bhutan with WanderOn (7N/8D with Phobjikha valley) and it was a beautiful place to visit. The immigration experience was smooth. We got to visit clean and peaceful cities, cool and serene valleys and truly magnificent monasteries...";
 
+const TRIP_TITLE = "Europe: Paris to Berlin, between cities, canals & culture";
+
 const REVIEW_PHOTOS = [
   `${R}review-photo-1.jpg`,
   `${R}review-photo-2.jpg`,
   `${R}review-photo-3.jpg`,
   `${R}review-photo-4.jpg`,
 ];
+
+// Full-size portrait images for the standalone gallery carousel (Figma 5146:5832)
+const GALLERY_PHOTOS = [`${R}gallery-1.jpg`, `${R}gallery-2.jpg`];
 
 const REVIEWS = [
   { name: "Shrutika Parab", date: "May, 2026", rating: "5.0" },
@@ -40,7 +46,15 @@ const REVIEWS = [
   { name: "Anjali Verma",   date: "Feb, 2026", rating: "5.0" },
 ];
 
-function ReviewCard({ name, date, onPhotoClick }: { name: string; date: string; onPhotoClick: (idx: number) => void }) {
+function ReviewCard({
+  name,
+  date,
+  onOpenGallery,
+}: {
+  name: string;
+  date: string;
+  onOpenGallery: () => void;
+}) {
   return (
     <div className="rsh-card">
       <div className="rsh-card-header">
@@ -68,20 +82,19 @@ function ReviewCard({ name, date, onPhotoClick }: { name: string; date: string; 
         <button className="rsh-card-read-more" type="button">Read More</button>
       </div>
 
-      <div className="rsh-card-photos">
-        {REVIEW_PHOTOS.map((src, i) => (
-          <div key={i} className={`rsh-card-photo${i === 3 ? " rsh-card-photo--more" : ""}`}
-            onClick={() => onPhotoClick(i)} style={{ cursor: "pointer" }}>
+      <button className="rsh-card-photos" type="button" onClick={onOpenGallery} aria-label="View trip photos">
+        {REVIEW_PHOTOS.slice(0, 4).map((src, i) => (
+          <span key={i} className={`rsh-card-photo${i === 3 ? " rsh-card-photo--more" : ""}`}>
             <img src={src} alt="" loading="lazy" />
             {i === 3 && (
-              <div className="rsh-card-photo-overlay">
+              <span className="rsh-card-photo-overlay">
                 <span>(10+)</span>
                 <span className="rsh-card-photo-view">View All</span>
-              </div>
+              </span>
             )}
-          </div>
+          </span>
         ))}
-      </div>
+      </button>
 
       <div className="rsh-card-helpful">
         <span className="rsh-card-helpful-label">Was this helpful?</span>
@@ -97,15 +110,9 @@ export default function ReviewsSheet({ isOpen, onClose }: { isOpen: boolean; onC
   const [activeTab, setActiveTab] = useState(0);
   // Lazy-render: don't mount until first opened so it doesn't slow initial page load
   const [hasOpened, setHasOpened] = useState(false);
-  const [galleryOpen, setGalleryOpen] = useState(false);
-  const [galleryIndex, setGalleryIndex] = useState(0);
-  const [galleryReviewer, setGalleryReviewer] = useState<{ name: string; rating: string } | null>(null);
-
-  function openGallery(name: string, rating: string, idx: number) {
-    setGalleryReviewer({ name, rating });
-    setGalleryIndex(idx);
-    setGalleryOpen(true);
-  }
+  const [destOpen, setDestOpen] = useState(false);
+  const [selectedDest, setSelectedDest] = useState<DestinationSelection | null>(null);
+  const [galleryReview, setGalleryReview] = useState<{ name: string; rating: string } | null>(null);
 
   useEffect(() => {
     if (isOpen) setHasOpened(true);
@@ -184,8 +191,12 @@ export default function ReviewsSheet({ isOpen, onClose }: { isOpen: boolean; onC
 
         {/* Destination filter pill */}
         <div className="rsh-dest-wrap">
-          <button className="rsh-dest-btn" type="button">
-            <span>Destination</span>
+          <button
+            className={`rsh-dest-btn${selectedDest ? " rsh-dest-btn--selected" : ""}`}
+            type="button"
+            onClick={() => setDestOpen(true)}
+          >
+            <span>{selectedDest ? selectedDest.label : "Destination"}</span>
             <img src={`${R}icon-dropdown.svg`} alt="" className="rsh-dest-arrow" aria-hidden loading="lazy" />
           </button>
         </div>
@@ -205,7 +216,11 @@ export default function ReviewsSheet({ isOpen, onClose }: { isOpen: boolean; onC
         {REVIEWS.map((r, i) => (
           <React.Fragment key={r.name}>
             {i > 0 && <div className="rsh-card-divider" />}
-            <ReviewCard name={r.name} date={r.date} onPhotoClick={(idx) => openGallery(r.name, r.rating, idx)} />
+            <ReviewCard
+              name={r.name}
+              date={r.date}
+              onOpenGallery={() => setGalleryReview({ name: r.name, rating: r.rating })}
+            />
           </React.Fragment>
         ))}
       </div>
@@ -230,15 +245,20 @@ export default function ReviewsSheet({ isOpen, onClose }: { isOpen: boolean; onC
       </div>
 
 
-      <GallerySheet
-        isOpen={galleryOpen}
-        onClose={() => setGalleryOpen(false)}
-        images={REVIEW_PHOTOS}
-        startIndex={galleryIndex}
-        title="Europe: Paris to Berlin, between cities, canals & culture"
-        tags={["Bali", "Ubud", "Kintamani Waterfalls", "Nusa Penida", "Kuta", "Uluwatu Temple"]}
-        reviewerName={galleryReviewer?.name}
-        reviewerRating={galleryReviewer?.rating}
+      <DestinationSheet
+        isOpen={destOpen}
+        onClose={() => setDestOpen(false)}
+        onSelect={(dest) => setSelectedDest(dest)}
+      />
+
+      <ReviewGallery
+        isOpen={!!galleryReview}
+        onClose={() => setGalleryReview(null)}
+        reviewerName={galleryReview?.name ?? ""}
+        rating={galleryReview?.rating ?? "5.0"}
+        tripTitle={TRIP_TITLE}
+        tags={DEST_TAGS}
+        photos={GALLERY_PHOTOS}
       />
     </div>
   );

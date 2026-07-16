@@ -1,13 +1,20 @@
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useCompare } from "../../context/CompareContext";
 import "./BottomNav.css";
 
-const P = "/figma/nav2/";
+interface BottomNavProps {
+  /** "dark" renders the dark pill used on the Events page (Figma 4601:5455). */
+  variant?: "light" | "dark";
+}
 
-export default function BottomNav() {
+export default function BottomNav({ variant = "light" }: BottomNavProps) {
   const { isLoggedIn, authReady } = useAuth();
+  const { count: compareCount } = useCompare();
   const navigate = useNavigate();
   const location = useLocation();
+  const dark = variant === "dark";
+  const P = dark ? "/figma/nav2/events/" : "/figma/nav2/";
 
   function handleAccount() {
     // Wait until auth status is verified so the login sheet never flashes.
@@ -22,33 +29,51 @@ export default function BottomNav() {
   }
 
   return (
-    <nav className="bottom-nav" aria-label="Primary">
-      <div className="bn-pill">
+    <nav className={`bottom-nav${dark ? " bottom-nav--dark" : ""}`} aria-label="Primary">
+      <div className={`bn-pill${dark ? " bn-pill--dark" : ""}`}>
 
-        {/* Events */}
-        <NavLink
-          to="/events"
-          className={({ isActive }) => `bn-item${isActive ? " bn-item--active" : ""}`}
-          aria-label="Events"
-        >
-          <span className="bn-ico">
-            <img src={`${P}icon-events.svg`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
-          </span>
-          <span className="bn-label">Events</span>
-        </NavLink>
+        {/* First tab — Trips (dark/Events page) or Events (default) */}
+        {dark ? (
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) => `bn-item${isActive ? " bn-item--active" : ""}`}
+            aria-label="Trips"
+          >
+            <span className="bn-ico">
+              <img src={`${P}trips.svg`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
+            </span>
+            <span className="bn-label">Trips</span>
+          </NavLink>
+        ) : (
+          <NavLink
+            to="/events"
+            className={({ isActive }) => `bn-item${isActive ? " bn-item--active" : ""}`}
+            aria-label="Events"
+          >
+            <span className="bn-ico">
+              <img src={`${P}icon-events.svg`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
+            </span>
+            <span className="bn-label">Events</span>
+          </NavLink>
+        )}
 
-        {/* Compare */}
-        <NavLink
-          to="/compare"
-          className={({ isActive }) => `bn-item${isActive ? " bn-item--active" : ""}`}
-          aria-label="Compare"
-        >
-          <span className="bn-ico">
-            <img src={`${P}icon-compare.svg`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
-          </span>
-          <span className="bn-label">Compare</span>
-          <span className="bn-badge" aria-label="2 items">2</span>
-        </NavLink>
+        {/* Compare — hidden on the Events page (different theme + flow) */}
+        {!dark && (
+          <NavLink
+            to="/compare"
+            className={({ isActive }) => `bn-item${isActive ? " bn-item--active" : ""}`}
+            aria-label="Compare"
+          >
+            <span className="bn-ico">
+              <img src={`${P}icon-compare.svg`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
+            </span>
+            <span className="bn-label">Compare</span>
+            {compareCount > 0 && (
+              <span className="bn-badge" aria-label={`${compareCount} items`}>{compareCount}</span>
+            )}
+          </NavLink>
+        )}
 
         {/* Logo — home */}
         <NavLink
@@ -70,7 +95,7 @@ export default function BottomNav() {
           onClick={handleAccount}
         >
           <span className="bn-ico">
-            <img src={`${P}icon-account.svg`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
+            <img src={`${P}${dark ? "account.svg" : "icon-account.svg"}`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
           </span>
           <span className="bn-label">Account</span>
         </button>
@@ -78,7 +103,7 @@ export default function BottomNav() {
         {/* Chat */}
         <button type="button" className="bn-item" aria-label="Chat">
           <span className="bn-ico">
-            <img src={`${P}icon-chat.svg`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
+            <img src={`${P}${dark ? "chat.svg" : "icon-chat.svg"}`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
           </span>
           <span className="bn-label">Chat</span>
         </button>
