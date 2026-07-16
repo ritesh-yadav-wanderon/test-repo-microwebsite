@@ -3,48 +3,59 @@
 .ps-wrap {
   position: relative;
   width: 100%;
-  height: 265px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Deck area — aspect ratio keeps the stack sized across widths. */
+.ps-deck {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 39 / 26;
   background: transparent;
   border: none;
   padding: 0;
+  margin: 0;
   cursor: pointer;
-  display: block;
   -webkit-tap-highlight-color: transparent;
+  /* Contain the card animation's layout recalcs (it transitions top/left/right)
+     so they don't propagate document-wide and flicker the fixed bottom nav on
+     mobile. `layout` does not clip, so overflowing cards stay visible. */
+  contain: layout;
 }
 
 .ps-card {
   position: absolute;
+  aspect-ratio: 1392 / 786;
   border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0px 3.6px 4px rgba(0, 0, 0, 0.25);
-  aspect-ratio: 726 / 464;
+  box-shadow: 0 3.6px 4px rgba(0, 0, 0, 0.25);
   transform-origin: center center;
+  will-change: transform, opacity;
 }
 
-.ps-img-wrap {
-  position: relative;
-  width: 100%;
-  height: 100%;
+.ps-frame {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
   overflow: hidden;
 }
 
 .ps-img {
   position: absolute;
   top: 0;
-  width: 205%;
   height: 100%;
+  width: 200%;
+  max-width: none;
   object-fit: cover;
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
 }
 
-/* Tap-to-flip label */
 .ps-hint {
-  position: absolute;
-  bottom: 0px;
-  left: 50%;
-  transform: translateX(-50%);
   font-family: "Roboto", sans-serif;
   font-size: 11px;
   font-weight: 500;
@@ -54,14 +65,8 @@
   pointer-events: none;
 }
 
-/* Sweep-out animation — top card exits to the left */
-@keyframes ps-sweep {
-  0%   { transform: rotate(0deg) translateX(0) translateY(0); opacity: 1; }
-  25%  { opacity: 1; }
-  100% { transform: rotate(-18deg) translateX(-140%) translateY(-12%); opacity: 0; }
-}
-
-.ps-card--sweep {
-  animation: ps-sweep 0.42s cubic-bezier(0.4, 0, 0.8, 0.6) forwards;
-  pointer-events: none;
+@media (prefers-reduced-motion: reduce) {
+  .ps-card {
+    transition: none !important;
+  }
 }

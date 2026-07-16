@@ -111,7 +111,7 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
                   onClick={() => setSubView(item.subView as SubView)}
                 >
                   <span className="bm-item-left">
-                    <img src={item.icon} width={16} height={16} alt="" aria-hidden />
+                    <img src={item.icon} width={20} height={20} alt="" aria-hidden />
                     <span className="bm-item-label">{item.label}</span>
                   </span>
                   <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
@@ -124,7 +124,7 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
                   onClick={() => go(item.to!)}
                 >
                   <span className="bm-item-left">
-                    <img src={item.icon} width={16} height={16} alt="" aria-hidden />
+                    <img src={item.icon} width={20} height={20} alt="" aria-hidden />
                     <span className="bm-item-label">{item.label}</span>
                   </span>
                   <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />

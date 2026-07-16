@@ -27,14 +27,6 @@ function GoogleIcon() {
   );
 }
 
-function StarIcon() {
-  return (
-    <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden>
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#FFB800"/>
-    </svg>
-  );
-}
-
 function LocationIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
@@ -65,11 +57,12 @@ export default function HeroSection({ onSearchClick, activeCategory, onCategoryC
       {/* Bottom content stack */}
       <div className="hero-body">
         {/* Rating badge */}
-        <div className="hero-rating" aria-label="4.9 stars from 14,921 Google reviews">
+        <div className="hero-rating" aria-label="4.9 rating from 14,921 Google reviews">
           <GoogleIcon />
-          <div className="hero-rating-stars">
-            <StarIcon /><StarIcon /><StarIcon /><StarIcon /><StarIcon />
+          <div className="hero-rating-wreath">
+            <img className="hero-laurel hero-laurel--l" src="/figma/hero/laurel.png" alt="" aria-hidden />
             <span className="hero-rating-score">4.9</span>
+            <img className="hero-laurel hero-laurel--r" src="/figma/hero/laurel.png" alt="" aria-hidden />
           </div>
           <span className="hero-rating-label">from 14,921 Reviews</span>
         </div>

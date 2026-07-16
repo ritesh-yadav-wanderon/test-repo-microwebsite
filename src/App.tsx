@@ -1,7 +1,8 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, type ReactNode } from "react";
 import { Routes, Route } from "react-router-dom";
 import SiteChrome from "./components/SiteChrome";
 import Home from "./pages/Home";
+import PageSkeleton, { type SkeletonVariant } from "./components/Skeleton/PageSkeleton";
 const SearchResults = lazy(() => import("./pages/SearchResults"));
 const Destination = lazy(() => import("./pages/Destination"));
 const TripDetail = lazy(() => import("./pages/TripDetail"));
@@ -15,28 +16,31 @@ const MyBooking = lazy(() => import("./pages/MyBooking"));
 const Cancellation = lazy(() => import("./pages/Cancellation"));
 const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess"));
 
+/** Wrap a lazy page so its chunk load shows a matching shimmer instead of a blank screen. */
+function withSkeleton(element: ReactNode, variant: SkeletonVariant): ReactNode {
+  return <Suspense fallback={<PageSkeleton variant={variant} />}>{element}</Suspense>;
+}
+
 export default function App() {
   return (
     <div className="app-shell">
       <SiteChrome />
-      <Suspense fallback={null}>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/search" element={<SearchResults />} />
-        <Route path="/destination/:slug" element={<Destination />} />
-        <Route path="/trip/:slug" element={<TripDetail />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/my-profile" element={<MyProfile />} />
-        <Route path="/compare" element={<Compare />} />
-        <Route path="/legal" element={<Legal />} />
-        <Route path="/booking" element={<Booking />} />
-        <Route path="/bookings" element={<MyBookings />} />
-        <Route path="/bookings/:ref" element={<MyBooking />} />
-        <Route path="/bookings/:ref/success" element={<PaymentSuccess />} />
-        <Route path="/bookings/:ref/cancellation" element={<Cancellation />} />
+        <Route path="/search" element={withSkeleton(<SearchResults />, "list")} />
+        <Route path="/destination/:slug" element={withSkeleton(<Destination />, "list")} />
+        <Route path="/trip/:slug" element={withSkeleton(<TripDetail />, "detail")} />
+        <Route path="/profile" element={withSkeleton(<Profile />, "profile")} />
+        <Route path="/my-profile" element={withSkeleton(<MyProfile />, "form")} />
+        <Route path="/compare" element={withSkeleton(<Compare />, "list")} />
+        <Route path="/legal" element={withSkeleton(<Legal />, "generic")} />
+        <Route path="/booking" element={withSkeleton(<Booking />, "form")} />
+        <Route path="/bookings" element={withSkeleton(<MyBookings />, "list")} />
+        <Route path="/bookings/:ref" element={withSkeleton(<MyBooking />, "bookingDetail")} />
+        <Route path="/bookings/:ref/success" element={withSkeleton(<PaymentSuccess />, "generic")} />
+        <Route path="/bookings/:ref/cancellation" element={withSkeleton(<Cancellation />, "bookingDetail")} />
         <Route path="*" element={<Home />} />
       </Routes>
-      </Suspense>
     </div>
   );
 }

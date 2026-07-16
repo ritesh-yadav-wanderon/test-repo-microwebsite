@@ -61,7 +61,7 @@
 /* ── Hero ── */
 .dp-hero {
   position: relative;
-  height: 440px;
+  height: 460px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -83,8 +83,8 @@
   inset: 0;
   background: linear-gradient(
     to bottom,
-    rgba(0, 0, 0, 0) 39.68%,
-    rgba(0, 0, 0, 1) 89.28%
+    rgba(0, 0, 0, 0) 80%,
+    rgba(0, 0, 0, 1) 100%
   );
   border-radius: 0 0 16px 16px;
 }
@@ -97,15 +97,15 @@
   gap: 16px;
   width: 100%;
   padding: 36px 16px 16px;
-  backdrop-filter: blur(8px);
-  background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.4));
 }
 
 .dp-hero-body {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 0;
+  gap: 8px;
+  padding: 0 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .dp-hero-title {
@@ -114,14 +114,20 @@
   font-weight: 700;
   color: #ffffff;
   margin: 0;
-  line-height: 1.3;
+  width: 100%;
+  line-height: 24px;
   text-shadow: 2px 4px 15px rgba(0, 0, 0, 0.8);
 }
 
 .dp-hero-line {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.35);
+  height: 2px;
   width: 100%;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    #fbfbfb 0%,
+    rgba(149, 149, 149, 0) 100%
+  );
 }
 
 /* ── Destination city carousel bar ── */
@@ -155,7 +161,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.7);
+  background: #757575;
   flex-shrink: 0;
 }
 
@@ -548,143 +554,91 @@
   border-radius: 4px;
 }
 
-/* ── Cultural and Local Voices (Figma 4518:29298) ── */
+/* ── Cultural and Local Voices (Figma 5390:5939) ── */
 .dp-culture {
   background: #fff;
-  padding: 28px 0 0;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 40px;
 }
 
 .dp-culture-head {
   text-align: center;
-  padding: 0 20px;
+  padding: 0 16px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
 }
 
 .dp-culture-title {
   font-family: "Roboto", sans-serif;
   font-size: 18px;
   font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.5px;
   color: #4e4e4e;
   margin: 0;
-  letter-spacing: 0.2px;
 }
 
 .dp-culture-sub {
   font-family: "Roboto", sans-serif;
   font-size: 14px;
   font-weight: 400;
+  line-height: 21px;
   color: #757575;
   margin: 0;
-  line-height: 1.5;
 }
 
+/* Polaroid cards — flattened images exported from Figma */
+.dp-pol {
+  margin: 0;
+}
+
+.dp-pol-flat {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+/* Top row: left straight, right tilted with stamp */
 .dp-culture-row {
   display: flex;
-  gap: 12px;
+  gap: 6px;
   justify-content: center;
   align-items: flex-start;
   padding: 0 16px;
 }
 
-.dp-culture-card {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.dp-pol--left {
+  width: 145px;
+  height: 245px;
 }
 
-.dp-culture-card--tilt {
-  transform: rotate(-3deg);
-  margin-top: 24px;
+.dp-pol--right {
+  width: 194px;
+  height: 270px;
+  margin-top: 4px;
 }
 
-.dp-culture-polaroid {
-  position: relative;
-  background: #fff;
-  padding: 7px 7px 26px;
-  box-shadow: 1px 4px 16px rgba(0, 0, 0, 0.16);
-  width: 148px;
-}
-
-.dp-culture-polaroid--lg {
-  width: 200px;
-  padding: 8px 8px 30px;
-}
-
-.dp-culture-photo {
-  width: 100%;
-  display: block;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-}
-
-.dp-culture-photo--lg {
-  aspect-ratio: 4 / 5;
-}
-
-.dp-culture-label {
-  position: absolute;
-  bottom: 30px;
-  left: 10px;
-  font-family: "Roboto", sans-serif;
-  font-size: 15px;
-  font-weight: 900;
-  color: #fff;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.55);
-  pointer-events: none;
-}
-
-.dp-culture-desc {
-  font-family: "Roboto", sans-serif;
-  font-size: 10px;
-  color: #3d3d3d;
-  margin: 0;
-  line-height: 1.5;
-  max-width: 148px;
-}
-
-.dp-culture-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  padding: 0 16px;
-}
-
-.dp-culture-center-desc {
-  font-family: "Roboto", sans-serif;
-  font-size: 10px;
-  color: #3d3d3d;
-  margin: 0;
-  line-height: 1.5;
-  text-align: center;
-  max-width: 220px;
+/* Center polaroid */
+.dp-pol--center {
+  align-self: center;
+  width: 210px;
+  height: 240px;
 }
 
 .dp-culture-quote {
-  font-family: "Roboto", sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: #202020;
+  font-family: "Roboto Condensed", "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 19px;
+  letter-spacing: 0.25px;
+  color: #3d3d3d;
   margin: 0;
-  line-height: 1.55;
   text-align: center;
-  padding: 0 20px;
-}
-
-.dp-culture-landscape {
-  width: 100%;
-  overflow: hidden;
-}
-
-.dp-culture-landscape-img {
-  width: 100%;
-  height: auto;
-  display: block;
+  padding: 0 16px;
 }
 
 .dp-culture-stack {
@@ -696,9 +650,19 @@
 .dp-trip-strip {
   padding: 0 16px;
 }
+/* Header row and cards both align to the 16px page margin provided by the
+   wrapper above (the shared .up-cards adds its own 16px, so zero it here to
+   avoid a double indent that misaligns cards from the section header). */
+.dp-trip-strip.up {
+  gap: 16px;
+  margin-top: 0;
+}
 .dp-trip-strip .up-header-row {
   padding: 0;
-  margin-bottom: 4px;
+}
+.dp-trip-strip .up-cards {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 /* ── Section divider (Figma 4544:31916) ── */
@@ -706,5 +670,6 @@
   width: 100%;
   height: 8px;
   background: #f5f5f5;
+  margin: 30px 0;
   flex-shrink: 0;
 }

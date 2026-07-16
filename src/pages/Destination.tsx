@@ -274,6 +274,9 @@ const DEFAULT_DATA: DestData = {
 
 
 
+/** Fixed anchor-bar cities matching the Figma hero (node 4518:26804). */
+const HERO_CITIES = ["Paris", "Amsterdam", "Prague", "Vienna", "Portugal", "Spain", "Italy"];
+
 export default function Destination() {
   const { slug = "Europe" } = useParams<{ slug: string }>();
   const navigate = useNavigate();
@@ -293,17 +296,17 @@ export default function Destination() {
       <SiteHeader2 destination={slug} date={data.relatedDate} showBack onBack={() => navigate(-1)} />
       {/* ── Hero (Figma 4518:26793) ── */}
       <section className="dp-hero">
-        <img src={data.heroImage} alt={heroTitle} className="dp-hero-img" loading="lazy" />
+        <img src="/figma/destination/hero.jpg" alt={heroTitle} className="dp-hero-img" loading="lazy" />
         <div className="dp-hero-grad" />
         <div className="dp-hero-bottom">
           <div className="dp-hero-body">
             <h1 className="dp-hero-title">{heroTitle}</h1>
             <div className="dp-hero-line" />
           </div>
-          {/* Scrollable city dots bar */}
+          {/* Scrollable city dots bar (Figma 4518:26804) */}
           <div className="dp-city-bar">
             <div className="dp-city-scroll">
-              {data.cities.map((city, i) => (
+              {HERO_CITIES.map((city, i) => (
                 <Fragment key={city}>
                   {i > 0 && <span className="dp-city-dot" aria-hidden />}
                   <span className="dp-city-name">{city}</span>
@@ -557,45 +560,52 @@ export default function Destination() {
         </div>
       </section>
 
+      <div className="dp-section-div" aria-hidden />
       <TribeStories />
 
       <div className="dp-section-div" aria-hidden />
-      {/* ── Cultural and Local Voices (Figma 4518:29298) ── */}
+      {/* ── Cultural and Local Voices (Figma 5390:5939) ── */}
       <section className="dp-culture">
         <div className="dp-culture-head">
           <h2 className="dp-culture-title">Cultural and Local Voices</h2>
-          <p className="dp-culture-sub">Choose from hundreds of destinations – provided by trusted pros</p>
+          <p className="dp-culture-sub">Every city a new rhythm, every night a new reason to celebrate.</p>
         </div>
 
-        {/* Top row: 2 polaroid cards */}
+        {/* Top row: two polaroids — left straight, right tilted with stamp */}
         <div className="dp-culture-row">
-          <div className="dp-culture-card">
-            <div className="dp-culture-polaroid">
-              <img className="dp-culture-photo" src="/figma/culture/raw-4.png" alt={slug} loading="lazy" />
-              <span className="dp-culture-label">{slug}</span>
-            </div>
-            <p className="dp-culture-desc">doorway to Southeast Asia: a first taste of the region</p>
-          </div>
-          <div className="dp-culture-card dp-culture-card--tilt">
-            <div className="dp-culture-polaroid">
-              <img className="dp-culture-photo" src="/figma/culture/raw-2.png" alt={slug} loading="lazy" />
-              <span className="dp-culture-label">{slug}</span>
-            </div>
-          </div>
+          <figure className="dp-pol dp-pol--left">
+            <img
+              className="dp-pol-flat"
+              src="/figma/culture/image-1.png"
+              alt="Germany — raise your stein with a thousand strangers like old friends"
+              loading="lazy"
+            />
+          </figure>
+
+          <figure className="dp-pol dp-pol--right">
+            <img
+              className="dp-pol-flat"
+              src="/figma/culture/image-2.png"
+              alt="Amsterdam — canals, bicycles, and golden-hour gables"
+              loading="lazy"
+            />
+          </figure>
         </div>
 
-        {/* Center: tuk-tuk polaroid */}
-        <div className="dp-culture-center">
-          <div className="dp-culture-polaroid dp-culture-polaroid--lg">
-            <img className="dp-culture-photo dp-culture-photo--lg" src="/figma/culture/raw-9.png" alt={`${slug} culture`} loading="lazy" />
-          </div>
-          <p className="dp-culture-center-desc">For millions of travellers, Thailand is the doorway to Southeast Asia: a first taste of the region</p>
-        </div>
+        {/* Center: La Tomatina polaroid */}
+        <figure className="dp-pol dp-pol--center">
+          <img
+            className="dp-pol-flat"
+            src="/figma/culture/image-3.png"
+            alt="La Tomatina — one town, forty tons of tomatoes, zero rules"
+            loading="lazy"
+          />
+        </figure>
 
         {/* Quote */}
-        <p className="dp-culture-quote">Eastern Thailand is half mountain, half ocean. Although there aren&apos;t many provinces here, it still has a lot of amazing sights and stunning locations to visit.</p>
+        <p className="dp-culture-quote">Europe isn&apos;t meant to be watched from the sidelines. From Munich&apos;s beer halls to Amsterdam&apos;s canals to a tomato-soaked street in Buñol, this is a continent best lived out loud.</p>
 
-        {/* Interactive photo stack (Figma 4518:26092) */}
+        {/* Interactive photo stack (kept — Figma 4518:26092) */}
         <div className="dp-culture-stack">
           <PhotoStack />
         </div>

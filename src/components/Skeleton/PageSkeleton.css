@@ -1,0 +1,200 @@
+.psk {
+  width: 100%;
+  max-width: var(--app-width);
+  margin: 0 auto;
+  min-height: 100dvh;
+  background: #fff;
+}
+
+/* Header */
+.psk-header {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  border-bottom: 1px solid #eee;
+}
+.psk-h-back {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.psk-h-title {
+  width: 120px;
+  height: 18px;
+  border-radius: 5px;
+}
+.psk-h-title--center {
+  margin: 0 auto;
+}
+.psk-h-action {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* Body */
+.psk-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 16px 40px;
+}
+.psk-center {
+  align-items: center;
+}
+
+/* Line width helpers */
+.psk-w40 {
+  width: 40%;
+}
+.psk-w50 {
+  width: 50%;
+}
+.psk-w60 {
+  width: 60%;
+}
+.psk-w70 {
+  width: 70%;
+}
+.psk-w75 {
+  width: 75%;
+}
+.psk-w80 {
+  width: 80%;
+}
+.psk-w90 {
+  width: 90%;
+}
+.psk-lg {
+  height: 20px;
+}
+.psk-mt {
+  margin-top: 6px;
+}
+
+/* Blocks */
+.psk-block-160 {
+  width: 100%;
+  height: 160px;
+  border-radius: 12px;
+}
+.psk-block-120 {
+  width: 100%;
+  height: 120px;
+  border-radius: 12px;
+}
+.psk-hero {
+  width: 100%;
+  height: 300px;
+  border-radius: 0;
+}
+.psk-banner {
+  width: 100%;
+  height: 140px;
+  border-radius: 12px;
+}
+
+/* List grid of trip cards */
+.psk-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.psk-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.psk-card-img {
+  width: 100%;
+  height: 130px;
+  border-radius: 12px;
+}
+
+/* Detail chips */
+.psk-chips {
+  display: flex;
+  gap: 8px;
+}
+.psk-chip {
+  width: 72px;
+  height: 26px;
+  border-radius: 999px;
+}
+
+/* Form fields */
+.psk-field {
+  width: 100%;
+  height: 48px;
+  border-radius: 8px;
+}
+.psk-two {
+  display: flex;
+  gap: 12px;
+}
+.psk-two > * {
+  flex: 1;
+}
+.psk-cta {
+  width: 100%;
+  height: 48px;
+  border-radius: 12px;
+  margin-top: 8px;
+}
+
+/* Profile */
+.psk-avatar {
+  width: 60px;
+  height: 60px;
+}
+.psk-stat {
+  height: 110px;
+  border-radius: 12px;
+}
+.psk-rows {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+.psk-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+}
+.psk-row-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+.psk-row-chevron {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  margin-left: auto;
+}
+
+/* Booking detail tabs */
+.psk-tabs {
+  display: flex;
+  gap: 8px;
+  padding: 10px 16px;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.04);
+}
+.psk-tab {
+  flex: 1;
+  height: 20px;
+  border-radius: 6px;
+}
+.psk-tag {
+  width: 100%;
+  height: 36px;
+  border-radius: 8px;
+}

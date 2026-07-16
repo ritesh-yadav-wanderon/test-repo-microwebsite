@@ -86,24 +86,35 @@ export default function Footer() {
           </ul>
         </section>
 
-        {/* ── Section 3: Company ── */}
+        {/* ── Section 3: Company (Figma 5259:5482) ── */}
         <section className="ft-company">
-          <div className="ft-company-top">
+          <div className="ft-company-block">
             <div className="ft-company-identity">
               <p className="ft-company-name">WANDERON EXPERIENCES PVT LTD</p>
+              <p className="ft-company-addr">
+                3rd Floor, Building No-436, Phase IV, Udyog Vihar,
+                <br />
+                Sector-18, Gurugram, Haryana-122015
+              </p>
+              <div className="ft-social">
+                <a className="ft-social-link" href="https://www.instagram.com/wanderon.in" target="_blank" rel="noreferrer" aria-label="Instagram">
+                  <img src="/figma/footer/ig-black.svg" alt="" className="ft-social-ig" />
+                </a>
+                <a className="ft-social-link" href="https://www.facebook.com/wanderon.in" target="_blank" rel="noreferrer" aria-label="Facebook">
+                  <img src="/figma/footer/fb-black.svg" alt="" className="ft-social-fb" />
+                </a>
+                <a className="ft-social-link" href="https://www.linkedin.com/company/wanderon" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+                  <img src="/figma/footer/li-black.svg" alt="" className="ft-social-li" />
+                </a>
+                <a className="ft-social-link" href="https://www.youtube.com/@WanderOn" target="_blank" rel="noreferrer" aria-label="YouTube">
+                  <img src="/figma/footer/yt-black.png" alt="" className="ft-social-yt" />
+                </a>
+              </div>
             </div>
             <div className="ft-contact">
-              <span>hello@wanderon.in</span>
-              <span>www.wanderon.in</span>
-              <span>+91-9090403075</span>
-            </div>
-            <div className="ft-social-pill">
-              <img src="/figma/footer/instagram.svg" alt="Instagram" className="ft-social-icon ft-social-icon--sm" />
-              <img src="/figma/footer/facebook.svg"  alt="Facebook"  className="ft-social-icon ft-social-icon--sm" />
-              <div className="ft-social-icon--linkedin-wrap">
-                <img src="/figma/footer/linkedin.svg" alt="LinkedIn" className="ft-social-icon ft-social-icon--xs" />
-              </div>
-              <img src="/figma/footer/youtube.png"   alt="YouTube"   className="ft-social-icon ft-social-icon--md" />
+              <a href="mailto:hello@wanderon.in">hello@wanderon.in</a>
+              <a href="https://www.wanderon.in" target="_blank" rel="noreferrer">www.wanderon.in</a>
+              <a href="tel:+919090403075">+91-9090403075</a>
             </div>
           </div>
           <p className="ft-copy">{`© WANDERON EXPERIENCES PVT LTD,  All rights reserved.`}</p>
