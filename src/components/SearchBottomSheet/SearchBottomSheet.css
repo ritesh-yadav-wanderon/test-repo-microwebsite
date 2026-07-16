@@ -3,13 +3,18 @@
 /* ── Overlay ── */
 .sbs-overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--app-width);
   z-index: 1010;
   display: flex;
   justify-content: center;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(0,0,0,0.4));
+  background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(0,0,0,0.8));
 }
 
 /* ── Sheet ── */
@@ -73,13 +78,13 @@
 .sbs-cat-ico { width: 40px; height: 40px; object-fit: cover; flex-shrink: 0; }
 .sbs-cat-ico-placeholder { width: 40px; height: 40px; flex-shrink: 0; }
 .sbs-cat-label {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
-  color: #3d3d3d;
+  color: #ffffff;
   text-align: center;
   line-height: 16px;
 }
-.sbs-cat--active .sbs-cat-label { font-weight: 500; color: #202020; }
+.sbs-cat--active .sbs-cat-label { font-weight: 500; color: #ffffff; }
 .sbs-cat-bar {
   position: absolute;
   bottom: -4px;
@@ -87,7 +92,7 @@
   transform: translateX(-50%);
   width: 60px;
   height: 4px;
-  background: #000;
+  background: var(--brand-yellow);
   border-radius: 20px;
 }
 

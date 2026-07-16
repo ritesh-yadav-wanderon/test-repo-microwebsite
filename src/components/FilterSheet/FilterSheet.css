@@ -3,7 +3,12 @@
 /* ── Overlay backdrop ── */
 .fs-overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--app-width);
   z-index: 1010;
   background: rgba(0, 0, 0, 0.45);
   opacity: 0;
