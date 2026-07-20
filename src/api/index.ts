@@ -1,4 +1,4 @@
-import type { ApiSource, Destination, TripGroup } from "../types";
+import type { ApiSource, Destination, Trip, TripDestination, TripGroup } from "../types";
 import { ENDPOINTS } from "./config";
 import {
   SAMPLE_UPCOMING_TRIPS,
@@ -144,4 +144,109 @@ export function getSampleInternational(): Destination[] {
 /** Single trip by slug (for the future Product page). Read-only GET. */
 export async function getTripBySlug(slug: string): Promise<unknown> {
   return getJSON(ENDPOINTS.tripBySlug(slug));
+}
+
+/** Format a YYYY-MM-DD batch date as "09 May" style label. */
+function fmtBatchDate(iso: string): string {
+  const d = new Date(iso + "T00:00:00");
+  if (isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
+}
+
+/**
+ * Flat list of trips for the Search Results / Listing page.
+ * Fetches upcomingTrips, deduplicates by slug, normalises to Trip[].
+ * Falls back to sample data if the API is unreachable.
+ */
+export async function getListingTrips(): Promise<Trip[]> {
+  try {
+    const data = await getJSON(ENDPOINTS.upcomingTrips);
+    const groups = Array.isArray(data) ? data
+      : (isRecord(data) && Array.isArray(data.data)) ? data.data as unknown[]
+      : [];
+
+    const seen = new Set<string>();
+    const trips: Trip[] = [];
+
+    for (const group of groups) {
+      if (!isRecord(group)) continue;
+      const arr = group.tripsArray;
+      if (!Array.isArray(arr)) continue;
+
+      for (const raw of arr) {
+        if (!isRecord(raw)) continue;
+        const slug = typeof raw.slug === "string" ? raw.slug : "";
+        if (!slug || seen.has(slug)) continue;
+        seen.add(slug);
+
+        const priceRaw = typeof raw.startingPrice === "number" ? raw.startingPrice : 0;
+        if (priceRaw < 1000) continue; // filter out test entries
+
+        const image = resolveImage(raw);
+        if (!image) continue; // skip trips with no card image
+
+        const title = typeof raw.title === "string" ? raw.title.trim() : "";
+        if (!title) continue;
+
+        const batches: string[] = Array.isArray(raw.batches)
+          ? (raw.batches as unknown[]).filter((b): b is string => typeof b === "string")
+          : [];
+
+        const destinations: TripDestination[] = Array.isArray(raw.destinations)
+          ? (raw.destinations as unknown[])
+              .filter(isRecord)
+              .map(d => ({
+                title: typeof d.title === "string" ? d.title : "",
+                slug: typeof d.slug === "string" ? d.slug : "",
+                isInternational: Boolean(d.isInternational),
+              }))
+              .filter(d => d.title)
+          : [];
+
+        const dur = isRecord(raw.duration) ? raw.duration : null;
+        const duration = (dur && typeof dur.nights === "number" && typeof dur.days === "number")
+          ? { nights: dur.nights, days: dur.days }
+          : undefined;
+
+        const features: string[] = Array.isArray(raw.features)
+          ? (raw.features as unknown[]).filter((f): f is string => typeof f === "string")
+          : [];
+
+        const categories: string[] = Array.isArray(raw.categories)
+          ? (raw.categories as unknown[]).filter((c): c is string => typeof c === "string")
+          : [];
+
+        trips.push({
+          slug,
+          title,
+          image,
+          startingPrice: formatPrice(raw.startingPrice),
+          duration,
+          skeletonItinerary: destinations.map(d => d.title),
+          features,
+          batches,
+          categories,
+          destinations,
+          joinedCount: "20+",
+          firstBatch: batches[0] ? fmtBatchDate(batches[0]) : undefined,
+          recommended: Boolean(raw.isPromoted),
+          womenOnly: Boolean(raw.womenOnly),
+        });
+      }
+    }
+
+    if (!trips.length) throw new Error("no valid listing trips");
+    // Show the recommended card variant on a few trips regardless of API flag.
+    trips.forEach((t, i) => { t.recommended = i < 3; });
+    return trips;
+  } catch (err) {
+    console.warn("[getListingTrips] using sample data:", err instanceof Error ? err.message : String(err));
+    // Flatten sample data as fallback
+    const seen = new Set<string>();
+    return SAMPLE_UPCOMING_TRIPS.flatMap(g => g.tripsArray ?? []).filter(t => {
+      if (seen.has(t.slug)) return false;
+      seen.add(t.slug);
+      return true;
+    });
+  }
 }

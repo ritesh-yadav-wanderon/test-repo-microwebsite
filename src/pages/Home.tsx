@@ -34,10 +34,8 @@ export default function Home() {
     <>
       <HeroSection
         onSearchClick={() => window.dispatchEvent(new CustomEvent("wanderon:open-search"))}
-        activeCategory={activeCategory}
-        onCategoryChange={setActiveCategory}
       />
-      <DestinationStrip />
+      <DestinationStrip activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
       <UpcomingTrips trips={trips} loading={loading} source={source} activeCategory={activeCategory} />
       <OriginalsSection />
       <TribeStories />

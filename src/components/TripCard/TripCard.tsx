@@ -1,4 +1,4 @@
-import { useState, type CSSProperties } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Trip } from "../../types";
 import { useCompare } from "../../context/CompareContext";
@@ -10,7 +10,23 @@ function fmtDate(d: string): string {
   return dt.toLocaleDateString("en-IN", { day: "2-digit", month: "short" });
 }
 
-/* ── Inline icons (currentColor so they inherit the accent / button color) ── */
+/* ────────────────────────────────────────────────────────────
+ * Static fallbacks — the trip API does not yet return these new
+ * fields, so per design we always render them with static values
+ * (identical across every trip) when the trip has no real data.
+ * ──────────────────────────────────────────────────────────── */
+const STATIC_ROUTE =
+  "3N Paris → 3N Amsterdam → 3N Prague → 2N Vienna → 3N Budapest";
+const STATIC_FEATURES = [
+  "Disneyland Tour with Eiffel Tower Visit",
+  "Cologne City Tour",
+  "Lake Titisee",
+];
+const STATIC_STRIKE = "29,000";
+const STATIC_DURATION = "7N/8D";
+const STATIC_DATES = "09 May, 12 May, 18 May...";
+
+/* ── Inline icons (currentColor so they inherit the surrounding color) ── */
 function HeartIcon({ filled }: { filled?: boolean }) {
   if (filled) {
     return (
@@ -64,7 +80,7 @@ export interface TripCardProps {
   eager?: boolean;
 }
 
-export default function TripCard({ trip, accentColor: accentOverride, cardPillBg: pillBgOverride, onSeeAllDates, eager }: TripCardProps) {
+export default function TripCard({ trip, onSeeAllDates, eager }: TripCardProps) {
   const navigate = useNavigate();
   const { isInCompare, toggle } = useCompare();
   const [wishlisted, setWishlisted] = useState(false);
@@ -74,12 +90,8 @@ export default function TripCard({ trip, accentColor: accentOverride, cardPillBg
     startingPrice,
     duration,
     skeletonItinerary = [],
-    features = [],
     recommended,
-    joinedCount,
-    firstBatch,
     batches = [],
-    womenOnly,
   } = trip;
 
   const inCompare = isInCompare(trip.slug);
@@ -89,73 +101,67 @@ export default function TripCard({ trip, accentColor: accentOverride, cardPillBg
       title,
       image,
       price: String(startingPrice ?? ""),
-      route: skeletonItinerary.join(" → "),
+      route: (skeletonItinerary.length ? skeletonItinerary.join(" → ") : STATIC_ROUTE),
     });
 
+  // ── Bindings (fall back to static Figma values when API omits them) ──
   const durationLabel =
-    duration?.nights && duration?.days ? `${duration.nights}N/${duration.days}D` : null;
+    duration?.nights && duration?.days
+      ? `${duration.nights}N/${duration.days}D`
+      : STATIC_DURATION;
 
-  const extra = Math.max(batches.length - 4, 0);
-  const batchList = batches.slice(0, 4).map(fmtDate).join(", ");
+  // Static skeleton itinerary from the design — same across all cards.
+  const route = STATIC_ROUTE;
 
-  const accentColor = accentOverride ?? (womenOnly ? "#704c83" : "#287686");
+  // Static feature highlights from the design — same across all cards.
+  const featureList = STATIC_FEATURES;
 
-  const priceNum = startingPrice ? Number(String(startingPrice).replace(/[₹,\s/-]/g, "")) : 0;
+  const batchesFmt = batches.map(fmtDate);
+  const datesLine = batchesFmt.length
+    ? batchesFmt.slice(0, 3).join(", ") + (batchesFmt.length > 3 ? "..." : "")
+    : STATIC_DATES;
+
+  const priceNum = startingPrice
+    ? Number(String(startingPrice).replace(/[₹,\s/-]/g, ""))
+    : 0;
   const priceDisplay = priceNum ? priceNum.toLocaleString("en-IN") : String(startingPrice ?? "");
-  const strikeDisplay = priceNum ? Math.round(priceNum * 1.15).toLocaleString("en-IN") : "";
+  // Strike price is not part of the API response yet — static per design.
+  const strikeDisplay = STATIC_STRIKE;
+
+  const goToTrip = () => navigate(`/trip/${trip.slug}`);
 
   return (
-    <article
-      className={`tc${recommended ? " tc--recommended" : ""}`}
-      style={{ "--tc-accent": accentColor } as CSSProperties}
-    >
-      {/* Media + floating meta pill */}
-      <div className="tc-media-wrap">
-        <div className="tc-media">
-          <img className="tc-img" src={image} alt={title} loading={eager ? "eager" : "lazy"} />
-          <div className="tc-media-actions">
-            <button
-              className={`tc-wish${wishlisted ? " tc-wish--saved" : ""}`}
-              type="button"
-              aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
-              aria-pressed={wishlisted}
-              onClick={() => setWishlisted((w) => !w)}
-            >
-              <HeartIcon filled={wishlisted} />
-            </button>
-            <button
-              className={`tc-compare${inCompare ? " tc-compare--active" : ""}`}
-              type="button"
-              aria-pressed={inCompare}
-              aria-label={inCompare ? "Remove from Compare" : "Add to Compare"}
-              onClick={toggleCompare}
-            >
-              {inCompare ? (
-                <svg className="tc-compare-ico" viewBox="0 0 14 14" fill="none" aria-hidden>
-                  <path d="M3 3L11 11M11 3L3 11" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" />
-                </svg>
-              ) : (
-                <img src="/figma/trip-hero/icon-compare.svg" alt="" className="tc-compare-ico" aria-hidden loading="lazy" />
-              )}
-              {inCompare ? "Remove from Compare" : "Add to Compare"}
-            </button>
-          </div>
-        </div>
+    <article className={`tc${recommended ? " tc--recommended" : ""}`}>
+      {/* ── Media ── */}
+      <div className="tc-media">
+        <img className="tc-img" src={image} alt={title} loading={eager ? "eager" : "lazy"} />
 
-        <div className="tc-meta-pill" style={pillBgOverride ? { background: pillBgOverride } : undefined}>
-          {durationLabel && (
-            <>
-              <span className="tc-meta-dur">
-                <CalendarIcon />
-                <span>{durationLabel}</span>
-              </span>
-              <span className="tc-meta-dot" aria-hidden />
-            </>
-          )}
-          <span className="tc-meta-join">
-            {joinedCount && <b>{joinedCount}{womenOnly ? " Women" : ""} have joined</b>}
-            {firstBatch && <span>{firstBatch}</span>}
-          </span>
+        <div className="tc-media-top">
+          <button
+            className={`tc-wish${wishlisted ? " tc-wish--saved" : ""}`}
+            type="button"
+            aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+            aria-pressed={wishlisted}
+            onClick={() => setWishlisted((w) => !w)}
+          >
+            <HeartIcon filled={wishlisted} />
+          </button>
+          <button
+            className="tc-compare"
+            type="button"
+            aria-pressed={inCompare}
+            aria-label={inCompare ? "Remove from Compare" : "Add to Compare"}
+            onClick={toggleCompare}
+          >
+            {inCompare ? (
+              <svg className="tc-compare-ico" viewBox="0 0 14 14" fill="none" aria-hidden>
+                <path d="M3 3L11 11M11 3L3 11" stroke="#FFFFFF" strokeWidth="1.4" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <img src="/figma/trip-hero/icon-compare.svg" alt="" className="tc-compare-ico" aria-hidden loading="lazy" />
+            )}
+            {inCompare ? "Remove from Compare" : "Add to Compare"}
+          </button>
         </div>
       </div>
 
@@ -166,48 +172,49 @@ export default function TripCard({ trip, accentColor: accentOverride, cardPillBg
         </div>
       )}
 
-      {/* Body */}
+      {/* ── Body ── */}
       <div className="tc-body">
         <div className="tc-info">
           <p className="tc-title">{title}</p>
 
-          {batches.length > 0 && (
-            <div className="tc-batch-row">
-              <span className="tc-batch">
-                Batches: {batchList}{extra > 0 ? "..." : ""}
+          <div className="tc-meta-row">
+            <div className="tc-meta-left">
+              <span className="tc-meta-cal">
+                <CalendarIcon />
               </span>
-              <button className="tc-see-all" type="button" onClick={onSeeAllDates}>
-                See All Departures
+              <span className="tc-meta-dur">{durationLabel}</span>
+              <span className="tc-meta-dot" aria-hidden />
+              <button className="tc-meta-dates" type="button" onClick={onSeeAllDates}>
+                {datesLine}
               </button>
             </div>
-          )}
+            <button className="tc-see-all" type="button" onClick={onSeeAllDates}>
+              See All Departures
+            </button>
+          </div>
 
-          {skeletonItinerary.length > 0 && (
-            <div className="tc-route">{skeletonItinerary.join(" → ")}</div>
-          )}
+          <div className="tc-route">{route}</div>
 
-          {features.length > 0 && (
-            <ul className="tc-features">
-              {features.slice(0, 3).map((f, i) => (
-                <li key={i}>
-                  <span className="tc-feat-dot" aria-hidden />
-                  {f}
-                </li>
-              ))}
-            </ul>
-          )}
+          <ul className="tc-features">
+            {featureList.map((f, i) => (
+              <li key={i}>
+                <span className="tc-feat-dot" aria-hidden />
+                {f}
+              </li>
+            ))}
+          </ul>
         </div>
 
         {/* Price + CTA */}
         <div className="tc-foot">
           <div className="tc-price-col">
             <div className="tc-price-row">
-              {strikeDisplay && <span className="tc-price-old">₹{strikeDisplay}/-</span>}
+              <span className="tc-price-old">₹{strikeDisplay}/-</span>
               <span className="tc-price-now">₹{priceDisplay}/-</span>
             </div>
             <span className="tc-price-sub">Onwards per person</span>
           </div>
-          <button className="tc-cta" type="button" onClick={() => navigate(`/trip/${trip.slug}`)}>
+          <button className="tc-cta" type="button" onClick={goToTrip}>
             View Trip
             <ArrowIcon />
           </button>

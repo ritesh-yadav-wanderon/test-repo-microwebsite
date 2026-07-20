@@ -103,7 +103,6 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 0 16px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -168,7 +167,7 @@
 /* ── Info section ── */
 .dp-info {
   background: #ffffff;
-  padding: 20px 16px 16px;
+  padding: 20px 16px 0;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -195,28 +194,50 @@
   text-decoration: underline;
   text-underline-offset: 2px;
   white-space: nowrap;
+  text-transform: capitalize;
+}
+.dp-bc-home {
+  display: block;
+  width: 12px;
+  height: 13px;
+  flex-shrink: 0;
 }
 
-/* Tags + best month card */
-.dp-tags-card {
-  border: 1px solid #ababab;
-  border-radius: 12px;
-  padding: 12px 8px 12px 12px;
+/* ── Info card + women strip ── */
+.dp-info-card-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.dp-info-card {
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
   box-sizing: border-box;
+  padding: 12px 8px 12px 12px;
+  border: 1px solid #ababab;
+  border-radius: 12px;
 }
 .dp-tags-text {
+  margin: 0;
   font-family: "Roboto", sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: #666666;
-  margin: 0;
-  line-height: 1.33;
+  line-height: 16px;
   letter-spacing: 0.03px;
 }
+
+.dp-info-ico {
+  display: block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
 .dp-bestmonth-row {
   display: flex;
   align-items: center;
@@ -228,32 +249,59 @@
   font-weight: 400;
   color: #4e4e4e;
   white-space: nowrap;
-  line-height: 1.5;
+  line-height: 21px;
 }
 
-/* Bottom row — women pill + price */
-.dp-info-bottom {
+.dp-price-row {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-}
-.dp-info-bottom-left {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* Women pill */
-.dp-women-pill {
-  display: inline-flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+.dp-price-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.dp-discount-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #4e4e4e;
+  white-space: nowrap;
+}
+.dp-info-price {
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: #121212;
+  white-space: nowrap;
+  line-height: 26px;
+}
+
+/* Women travellers strip attached under the card */
+.dp-women-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 4px;
+  width: calc(100% - 20px);
   height: 20px;
+  box-sizing: border-box;
+  padding: 0 8px 0 4px;
   background: #faf1ff;
   border: 1px solid #e7c0fc;
-  border-radius: 30px;
-  padding-left: 4px;
-  padding-right: 8px;
+  border-top: none;
+  border-radius: 0 0 30px 30px;
+  overflow: hidden;
+}
+.dp-women-ico {
+  display: block;
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
 }
 .dp-women-text {
   font-family: "Roboto", sans-serif;
@@ -261,31 +309,7 @@
   font-weight: 400;
   color: #c458fe;
   white-space: nowrap;
-  line-height: 1;
-}
-
-/* Discount row */
-.dp-discount-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.dp-discount-text {
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  color: #575757;
-  white-space: nowrap;
-}
-
-/* Price value */
-.dp-info-price {
-  font-family: "Roboto", sans-serif;
-  font-size: 18px;
-  font-weight: 500;
-  color: #01afd1;
-  white-space: nowrap;
-  line-height: 1.44;
+  line-height: 12px;
 }
 
 .dp-deco-strip {

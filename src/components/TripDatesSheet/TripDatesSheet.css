@@ -306,13 +306,13 @@
   align-items: center;
   justify-content: center;
   width: 160px;
-  height: 38px;
-  background: #fee60b;
-  border-radius: 8px;
+  height: 48px;
+  background: #121212;
+  border-radius: 40px;
   font-family: "Roboto", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
-  color: #121212;
+  color: #fff;
   text-decoration: none;
   cursor: pointer;
   border: none;

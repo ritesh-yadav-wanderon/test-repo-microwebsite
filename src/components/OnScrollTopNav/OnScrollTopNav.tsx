@@ -16,7 +16,7 @@ export default function OnScrollTopNav({ visible, isHome, onBack, onSearch, onBu
       className={`ostn${visible ? " ostn--visible" : " ostn--hidden"}`}
       aria-hidden={!visible}
     >
-      {/* Back button — only on non-home pages */}
+      {/* Back button — non-home pages only */}
       {!isHome && (
         <button
           className="ostn-back"
@@ -25,7 +25,7 @@ export default function OnScrollTopNav({ visible, isHome, onBack, onSearch, onBu
           tabIndex={tab}
           onClick={onBack}
         >
-          <img src="/figma/nav/arrow-back.svg" width={24} height={24} alt="" aria-hidden />
+          <img src="/figma/ostn/icon-arrow-back.svg" width={24} height={24} alt="" aria-hidden />
         </button>
       )}
 
@@ -39,26 +39,26 @@ export default function OnScrollTopNav({ visible, isHome, onBack, onSearch, onBu
       >
         {/* Location pane */}
         <div className="ostn-pane">
-          <img src="/figma/listing/location-on.svg" width={16} height={16} alt="" aria-hidden />
+          <img src="/figma/ostn/icon-location.svg" width={16} height={16} alt="" aria-hidden />
           <span className="ostn-pane-text">Where to?</span>
         </div>
 
-        {/* Vertical divider */}
+        {/* Divider */}
         <div className="ostn-divider" aria-hidden />
 
         {/* Date pane */}
         <div className="ostn-pane">
-          <img src="/figma/listing/calendar-month.svg" width={16} height={16} alt="" aria-hidden />
+          <img src="/figma/ostn/icon-calendar.svg" width={16} height={16} alt="" aria-hidden />
           <span className="ostn-pane-text">When?</span>
         </div>
 
-        {/* Teal search circle */}
-        <div className="ostn-search-circle" aria-hidden>
-          <img src="/figma/nav/search-teal.svg" width={40} height={40} alt="" />
+        {/* Search button — 50×40 black pill */}
+        <div className="ostn-search-btn" aria-hidden>
+          <img src="/figma/ostn/icon-search.svg" width={50} height={40} alt="" />
         </div>
       </button>
 
-      {/* Burger menu */}
+      {/* Burger */}
       <button
         className="ostn-burger"
         type="button"
@@ -66,7 +66,7 @@ export default function OnScrollTopNav({ visible, isHome, onBack, onSearch, onBu
         tabIndex={tab}
         onClick={onBurger}
       >
-        <img src="/figma/nav/burger-menu.svg" width={24} height={12} alt="" aria-hidden />
+        <img src="/figma/ostn/icon-burger.svg" width={33} height={18} alt="" aria-hidden />
       </button>
     </header>
   );

@@ -173,13 +173,13 @@
 .ls-action-btn {
   width: 100%;
   height: 48px;
-  background: #01afd1;
+  background: #121212;
   border: none;
-  border-radius: 8px;
+  border-radius: 60px;
   font-family: var(--font);
   font-size: 14px;
   font-weight: 500;
-  color: #fbfbfb;
+  color: #ffffff;
   cursor: pointer;
   line-height: 18.2px;
   flex-shrink: 0;

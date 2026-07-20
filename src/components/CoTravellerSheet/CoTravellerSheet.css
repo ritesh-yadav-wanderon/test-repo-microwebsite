@@ -250,8 +250,8 @@
 .cts-cta-cancel,
 .cts-cta-save {
   flex: 1;
-  height: 44px;
-  border-radius: 8px;
+  height: 40px;
+  border-radius: 60px;
   font-size: 14px;
   font-weight: 500;
 }
@@ -261,6 +261,6 @@
   background: #fff;
 }
 .cts-cta-save {
-  background: #01afd1;
+  background: #121212;
   color: #fff;
 }

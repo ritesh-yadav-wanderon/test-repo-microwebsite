@@ -44,7 +44,7 @@
   overflow: hidden;
   background: transparent;
   cursor: pointer;
-  padding: 0;
+  padding: 0 4px 0 0;
   text-align: left;
 }
 
@@ -55,7 +55,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  background: #fbfbfb;
+  background: #ffffff;
   padding: 6px 6px 6px 8px;
   box-sizing: border-box;
 }
@@ -89,12 +89,13 @@
   flex-shrink: 0;
 }
 
-.sh2-search-btn {
-  width: 40px;
+.sh2-search-btn-wrap {
+  width: 50px;
   height: 40px;
   flex-shrink: 0;
-  display: block;
-  margin: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sh2-menu {

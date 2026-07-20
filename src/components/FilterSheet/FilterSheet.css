@@ -248,16 +248,17 @@
   width: 16px;
   height: 16px;
   border-radius: 2px;
-  border: 1.5px solid #01afd1;
+  border: 1.5px solid #121212;
   background: #fbfbfb;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  border-radius: 4px;
 }
 .fs-checkbox--checked {
-  background: #01afd1;
-  border-color: #01afd1;
+  background: #121212;
+  border-color: #121212;
 }
 
 /* ── Divider ── */
@@ -543,19 +544,20 @@
   height: 40px;
   border-radius: 8px;
   font-family: "Roboto", sans-serif;
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 14px;
   cursor: pointer;
 }
 .fs-btn-clear {
   background: #fff;
-  border: 1.5px solid #01afd1;
-  color: #01afd1;
+  border: 1px solid #757575;
+  color: #757575;
+  font-weight: 400;
 }
 .fs-btn-show {
-  background: #01afd1;
+  background: #121212;
   border: none;
   color: #fff;
+  font-weight: 500;
 }
 
 /* ── Destination panel rows ── */
@@ -679,5 +681,102 @@
 .fs-dest-sep {
   height: 1px;
   background: #e0e8eb;
+  flex-shrink: 0;
+}
+
+/* ── Bucket List Panel ── */
+.fs-bucket {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.fs-bucket-hint {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #757575;
+  line-height: 18px;
+  margin: 0;
+}
+
+.fs-bucket-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.fs-bucket-input {
+  flex: 1;
+  height: 48px;
+  border: 1px solid #adadad;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  color: #121212;
+  outline: none;
+  box-sizing: border-box;
+}
+.fs-bucket-input:focus {
+  border-color: #121212;
+}
+.fs-bucket-input::placeholder {
+  color: #ababab;
+}
+
+.fs-bucket-add {
+  height: 48px;
+  padding: 0 16px;
+  border-radius: 60px;
+  background: #121212;
+  color: #ffffff;
+  border: none;
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.fs-bucket-add:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.fs-bucket-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fs-bucket-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px 0 12px;
+  border-radius: 60px;
+  background: #f0f0f0;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #121212;
+}
+
+.fs-bucket-chip-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #d0d0d0;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  color: #121212;
+  padding: 0;
   flex-shrink: 0;
 }

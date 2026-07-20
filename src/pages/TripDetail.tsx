@@ -12,6 +12,8 @@ import LoginSheet from "../components/LoginSheet/LoginSheet";
 import { useAuth } from "../context/AuthContext";
 import FooterMessage from "../components/FooterMessage/FooterMessage";
 import Footer from "../components/Footer";
+import { SAMPLE_UPCOMING_TRIPS } from "../api/sampleData";
+import { TripCardItem, ViewMoreCard } from "../components/UpcomingTrips/TripCardItem";
 
 // ── Figma-downloaded assets ──────────────────────────────────────────────────
 const FIG = "/trip-detail/";
@@ -49,10 +51,9 @@ const HERO_GALLERY = [
 ];
 const MOMENTS_IMGS = MOMENTS_SLOTS.map(s => s.img);
 
-// more trips images
+// more trips images (fallback thumbnails for the View More card)
 const MORE_TRIP_A = `${MG}more-trip-a.jpg`;
 const MORE_TRIP_B = `${MG}more-trip-b.jpg`;
-const MORE_TRIP_C = `${MG}more-trip-c.jpg`;
 
 // captain assets
 const CAP_AV_A = `${MG}captain-av-a.jpg`;
@@ -64,21 +65,6 @@ const CAP_ICO_WOMEN = `${MG}captain-icon-women.svg`;
 
 
 
-
-
-// ── Inline SVG icons ─────────────────────────────────────────────────────────
-const IcoCalendar = () => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#287686" strokeWidth="2" strokeLinecap="round">
-    <rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/>
-    <line x1="8" y1="2" x2="8" y2="6"/><line x1="16" y1="2" x2="16" y2="6"/>
-  </svg>
-);
-
-const IcoHeart = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round">
-    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-  </svg>
-);
 
 
 const TI = "/figma/trip-info/";
@@ -837,11 +823,24 @@ export default function TripDetail() {
   }
 
 
-  const moreTrips = [
-    { title: "15-Day Europe Group Trip 2026: Paris to Budapest", batches: "09 May, 12 May, +10 More Batches", image: MORE_TRIP_A, duration: "7N/8D", price: "62999" },
-    { title: "15-Day Europe Group Trip 2026: Paris to Budapest", batches: "09 May, 12 May, +10 More Batches", image: MORE_TRIP_B, duration: "7N/8D", price: "62999" },
-    { title: "15-Day Europe Group Trip 2026: Paris to Budapest", batches: "09 May, 12 May, +10 More Batches", image: MORE_TRIP_C, duration: "7N/8D", price: "62999" },
-  ];
+  // Related trips filtered by this product's destination (last breadcrumb).
+  const productDest = data.breadcrumbs[data.breadcrumbs.length - 1] ?? "";
+  const relatedTrips = (() => {
+    const d = productDest.trim().toLowerCase();
+    const pool = SAMPLE_UPCOMING_TRIPS.flatMap((g) => g.tripsArray).filter((t) => t.slug !== routeSlug);
+    const matched = pool.filter((t) =>
+      t.slug.toLowerCase().includes(d) ||
+      t.title.toLowerCase().includes(d) ||
+      (t.skeletonItinerary ?? []).some((c) => c.toLowerCase().includes(d)) ||
+      (t.destinations ?? []).some((x) =>
+        x.title.toLowerCase().includes(d) || x.slug.toLowerCase().includes(d)
+      )
+    );
+    return (matched.length ? matched : pool).slice(0, 6);
+  })();
+  const moreVmA = relatedTrips[0]?.image ?? MORE_TRIP_A;
+  const moreVmB = relatedTrips[1]?.image ?? MORE_TRIP_B;
+  const moreHref = `/search?destination=${encodeURIComponent(productDest)}`;
 
   const faqs = [
     {
@@ -1318,44 +1317,12 @@ export default function TripDetail() {
       {/* ── More Trips (Figma 3014:14166) ────────────────────────────── */}
       <div className="tdp2-separator"/>
       <section className="tdp2-more-section">
-        <p className="tdp2-more-label">More Europe Trips</p>
+        <p className="tdp2-more-label">More {productDest} Trips</p>
         <div className="tdp2-more-scroll">
-          {moreTrips.map((t, i) => (
-            <a key={i} href="/trip/europe-paris-amsterdam-switzerland" className="tdp2-more-card-v2">
-              <div className="tdp2-more-cv2-img-wrap">
-                <img src={t.image} alt={t.title} className="tdp2-more-cv2-img" loading="lazy"/>
-                <button className="tdp2-more-cv2-wish" type="button"><IcoHeart /></button>
-              </div>
-              <div className="tdp2-more-cv2-info">
-                <p className="tdp2-more-cv2-title">{t.title}</p>
-                <div className="tdp2-more-cv2-dur"><IcoCalendar /><span>{t.duration}</span></div>
-                <p className="tdp2-more-cv2-batches">{t.batches}</p>
-                <p className="tdp2-more-cv2-price">&#8377;{t.price}/-</p>
-                <p className="tdp2-more-cv2-per">Onwards per person</p>
-              </div>
-            </a>
+          {relatedTrips.map((t) => (
+            <TripCardItem key={t.slug} trip={t} />
           ))}
-          <button
-            className="tdp2-more-vm-card"
-            type="button"
-            onClick={() =>
-              navigate(
-                `/search?destination=${encodeURIComponent(
-                  data.breadcrumbs[data.breadcrumbs.length - 1] ?? ""
-                )}`
-              )
-            }
-          >
-            <div className="tdp2-more-vm-imgs">
-              <span className="tdp2-more-vm-img tdp2-more-vm-back">
-                <img src={MORE_TRIP_B} alt="" loading="lazy"/>
-              </span>
-              <span className="tdp2-more-vm-img tdp2-more-vm-front">
-                <img src={MORE_TRIP_A} alt="" loading="lazy"/>
-              </span>
-            </div>
-            <p className="tdp2-more-vm-label">View More Trips</p>
-          </button>
+          <ViewMoreCard a={moreVmA} b={moreVmB} to={moreHref} />
         </div>
       </section>
 

@@ -133,7 +133,13 @@
 .up-card-info {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 8px;
+}
+
+.up-card-price-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .up-card-title {

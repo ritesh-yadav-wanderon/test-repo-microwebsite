@@ -160,8 +160,18 @@ ul {
   white-space: nowrap;
 }
 
-a, button {
+/* Kill the blue/grey tap-highlight flash on every interactive element
+   (anchors, buttons, and div/role="button" clickables alike). */
+* {
   -webkit-tap-highlight-color: transparent;
+}
+
+a, button, [role="button"], [role="link"], label, summary, input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+a, button {
   outline: none;
 }
 

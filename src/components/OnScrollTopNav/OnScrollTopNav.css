@@ -1,10 +1,10 @@
-/* OnScrollTopNav — Figma 4736:5876.
-   Slides down from top on scroll; white bar with search pill + burger menu. */
+/* OnScrollTopNav — Figma 4736:5903 */
 
 .ostn {
   position: fixed;
   top: 0;
   left: 50%;
+  transform: translateX(-50%) translateY(-110%);
   width: 100%;
   max-width: var(--app-width);
   z-index: 110;
@@ -12,6 +12,7 @@
   align-items: center;
   gap: 10px;
   padding: 12px 16px 12px 12px;
+  box-sizing: border-box;
   background: #ffffff;
   box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
   transition: transform 0.28s ease, opacity 0.28s ease;
@@ -30,19 +31,20 @@
   pointer-events: none;
 }
 
-/* ── Back button (non-home pages) ── */
+/* ── Back button ── */
 .ostn-back {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 24px;
   height: 24px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0;
   background: transparent;
   border: none;
   cursor: pointer;
 }
+.ostn-back img { display: block; }
 
 /* ── Search pill ── */
 .ostn-pill {
@@ -51,7 +53,7 @@
   display: flex;
   align-items: center;
   background: #ffffff;
-  border: 1px solid #999999;
+  border: 1px solid #666666;
   border-radius: 30px;
   overflow: hidden;
   padding: 0 4px 0 0;
@@ -59,7 +61,7 @@
   text-align: left;
 }
 
-/* Location + Date panes */
+/* ── Location / Date panes ── */
 .ostn-pane {
   flex: 1 0 0;
   min-width: 0;
@@ -67,9 +69,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  background: #fbfbfb;
   padding: 6px 6px 6px 8px;
-  overflow: hidden;
 }
 
 .ostn-pane-text {
@@ -82,38 +82,32 @@
   text-overflow: ellipsis;
 }
 
-/* Vertical divider between panes */
+/* ── Vertical divider ── */
 .ostn-divider {
   width: 1px;
   height: 20px;
-  background: #d4d4d4;
+  background: #adadad;
   flex-shrink: 0;
 }
 
-/* Teal search circle — 40×40 */
-.ostn-search-circle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 40px;
+/* ── Search button — 50×40 black pill ── */
+.ostn-search-btn {
+  width: 50px;
   height: 40px;
-  margin-left: 2px;
+  flex-shrink: 0;
 }
-.ostn-search-circle img {
+.ostn-search-btn img {
   display: block;
-  width: 40px;
+  width: 50px;
   height: 40px;
 }
 
-/* ── Burger menu button ── */
+/* ── Burger menu ── */
 .ostn-burger {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 48px;
-  width: 36px;
-  flex-shrink: 0;
   padding: 0;
   background: transparent;
   border: none;

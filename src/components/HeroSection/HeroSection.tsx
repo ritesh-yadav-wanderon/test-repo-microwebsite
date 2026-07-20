@@ -2,19 +2,7 @@ import "./HeroSection.css";
 
 interface Props {
   onSearchClick: () => void;
-  activeCategory: number;
-  onCategoryChange: (idx: number) => void;
 }
-
-const CATEGORIES = [
-  "All Trips",
-  "Adventure",
-  "Luxury",
-  "Culture",
-  "Festival",
-  "Wellness",
-  "Weekend",
-];
 
 function GoogleIcon() {
   return (
@@ -27,23 +15,33 @@ function GoogleIcon() {
   );
 }
 
-function LocationIcon() {
+
+function SearchBtnIcon() {
   return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill="#666"/>
+    <svg width="58" height="48" viewBox="0 0 58 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <defs>
+        <filter id="sb-shadow" x="0" y="0" width="58" height="48" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+          <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+          <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+          <feOffset dy="4"/>
+          <feGaussianBlur stdDeviation="2"/>
+          <feComposite in2="hardAlpha" operator="out"/>
+          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+          <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+        </filter>
+      </defs>
+      <g filter="url(#sb-shadow)">
+        <rect x="4" width="50" height="40" rx="20" fill="black"/>
+        <rect x="4.5" y="0.5" width="49" height="39" rx="19.5" stroke="#4D4D4D"/>
+        <path d="M29.1131 15.9169C29.313 15.6692 29.679 15.6281 29.8947 15.8623C30.1105 16.0965 30.2981 16.3566 30.4513 16.6375C30.6968 17.0876 30.8517 17.5817 30.9063 18.0914C30.9609 18.6012 30.9137 19.1171 30.7691 19.6089C30.6788 19.9157 30.5516 20.21 30.3903 20.4845C30.229 20.7589 29.8616 20.7961 29.6138 20.5964C29.366 20.3965 29.334 20.0352 29.4778 19.7512C29.5536 19.6018 29.6159 19.445 29.6634 19.2835C29.7653 18.9371 29.7971 18.5737 29.7587 18.2147C29.7202 17.8555 29.6114 17.5062 29.4384 17.1891C29.3579 17.0416 29.2643 16.902 29.1588 16.7722C28.958 16.5251 28.9132 16.1648 29.1131 15.9169Z" fill="white"/>
+        <path fillRule="evenodd" clipRule="evenodd" d="M27.0237 12C30.6174 12 33.5307 14.9133 33.5307 18.507C33.5307 19.7999 33.1514 21.0032 32.5013 22.016L37.0054 25.6901C37.5621 26.1446 37.644 26.9647 37.1896 27.5215C36.7352 28.0781 35.9163 28.1612 35.3596 27.707L30.6814 23.8893C29.639 24.599 28.3799 25.014 27.0237 25.014C23.43 25.014 20.5167 22.1007 20.5167 18.507C20.5167 14.9133 23.43 12 27.0237 12ZM27.0237 13.3014C24.0111 13.3014 21.8181 15.4944 21.8181 18.507C21.8181 21.5196 24.0111 23.7126 27.0237 23.7126C30.0363 23.7126 32.2293 21.5196 32.2293 18.507C32.2293 15.4944 30.0363 13.3014 27.0237 13.3014Z" fill="white"/>
+      </g>
     </svg>
   );
 }
 
-function CalendarIcon() {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-      <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM7 11h5v5H7z" fill="#666"/>
-    </svg>
-  );
-}
-
-export default function HeroSection({ onSearchClick, activeCategory, onCategoryChange }: Props) {
+export default function HeroSection({ onSearchClick }: Props) {
   return (
     <section className="hero" aria-label="Home hero">
       {/* Background image — text baked into photo */}
@@ -67,7 +65,7 @@ export default function HeroSection({ onSearchClick, activeCategory, onCategoryC
           <span className="hero-rating-label">from 14,921 Reviews</span>
         </div>
 
-        {/* Search bar */}
+        {/* Search bar — Figma 4492:14931 */}
         <button
           className="hero-search"
           type="button"
@@ -76,43 +74,20 @@ export default function HeroSection({ onSearchClick, activeCategory, onCategoryC
           onClick={onSearchClick}
         >
           <div className="hero-search-pane">
-            <LocationIcon />
+            <img src="/figma/hero/icon-location-w.svg" width={16} height={16} alt="" aria-hidden />
             <span className="hero-search-placeholder">Where to</span>
           </div>
           <div className="hero-search-sep" aria-hidden />
           <div className="hero-search-pane">
-            <CalendarIcon />
+            <img src="/figma/hero/icon-calendar-w.svg" width={16} height={16} alt="" aria-hidden />
             <span className="hero-search-placeholder">Any date</span>
           </div>
-          {/* Figma asset: node 4492:14943 */}
-          <img
-            className="hero-search-btn-img"
-            src="/figma/search-btn.svg"
-            alt=""
-            aria-hidden
-          />
+          <div className="hero-search-btn-wrap" aria-hidden>
+            <SearchBtnIcon />
+          </div>
         </button>
 
-        {/* Category tabs */}
-        <nav className="hero-cats" aria-label="Trip categories">
-          {CATEGORIES.map((cat, i) => (
-            <>
-              {i > 0 && <span key={`sep-${i}`} className="hero-cat-sep" aria-hidden />}
-              <button
-                key={cat}
-                className={`hero-cat${i === activeCategory ? " hero-cat--active" : ""}`}
-                type="button"
-                onClick={() => onCategoryChange(i)}
-              >
-                {cat}
-              </button>
-            </>
-          ))}
-          <span className="hero-cat-sep" aria-hidden />
-          <button className="hero-cat hero-cat--see-all" type="button">
-            See all<br />categories
-          </button>
-        </nav>
+
       </div>
     </section>
   );

@@ -5,6 +5,12 @@ export interface TripDuration {
   days: number;
 }
 
+export interface TripDestination {
+  title: string;
+  slug: string;
+  isInternational?: boolean;
+}
+
 export interface Trip {
   slug: string;
   title: string;
@@ -21,6 +27,7 @@ export interface Trip {
   features?: string[];
   batches?: string[];
   categories?: string[];
+  destinations?: TripDestination[];
   womenOnly?: boolean;
 }
 

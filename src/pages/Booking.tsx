@@ -49,7 +49,7 @@ export default function Booking() {
   const data = { ...DEFAULTS, ...state };
 
   const [accommodationOpen, setAccommodationOpen] = useState(true);
-  const [travelers, setTravelers] = useState(0);
+  const [travelers, setTravelers] = useState(1);
   const [mixedGender, setMixedGender] = useState(false);
   const [privateRoom, setPrivateRoom] = useState(true);
   const [flexibleCancel, setFlexibleCancel] = useState(false);
@@ -69,8 +69,14 @@ export default function Booking() {
   const [email, setEmail] = useState("");
 
   // Who are you booking for
-  const [femaleCount, setFemaleCount] = useState(2);
+  const [femaleCount, setFemaleCount] = useState(0);
   const [maleCount, setMaleCount] = useState(0);
+
+  // Derive minimums and effective counts directly from gender — no useEffect lag
+  const femaleMin = (gender === "female" || gender === "other") ? 1 : 0;
+  const maleMin   = gender === "male" ? 1 : 0;
+  const effectiveFemale = Math.max(femaleCount, femaleMin);
+  const effectiveMale   = Math.max(maleCount,   maleMin);
 
   // Applied coupon/voucher (drives the bill discount)
   const [appliedVoucher, setAppliedVoucher] = useState<AppliedVoucher | null>(null);
@@ -354,7 +360,7 @@ export default function Booking() {
                     className="bkg-step-btn"
                     type="button"
             aria-label="Decrease travelers"
-            onClick={() => setTravelers((v) => Math.max(0, v - 1))}
+            onClick={() => setTravelers((v) => Math.max(1, v - 1))}
                   >
                     <img src={`${A}icon-minus.svg`} width={20} height={20} alt="" aria-hidden />
                   </button>
@@ -373,74 +379,80 @@ export default function Booking() {
           )}
         </section>
 
-        <div className="bkg-strip" />
+        {travelers > 1 && (
+          <>
+            <div className="bkg-strip" />
 
-        {/* ── Who are you booking for? ──────────────────────── */}
-        <section className="bkg-section bkg-section--pad0">
-          <div className="bkg-subhead bkg-subhead--pad">
-            <span className="bkg-section-icon">
-              <img src={`${A}icon-groups.svg`} width={16} height={16} alt="" aria-hidden />
-            </span>
-            <span className="bkg-section-title">Who are you booking for?</span>
-          </div>
-
-          <div className="bkg-bookingfor">
-            <div className="bkg-bf-row">
-              <div className="bkg-bf-col">
-                <span className="bkg-bf-label">Female</span>
-                <div className="bkg-stepper">
-                  <button
-                    className="bkg-step-btn"
-                    type="button"
-                    aria-label="Decrease female travelers"
-                    onClick={() => setFemaleCount((v) => Math.max(0, v - 1))}
-                  >
-                    <img src={`${A}icon-minus.svg`} width={20} height={20} alt="" aria-hidden />
-                  </button>
-                  <span className="bkg-step-count">{femaleCount}</span>
-                  <button
-                    className="bkg-step-btn"
-                    type="button"
-                    aria-label="Increase female travelers"
-                    onClick={() => setFemaleCount((v) => v + 1)}
-                  >
-                    <img src={`${A}icon-plus.svg`} width={20} height={20} alt="" aria-hidden />
-                  </button>
-                </div>
+            {/* ── Who are you booking for? ──────────────────────── */}
+            <section className="bkg-section bkg-section--pad0">
+              <div className="bkg-subhead bkg-subhead--pad">
+                <span className="bkg-section-icon">
+                  <img src={`${A}icon-groups.svg`} width={16} height={16} alt="" aria-hidden />
+                </span>
+                <span className="bkg-section-title">Who are you booking for?</span>
               </div>
 
-              <div className="bkg-bf-divider" aria-hidden />
+              <div className="bkg-bookingfor">
+                <div className="bkg-bf-row">
+                  <div className="bkg-bf-col">
+                    <span className="bkg-bf-label">Female</span>
+                    <div className="bkg-stepper">
+                      <button
+                        className="bkg-step-btn"
+                        type="button"
+                        aria-label="Decrease female travelers"
+                        disabled={effectiveFemale <= femaleMin}
+                        onClick={() => setFemaleCount(Math.max(femaleMin, effectiveFemale - 1))}
+                      >
+                        <img src={`${A}icon-minus.svg`} width={20} height={20} alt="" aria-hidden />
+                      </button>
+                      <span className="bkg-step-count">{effectiveFemale}</span>
+                      <button
+                        className="bkg-step-btn"
+                        type="button"
+                        aria-label="Increase female travelers"
+                        onClick={() => setFemaleCount(effectiveFemale + 1)}
+                      >
+                        <img src={`${A}icon-plus.svg`} width={20} height={20} alt="" aria-hidden />
+                      </button>
+                    </div>
+                  </div>
 
-              <div className="bkg-bf-col">
-                <span className="bkg-bf-label">Male</span>
-                <div className="bkg-stepper">
-                  <button
-                    className="bkg-step-btn"
-                    type="button"
-                    aria-label="Decrease male travelers"
-                    onClick={() => setMaleCount((v) => Math.max(0, v - 1))}
-                  >
-                    <img src={`${A}icon-minus.svg`} width={20} height={20} alt="" aria-hidden />
-                  </button>
-                  <span className="bkg-step-count">{maleCount}</span>
-                  <button
-                    className="bkg-step-btn"
-                    type="button"
-                    aria-label="Increase male travelers"
-                    onClick={() => setMaleCount((v) => v + 1)}
-                  >
-                    <img src={`${A}icon-plus.svg`} width={20} height={20} alt="" aria-hidden />
-                  </button>
+                  <div className="bkg-bf-divider" aria-hidden />
+
+                  <div className="bkg-bf-col">
+                    <span className="bkg-bf-label">Male</span>
+                    <div className="bkg-stepper">
+                      <button
+                        className="bkg-step-btn"
+                        type="button"
+                        aria-label="Decrease male travelers"
+                        disabled={effectiveMale <= maleMin}
+                        onClick={() => setMaleCount(Math.max(maleMin, effectiveMale - 1))}
+                      >
+                        <img src={`${A}icon-minus.svg`} width={20} height={20} alt="" aria-hidden />
+                      </button>
+                      <span className="bkg-step-count">{effectiveMale}</span>
+                      <button
+                        className="bkg-step-btn"
+                        type="button"
+                        aria-label="Increase male travelers"
+                        onClick={() => setMaleCount(effectiveMale + 1)}
+                      >
+                        <img src={`${A}icon-plus.svg`} width={20} height={20} alt="" aria-hidden />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bkg-note">
+                  <img src={`${A}icon-info-grey.svg`} width={13} height={13} alt="" aria-hidden />
+                  <span>If you book for 2, the private room is free of charge upto 2 people.</span>
                 </div>
               </div>
-            </div>
-
-            <div className="bkg-note">
-              <img src={`${A}icon-info-grey.svg`} width={13} height={13} alt="" aria-hidden />
-              <span>If you book for 2, the private room is free of charge upto 2 people.</span>
-            </div>
-          </div>
-        </section>
+            </section>
+          </>
+        )}
 
         <div className="bkg-strip" />
 

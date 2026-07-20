@@ -1510,14 +1510,14 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  border-radius: 50%;
+  border-radius: 60px;
   border: none;
   cursor: pointer;
   flex-shrink: 0;
   position: relative;
 }
 .tdp2-bnav-phone {
-  background: #01afd1;
+  background: #121212;
 }
 .tdp2-bnav-whatsapp {
   background: #25D366;
@@ -1869,132 +1869,7 @@
   -webkit-overflow-scrolling: touch;
 }
 .tdp2-more-scroll::-webkit-scrollbar { display: none; }
-.tdp2-more-card-v2 {
-  flex: 0 0 160px;
-  width: 160px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  text-decoration: none;
-  color: inherit;
-}
-.tdp2-more-cv2-img-wrap {
-  position: relative;
-  width: 160px;
-  height: 160px;
-  border-radius: 12px;
-  overflow: hidden;
-  flex-shrink: 0;
-  background: #f0ece6;
-}
-.tdp2-more-cv2-img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.tdp2-more-cv2-wish {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 30px;
-  height: 28px;
-  border: none;
-  background: rgba(0,0,0,0.35);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.tdp2-more-cv2-info { display: flex; flex-direction: column; gap: 3px; }
-.tdp2-more-cv2-title {
-  font-size: 13px;
-  font-weight: 500;
-  color: #1a1a1a;
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin: 0;
-}
-.tdp2-more-cv2-dur {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  color: #575757;
-  font-weight: 500;
-}
-.tdp2-more-cv2-batches {
-  font-size: 11px;
-  color: #757575;
-  margin: 0;
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.tdp2-more-cv2-price {
-  font-size: 16px;
-  font-weight: 700;
-  color: #015f74;
-  margin: 2px 0 0;
-}
-.tdp2-more-cv2-per {
-  font-size: 11px;
-  color: #9ab3b6;
-  margin: 0;
-}
-/* View More Trips card */
-.tdp2-more-vm-card {
-  flex: 0 0 160px;
-  width: 160px;
-  height: 160px;
-  align-self: flex-start;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 17px;
-  padding: 0;
-  background: #fbfbfb;
-  border: none;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.16);
-  overflow: hidden;
-  cursor: pointer;
-}
-.tdp2-more-vm-imgs {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
-.tdp2-more-vm-img {
-  width: 40px;
-  height: 50px;
-  border: 2px solid #e5e5e5;
-  border-radius: 4px;
-  overflow: hidden;
-  background: #fbfbfb;
-  display: block;
-}
-.tdp2-more-vm-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.tdp2-more-vm-back { transform: rotate(-5deg); margin-right: -12px; z-index: 1; }
-.tdp2-more-vm-front { transform: rotate(5deg); z-index: 2; }
-.tdp2-more-vm-label {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 24px;
-  color: #4d4d4d;
-  text-align: center;
-  white-space: nowrap;
-}
+/* Card + View-More styles now live in the shared TripCardItem.css */
 
 /* ── Enquiry CTA (Figma 4593:11282) ──────────────────────────────── */
 .tdp2-enquiry-wrap {
@@ -2589,10 +2464,11 @@
   justify-content: center;
   gap: 6px;
   width: 100%;
-  height: 44px;
-  background: #fee60b;
+  height: 48px;
+  background: #121212;
   border: none;
-  border-radius: 56px;
+  border-radius: 60px;
+  color: #ffffff;
   cursor: pointer;
   padding: 10px;
   box-sizing: border-box;

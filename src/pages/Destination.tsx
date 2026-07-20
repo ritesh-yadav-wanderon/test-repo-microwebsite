@@ -1,6 +1,8 @@
-import { Fragment } from "react";
+import { Fragment, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { SAMPLE_UPCOMING_TRIPS } from "../api/sampleData";
+import { getListingTrips } from "../api";
+import type { Trip } from "../types";
+import { TripCardItem, TripCardShimmer, ViewMoreCard } from "../components/UpcomingTrips/TripCardItem";
 import FooterMessage from "../components/FooterMessage/FooterMessage";
 import TribeStories from "../components/TribeStories";
 import Footer from "../components/Footer";
@@ -277,19 +279,72 @@ const DEFAULT_DATA: DestData = {
 /** Fixed anchor-bar cities matching the Figma hero (node 4518:26804). */
 const HERO_CITIES = ["Paris", "Amsterdam", "Prague", "Vienna", "Portugal", "Spain", "Italy"];
 
+/** Build destination-branded "customise" cards for destinations that have no
+ * scheduled trips, so we never fall back to showing other destinations' trips. */
+function buildCustomiseTrips(slug: string, data: DestData): Trip[] {
+  const cities = data.cities ?? [];
+  const durations = [
+    { nights: 4, days: 5 },
+    { nights: 5, days: 6 },
+    { nights: 6, days: 7 },
+  ];
+  return durations.map((duration, i) => ({
+    slug,
+    title: cities[i]
+      ? `Customise your ${slug} Trip: ${cities[i]} & more`
+      : `Customise your ${slug} Trip`,
+    image: data.heroImage,
+    startingPrice: data.startingPrice,
+    duration,
+    batches: [],
+  }));
+}
+
+/** Whether a trip belongs to the given destination (matches slug, title,
+ * itinerary cities or the destinations array). */
+function tripMatchesDestination(t: Trip, dest: string): boolean {
+  const d = dest.trim().toLowerCase();
+  if (!d) return true;
+  if (t.slug.toLowerCase().includes(d)) return true;
+  if (t.title.toLowerCase().includes(d)) return true;
+  if ((t.skeletonItinerary ?? []).some((c) => c.toLowerCase().includes(d))) return true;
+  if ((t.destinations ?? []).some((x) =>
+    x.title.toLowerCase().includes(d) || x.slug.toLowerCase().includes(d)
+  )) return true;
+  return false;
+}
+
 export default function Destination() {
   const { slug = "Europe" } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const data = DEST_DATA[slug] ?? DEFAULT_DATA;
   const heroTitle = slug in DEST_DATA ? data.heroTitle : `Group trips to ${slug}`;
 
-  const allTrips = SAMPLE_UPCOMING_TRIPS.flatMap((g) => g.tripsArray);
-  const destTrips = allTrips.filter((t) =>
-    t.slug.toLowerCase().includes(slug.toLowerCase())
-  );
-  const stripTrips = (destTrips.length > 0 ? destTrips : allTrips).slice(0, 6);
-  const vmImgA = stripTrips[0]?.image ?? "/figma/trips/trip-1.jpg";
-  const vmImgB = stripTrips[1]?.image ?? "/figma/trips/trip-2.jpg";
+  // Trips come from the same source as the listing page (real API, with a
+  // built-in sample fallback) so destination pages and the listing agree.
+  const [allTrips, setAllTrips] = useState<Trip[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    getListingTrips().then((trips) => {
+      if (!cancelled) { setAllTrips(trips); setLoading(false); }
+    });
+    return () => { cancelled = true; };
+  }, []);
+
+  const destTrips = allTrips.filter((t) => tripMatchesDestination(t, slug));
+  // Destinations with no scheduled trips only show the "Customise" section.
+  const hasUpcoming = destTrips.length > 0;
+  const stripTrips = destTrips.slice(0, 6);
+  // Customise strip: real destination trips when available, otherwise
+  // destination-branded synthetic cards (never other destinations' trips).
+  const moreHref = `/search?destination=${encodeURIComponent(slug)}`;
+  const customiseTrips = hasUpcoming ? destTrips.slice(0, 6) : buildCustomiseTrips(slug, data);
+  const customiseHref = hasUpcoming ? undefined : moreHref;
+  const vmSource = hasUpcoming ? stripTrips : customiseTrips;
+  const vmImgA = vmSource[0]?.image ?? "/figma/trips/trip-1.jpg";
+  const vmImgB = vmSource[1]?.image ?? "/figma/trips/trip-2.jpg";
 
   return (
     <div className="dp-page">
@@ -317,187 +372,90 @@ export default function Destination() {
         </div>
       </section>
 
-      {/* ── Dates-Costing-General (Figma 4620:23655) ── */}
+      {/* ── Dates-Costing-General (Figma 4620:23656) ── */}
       <section className="dp-info">
         {/* Breadcrumb */}
         <div className="dp-breadcrumb">
-          <svg width="12" height="13" viewBox="0 0 12 13" fill="#757575" aria-hidden>
-            <path d="M10 11.5H8V7.5H4V11.5H2V5.5L6 2.5L10 5.5V11.5ZM0 13H12V5L6 0L0 5V13Z"/>
-          </svg>
+          <img src="/figma/destination/icon-home.svg" alt="" className="dp-bc-home" aria-hidden />
           <span className="dp-bc-sep">{">"}</span>
           <span className="dp-bc-dest">{slug}</span>
         </div>
 
-        {/* Tags + best month card */}
-        <div className="dp-tags-card">
-          <p className="dp-tags-text">{data.tags.join(" | ")}</p>
-          <div className="dp-bestmonth-row">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4e4e4e" strokeWidth="1.6" strokeLinecap="round" aria-hidden>
-              <rect x="3" y="8" width="18" height="13" rx="2"/>
-              <path d="M8 8V5a2 2 0 0 1 4 0v3M12 8V5a2 2 0 0 1 4 0v3"/>
-              <line x1="3" y1="13" x2="21" y2="13"/>
-            </svg>
-            <span className="dp-bestmonth-text">Best month to travel: {data.bestMonth}</span>
-          </div>
-        </div>
-
-        {/* Price + women row */}
-        <div className="dp-info-bottom">
-          <div className="dp-info-bottom-left">
-            {/* Women pill */}
-            <div className="dp-women-pill">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="#c458fe" aria-hidden>
-                <circle cx="12" cy="6" r="4"/>
-                <path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#c458fe" strokeWidth="2" fill="none"/>
-                <circle cx="16" cy="8" r="3" fill="#faf1ff" stroke="#c458fe" strokeWidth="1.5"/>
-                <path d="M14 8l1.5 1.5L18 6" stroke="#c458fe" strokeWidth="1.5" fill="none" strokeLinecap="round"/>
-              </svg>
-              <span className="dp-women-text">{data.womenPct} Women travellers have joined!</span>
+        {/* Info card + women strip */}
+        <div className="dp-info-card-wrap">
+          <div className="dp-info-card">
+            <p className="dp-tags-text">{data.tags.join(" | ")}</p>
+            <div className="dp-bestmonth-row">
+              <img src="/figma/destination/icon-bestmonth.svg" alt="" className="dp-info-ico" aria-hidden />
+              <span className="dp-bestmonth-text">Best month to travel: {data.bestMonth}</span>
             </div>
-            {/* Discount + label */}
-            <div className="dp-discount-row">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="#575757" aria-hidden>
-                <path d="M12.79 2.79 3.5 12.08A2 2 0 0 0 3 13.5V20a2 2 0 0 0 2 2h6.5a2 2 0 0 0 1.42-.59l9.29-9.29a2 2 0 0 0 0-2.83l-6.5-6.5a2 2 0 0 0-2.92 0z"/>
-                <circle cx="7.5" cy="16.5" r="1.5" fill="#fff"/>
-              </svg>
-              <span className="dp-discount-text">Starting Price (per person):</span>
+            <div className="dp-price-row">
+              <div className="dp-price-left">
+                <img src="/figma/destination/icon-price.svg" alt="" className="dp-info-ico" aria-hidden />
+                <span className="dp-discount-text">Starting Price (per person):</span>
+              </div>
+              <span className="dp-info-price">{data.startingPrice}</span>
             </div>
           </div>
-          <span className="dp-info-price">{data.startingPrice}</span>
+          <div className="dp-women-strip">
+            <img src="/figma/destination/icon-women.svg" alt="" className="dp-women-ico" aria-hidden />
+            <span className="dp-women-text">{data.womenPct} Women travellers have joined!</span>
+          </div>
         </div>
       </section>
 
       {/* Section divider */}
       <div className="dp-section-div" aria-hidden />
 
-      {/* ── Best Summer Deals — horizontal trip strip (Figma 4518:27539) ── */}
-      <section className="up dp-trip-strip">
-        <div className="up-header-row">
-          <p className="up-title">Best Summer Deals</p>
-          <button className="up-header-arrow" type="button" aria-label="View all trips">
-            <img src="/figma/trips/arrow-right.svg" width={16} height={16} alt="" aria-hidden loading="lazy" />
-          </button>
-        </div>
-        <div className="up-cards">
-          {stripTrips.map((trip) => (
-            <a
-              key={trip.slug}
-              className="up-card"
-              href={`/trip/${trip.slug}`}
-              style={{ textDecoration: "none" }}
-            >
-              <div className="up-card-img-wrap">
-                {trip.image
-                  ? <img className="up-card-img" src={trip.image} alt={trip.title} loading="lazy" />
-                  : <div className="up-card-img-placeholder" />
-                }
-                <button
-                  className="up-card-wishlist"
-                  type="button"
-                  aria-label="Add to wishlist"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <img src="/figma/trips/wishlist-default.svg" width={30} height={28} alt="" aria-hidden loading="lazy" />
-                </button>
-              </div>
-              <div className="up-card-info">
-                <p className="up-card-title">{trip.title}</p>
-                {trip.duration && (
-                  <div className="up-card-dur-row">
-                    <img src="/figma/trips/calendar-clock.svg" width={12} height={12} alt="" aria-hidden loading="lazy" />
-                    <span className="up-card-dur">{trip.duration.nights}N/{trip.duration.days}D</span>
-                  </div>
-                )}
-                {trip.batches && trip.batches.length > 0 && (
-                  <p className="up-card-batches">
-                    {trip.batches.slice(0, 2).map((b: string) => {
-                      const d = new Date(b + "T00:00:00");
-                      return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
-                    }).join(", ")}
-                    {trip.batches.length > 2 && <span className="up-card-batches-more">, +{trip.batches.length - 2} More Batches</span>}
-                  </p>
-                )}
-                <p className="up-card-price">₹{Number(trip.startingPrice).toLocaleString("en-IN")}/-</p>
-                <p className="up-card-per-person">Onwards per person</p>
-              </div>
-            </a>
-          ))}
-          {/* View More Trips card */}
-          <a className="up-card up-view-more" href="/search" role="button">
-            <div className="up-vm-img-wrap">
-              <img className="up-vm-img up-vm-back" src={vmImgB} alt="" aria-hidden loading="lazy" />
-              <img className="up-vm-img up-vm-front" src={vmImgA} alt="" aria-hidden loading="lazy" />
+      {loading ? (
+        <section className="up dp-trip-strip">
+          <div className="up-header-row">
+            <p className="up-title">Upcoming Group Trips</p>
+          </div>
+          <div className="up-cards">
+            {[0, 1, 2].map((i) => <TripCardShimmer key={i} />)}
+          </div>
+        </section>
+      ) : (
+      <>
+      {hasUpcoming && (
+        <>
+          {/* ── Best Summer Deals — horizontal trip strip (Figma 4518:27539) ── */}
+          <section className="up dp-trip-strip">
+            <div className="up-header-row">
+              <p className="up-title">Best Summer Deals</p>
+              <button className="up-header-arrow" type="button" aria-label="View all trips">
+                <img src="/figma/trips/arrow-right.svg" width={16} height={16} alt="" aria-hidden loading="lazy" />
+              </button>
             </div>
-            <p className="up-vm-label">View More Trips</p>
-          </a>
-        </div>
-      </section>
-
-
-      <div className="dp-section-div" aria-hidden />
-      {/* ── Upcoming Group Trips ── */}
-      <section className="up dp-trip-strip">
-        <div className="up-header-row">
-          <p className="up-title">Upcoming Group Trips</p>
-          <button className="up-header-arrow" type="button" aria-label="View all trips">
-            <img src="/figma/trips/arrow-right.svg" width={16} height={16} alt="" aria-hidden loading="lazy" />
-          </button>
-        </div>
-        <div className="up-cards">
-          {allTrips.slice(0, 6).map((trip) => (
-            <a
-              key={trip.slug + "-upcoming"}
-              className="up-card"
-              href={`/trip/${trip.slug}`}
-              style={{ textDecoration: "none" }}
-            >
-              <div className="up-card-img-wrap">
-                {trip.image
-                  ? <img className="up-card-img" src={trip.image} alt={trip.title} loading="lazy" />
-                  : <div className="up-card-img-placeholder" />
-                }
-                <button
-                  className="up-card-wishlist"
-                  type="button"
-                  aria-label="Add to wishlist"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <img src="/figma/trips/wishlist-default.svg" width={30} height={28} alt="" aria-hidden loading="lazy" />
-                </button>
-              </div>
-              <div className="up-card-info">
-                <p className="up-card-title">{trip.title}</p>
-                {trip.duration && (
-                  <div className="up-card-dur-row">
-                    <img src="/figma/trips/calendar-clock.svg" width={12} height={12} alt="" aria-hidden loading="lazy" />
-                    <span className="up-card-dur">{trip.duration.nights}N/{trip.duration.days}D</span>
-                  </div>
-                )}
-                {trip.batches && trip.batches.length > 0 && (
-                  <p className="up-card-batches">
-                    {trip.batches.slice(0, 2).map((b: string) => {
-                      const d = new Date(b + "T00:00:00");
-                      return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
-                    }).join(", ")}
-                    {trip.batches.length > 2 && <span className="up-card-batches-more">, +{trip.batches.length - 2} More Batches</span>}
-                  </p>
-                )}
-                <p className="up-card-price">₹{Number(trip.startingPrice).toLocaleString("en-IN")}/-</p>
-                <p className="up-card-per-person">Onwards per person</p>
-              </div>
-            </a>
-          ))}
-          <a className="up-card up-view-more" href="/search" role="button">
-            <div className="up-vm-img-wrap">
-              <img className="up-vm-img up-vm-back" src={vmImgB} alt="" aria-hidden loading="lazy" />
-              <img className="up-vm-img up-vm-front" src={vmImgA} alt="" aria-hidden loading="lazy" />
+            <div className="up-cards">
+              {stripTrips.map((trip) => (
+                <TripCardItem key={trip.slug} trip={trip} />
+              ))}
+              <ViewMoreCard a={vmImgA} b={vmImgB} to={moreHref} />
             </div>
-            <p className="up-vm-label">View More Trips</p>
-          </a>
-        </div>
-      </section>
+          </section>
 
-      <div className="dp-section-div" aria-hidden />
+          <div className="dp-section-div" aria-hidden />
+          {/* ── Upcoming Group Trips ── */}
+          <section className="up dp-trip-strip">
+            <div className="up-header-row">
+              <p className="up-title">Upcoming Group Trips</p>
+              <button className="up-header-arrow" type="button" aria-label="View all trips">
+                <img src="/figma/trips/arrow-right.svg" width={16} height={16} alt="" aria-hidden loading="lazy" />
+              </button>
+            </div>
+            <div className="up-cards">
+              {stripTrips.map((trip) => (
+                <TripCardItem key={trip.slug + "-upcoming"} trip={trip} />
+              ))}
+              <ViewMoreCard a={vmImgA} b={vmImgB} to={moreHref} />
+            </div>
+          </section>
+
+          <div className="dp-section-div" aria-hidden />
+        </>
+      )}
       {/* ── Customise Europe Trips ── */}
       <section className="up dp-trip-strip">
         <div className="up-header-row">
@@ -507,58 +465,14 @@ export default function Destination() {
           </button>
         </div>
         <div className="up-cards">
-          {allTrips.slice(2, 8).map((trip) => (
-            <a
-              key={trip.slug + "-custom"}
-              className="up-card"
-              href={`/trip/${trip.slug}`}
-              style={{ textDecoration: "none" }}
-            >
-              <div className="up-card-img-wrap">
-                {trip.image
-                  ? <img className="up-card-img" src={trip.image} alt={trip.title} loading="lazy" />
-                  : <div className="up-card-img-placeholder" />
-                }
-                <button
-                  className="up-card-wishlist"
-                  type="button"
-                  aria-label="Add to wishlist"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <img src="/figma/trips/wishlist-default.svg" width={30} height={28} alt="" aria-hidden loading="lazy" />
-                </button>
-              </div>
-              <div className="up-card-info">
-                <p className="up-card-title">{trip.title}</p>
-                {trip.duration && (
-                  <div className="up-card-dur-row">
-                    <img src="/figma/trips/calendar-clock.svg" width={12} height={12} alt="" aria-hidden loading="lazy" />
-                    <span className="up-card-dur">{trip.duration.nights}N/{trip.duration.days}D</span>
-                  </div>
-                )}
-                {trip.batches && trip.batches.length > 0 && (
-                  <p className="up-card-batches">
-                    {trip.batches.slice(0, 2).map((b: string) => {
-                      const d = new Date(b + "T00:00:00");
-                      return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
-                    }).join(", ")}
-                    {trip.batches.length > 2 && <span className="up-card-batches-more">, +{trip.batches.length - 2} More Batches</span>}
-                  </p>
-                )}
-                <p className="up-card-price">₹{Number(trip.startingPrice).toLocaleString("en-IN")}/-</p>
-                <p className="up-card-per-person">Onwards per person</p>
-              </div>
-            </a>
+          {customiseTrips.map((trip, i) => (
+            <TripCardItem key={trip.slug + "-custom-" + i} trip={trip} batchesText="Date of your choice" href={customiseHref} />
           ))}
-          <a className="up-card up-view-more" href="/search" role="button">
-            <div className="up-vm-img-wrap">
-              <img className="up-vm-img up-vm-back" src={vmImgB} alt="" aria-hidden loading="lazy" />
-              <img className="up-vm-img up-vm-front" src={vmImgA} alt="" aria-hidden loading="lazy" />
-            </div>
-            <p className="up-vm-label">View More Trips</p>
-          </a>
+          <ViewMoreCard a={vmImgA} b={vmImgB} to={moreHref} />
         </div>
       </section>
+      </>
+      )}
 
       <div className="dp-section-div" aria-hidden />
       <TribeStories />

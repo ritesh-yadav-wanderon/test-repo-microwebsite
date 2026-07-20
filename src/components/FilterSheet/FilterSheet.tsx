@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import "./FilterSheet.css";
 
 /* ── Static data ── */
@@ -12,6 +12,7 @@ const TABS = [
   "Add-Ons",
   "Departure City",
   "Accommodation Type",
+  "Bucket List",
 ];
 
 type DestItem = { label: string; slug: string; trending?: boolean };
@@ -475,12 +476,12 @@ function DateDurationPanel({ sel, onToggle }: { sel: Set<string>; onToggle: (v: 
 function buildSearchParams(selections: Record<string, Set<string>>): string {
   const p = new URLSearchParams();
   const dest = [...(selections["Destinations"] ?? [])];
-  if (dest.length) p.set("destinations", dest.join(","));
+  if (dest.length) p.set("destination", dest.join(","));
   const cats = [...(selections["Category"] ?? [])];
   if (cats.length) p.set("category", cats.join(","));
   const dateSel = [...(selections["Date & Duration"] ?? [])];
   const months = dateSel.filter(v => /^\d{4}-\d{2}$/.test(v));
-  if (months.length) p.set("filterMonths", months.join(","));
+  if (months.length) p.set("months", months.join(","));
   const fromDate = dateSel.find(v => v.startsWith("from:"))?.replace("from:", "");
   const toDate = dateSel.find(v => v.startsWith("to:"))?.replace("to:", "");
   if (fromDate) p.set("from", fromDate);
@@ -493,20 +494,111 @@ function buildSearchParams(selections: Record<string, Set<string>>): string {
   if (acc.length) p.set("accommodation", acc.join(","));
   const plan = [...(selections["Planning With"] ?? [])];
   if (plan.length) p.set("planningWith", plan.join(","));
+  const bucket = [...(selections["Bucket List"] ?? [])];
+  if (bucket.length) p.set("bucketList", bucket.join(","));
   return p.toString();
 }
 
+
+/* ── BucketListPanel ── */
+function BucketListPanel({ sel, onAdd, onRemove }: {
+  sel: Set<string>;
+  onAdd: (v: string) => void;
+  onRemove: (v: string) => void;
+}) {
+  const [input, setInput] = useState("");
+
+  function addFromInput(raw: string) {
+    raw.split(",").map(s => s.trim()).filter(s => s && !sel.has(s)).forEach(onAdd);
+    setInput("");
+  }
+
+  function handleKey(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter") addFromInput(input);
+  }
+
+  function handleAdd() { addFromInput(input); }
+
+  return (
+    <div className="fs-bucket">
+      <p className="fs-bucket-hint">
+        Add places from your bucket list. We'll match trips that cover these destinations in their itinerary.
+      </p>
+      <div className="fs-bucket-input-row">
+        <input
+          className="fs-bucket-input"
+          type="text"
+          placeholder="e.g. Leh, Bir, Spiti…"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKey}
+          aria-label="Add a destination to your bucket list"
+        />
+        <button
+          className="fs-bucket-add"
+          type="button"
+          onClick={handleAdd}
+          disabled={!input.trim()}
+          aria-label="Add destination"
+        >
+          Add
+        </button>
+      </div>
+      {sel.size > 0 && (
+        <div className="fs-bucket-chips">
+          {[...sel].map((place) => (
+            <span key={place} className="fs-bucket-chip">
+              {place}
+              <button
+                type="button"
+                className="fs-bucket-chip-remove"
+                onClick={() => onRemove(place)}
+                aria-label={`Remove ${place}`}
+              >
+                ×
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ── FilterSheet ── */
-export default function FilterSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+export default function FilterSheet({ isOpen, onClose, initialTab = 0 }: { isOpen: boolean; onClose: () => void; initialTab?: number }) {
   const [hasOpened, setHasOpened] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [selections, setSelections] = useState<Record<string, Set<string>>>(() =>
     Object.fromEntries(TABS.map((t) => [t, new Set<string>()]))
   );
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  function seedFromParams(params: URLSearchParams): Record<string, Set<string>> {
+    const s: Record<string, Set<string>> = Object.fromEntries(TABS.map(t => [t, new Set<string>()]));
+    params.get("destination")?.split(",").filter(Boolean).forEach(v => s["Destinations"].add(v));
+    params.get("months")?.split(",").filter(Boolean).forEach(v => s["Date & Duration"].add(v));
+    const from = params.get("from");
+    if (from) s["Date & Duration"].add(`from:${from}`);
+    const to = params.get("to");
+    if (to) s["Date & Duration"].add(`to:${to}`);
+    params.get("category")?.split(",").filter(Boolean).forEach(v => s["Category"].add(v));
+    params.get("planningWith")?.split(",").filter(Boolean).forEach(v => s["Planning With"].add(v));
+    params.get("addons")?.split(",").filter(Boolean).forEach(v => s["Add-Ons"].add(v));
+    params.get("fromCity")?.split(",").filter(Boolean).forEach(v => s["Departure City"].add(v));
+    params.get("accommodation")?.split(",").filter(Boolean).forEach(v => s["Accommodation Type"].add(v));
+    params.get("bucketList")?.split(",").map(x => x.trim()).filter(Boolean).forEach(v => s["Bucket List"].add(v));
+    return s;
+  }
 
   useEffect(() => { if (isOpen) setHasOpened(true); }, [isOpen]);
-  useEffect(() => { if (!isOpen) setActiveTab(0); }, [isOpen]);
+  useEffect(() => {
+    if (!isOpen) return;
+    setActiveTab(initialTab);
+    setSelections(seedFromParams(searchParams));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, initialTab]);
 
   if (!hasOpened) return null;
 
@@ -540,6 +632,7 @@ export default function FilterSheet({ isOpen, onClose }: { isOpen: boolean; onCl
       case "Add-Ons":            return <FilterListPanel items={ADDONS} sel={activeSel} onToggle={(v) => toggle(activeTabName, v)} />;
       case "Departure City":     return <FilterListPanel items={DEPARTURE_CITIES} sel={activeSel} onToggle={(v) => toggle(activeTabName, v)} />;
       case "Accommodation Type": return <FilterListPanel items={ACCOMMODATION_TYPES} sel={activeSel} onToggle={(v) => toggle(activeTabName, v)} />;
+      case "Bucket List":        return <BucketListPanel sel={activeSel} onAdd={(v) => toggle(activeTabName, v)} onRemove={(v) => toggle(activeTabName, v)} />;
       default: return null;
     }
   }
@@ -584,7 +677,7 @@ export default function FilterSheet({ isOpen, onClose }: { isOpen: boolean; onCl
           <div className="fs-content">{renderPanel()}</div>
         </div>
         <div className="fs-footer">
-          <button className="fs-btn-clear" type="button" onClick={clearTab}>Clear</button>
+          <button className="fs-btn-clear" type="button" onClick={clearTab}>Clear selection</button>
           <button className="fs-btn-show" type="button" onClick={handleShowResults}>Show Results</button>
         </div>
       </div>

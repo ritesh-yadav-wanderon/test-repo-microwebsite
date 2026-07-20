@@ -308,11 +308,11 @@
   background: #fff;
 }
 .cx-cta {
-  height: 44px;
+  height: 48px;
   width: 100%;
-  border-radius: 8px;
-  background: #fee60b;
+  border-radius: 60px;
+  background: #121212;
   font-size: 14px;
   font-weight: 500;
-  color: #202020;
+  color: #fff;
 }
