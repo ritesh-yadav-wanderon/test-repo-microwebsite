@@ -12,6 +12,8 @@ import FooterMessage from "../components/FooterMessage/FooterMessage";
 import Footer from "../components/Footer";
 import BottomNav from "../components/BottomNav";
 import { getUpcomingTrips } from "../api";
+import DesktopHome from "../components/desktop/DesktopHome";
+import { useIsDesktop } from "../hooks/useIsDesktop";
 import "./Home.css";
 
 export default function Home() {
@@ -19,6 +21,7 @@ export default function Home() {
   const [source, setSource] = useState<ApiSource | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState(0);
+  const isDesktop = useIsDesktop();
 
   useEffect(() => {
     let alive = true;
@@ -30,6 +33,10 @@ export default function Home() {
     });
     return () => { alive = false; };
   }, []);
+
+  if (isDesktop) {
+    return <DesktopHome trips={trips} loading={loading} source={source} />;
+  }
 
   return (
     <>

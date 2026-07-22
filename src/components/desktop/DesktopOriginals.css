@@ -1,0 +1,115 @@
+.dorig {
+  max-width: 1280px;
+  margin: 60px auto 0;
+  /* Figma: instance is 1132px wide inside the 1280px page → 74px gutters */
+  padding: 0 74px;
+}
+
+.dorig__card {
+  position: relative;
+  height: 475px;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #fef4e7;
+  cursor: pointer;
+}
+
+/* Layer positions from Figma (card canvas 1192x500) */
+.dorig__climber {
+  position: absolute;
+  left: 40.5%;
+  top: 26%;
+  width: 60.2%;
+  height: 112.8%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.dorig__climber img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 152.1%;
+  height: 116.6%;
+  max-width: none;
+  object-fit: cover;
+}
+
+.dorig__mountain {
+  position: absolute;
+  left: 0;
+  top: 78.8%;
+  width: 100.7%;
+  height: 52%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.dorig__mountain img {
+  position: absolute;
+  left: -4.5%;
+  top: 0;
+  width: 105.8%;
+  height: 118.8%;
+  max-width: none;
+  object-fit: cover;
+}
+
+.dorig__birds {
+  position: absolute;
+  left: 52.4%;
+  top: 27.6%;
+  width: 172px;
+  height: 59px;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.dorig__flags {
+  position: absolute;
+  left: 65%;
+  top: -45%;
+  width: 440px;
+  height: 440px;
+  transform: rotate(-158.49deg) scaleY(-1);
+  object-fit: cover;
+  pointer-events: none;
+}
+
+.dorig__copy {
+  position: absolute;
+  left: 57px;
+  top: 39px;
+  width: 314px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9.6px;
+}
+
+.dorig__title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #3d3d3d;
+}
+
+.dorig__desc {
+  font-size: 20px;
+  color: #3d3d3d;
+  opacity: 0.8;
+  text-align: justify;
+}
+
+.dorig__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 107px;
+  height: 39px;
+  margin-top: 8px;
+  border: 0.667px solid #3d3d3d;
+  border-radius: 32px;
+  font-size: 16px;
+  line-height: 24px;
+  color: #3d3d3d;
+}
