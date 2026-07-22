@@ -143,7 +143,13 @@ function BatchCard({
             </span>
           </div>
           <div className="bsh-card-dash" aria-hidden>
-            <img src={`${ASSETS}dash-line.svg`} alt="" />
+            <svg className="bsh-card-dash-dot" viewBox="0 0 6 6" width="6" height="6" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="3" cy="3" r="2.667" fill="#A8B1BD" />
+            </svg>
+            <span className="bsh-card-dash-line" />
+            <svg className="bsh-card-dash-dot" viewBox="0 0 6 6" width="6" height="6" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="3" cy="3" r="2.667" fill="#A8B1BD" />
+            </svg>
           </div>
           <div className="bsh-card-date-block bsh-card-date-block--end">
             <span className="bsh-card-date-main">{fmtFull(endDate)}</span>
@@ -207,7 +213,7 @@ function BatchCard({
           disabled={isSoldOut}
           onClick={() => onBook(batch, startDate, endDate)}
         >
-          {ctaLabel}
+          {isSoldOut ? "Sold Out" : ctaLabel}
         </button>
       </div>
     </div>

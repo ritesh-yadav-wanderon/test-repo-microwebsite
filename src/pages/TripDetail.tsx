@@ -1400,7 +1400,7 @@ export default function TripDetail() {
       <BatchesSheet
         isOpen={batchesOpen}
         onClose={() => setBatchesOpen(false)}
-        tripTitle={stickyTitle}
+        tripTitle={data.title}
         nights={7}
         ctaLabel={selectedBatch ? "Select Batch" : "Book Trip"}
         onSelectBatch={

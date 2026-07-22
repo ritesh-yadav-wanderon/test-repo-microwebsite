@@ -5,6 +5,7 @@ import type { Trip } from "../types";
 import { TripCardItem, TripCardShimmer, ViewMoreCard } from "../components/UpcomingTrips/TripCardItem";
 import FooterMessage from "../components/FooterMessage/FooterMessage";
 import TribeStories from "../components/TribeStories";
+import QueryBanner from "../components/QueryBanner";
 import Footer from "../components/Footer";
 import BottomNav from "../components/BottomNav";
 import PlotBanner from "../components/PlotBanner";
@@ -526,6 +527,11 @@ export default function Destination() {
       </section>
 
       <PlotBanner />
+
+      {/* ── Enquire Now (QueryBanner — same as homepage) ── */}
+      <div className="dp-section-div" aria-hidden />
+      <QueryBanner />
+
       <FooterMessage />
       <Footer />
       <BottomNav />

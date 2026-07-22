@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import "./Footer.css";
 
 const DEST_TABS = [
@@ -37,8 +38,23 @@ const QUICK_LINKS = [
   "Careers",
 ];
 
+const norm = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, "");
+
+/**
+ * Pick the destination tab (India / International / Special) that matches the
+ * destination in the current route's path. Falls back to India (0).
+ */
+function tabFromPath(pathname: string): number {
+  const p = norm(pathname);
+  for (let i = 0; i < DEST_TABS.length; i++) {
+    if (DEST_TABS[i].items.some((item) => p.includes(norm(item)))) return i;
+  }
+  return 0;
+}
+
 export default function Footer() {
-  const [activeTab, setActiveTab] = useState(0);
+  const { pathname } = useLocation();
+  const [activeTab, setActiveTab] = useState(() => tabFromPath(pathname));
 
   return (
     <footer className="ft-root">

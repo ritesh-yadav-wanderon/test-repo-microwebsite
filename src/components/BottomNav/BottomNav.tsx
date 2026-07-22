@@ -58,22 +58,20 @@ export default function BottomNav({ variant = "light" }: BottomNavProps) {
           </NavLink>
         )}
 
-        {/* Compare — hidden on the Events page (different theme + flow) */}
-        {!dark && (
-          <NavLink
-            to="/compare"
-            className={({ isActive }) => `bn-item${isActive ? " bn-item--active" : ""}`}
-            aria-label="Compare"
-          >
-            <span className="bn-ico">
-              <img src={`${P}icon-compare.svg`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
-            </span>
-            <span className="bn-label">Compare</span>
-            {compareCount > 0 && (
-              <span className="bn-badge" aria-label={`${compareCount} items`}>{compareCount}</span>
-            )}
-          </NavLink>
-        )}
+        {/* Compare (Figma 5396:14828) */}
+        <NavLink
+          to="/compare"
+          className={({ isActive }) => `bn-item${isActive ? " bn-item--active" : ""}`}
+          aria-label="Compare"
+        >
+          <span className="bn-ico">
+            <img src={`${P}${dark ? "compare.svg" : "icon-compare.svg"}`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
+          </span>
+          <span className="bn-label">Compare</span>
+          {compareCount > 0 && (
+            <span className="bn-badge" aria-label={`${compareCount} items`}>{compareCount}</span>
+          )}
+        </NavLink>
 
         {/* Logo — home */}
         <NavLink

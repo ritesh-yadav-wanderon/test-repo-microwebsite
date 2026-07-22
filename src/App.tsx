@@ -11,6 +11,7 @@ const MyProfile = lazy(() => import("./pages/MyProfile"));
 const Compare = lazy(() => import("./pages/Compare"));
 const Legal   = lazy(() => import("./pages/Legal"));
 const Events = lazy(() => import("./pages/Events"));
+const EventDetail = lazy(() => import("./pages/EventDetail"));
 const Booking = lazy(() => import("./pages/Booking"));
 const MyBookings = lazy(() => import("./pages/MyBookings"));
 const MyBooking = lazy(() => import("./pages/MyBooking"));
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/profile" element={withSkeleton(<Profile />, "profile")} />
         <Route path="/my-profile" element={withSkeleton(<MyProfile />, "form")} />
         <Route path="/events" element={withSkeleton(<Events />, "list")} />
+        <Route path="/event/:slug" element={withSkeleton(<EventDetail />, "detail")} />
         <Route path="/compare" element={withSkeleton(<Compare />, "list")} />
         <Route path="/legal" element={withSkeleton(<Legal />, "generic")} />
         <Route path="/booking" element={withSkeleton(<Booking />, "form")} />

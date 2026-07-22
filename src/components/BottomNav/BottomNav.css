@@ -103,10 +103,10 @@
   white-space: nowrap;
 }
 
-/* ── Dark variant — Events page (Figma 4601:5455) ── */
+/* ── Dark variant — Events page (Figma 5396:14821) ── */
 .bn-pill--dark {
-  background: rgba(71, 71, 71, 0.9);
-  border: 1px solid #5c5c5c;
+  background: #141414;
+  border: 1px solid #303030;
   -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
 }
@@ -115,9 +115,9 @@
   color: #fff;
 }
 
-/* Center logo sits on its own dark rounded backing */
+/* Center logo sits on its own black rounded backing */
 .bn-pill--dark .bn-item--logo {
-  background: #121212;
+  background: #000;
 }
 
 .bn-pill--dark .bn-item--active {
@@ -125,7 +125,7 @@
 }
 
 .bn-pill--dark .bn-item--logo.bn-item--active {
-  background: #121212;
+  background: #000;
 }
 
 /* Compare count badge */

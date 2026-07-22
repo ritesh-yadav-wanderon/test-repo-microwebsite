@@ -1,0 +1,665 @@
+/* ── Event product page (Figma 5396:15194 / 15375 / 15581) — dark theme ── */
+.epd-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: #121212;
+  color: #fff;
+  padding-bottom: 70px; /* clear the fixed bottom bar */
+}
+
+/* ── Hero ── */
+.epd-hero {
+  position: relative;
+  width: 100%;
+  height: 510px;
+  background: #000;
+  overflow: hidden;
+}
+
+.epd-hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.epd-topnav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.epd-round-btn {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 42px;
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.epd-menu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 50px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.epd-menu-icon {
+  display: block;
+  width: 32px;
+  height: 16px;
+}
+
+.epd-hero-actions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  z-index: 3;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.epd-hero-actions::-webkit-scrollbar { display: none; }
+
+.epd-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.epd-chip--icon {
+  width: 40px;
+  padding: 0;
+  justify-content: center;
+}
+
+.epd-chip-ico {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+.epd-chip-heart {
+  width: 14px;
+  height: 12px;
+}
+.epd-chip--active {
+  background: rgba(255, 255, 255, 0.25);
+}
+.epd-chip-play {
+  width: 26px;
+  height: 26px;
+}
+
+/* ── Content sheet ── */
+.epd-sheet {
+  position: relative;
+  z-index: 2;
+  margin-top: -16px;
+  background: #121212;
+  border-radius: 16px 16px 0 0;
+  padding: 8px 0 0;
+}
+
+.epd-handle {
+  display: block;
+  width: 50px;
+  height: 3px;
+  margin: 0 auto 16px;
+  border-radius: 30px;
+  background: #363636;
+}
+
+.epd-head {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 16px;
+}
+
+.epd-title {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #fff;
+}
+
+.epd-dates {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  color: #fff490;
+}
+
+/* Pick up / drop */
+.epd-route {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 16px 0;
+}
+
+.epd-route-labels {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.epd-route-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  color: #999;
+  white-space: nowrap;
+}
+.epd-route-tag img {
+  width: 10px;
+  height: 12px;
+}
+
+.epd-route-dash {
+  flex: 1;
+  height: 1px;
+  background-image: repeating-linear-gradient(to right, #4d4d4d 0 4px, transparent 4px 8px);
+}
+
+.epd-route-places {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.epd-route-place {
+  max-width: 45%;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #fff;
+}
+.epd-route-place--end {
+  text-align: right;
+}
+
+/* ── Tabs (sticky) ── */
+.epd-tabs-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #121212;
+  padding: 20px 16px 0;
+}
+
+.epd-tabs {
+  display: flex;
+  align-items: center;
+  height: 42px;
+  padding: 4px;
+  gap: 2px;
+  background: #3d3d3d;
+  border: 1px solid #575757;
+  border-radius: 60px;
+}
+
+.epd-tab {
+  flex: 1 0 0;
+  min-width: 0;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 24px;
+  background: transparent;
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.epd-tab--active {
+  background: #000;
+  font-weight: 500;
+}
+
+.epd-body {
+  padding-top: 20px;
+}
+
+/* ── About tab ── */
+.epd-about {
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px;
+}
+.epd-about-text {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  color: #e6e6e6;
+}
+.epd-readmore {
+  align-self: flex-start;
+  margin-top: 2px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #e6e6e6;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 22px;
+  cursor: pointer;
+}
+
+.epd-section-title {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20.8px;
+  color: #fff;
+}
+
+.epd-tk {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 16px 0;
+}
+
+.epd-tk-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.epd-tk-ico {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+.epd-tk-text {
+  display: flex;
+  flex-direction: column;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+}
+.epd-tk-label {
+  color: #ccc;
+}
+.epd-tk-value {
+  color: #e6e6e6;
+}
+
+.epd-divider {
+  height: 1px;
+  margin: 20px 0;
+  background: #2a2a2a;
+}
+
+.epd-more {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 16px;
+}
+.epd-more-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #575757;
+  border-radius: 12px;
+  background: none;
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.epd-more-box > span {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+.epd-more-box img {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+.epd-more-chev {
+  width: 8px !important;
+  height: 16px !important;
+}
+
+/* ── Itinerary tab ── */
+.epd-itin {
+  padding: 0 16px;
+}
+.epd-day {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.epd-day-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.epd-day-badge {
+  flex-shrink: 0;
+  padding: 4px 12px;
+  border-radius: 60px;
+  background: #f5f5f5;
+  color: #121212;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.epd-day-title {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 22px;
+  color: #fff;
+}
+.epd-day-media {
+  width: 100%;
+  height: 180px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.epd-day-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.epd-day-list {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.epd-day-list li {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  color: #e6e6e6;
+}
+.epd-day-meal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  color: #ccc;
+}
+.epd-day-meal-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff490;
+}
+.epd-day-divider {
+  height: 1px;
+  margin: 20px 0;
+  background: #2a2a2a;
+}
+.epd-itin-end {
+  margin: 24px 0 0;
+  text-align: center;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff490;
+}
+
+/* ── Gallery tab ── */
+.epd-gallery-body {
+  display: flex;
+  flex-direction: column;
+}
+.epd-gallery-title {
+  padding: 0 16px;
+}
+.epd-gallery-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.epd-gallery-scroll::-webkit-scrollbar { display: none; }
+.epd-gallery-item {
+  flex-shrink: 0;
+  width: 160px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.epd-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.epd-strip {
+  height: 8px;
+  background: #3d3d3d;
+  margin: 8px 0 24px;
+}
+
+.epd-spotlight {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 16px;
+}
+.epd-spot-scroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+.epd-spot-scroll::-webkit-scrollbar { display: none; }
+.epd-spot-card {
+  position: relative;
+  flex-shrink: 0;
+  width: 200px;
+  height: 273px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  scroll-snap-align: start;
+  -webkit-tap-highlight-color: transparent;
+}
+.epd-spot-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.epd-spot-play {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 42px;
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.2);
+}
+
+.epd-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.epd-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4d4d4d;
+}
+.epd-dot--active {
+  background: #fff;
+}
+
+/* ── Footer ── */
+.epd-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 60px 20px;
+}
+.epd-footer img {
+  width: 40px;
+  height: 40px;
+}
+.epd-footer-text {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: #d2d2d2;
+}
+
+/* ── Sticky bottom bar ── */
+.epd-bottombar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: var(--app-width);
+  z-index: 1000;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 11px 4px 20px;
+  box-sizing: border-box;
+  background: rgba(20, 20, 20, 0.6);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  border-top: 1px solid #262626;
+}
+
+.epd-price-col {
+  display: flex;
+  flex-direction: column;
+}
+.epd-price-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.epd-price {
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #fff;
+}
+.epd-discount {
+  padding: 2px 8px;
+  border-radius: 30px;
+  background: #e8e8e8;
+  color: #121212;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  line-height: 16px;
+}
+.epd-price-sub {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  line-height: 16px;
+  color: #ccc;
+}
+
+.epd-book {
+  width: 148px;
+  height: 48px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 56px;
+  background: #fff;
+  color: #121212;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
