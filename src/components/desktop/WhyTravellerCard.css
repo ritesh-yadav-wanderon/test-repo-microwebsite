@@ -1,0 +1,68 @@
+/* Figma 5224:12932 — 268x350 photo card, 18px padding, radius 16 */
+.wtcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 268px;
+  height: 350px;
+  padding: 18px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 58.9px rgba(0, 0, 0, 0.15);
+  color: #fff;
+}
+
+.wtcard--dark-text {
+  color: #202020;
+}
+
+.wtcard__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+.wtcard__text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+  height: 61px;
+}
+
+.wtcard__title {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: -0.5px;
+}
+
+.wtcard__sub {
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+}
+
+.wtcard__plus {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0 7px;
+  border-radius: 100px;
+  background: #fff;
+}
+
+.wtcard__plus img {
+  width: 17.72px;
+  height: 17.72px;
+}

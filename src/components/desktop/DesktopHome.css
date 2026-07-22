@@ -1,0 +1,38 @@
+/* Desktop homepage overrides — active only ≥1024px and only while the
+   desktop home tree (.dhome) is mounted. Mobile layout is untouched. */
+@media (min-width: 1024px) {
+  .app-shell:has(.dhome) {
+    max-width: none;
+    box-shadow: none;
+  }
+
+  /* Mobile chrome injected by SiteChrome is not part of the desktop design */
+  .app-shell:has(.dhome) .site-header,
+  .app-shell:has(.dhome) .ostn,
+  .app-shell:has(.dhome) .bottom-nav {
+    display: none;
+  }
+}
+
+.dhome {
+  position: relative;
+  background: #fff;
+  min-height: 100vh;
+}
+
+/* Shared desktop section primitives */
+.dhome .dsection-title {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.dhome .dsection-sub {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  color: var(--text-muted);
+  text-align: center;
+}
