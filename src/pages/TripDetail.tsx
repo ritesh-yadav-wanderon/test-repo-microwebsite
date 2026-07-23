@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useCompare } from "../context/CompareContext";
 import "./TripDetail.css";
@@ -802,6 +802,15 @@ export default function TripDetail() {
   // Share sheet
   const [shareOpen, setShareOpen] = useState(false);
 
+  // WhatsApp FAB — appears once the user scrolls past the first fold (hero).
+  const [showWhatsApp, setShowWhatsApp] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setShowWhatsApp(window.scrollY > 420);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const openGallery = (imgs: string[], idx = 0) => {
     setGalleryImages(imgs);
     setGalleryIndex(idx);
@@ -1335,6 +1344,36 @@ export default function TripDetail() {
 
       {/* ── Sticky Bottom Nav (Figma 4518:15125 / 5406:15308) ───────── */}
       <div className="tdp2-sticky-nav">
+        {/* WhatsApp FAB — floats above the nav, appears past the first fold */}
+        {showWhatsApp && (
+          <a
+            className="tdp2-wa-fab"
+            href="https://api.whatsapp.com/send?phone=918130288566&text=Hi+WanderOn%2C+I+have+a+query%21"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Chat on WhatsApp"
+          >
+            <img src="/figma/nav/whatsapp-btn.svg" alt="" aria-hidden className="tdp2-wa-fab-img" />
+          </a>
+        )}
+
+        {/* Compare Trips bar — appears when this trip is added to compare */}
+        {inCompare && (
+          <button
+            className="tdp2-compare-bar"
+            type="button"
+            onClick={() => navigate("/compare")}
+          >
+            <img
+              src="/figma/nav2/icon-compare.svg"
+              alt=""
+              aria-hidden
+              className="tdp2-compare-bar-icon"
+            />
+            <span>Compare Trips</span>
+          </button>
+        )}
+
         {selectedBatch && (
           <div className="tdp2-sticky-tag">
             <div className="tdp2-sticky-tag-left">

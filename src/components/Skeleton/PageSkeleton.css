@@ -198,3 +198,149 @@
   height: 36px;
   border-radius: 8px;
 }
+
+/* ── Destination page skeleton ── */
+.psk-dhero {
+  position: relative;
+  width: 100%;
+  height: 460px;
+}
+.psk-dhero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+}
+.psk-dhero-foot {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.psk-dhero-title {
+  width: 70%;
+  height: 24px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.55);
+}
+.psk-dhero-rule {
+  width: 120px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.55);
+}
+.psk-dhero-cities {
+  display: flex;
+  gap: 14px;
+}
+.psk-dhero-city {
+  width: 56px;
+  height: 14px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.5);
+}
+.psk-info-card {
+  width: 100%;
+  height: 116px;
+  border-radius: 12px;
+}
+.psk-women {
+  width: 100%;
+  height: 44px;
+  border-radius: 10px;
+}
+
+/* Horizontal trip strip */
+.psk-strip {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 16px 40px;
+}
+.psk-strip-row {
+  display: flex;
+  gap: 14px;
+  overflow: hidden;
+}
+.psk-hcard {
+  flex: 0 0 auto;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.psk-hcard-img {
+  width: 100%;
+  height: 240px;
+  border-radius: 12px;
+}
+
+/* ── Product page skeleton ── */
+.psk-phero {
+  position: relative;
+  width: 100%;
+  height: 460px;
+}
+.psk-phero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0 0 16px 16px;
+}
+.psk-phero-thumbs {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.psk-phero-thumb {
+  width: 55px;
+  height: 55px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.5);
+}
+.psk-phero-bar {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.psk-phero-wish {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+}
+.psk-phero-pill {
+  width: 96px;
+  height: 40px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.5);
+}
+.psk-pd {
+  width: 100%;
+  height: 64px;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+.psk-city-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+.psk-city-pill {
+  width: 64px;
+  height: 16px;
+  border-radius: 4px;
+}

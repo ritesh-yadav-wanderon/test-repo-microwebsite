@@ -42,7 +42,7 @@
 }
 
 html {
-  background: #c9c4bd;
+  background: #ffffff;
 }
 
 html {
@@ -55,7 +55,7 @@ html::-webkit-scrollbar {
 
 body {
   font-family: var(--font);
-  background: #c9c4bd;
+  background: #ffffff;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;

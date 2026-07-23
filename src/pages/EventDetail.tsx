@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BurgerMenu from "../components/BurgerMenu/BurgerMenu";
 import "./EventDetail.css";
@@ -68,7 +68,29 @@ export default function EventDetail() {
   const [saved, setSaved] = useState(false);
   const [compared, setCompared] = useState(false);
   const [playing, setPlaying] = useState(true);
+  const [loading, setLoading] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  const [tabLoading, setTabLoading] = useState(false);
+
+  // Show section skeletons briefly while the page + media settle in.
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 900);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Re-show a section skeleton while the newly selected tab's content loads.
+  useEffect(() => {
+    if (!tabLoading) return;
+    const t = setTimeout(() => setTabLoading(false), 550);
+    return () => clearTimeout(t);
+  }, [tabLoading]);
+
+  const selectTab = (t: Tab) => {
+    if (t === tab) return;
+    setTab(t);
+    setTabLoading(true);
+  };
 
   const togglePlay = () => {
     const v = videoRef.current;
@@ -94,6 +116,8 @@ export default function EventDetail() {
       },
     });
   };
+
+  if (loading) return <EventDetailSkeleton />;
 
   return (
     <div className="epd-page">
@@ -189,7 +213,7 @@ export default function EventDetail() {
                 role="tab"
                 aria-selected={tab === t}
                 className={`epd-tab${tab === t ? " epd-tab--active" : ""}`}
-                onClick={() => setTab(t)}
+                onClick={() => selectTab(t)}
               >
                 {t === "about" ? "About the Event" : t === "itinerary" ? "Itinerary Details" : "Gallery"}
               </button>
@@ -199,9 +223,15 @@ export default function EventDetail() {
 
         {/* Tab body */}
         <div className="epd-body">
-          {tab === "about" && <AboutBody />}
-          {tab === "itinerary" && <ItineraryBody />}
-          {tab === "gallery" && <GalleryBody />}
+          {tabLoading ? (
+            <TabBodySkeleton tab={tab} />
+          ) : (
+            <>
+              {tab === "about" && <AboutBody />}
+              {tab === "itinerary" && <ItineraryBody />}
+              {tab === "gallery" && <GalleryBody />}
+            </>
+          )}
         </div>
 
         {/* Footer */}
@@ -299,6 +329,143 @@ function ItineraryBody() {
         </div>
       ))}
       <p className="epd-itin-end">End Of the Journey</p>
+    </div>
+  );
+}
+
+/* ── Skeletons ───────────────────────────────────────────────── */
+function Sk({ w, h, r, className }: { w?: number | string; h?: number | string; r?: number; className?: string }) {
+  return (
+    <span
+      className={`epd-sk${className ? " " + className : ""}`}
+      style={{ width: w, height: h, borderRadius: r }}
+      aria-hidden
+    />
+  );
+}
+
+function AboutSkeleton() {
+  return (
+    <>
+      <div className="epd-about">
+        <Sk h={16} className="epd-sk--full" />
+        <Sk h={16} w="70%" className="epd-sk--mt" />
+      </div>
+      <div className="epd-tk">
+        <Sk w={130} h={18} />
+        {[0, 1, 2, 3].map((i) => (
+          <div className="epd-tk-item" key={i}>
+            <Sk w={36} h={36} r={10} />
+            <div className="epd-tk-text epd-sk-stack">
+              <Sk w={80} h={12} />
+              <Sk w="65%" h={14} />
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="epd-divider" aria-hidden />
+      <div className="epd-more">
+        <Sk w={60} h={18} />
+        <Sk h={44} className="epd-sk--full" r={12} />
+      </div>
+    </>
+  );
+}
+
+function ItinerarySkeleton() {
+  return (
+    <div className="epd-itin">
+      {[0, 1, 2].map((i) => (
+        <div className="epd-day" key={i}>
+          <div className="epd-day-head">
+            <Sk w={58} h={26} r={60} />
+            <Sk w="55%" h={18} />
+          </div>
+          <Sk h={180} className="epd-sk--full" r={12} />
+          <Sk h={14} w="80%" />
+          <Sk h={14} w="60%" />
+          {i < 2 && <div className="epd-day-divider" aria-hidden />}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function GallerySkeleton() {
+  return (
+    <div className="epd-gallery-body">
+      <div className="epd-gallery-title">
+        <Sk w={70} h={18} />
+      </div>
+      <div className="epd-gallery-scroll">
+        {[205, 132, 205, 166, 205].map((h, i) => (
+          <Sk key={i} w={160} h={h} r={8} className="epd-sk-shrink" />
+        ))}
+      </div>
+      <div className="epd-strip" aria-hidden />
+      <div className="epd-spotlight">
+        <Sk w={120} h={18} />
+        <div className="epd-spot-scroll">
+          {[0, 1, 2].map((i) => (
+            <Sk key={i} w={200} h={273} r={6} className="epd-sk-shrink" />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function TabBodySkeleton({ tab }: { tab: Tab }) {
+  if (tab === "itinerary") return <ItinerarySkeleton />;
+  if (tab === "gallery") return <GallerySkeleton />;
+  return <AboutSkeleton />;
+}
+
+function EventDetailSkeleton() {
+  return (
+    <div className="epd-page">
+      <div className="epd-hero epd-sk epd-sk--hero" aria-hidden>
+        <div className="epd-hero-actions">
+          <Sk w={40} h={40} r={30} className="epd-sk--dark" />
+          <Sk w={130} h={40} r={30} className="epd-sk--dark" />
+          <Sk w={90} h={40} r={30} className="epd-sk--dark" />
+          <Sk w={40} h={40} r={30} className="epd-sk--dark" />
+        </div>
+      </div>
+
+      <div className="epd-sheet">
+        <span className="epd-handle" aria-hidden />
+        <div className="epd-head epd-sk-stack">
+          <Sk w="70%" h={20} />
+          <Sk w={200} h={16} />
+        </div>
+        <div className="epd-route">
+          <Sk h={12} w="100%" />
+          <div className="epd-route-places">
+            <Sk w={110} h={32} />
+            <Sk w={150} h={32} />
+          </div>
+        </div>
+        <div className="epd-tabs-wrap">
+          <Sk h={42} className="epd-sk--full" r={60} />
+        </div>
+        <div className="epd-body">
+          <AboutSkeleton />
+        </div>
+        <div className="epd-footer">
+          <Sk w={40} h={40} r={20} />
+          <Sk w="80%" h={28} />
+          <Sk w="70%" h={28} />
+        </div>
+      </div>
+
+      <div className="epd-bottombar">
+        <div className="epd-price-col epd-sk-stack">
+          <Sk w={120} h={20} />
+          <Sk w={140} h={12} />
+        </div>
+        <Sk w={148} h={48} r={56} />
+      </div>
     </div>
   );
 }

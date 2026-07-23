@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import type { Trip } from "../../types";
 import "./UpcomingTrips.css";
 import "./TripCardItem.css";
@@ -50,7 +50,7 @@ export function TripCardItem({ trip, batchesText, href }: { trip: Trip; batchesT
   const batches = batchesText ?? formatBatches(trip.batches);
 
   return (
-    <a className="tdp2-more-card-v2" href={href ?? `/trip/${trip.slug}`}>
+    <Link className="tdp2-more-card-v2" to={href ?? `/trip/${trip.slug}`}>
       <div className="tdp2-more-cv2-img-wrap">
         {trip.image
           ? <img src={trip.image} alt={trip.title} className="tdp2-more-cv2-img" loading="lazy" />
@@ -74,7 +74,7 @@ export function TripCardItem({ trip, batchesText, href }: { trip: Trip; batchesT
         <p className="tdp2-more-cv2-price">&#8377;{formatPrice(trip.startingPrice)}/-</p>
         <p className="tdp2-more-cv2-per">Onwards per person</p>
       </div>
-    </a>
+    </Link>
   );
 }
 

@@ -1,1 +1,0 @@
-export { homeHero } from "./homeHero";

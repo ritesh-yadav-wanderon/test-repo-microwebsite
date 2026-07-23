@@ -8,6 +8,9 @@ interface BottomNavProps {
   variant?: "light" | "dark";
 }
 
+const WHATSAPP_URL =
+  "https://api.whatsapp.com/send?phone=918130288566&text=Hi+WanderOn%2C+I+have+a+query%21";
+
 export default function BottomNav({ variant = "light" }: BottomNavProps) {
   const { isLoggedIn, authReady } = useAuth();
   const { count: compareCount } = useCompare();
@@ -98,8 +101,13 @@ export default function BottomNav({ variant = "light" }: BottomNavProps) {
           <span className="bn-label">Account</span>
         </button>
 
-        {/* Chat */}
-        <button type="button" className="bn-item" aria-label="Chat">
+        {/* Chat — opens WhatsApp */}
+        <button
+          type="button"
+          className="bn-item"
+          aria-label="Chat on WhatsApp"
+          onClick={() => window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer")}
+        >
           <span className="bn-ico">
             <img src={`${P}${dark ? "chat.svg" : "icon-chat.svg"}`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
           </span>

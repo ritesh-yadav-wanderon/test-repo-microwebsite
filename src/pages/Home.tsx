@@ -6,6 +6,7 @@ import UpcomingTrips from "../components/UpcomingTrips";
 import OriginalsSection from "../components/OriginalsSection";
 import TribeStories from "../components/TribeStories";
 import PlotBanner from "../components/PlotBanner";
+import WhyWanderon from "../components/WhyWanderon/WhyWanderon";
 import QueryBanner from "../components/QueryBanner";
 import FooterMessage from "../components/FooterMessage/FooterMessage";
 import Footer from "../components/Footer";
@@ -40,6 +41,7 @@ export default function Home() {
       <OriginalsSection />
       <TribeStories />
       <PlotBanner />
+      <WhyWanderon />
       <QueryBanner />
       <FooterMessage />
       <Footer />

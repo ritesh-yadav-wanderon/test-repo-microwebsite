@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import "./DestinationStrip.css";
 
 const CAT_SEP = "/figma/dest/cat-sep.png";
@@ -42,7 +43,7 @@ const INTERNATIONAL: Destination[] = [
 
 function DestItem({ dest }: { dest: Destination }) {
   return (
-    <a className="dest-item" href={`/destination/${dest.name}`} aria-label={dest.name}>
+    <Link className="dest-item" to={`/destination/${dest.name}`} aria-label={dest.name}>
       <div className="dest-item-img-wrap">
         <img
           className={`dest-item-ellipse dest-item-ellipse--${dest.ellipse}`}
@@ -58,7 +59,7 @@ function DestItem({ dest }: { dest: Destination }) {
         />
       </div>
       <span className="dest-item-label">{dest.name}</span>
-    </a>
+    </Link>
   );
 }
 

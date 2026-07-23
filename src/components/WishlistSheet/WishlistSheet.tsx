@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { Link } from "react-router-dom";
 import "./WishlistSheet.css";
 
 interface WishlistTrip {
@@ -69,10 +70,11 @@ function HeartIcon({ filled }: { filled: boolean }) {
   );
 }
 
-function WishCard({ trip, inCompare, onToggleCompare }: {
+function WishCard({ trip, inCompare, onToggleCompare, onNavigate }: {
   trip: WishlistTrip;
   inCompare: boolean;
   onToggleCompare: () => void;
+  onNavigate: () => void;
 }) {
   const [wishlisted, setWishlisted] = useState(true);
 
@@ -81,7 +83,7 @@ function WishCard({ trip, inCompare, onToggleCompare }: {
   const batchText = visibleBatches.map(fmtBatch).join(", ");
 
   return (
-    <a className="wl-card" href={`/trip/${trip.slug}`}>
+    <Link className="wl-card" to={`/trip/${trip.slug}`} onClick={onNavigate}>
       {/* Square image */}
       <div className="wl-card-img-wrap">
         <img className="wl-card-img" src={trip.image} alt={trip.title} loading="lazy" />
@@ -124,7 +126,7 @@ function WishCard({ trip, inCompare, onToggleCompare }: {
           <span className="wl-card-price-sub">Onwards per person</span>
         </div>
       </div>
-    </a>
+    </Link>
   );
 }
 
@@ -227,6 +229,7 @@ export default function WishlistSheet({ isOpen, onClose }: WishlistSheetProps) {
               trip={trip}
               inCompare={compareSet.has(trip.slug)}
               onToggleCompare={() => toggleCompare(trip.slug)}
+              onNavigate={onClose}
             />
           ))}
         </div>

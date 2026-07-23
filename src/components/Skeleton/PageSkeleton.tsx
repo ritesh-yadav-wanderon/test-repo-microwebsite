@@ -3,6 +3,8 @@ import "./PageSkeleton.css";
 export type SkeletonVariant =
   | "list"
   | "detail"
+  | "destination"
+  | "product"
   | "form"
   | "profile"
   | "bookingDetail"
@@ -82,6 +84,87 @@ export default function PageSkeleton({ variant = "generic" }: PageSkeletonProps)
           <span className="sk sk-line psk-w70" />
           <span className="sk sk-line psk-w80" />
           <span className="sk psk-block-120" />
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === "destination") {
+    return (
+      <div className="psk" aria-busy="true" aria-label="Loading">
+        {/* Full-bleed hero with title + city bar (mirrors .dp-hero) */}
+        <div className="psk-dhero">
+          <span className="sk psk-dhero-img" />
+          <div className="psk-dhero-foot">
+            <span className="sk psk-dhero-title" />
+            <span className="sk psk-dhero-rule" />
+            <div className="psk-dhero-cities">
+              {Array.from({ length: 5 }, (_, i) => (
+                <span key={i} className="sk psk-dhero-city" />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Info card + women strip (mirrors .dp-info) */}
+        <div className="psk-body">
+          <span className="sk sk-line psk-w40" />
+          <span className="sk psk-info-card" />
+          <span className="sk psk-women" />
+        </div>
+
+        {/* Horizontal trip strip (mirrors .dp-trip-strip / .up-cards) */}
+        <div className="psk-strip">
+          <span className="sk sk-line psk-w50 psk-lg" />
+          <div className="psk-strip-row">
+            {Array.from({ length: 3 }, (_, i) => (
+              <div className="psk-hcard" key={i}>
+                <span className="sk psk-hcard-img" />
+                <span className="sk sk-line psk-w90" />
+                <span className="sk sk-line psk-w60" />
+                <span className="sk sk-line psk-w40 psk-mt" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (variant === "product") {
+    return (
+      <div className="psk" aria-busy="true" aria-label="Loading">
+        {/* Hero with thumb strip + action pills (mirrors .tdp2-hero) */}
+        <div className="psk-phero">
+          <span className="sk psk-phero-img" />
+          <div className="psk-phero-thumbs">
+            {Array.from({ length: 4 }, (_, i) => (
+              <span key={i} className="sk psk-phero-thumb" />
+            ))}
+          </div>
+          <div className="psk-phero-bar">
+            <span className="sk psk-phero-wish" />
+            <span className="sk psk-phero-pill" />
+            <span className="sk psk-phero-pill" />
+          </div>
+        </div>
+
+        {/* Trip info card (mirrors .tdp2-ti-card) */}
+        <div className="psk-body">
+          <span className="sk sk-line psk-w40" />
+          <span className="sk sk-line psk-w90 psk-lg" />
+          <span className="sk sk-line psk-w60 psk-lg" />
+          <div className="psk-chips">
+            <span className="sk psk-chip" />
+            <span className="sk psk-chip" />
+            <span className="sk psk-chip" />
+          </div>
+          <span className="sk psk-pd" />
+          <div className="psk-city-row">
+            {Array.from({ length: 4 }, (_, i) => (
+              <span key={i} className="sk psk-city-pill" />
+            ))}
+          </div>
         </div>
       </div>
     );

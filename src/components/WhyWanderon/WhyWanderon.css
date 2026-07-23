@@ -1,0 +1,162 @@
+/* ── Why travellers choose WanderOn ── */
+.ww {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Header */
+.ww-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.ww-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  color: #4e4e4e;
+}
+
+.ww-sub {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #757575;
+}
+
+/* Horizontal card row */
+.ww-row {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  padding: 4px 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 16px;
+}
+.ww-row::-webkit-scrollbar {
+  display: none;
+}
+
+/* Card */
+.ww-card {
+  position: relative;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 268px;
+  height: 350px;
+  padding: 18px;
+  border-radius: 16px;
+  overflow: hidden;
+  scroll-snap-align: start;
+  background: transparent;
+  transition: background 0.35s ease, box-shadow 0.35s ease;
+}
+
+.ww-card--open {
+  background: #e7e7e7;
+  box-shadow: 0px 4px 20px 0px rgba(0, 0, 0, 0.06);
+}
+
+.ww-card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+/* Text block */
+.ww-card-text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  width: 100%;
+  color: #ffffff;
+}
+
+.ww-card-text--dark {
+  color: #202020;
+}
+
+.ww-card-text--open {
+  gap: 12px;
+  color: #3d3d3d;
+}
+
+.ww-card-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: -0.5px;
+  width: 100%;
+}
+
+.ww-card-body {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  width: 100%;
+}
+
+.ww-card-text--open .ww-card-body {
+  margin-top: 20px;
+  line-height: 18px;
+}
+
+/* Toggle button */
+.ww-card-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 100px;
+  background: #ffffff;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+}
+
+.ww-card-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.35s cubic-bezier(0.16, 0.84, 0.3, 1);
+}
+
+/* Plus rotates 45° into a cross */
+.ww-card-btn-icon--close {
+  transform: rotate(45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ww-card,
+  .ww-card-btn-icon {
+    transition: none;
+  }
+}

@@ -35,6 +35,48 @@ function parsePriceNum(price: string): number {
   return Number(String(price).replace(/[₹,\s/\-]/g, "")) || 0;
 }
 
+type SortKey = "price-asc" | "price-desc" | "duration" | "recent";
+
+const SORT_OPTIONS: { key: SortKey; label: string }[] = [
+  { key: "price-asc", label: "Price: Low to High" },
+  { key: "price-desc", label: "Price: High to Low" },
+  { key: "duration", label: "Duration: Short to Long" },
+  { key: "recent", label: "Recent Batch" },
+];
+
+/** Nearest upcoming batch timestamp; trips without batches sort last. */
+function nearestBatchTime(trip: Trip): number {
+  const batches = trip.batches ?? [];
+  if (!batches.length) return Infinity;
+  const now = Date.now();
+  const times = batches
+    .map(b => new Date(b + "T00:00:00").getTime())
+    .filter(t => !Number.isNaN(t));
+  if (!times.length) return Infinity;
+  const upcoming = times.filter(t => t >= now);
+  return upcoming.length ? Math.min(...upcoming) : Math.min(...times);
+}
+
+function sortTrips(trips: Trip[], sortBy: SortKey | null): Trip[] {
+  if (!sortBy) return trips;
+  const out = [...trips];
+  switch (sortBy) {
+    case "price-asc":
+      out.sort((a, b) => parsePriceNum(a.startingPrice) - parsePriceNum(b.startingPrice));
+      break;
+    case "price-desc":
+      out.sort((a, b) => parsePriceNum(b.startingPrice) - parsePriceNum(a.startingPrice));
+      break;
+    case "duration":
+      out.sort((a, b) => (a.duration?.nights ?? Infinity) - (b.duration?.nights ?? Infinity));
+      break;
+    case "recent":
+      out.sort((a, b) => nearestBatchTime(a) - nearestBatchTime(b));
+      break;
+  }
+  return out;
+}
+
 function matchesCategory(label: string, trip: Trip): boolean {
   const price = parsePriceNum(trip.startingPrice);
   const cats = (trip.categories ?? []).join(" ").toLowerCase();
@@ -143,6 +185,8 @@ export default function SearchResults() {
   const [filterTab, setFilterTab] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
+  const [sortOpen, setSortOpen] = useState(false);
+  const [sortBy, setSortBy] = useState<SortKey | null>(null);
 
   // Fetch trips once on mount
   useEffect(() => {
@@ -154,12 +198,12 @@ export default function SearchResults() {
     return () => { cancelled = true; };
   }, []);
 
-  // Reset pagination when filters change
-  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [searchParams]);
+  // Reset pagination when filters or sort change
+  useEffect(() => { setVisibleCount(PAGE_SIZE); }, [searchParams, sortBy]);
 
   const filteredTrips = useMemo(
-    () => filterTrips(allTrips, searchParams),
-    [allTrips, searchParams]
+    () => sortTrips(filterTrips(allTrips, searchParams), sortBy),
+    [allTrips, searchParams, sortBy]
   );
 
   // IntersectionObserver for infinite scroll
@@ -252,6 +296,40 @@ export default function SearchResults() {
         }}
       />
 
+      {/* Sort By sheet */}
+      <div className={`sr-sort${sortOpen ? " sr-sort--open" : ""}`} aria-hidden={!sortOpen}>
+        <div className="sr-sort-overlay" onClick={() => setSortOpen(false)} />
+        <div className="sr-sort-panel" role="dialog" aria-modal="true" aria-label="Sort trips">
+          <div className="sr-sort-head">
+            <p className="sr-sort-title">Sort By</p>
+            <button className="sr-sort-close" type="button" onClick={() => setSortOpen(false)} aria-label="Close">
+              <img src="/figma/listing/close-icon.svg" alt="" width={20} height={20} />
+            </button>
+          </div>
+          <div className="sr-sort-list">
+            <button
+              type="button"
+              className={`sr-sort-opt${sortBy === null ? " sr-sort-opt--sel" : ""}`}
+              onClick={() => { setSortBy(null); setSortOpen(false); }}
+            >
+              <span>Recommended</span>
+              <span className="sr-sort-radio" aria-hidden />
+            </button>
+            {SORT_OPTIONS.map(opt => (
+              <button
+                key={opt.key}
+                type="button"
+                className={`sr-sort-opt${sortBy === opt.key ? " sr-sort-opt--sel" : ""}`}
+                onClick={() => { setSortBy(opt.key); setSortOpen(false); }}
+              >
+                <span>{opt.label}</span>
+                <span className="sr-sort-radio" aria-hidden />
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <SiteHeader2 destination={destinationLabel} date={dateLabel} showBack onBack={() => navigate(-1)} />
 
       <main className="sr-main">
@@ -268,9 +346,28 @@ export default function SearchResults() {
               <img src="/figma/listing/list-alt-add.svg" alt="" className="sr-fpill-ico" loading="lazy" />
               <span>Bucket List</span>
             </button>
-            <button className="sr-fpill sr-fpill--ctrl" type="button">
-              <span>Sort By</span>
-              <img src="/figma/listing/sort-arrow.svg" alt="" className="sr-fpill-ico" loading="lazy" />
+            <button
+              className={`sr-fpill sr-fpill--ctrl${sortBy ? " sr-fpill--active" : ""}`}
+              type="button"
+              onClick={() => setSortOpen(true)}
+              aria-haspopup="dialog"
+              aria-expanded={sortOpen}
+            >
+              <span>{sortBy ? SORT_OPTIONS.find(o => o.key === sortBy)?.label : "Sort By"}</span>
+              {sortBy ? (
+                <span
+                  className="sr-fpill-clear"
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Clear sort"
+                  onClick={(e) => { e.stopPropagation(); setSortBy(null); }}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); setSortBy(null); } }}
+                >
+                  <img src="/figma/listing/close-icon.svg" alt="" width={14} height={14} />
+                </span>
+              ) : (
+                <img src="/figma/listing/sort-arrow.svg" alt="" className="sr-fpill-ico" loading="lazy" />
+              )}
             </button>
             {PRESET_CHIPS.map(chip => (
               <button className="sr-fpill" key={chip} type="button"><span>{chip}</span></button>

@@ -1,50 +1,61 @@
-/* Inspiring Stories — Figma 3113:9626 / 9862 / 9648 */
+/* Inspiring Stories — single animated card. Figma 3113:9840 / 9862 / 9648 */
 
 .orig {
   width: 100%;
-}
-
-/* Horizontal scroll row */
-.orig-scroll {
-  display: flex;
-  gap: 16px;
   padding: 22px 16px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
+  box-sizing: border-box;
 }
 
-.orig-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-
-/* Card — 358×400, matches Figma frame */
+/* Card — 400px tall, fills the app width (Figma frame 358×400) */
 .orig-card {
   position: relative;
-  width: 358px;
-  height: 400px;
+  width: 100%;
+  aspect-ratio: 358 / 400;
   border-radius: 16px;
   overflow: hidden;
-  flex-shrink: 0;
-  scroll-snap-align: start;
-  cursor: pointer;
-  text-align: left;
-  border: none;
-  padding: 0;
+  background: #f6e7d5;
 }
 
+/* ── Slide layers (stacked, cross-fade) ── */
+.orig-slide {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 1.1s ease-in-out, visibility 0s linear 1.1s;
+}
 
-/* Content block — top-left, z above images */
+.orig-slide--active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: opacity 1.1s ease-in-out, visibility 0s;
+}
+
+/* ── Text content — top-left, slides up + fades in ── */
 .orig-content {
   position: absolute;
   left: 16px;
   top: 16px;
-  width: 200px;
+  width: 300px;
+  max-width: calc(100% - 40px);
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 13px;
   z-index: 2;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.85s ease 0.05s, transform 0.95s cubic-bezier(0.22, 0.61, 0.36, 1) 0.05s;
+}
+
+.orig-slide--active .orig-content {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .orig-story {
@@ -78,8 +89,22 @@
   justify-content: center;
   height: 36px;
   padding: 0 16px;
-  border: 0.667px solid #3d3d3d;
+  border: 0.667px solid rgba(61, 61, 61, 0.35);
   border-radius: 32px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(10px) saturate(140%);
+  -webkit-backdrop-filter: blur(10px) saturate(140%);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.orig-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 .orig-btn span {
@@ -91,40 +116,66 @@
   white-space: nowrap;
 }
 
-/* ── Hiker card images ── */
+/* ── Media wrapper — slides in from the right + fades ── */
+.orig-media {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
 
-/* Person on mountain — bottom-right, 260×241 */
+/* Only the incoming (active) media slides in; the outgoing one just fades in
+   place via the slide's opacity cross-fade — avoids the harsh double-swipe. */
+.orig-slide--active .orig-media {
+  animation: orig-media-in 1.35s cubic-bezier(0.16, 0.84, 0.3, 1) both;
+}
+
+@keyframes orig-media-in {
+  0% {
+    opacity: 0;
+    transform: translateX(120px) scale(1.06);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* ── Bhutan card images ── */
+
+/* Person on mountain — full width, bottom-right (crop preserved via ratio) */
 .orig-hiker {
   position: absolute;
-  bottom: 0;
+  bottom: -100px;
   right: 0;
-  width: 260px;
-  height: 241px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 260 / 241;
   object-fit: cover;
   object-position: left top;
   pointer-events: none;
   display: block;
 }
 
-/* Mountain bottom — centered at bottom, horizontally mirrored */
+/* Mountain bottom — full width at the bottom, horizontally mirrored */
 .orig-mountain-wrap {
   position: absolute;
   bottom: -40px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 260px;
-  height: 191px;
+  left: 0;
+  width: 100%;
+  aspect-ratio: 260 / 191;
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
 }
 
-/* scaleY(-1) + rotate(180deg) = net scaleX(-1) */
 .orig-mountain-inner {
   transform: scaleX(-1);
-  width: 260px;
-  height: 191px;
+  width: 100%;
+  height: 100%;
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
@@ -140,11 +191,22 @@
   display: block;
 }
 
-/* ── Architecture card images ── */
+/* Birds — small flock, upper-left of the scene */
+.orig-birds {
+  position: absolute;
+  left: 26.67px;
+  top: 186.67px;
+  width: 66.67px;
+  height: 28.28px;
+  object-fit: contain;
+  pointer-events: none;
+  display: block;
+}
 
+/* ── Architecture card images ── */
 .orig-arch {
   position: absolute;
-  width: 260px;
+  width: 100%;
   pointer-events: none;
   display: block;
   object-fit: cover;
@@ -157,9 +219,66 @@
   aspect-ratio: 1192 / 899;
 }
 
-/* Mosque — starts mid-card, right-aligned */
+/* Mosque — anchored bottom-right */
 .orig-arch--mosque {
-  top: 208px;
+  bottom: 0px;
   right: 0;
   aspect-ratio: 1192 / 899;
+}
+
+/* ── Transition indicator (progress bars) ── */
+.orig-progress {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.orig-prog {
+  position: relative;
+  width: 22px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(61, 61, 61, 0.18);
+  overflow: hidden;
+}
+
+.orig-prog-fill {
+  position: absolute;
+  inset: 0;
+  width: 0;
+  border-radius: 2px;
+  background: #3d3d3d;
+}
+
+.orig-prog--active .orig-prog-fill {
+  animation-name: orig-fill;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes orig-fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orig-slide,
+  .orig-content {
+    transition: opacity 0.4s ease;
+    transform: none;
+  }
+
+  .orig-slide--active .orig-media {
+    animation: none;
+  }
+
+  .orig-prog--active .orig-prog-fill {
+    animation: none;
+    width: 100%;
+  }
 }

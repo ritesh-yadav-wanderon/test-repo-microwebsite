@@ -2560,6 +2560,80 @@
   box-shadow: 0px -2px 6px rgba(0, 0, 0, 0.16);
   z-index: 100;
 }
+
+/* Compare Trips button — small pill attached above the sticky nav, left-aligned */
+.tdp2-compare-bar {
+  position: absolute;
+  left: 16px;
+  bottom: 100%;
+  width: 100%;
+  max-width: 120px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  background: #121212;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  text-wrap: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  animation: tdp2-slide-up 0.28s ease;
+}
+.tdp2-compare-bar-icon {
+  width: 14px;
+  height: 14px;
+  /* recolour the grey nav glyph to white */
+  filter: brightness(0) invert(1);
+}
+
+/* WhatsApp FAB — floats bottom-right, 16px above the sticky nav */
+.tdp2-wa-fab {
+  position: absolute;
+  right: 16px;
+  bottom: 100%;
+  margin-bottom: 16px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  -webkit-tap-highlight-color: transparent;
+  animation: tdp2-fab-in 0.3s ease;
+}
+.tdp2-wa-fab-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@keyframes tdp2-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes tdp2-fab-in {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 /* Selected-batch tag row (Figma 5406:15308) */
 .tdp2-sticky-tag {
   display: flex;

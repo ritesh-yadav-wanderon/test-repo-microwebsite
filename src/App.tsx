@@ -1,6 +1,7 @@
 import { lazy, Suspense, type ReactNode } from "react";
 import { Routes, Route } from "react-router-dom";
 import SiteChrome from "./components/SiteChrome";
+import ScrollToTop from "./components/ScrollToTop";
 import Home from "./pages/Home";
 import PageSkeleton, { type SkeletonVariant } from "./components/Skeleton/PageSkeleton";
 const SearchResults = lazy(() => import("./pages/SearchResults"));
@@ -26,16 +27,24 @@ function withSkeleton(element: ReactNode, variant: SkeletonVariant): ReactNode {
 export default function App() {
   return (
     <div className="app-shell">
+      <ScrollToTop />
       <SiteChrome />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/search" element={withSkeleton(<SearchResults />, "list")} />
-        <Route path="/destination/:slug" element={withSkeleton(<Destination />, "list")} />
-        <Route path="/trip/:slug" element={withSkeleton(<TripDetail />, "detail")} />
+        <Route path="/destination/:slug" element={withSkeleton(<Destination />, "destination")} />
+        <Route path="/trip/:slug" element={withSkeleton(<TripDetail />, "product")} />
         <Route path="/profile" element={withSkeleton(<Profile />, "profile")} />
         <Route path="/my-profile" element={withSkeleton(<MyProfile />, "form")} />
         <Route path="/events" element={withSkeleton(<Events />, "list")} />
-        <Route path="/event/:slug" element={withSkeleton(<EventDetail />, "detail")} />
+        <Route
+          path="/event/:slug"
+          element={
+            <Suspense fallback={<div style={{ minHeight: "100vh", background: "#121212" }} />}>
+              <EventDetail />
+            </Suspense>
+          }
+        />
         <Route path="/compare" element={withSkeleton(<Compare />, "list")} />
         <Route path="/legal" element={withSkeleton(<Legal />, "generic")} />
         <Route path="/booking" element={withSkeleton(<Booking />, "form")} />

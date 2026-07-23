@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import PaymentSheet from "../components/PaymentSheet/PaymentSheet";
 import Voucher, { type AppliedVoucher } from "../components/Voucher/Voucher";
 import "./Booking.css";
@@ -654,8 +654,8 @@ export default function Booking() {
             onChange={(e) => setAgreed(e.target.checked)}
           />
           <p className="bkg-agree-text">
-            I agree to the <a href="/legal">Payment Terms</a>, <a href="/legal">Cancellation Policy</a>,
-            General <a href="/legal">Terms &amp; Conditions</a>, and <a href="/legal">Privacy Policy</a>.
+            I agree to the <Link to="/legal">Payment Terms</Link>, <Link to="/legal">Cancellation Policy</Link>,
+            General <Link to="/legal">Terms &amp; Conditions</Link>, and <Link to="/legal">Privacy Policy</Link>.
           </p>
         </section>
       </div>

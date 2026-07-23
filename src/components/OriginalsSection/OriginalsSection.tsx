@@ -1,99 +1,176 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./OriginalsSection.css";
+
+/* Figma "Inspiring Stories" component — 3113:9840 / 9862 / 9648.
+   A single card that auto-cycles through 3 states: images move in and the
+   text changes. (Previously mis-built as a horizontal carousel.) */
 
 const GRADIENT =
   "linear-gradient(-55.37deg, rgb(252, 223, 218) 19.305%, rgb(207, 225, 243) 78.195%)";
 
-const CARDS = [
+type SlideVariant = "ladakh" | "rome" | "almaty";
+
+type Slide = {
+  id: string;
+  title: string;
+  body: string;
+  bg: string;
+  variant: SlideVariant;
+  destination: string;
+};
+
+const SLIDES: Slide[] = [
   {
-    id: "inspiring",
-    title: "Inspiring Stories",
-    body: "In Bhutan, luxury feels less like indulgence and more like ease. This Bhutan self-drive expedition offers curated comfort across long Himalayan routes.",
-    variant: "hiker" as const,
+    id: "Ladakh",
+    title: "Ladakh",
+    body: "Trade the ordinary for the extraordinary. High in the Himalayas, discover a rugged high-altitude desert of cliffside monasteries and vivid blue lakes. This isn't just a trip—it's an expedition for the soul.",
+    bg: "#f6e7d5",
+    variant: "ladakh",
+    destination: "Ladakh",
   },
   {
     id: "rome",
     title: "Rome",
-    body: "Step into the eternal city — where every cobblestone tells a story and every corner hides a marvel waiting to be discovered.",
-    variant: "rome" as const,
+    body: "Where ancient ruins meet bustling modern life. Wander cobblestone alleys, stand in awe of the Colosseum, and indulge in world-class espresso and pasta. The Eternal City awaits.",
+    bg: GRADIENT,
+    variant: "rome",
+    destination: "Rome",
   },
   {
-    id: "mosque",
-    title: "Inspiring Stories",
-    body: "From ancient minarets to vast desert skies, every journey here is a chapter written in wonder.",
-    variant: "mosque" as const,
+    id: "almaty",
+    title: "Almaty",
+    body: "A surprising blend of cosmopolitan flair and untamed wilderness. Vibrant café culture and leafy avenues sit right at the majestic foothills of snow-capped peaks and turquoise alpine lakes.",
+    bg: GRADIENT,
+    variant: "almaty",
+    destination: "Almaty",
   },
 ];
 
-function OrigCard({ title, body, variant }: (typeof CARDS)[0]) {
-  const isHiker = variant === "hiker";
-  const style = isHiker
-    ? { background: "#f6e7d5" }
-    : { backgroundImage: GRADIENT };
+const INTERVAL = 4500;
 
-  return (
-    <button className="orig-card" style={style} type="button">
-      <div className="orig-content">
-        <div className="orig-story">
-          <p className="orig-title">{title}</p>
-          <p className="orig-body">{body}</p>
-        </div>
-        <div className="orig-btn">
-          <span>Explore</span>
-        </div>
-      </div>
-
-      {isHiker && (
-        <>
-          <img
-            src="/figma/originals/hiker.png"
-            alt=""
-            aria-hidden
-            className="orig-hiker"
-          />
-          <div className="orig-mountain-wrap">
-            <div className="orig-mountain-inner">
-              <img
-                src="/figma/originals/mountain-bottom.png"
-                alt=""
-                aria-hidden
-                className="orig-mountain"
-              />
-            </div>
+function SlideMedia({ variant }: { variant: SlideVariant }) {
+  if (variant === "ladakh") {
+    return (
+      <>
+        <div className="orig-mountain-wrap">
+          <div className="orig-mountain-inner">
+            <img
+              src="/figma/originals/mountain-bottom.png"
+              alt=""
+              aria-hidden
+              className="orig-mountain"
+            />
           </div>
-          </>
-      )}
+        </div>
+        <img
+          src="/figma/originals/hiker.png"
+          alt=""
+          aria-hidden
+          className="orig-hiker"
+        />
+        <img
+          src="/figma/originals/birds.png"
+          alt=""
+          aria-hidden
+          className="orig-birds"
+        />
+      </>
+    );
+  }
 
-      {variant === "rome" && (
-        <>
-          <img
-            src="/figma/originals/roma.png"
-            alt=""
-            aria-hidden
-            className="orig-arch orig-arch--rome"
-          />
-          </>
-      )}
+  if (variant === "rome") {
+    return (
+      <img
+        src="/figma/originals/roma.png"
+        alt=""
+        aria-hidden
+        className="orig-arch orig-arch--rome"
+      />
+    );
+  }
 
-      {variant === "mosque" && (
-        <>
-          <img
-            src="/figma/originals/mosque.png"
-            alt=""
-            aria-hidden
-            className="orig-arch orig-arch--mosque"
-          />
-          </>
-      )}
-    </button>
+  // almaty
+  return (
+    <img
+      src="/figma/originals/mosque.png"
+      alt=""
+      aria-hidden
+      className="orig-arch orig-arch--mosque"
+    />
   );
 }
 
 export default function OriginalsSection() {
+  const [active, setActive] = useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const id = window.setInterval(() => {
+      setActive((i) => (i + 1) % SLIDES.length);
+    }, INTERVAL);
+    return () => window.clearInterval(id);
+  }, []);
+
+  const openDestination = (destination: string) => {
+    navigate(`/destination/${destination}`);
+  };
+
   return (
     <section className="orig">
-      <div className="orig-scroll">
-        {CARDS.map((card) => (
-          <OrigCard key={card.id} {...card} />
+      <div className="orig-card">
+        {SLIDES.map((slide, i) => (
+          <div
+            key={slide.id}
+            className={`orig-slide${i === active ? " orig-slide--active" : ""}`}
+            style={{ background: slide.bg }}
+            aria-hidden={i !== active}
+            role="link"
+            tabIndex={i === active ? 0 : -1}
+            aria-label={`Explore ${slide.title}`}
+            onClick={() => openDestination(slide.destination)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                openDestination(slide.destination);
+              }
+            }}
+          >
+            <div className="orig-media">
+              <SlideMedia variant={slide.variant} />
+            </div>
+
+            <div className="orig-content">
+              <div className="orig-story">
+                <p className="orig-title">{slide.title}</p>
+                <p className="orig-body">{slide.body}</p>
+              </div>
+              <button
+                className="orig-btn"
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openDestination(slide.destination);
+                }}
+              >
+                <span>Explore</span>
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="orig-progress" aria-hidden>
+        {SLIDES.map((slide, i) => (
+          <span
+            key={slide.id}
+            className={`orig-prog${i === active ? " orig-prog--active" : ""}`}
+          >
+            <span
+              className="orig-prog-fill"
+              style={{ animationDuration: `${INTERVAL}ms` }}
+            />
+          </span>
         ))}
       </div>
     </section>

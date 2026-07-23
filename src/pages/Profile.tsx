@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import PageSkeleton from "../components/Skeleton/PageSkeleton";
 import "./Profile.css";
 
 const P = "/figma/profile/";
@@ -26,7 +27,9 @@ export default function Profile() {
     }
   }, [authReady, isLoggedIn, navigate]);
 
-  if (!authReady || !isLoggedIn) return null;
+  // While auth is being verified (or during the redirect for logged-out users),
+  // show the profile skeleton instead of a blank screen.
+  if (!authReady || !isLoggedIn) return <PageSkeleton variant="profile" />;
 
   const phone = user?.phone ?? "";
   const countryCode = user?.countryCode ?? "+91";

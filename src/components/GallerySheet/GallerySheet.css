@@ -233,6 +233,7 @@
 }
 
 .gsh-img-wrap {
+  position: relative;
   flex-shrink: 0;
   width: 300px;
   height: 400px;
@@ -241,11 +242,23 @@
   scroll-snap-align: start;
 }
 
+.gsh-img-sk {
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+}
+
 .gsh-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.gsh-img--loaded {
+  opacity: 1;
 }
 
 /* ── Scroll buttons row ── */

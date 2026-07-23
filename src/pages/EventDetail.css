@@ -663,3 +663,52 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
+
+/* ── Dark skeletons ── */
+.epd-sk {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  background: #242424;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.epd-sk::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: sk-shimmer 1.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .epd-sk::after { animation: none; }
+}
+
+.epd-sk--full {
+  width: 100%;
+}
+.epd-sk--mt {
+  margin-top: 8px;
+}
+.epd-sk--dark {
+  background: rgba(0, 0, 0, 0.35);
+}
+.epd-sk-shrink {
+  flex-shrink: 0;
+}
+.epd-sk-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Hero skeleton keeps its full height and anchors the action chips at the bottom */
+.epd-sk--hero {
+  border-radius: 0;
+}

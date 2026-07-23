@@ -259,7 +259,7 @@ const DEST_DATA: Record<string, DestData> = {
 };
 
 const DEFAULT_DATA: DestData = {
-  heroImage: "https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=900&q=80&auto=format&fit=crop",
+  heroImage: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=900&q=80&auto=format&fit=crop",
   heroTitle: "Group trips",
   travelScore: 4.5,
   tags: ["Adventure Trips", "Cultural Tours", "Weekend Escapes"],

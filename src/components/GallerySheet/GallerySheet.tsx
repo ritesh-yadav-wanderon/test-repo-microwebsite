@@ -4,6 +4,32 @@ import ScrollButtons from "../ScrollButtons/ScrollButtons";
 
 const TABS = ["Destination", "Activities", "Accommodation", "Transfer"];
 
+/** Single gallery image with a shimmer placeholder shown until it loads. */
+function GalleryImg({ src, index }: { src: string; index: number }) {
+  const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    // Cached images may already be complete before onLoad can fire.
+    if (imgRef.current?.complete) setLoaded(true);
+  }, [src]);
+
+  return (
+    <div className="gsh-img-wrap">
+      {!loaded && <div className="gsh-img-sk sk" aria-hidden />}
+      <img
+        ref={imgRef}
+        src={src}
+        alt={`Photo ${index + 1}`}
+        className={`gsh-img${loaded ? " gsh-img--loaded" : ""}`}
+        loading="lazy"
+        onLoad={() => setLoaded(true)}
+        onError={() => setLoaded(true)}
+      />
+    </div>
+  );
+}
+
 interface GallerySheetProps {
   isOpen: boolean;
   onClose: () => void;
@@ -127,9 +153,7 @@ export default function GallerySheet({
       {/* Photo scroll */}
       <div className="gsh-scroll" ref={scrollRef} onScroll={handleScroll}>
         {images.map((src, i) => (
-          <div key={i} className="gsh-img-wrap">
-            <img src={src} alt={`Photo ${i + 1}`} className="gsh-img" loading="lazy" />
-          </div>
+          <GalleryImg key={i} src={src} index={i} />
         ))}
       </div>
 
