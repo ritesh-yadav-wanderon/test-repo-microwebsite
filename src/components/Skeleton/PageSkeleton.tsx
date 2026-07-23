@@ -1,4 +1,5 @@
 import "./PageSkeleton.css";
+import { useIsDesktop } from "../../hooks/useIsDesktop";
 
 export type SkeletonVariant =
   | "list"
@@ -50,7 +51,44 @@ function Field() {
   return <span className="sk psk-field" />;
 }
 
+/** Desktop-shaped loading placeholder — prevents the mobile skeleton from
+ *  flashing on ≥1024px pages (product / destination) before the desktop tree
+ *  mounts. */
+function DesktopSkeleton() {
+  return (
+    <div className="dpsk" aria-busy="true" aria-label="Loading">
+      <div className="dpsk-header">
+        <span className="sk dpsk-logo" />
+        <span className="sk dpsk-navlinks" />
+      </div>
+      <div className="dpsk-inner">
+        <span className="sk sk-line dpsk-title" />
+        <div className="dpsk-gallery">
+          <span className="sk dpsk-g-main" />
+          <span className="sk dpsk-g-mid" />
+          <div className="dpsk-g-col">
+            <span className="sk dpsk-g-small" />
+            <span className="sk dpsk-g-small" />
+          </div>
+        </div>
+        <div className="dpsk-cols">
+          <div className="dpsk-col-main">
+            <span className="sk sk-line dpsk-w70" />
+            <span className="sk sk-line dpsk-w50" />
+            <span className="sk dpsk-block" />
+            <span className="sk dpsk-block" />
+          </div>
+          <span className="sk dpsk-card" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function PageSkeleton({ variant = "generic" }: PageSkeletonProps) {
+  const isDesktop = useIsDesktop();
+  if (isDesktop) return <DesktopSkeleton />;
+
   if (variant === "list") {
     return (
       <div className="psk" aria-busy="true" aria-label="Loading">

@@ -1,0 +1,777 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   Desktop product / trip-detail page — Figma 3999:11555
+   Active only ≥1024px, only while .dtdp is mounted. The mobile TripDetail
+   layout (.tdp2-*) is untouched; a handful of .tdp2-* itinerary blocks are
+   reused inside .dtdp-itin-content.
+   ══════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 1024px) {
+  .app-shell:has(.dtdp) {
+    max-width: none;
+    box-shadow: none;
+    background: #fff;
+  }
+  /* Global mobile chrome is not part of the desktop design */
+  .app-shell:has(.dtdp) .site-header,
+  .app-shell:has(.dtdp) .ostn,
+  .app-shell:has(.dtdp) .bottom-nav {
+    display: none;
+  }
+}
+
+.dtdp {
+  --dtdp-max: 1280px;
+  --dtdp-pad: 80px;
+  position: relative;
+  background: #fff;
+  min-height: 100vh;
+  color: #3d3d3d;
+  font-family: "Roboto", system-ui, sans-serif;
+}
+
+/* ── Light sticky header ─────────────────────────────────────────────────── */
+.dtdp-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+  padding: 12px 40px;
+  background: #fff;
+  box-shadow: 0 4px 36.7px rgba(0, 0, 0, 0.11);
+}
+.dtdp-header-logo {
+  width: 60px;
+  height: 60px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+.dtdp-header-logo img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+.dtdp-header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.dtdp-header-link {
+  border: none;
+  background: none;
+  font-size: 14px;
+  color: #3d3d3d;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dtdp-header-search {
+  width: 45px;
+  height: 36px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  display: block;
+}
+.dtdp-header-search svg { display: block; width: 45px; height: 36px; }
+.dtdp-header-events {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  width: 106px;
+  border: none;
+  border-radius: 68px;
+  background-image: linear-gradient(190deg, #3c2f44 1.6%, #9775aa 110%);
+  box-shadow: 0 4px 17.3px rgba(0, 0, 0, 0.11);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.dtdp-header-profile {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+.dtdp-header-profile img { width: 36px; height: 36px; }
+
+/* ── Product title + meta + services (Figma 5652:12023) ──────────────────── */
+.dtdp-ptitle {
+  max-width: var(--dtdp-max);
+  margin: 0 auto;
+  padding: 28px var(--dtdp-pad) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dtdp-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+.dtdp-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 34px;
+  color: #3d3d3d;
+}
+.dtdp-title-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+.dtdp-pill-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4.7px;
+  height: 29px;
+  padding: 0 15px;
+  border: 0.789px solid rgba(117, 117, 117, 0.5);
+  border-radius: 48px;
+  background: #fff;
+  color: #757575;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dtdp-pill-action img,
+.dtdp-pill-action svg { width: 13px; height: 13px; }
+.dtdp-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 29px;
+  height: 29px;
+  border: 0.789px solid rgba(117, 117, 117, 0.5);
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  padding: 0;
+}
+.dtdp-icon-btn img,
+.dtdp-icon-btn svg { width: 13px; height: 13px; }
+.dtdp-icon-btn--saved { border-color: #f2545b; }
+/* The mobile hero icons are white (built for a dark image) — recolor to grey so
+   they're visible on the light desktop title bar. */
+.dtdp-title-actions img { filter: brightness(0) saturate(100%) invert(48%); }
+.dtdp-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.dtdp-meta-chip {
+  padding: 4px 8px;
+  border: 1px solid #dedede;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #757575;
+  white-space: nowrap;
+}
+.dtdp-services {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+}
+.dtdp-service {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #287686;
+  white-space: nowrap;
+}
+.dtdp-service-icon { width: 12px; height: 12px; }
+
+/* ── Hero gallery (Figma 5652:12023) ─────────────────────────────────────── */
+.dtdp-gallery {
+  max-width: var(--dtdp-max);
+  margin: 0 auto;
+  padding: 40px var(--dtdp-pad) 0;
+}
+/* Inner keeps the exact 1120 × 460 aspect ratio, so the whole section scales. */
+.dtdp-gallery-inner {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+  aspect-ratio: 1120 / 460;
+}
+.dtdp-gallery-left {
+  display: flex;
+  gap: 4px;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+}
+.dtdp-gallery-img {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  height: 100%;
+}
+.dtdp-gallery-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.dtdp-gallery-img--main { flex: 1 1 0; min-width: 0; border-radius: 12px 0 0 12px; }
+.dtdp-gallery-img--mid { width: 21.96%; flex-shrink: 0; } /* 246 / 1120 */
+.dtdp-gallery-right {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 25.89%; /* 290 / 1120 */
+  flex-shrink: 0;
+  height: 100%;
+}
+.dtdp-gallery-right .dtdp-gallery-img { flex: 1 1 0; min-height: 0; height: auto; }
+.dtdp-gallery-img--tr { border-radius: 0 12px 0 0; }
+.dtdp-gallery-img--more { border-radius: 0 0 12px 0; }
+.dtdp-gallery-more-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+.dtdp-gallery-more-count,
+.dtdp-gallery-more-label {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0.016px;
+  text-align: center;
+}
+
+/* ── Two-column body ─────────────────────────────────────────────────────── */
+.dtdp-body {
+  max-width: var(--dtdp-max);
+  margin: 0 auto;
+  padding: 20px var(--dtdp-pad) 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+.dtdp-main {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 29px;
+}
+.dtdp-book {
+  width: 357px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 92px;
+  /* Start flush with the bottom of the product title (cancels .dtdp-body top pad). */
+  margin-top: -60px;
+  transition: top 0.2s ease;
+}
+/* When the tab bar is stuck (fixed at top:72px, height 44px → bottom 116px),
+   drop the booking card to leave a 20px gap below it. */
+.dtdp-book.tabs-stuck {
+  top: 136px;
+}
+
+/* Nights breakdown (Figma 6228:8489) */
+.dtdp-nights {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0 29px;
+  border-bottom: 1px solid #ededed;
+}
+.dtdp-nights-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: #f1ebff;
+  color: #121212;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  white-space: nowrap;
+}
+.dtdp-nights-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+.dtdp-nights-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.dtdp-nights-sep {
+  width: 1px;
+  height: 28px;
+  background: #d9d9d9;
+  flex-shrink: 0;
+}
+.dtdp-nights-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  white-space: nowrap;
+}
+.dtdp-nights-num {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #d9d9d9;
+}
+.dtdp-nights-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.dtdp-nights-label { font-size: 12px; line-height: 12px; color: #757575; }
+.dtdp-nights-city { font-size: 14px; line-height: 14px; color: #121212; }
+
+/* Pick Up / Drop */
+.dtdp-pd {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.dtdp-pd-col {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dtdp-pd-col--right { align-items: flex-end; text-align: right; }
+.dtdp-pd-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #757575;
+}
+.dtdp-pd-label img { width: 10px; height: 12px; }
+.dtdp-pd-city {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #121212;
+}
+.dtdp-pd-line {
+  flex: 0 0 auto;
+  width: 380px;
+  max-width: 42%;
+  border-top: 1px dashed #c9c9c9;
+  align-self: center;
+}
+
+/* Vibes reuse mobile TiFitRow (.tdp2-ti-fit-row) */
+.dtdp-vibes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Tab bar — sits in-flow inside .dtdp-main (so it takes the left-column width),
+   then becomes a full-bleed fixed bar under the header once it reaches the top.
+   The wrapper reserves the bar's height when stuck to avoid a scroll jump. */
+.dtdp-tabs-sentinel { height: 0; }
+.dtdp-tabs-wrap { width: 100%; }
+.dtdp-tabs-wrap.stuck { height: 44px; }
+
+.dtdp-tabs-bar {
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid rgba(117, 117, 117, 0.2);
+}
+.dtdp-tabs-wrap.stuck .dtdp-tabs-bar {
+  position: fixed;
+  top: 72px; /* directly below the sticky header */
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 40;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  animation: dtdp-tabs-drop 0.24s ease;
+}
+@keyframes dtdp-tabs-drop {
+  from { transform: translateY(-8px); opacity: 0.4; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.dtdp-tabs {
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 49px;
+  height: 44px;
+  padding: 0 6px;
+  overflow-x: auto;
+}
+.dtdp-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 4px 12px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  font-size: 14px;
+  color: #757575;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.dtdp-tab img { width: 16px; height: 16px; }
+.dtdp-tab.active {
+  color: #3d3d3d;
+  font-weight: 600;
+  border-bottom-color: #000;
+}
+
+/* ── Itinerary: Day Plan rail + content ──────────────────────────────────── */
+.dtdp-itin {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+.dtdp-dayplan {
+  position: sticky;
+  top: 132px;
+  flex: 0 0 120px;
+  width: 120px;
+  padding-top: 68px;
+}
+.dtdp-dayplan-title {
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #3d3d3d;
+}
+.dtdp-dayplan-list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-left: 4px;
+}
+.dtdp-dayplan-list::before {
+  content: "";
+  position: absolute;
+  left: 7.5px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: #e3e3e3;
+}
+.dtdp-dayplan-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: none;
+  background: none;
+  padding: 0;
+  font-size: 12px;
+  color: #757575;
+  cursor: pointer;
+}
+.dtdp-dayplan-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #c9c9c9;
+  flex-shrink: 0;
+  z-index: 1;
+}
+.dtdp-dayplan-item.active { color: #01afd1; font-weight: 600; }
+.dtdp-dayplan-item.active .dtdp-dayplan-dot { background: #01afd1; }
+
+.dtdp-itin-content {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+/* Neutralise mobile page paddings when reused inside the desktop column */
+.dtdp-itin-content .tdp2-itin-map-wrap { padding: 0 0 16px; }
+.dtdp-itin-content .tdp2-itin-city-group { padding: 0; }
+
+/* ── Inclusions / Exclusions accordions ──────────────────────────────────── */
+.dtdp-accordion {
+  border: 1px solid #ededed;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.dtdp-accordion-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 16px 20px;
+  border: none;
+  background: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  color: #3d3d3d;
+  cursor: pointer;
+}
+.dtdp-accordion-head img { width: 18px; height: 18px; }
+.dtdp-accordion-chev {
+  margin-left: auto;
+  display: inline-flex;
+  transition: transform 0.2s ease;
+}
+.dtdp-accordion-chev.open { transform: rotate(180deg); }
+.dtdp-accordion-body { padding: 0 20px 20px; }
+.dtdp-incl-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  columns: 2;
+  column-gap: 40px;
+}
+.dtdp-incl-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  break-inside: avoid;
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 21px;
+  color: #4e4e4e;
+}
+.dtdp-incl-item img { width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; }
+.dtdp-incl-insurance {
+  margin-top: 12px;
+  padding: 16px;
+  background: #f7f7f7;
+  border-radius: 8px;
+}
+.dtdp-incl-ins-title { margin: 0 0 6px; font-size: 14px; font-weight: 600; color: #3d3d3d; }
+.dtdp-incl-ins-body { margin: 0; font-size: 13px; line-height: 20px; color: #757575; }
+
+/* ── Sticky booking card (Figma 5788:7351) ───────────────────────────────── */
+.dtdp-book-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 20px;
+  padding: 16px 0 0;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden; /* clips the flush women bar under the rounded corners */
+  box-shadow: 0 4px 82.3px rgba(0, 0, 0, 0.08);
+}
+/* Divider under the head (Figma 6245:8626) — shown with the revealed head. */
+.dtdp-book-divider {
+  width: 100%;
+  height: 1px;
+  background: #ededed;
+}
+/* Hidden (and removed from layout) until the product title scrolls out of view. */
+.dtdp-book-head {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0 12px;
+}
+.dtdp-book-head.show-title {
+  display: flex;
+}
+.dtdp-book-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #3d3d3d;
+}
+.dtdp-book-dur {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.dtdp-book-dur img { width: 20px; height: 20px; }
+.dtdp-book-dur span { font-size: 14px; color: #757575; }
+
+/* Repositioned to the bottom of the card — always visible (Figma 6234:17889). */
+.dtdp-book-women {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 16px;
+  background: #faf1ff;
+}
+.dtdp-book-women img { width: 13px; height: 13px; }
+.dtdp-book-women span { font-size: 12px; color: #c458fe; white-space: nowrap; }
+
+.dtdp-book-price {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 12px;
+}
+.dtdp-book-price-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+.dtdp-book-disc {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 30px;
+  background: #f5f5f5;
+  color: #4d4d4d;
+  font-size: 12px;
+  line-height: 16px;
+}
+.dtdp-book-strike {
+  color: #ababab;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  text-decoration: line-through;
+}
+.dtdp-book-price-main {
+  color: #3d3d3d;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 24px;
+  white-space: nowrap;
+}
+.dtdp-book-price-sub {
+  color: #4d4d4d;
+  font-size: 12px;
+  line-height: 16px;
+}
+.dtdp-book-cta-wrap { padding: 0 12px; }
+.dtdp-book-cta {
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: 25px;
+  background: #01afd1;
+  box-shadow: -2px 4px 10px rgba(0, 0, 0, 0.12);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* ── Meet your trip captain ──────────────────────────────────────────────── */
+.dtdp-captain {
+  max-width: var(--dtdp-max);
+  margin: 60px auto 0;
+  padding: 0 var(--dtdp-pad);
+}
+.dtdp-captain-title {
+  margin: 0 0 24px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #015f74;
+}
+.dtdp-captain-cols {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+}
+.dtdp-captain-left {
+  flex: 0 0 460px;
+  width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.dtdp-captain-avstack { display: flex; }
+.dtdp-captain-av {
+  width: 101px;
+  height: 101px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid #fff;
+}
+.dtdp-captain-av:not(:first-child) { margin-left: -17px; }
+.dtdp-captain-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.dtdp-captain-desc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 21px;
+  color: #4e4e4e;
+  text-align: justify;
+}
+.dtdp-captain-right {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+}
+.dtdp-captain-bullet { display: flex; align-items: flex-start; gap: 18px; }
+.dtdp-captain-bullet-icon { width: 24px; height: 24px; flex-shrink: 0; }
+.dtdp-captain-bullet-title { margin: 0 0 2px; font-size: 16px; font-weight: 500; color: #4e4e4e; }
+.dtdp-captain-bullet-body { margin: 0; font-size: 14px; line-height: 19.6px; color: #4e4e4e; }
+
+/* ── FAQs ────────────────────────────────────────────────────────────────── */
+.dtdp-faq {
+  max-width: var(--dtdp-max);
+  margin: 40px auto 0;
+  padding: 0 var(--dtdp-pad);
+}
+.dtdp-faq-head { text-align: center; margin-bottom: 32px; }
+.dtdp-faq-title { margin: 0 0 8px; font-size: 24px; font-weight: 600; color: #3d3d3d; }
+.dtdp-faq-sub { margin: 0; font-size: 16px; color: #757575; }
+.dtdp-faq-list { display: flex; flex-direction: column; }
+.dtdp-faq-row { border-bottom: 1px solid #ededed; }
+.dtdp-faq-btn {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  width: 100%;
+  padding: 20px 0;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+.dtdp-faq-num { font-size: 20px; font-weight: 600; color: #01afd1; flex-shrink: 0; }
+.dtdp-faq-q { flex: 1 1 0; font-size: 16px; font-weight: 500; color: #3d3d3d; }
+.dtdp-faq-toggle { font-size: 20px; color: #3d3d3d; flex-shrink: 0; }
+.dtdp-faq-a {
+  margin: 0;
+  padding: 0 44px 20px 60px;
+  font-size: 14px;
+  line-height: 22px;
+  color: #757575;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Reused mobile itinerary blocks (.tdp2-*) — widen for the desktop column.
+   These only apply while nested inside .dtdp so the mobile page is untouched.
+   ══════════════════════════════════════════════════════════════════════════ */
+.dtdp .tdp2-itin-map { width: 100%; height: auto; border-radius: 12px; }

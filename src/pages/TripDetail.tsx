@@ -14,6 +14,8 @@ import FooterMessage from "../components/FooterMessage/FooterMessage";
 import Footer from "../components/Footer";
 import { SAMPLE_UPCOMING_TRIPS } from "../api/sampleData";
 import { TripCardItem, ViewMoreCard } from "../components/UpcomingTrips/TripCardItem";
+import { useIsDesktop } from "../hooks/useIsDesktop";
+import DesktopTripDetail from "../components/desktop/DesktopTripDetail";
 
 // ── Figma-downloaded assets ──────────────────────────────────────────────────
 const FIG = "/trip-detail/";
@@ -77,7 +79,7 @@ const FIT_ICONS: Record<string, string> = {
 };
 
 // ── Type definitions ──────────────────────────────────────────────────────────
-interface DayActivity {
+export interface DayActivity {
   title: string;
   ticketsIncluded?: boolean;
   photos?: string[];
@@ -86,7 +88,7 @@ interface DayActivity {
   leisureDescBold?: string;
   leisurePhotos?: string[];
 }
-interface DayItinerary {
+export interface DayItinerary {
   days: string;
   city: string;
   photo: string;
@@ -107,7 +109,7 @@ interface DayItinerary {
   transferTo?: string;
   isStaticCard?: boolean;
 }
-interface ProductData {
+export interface ProductData {
   title: string;
   heroImages: string[];
   displayPrice: string;
@@ -134,7 +136,7 @@ interface ProductData {
 }
 
 // ── Static page data (Figma) ─────────────────────────────────────────────────
-const STATIC_DATA: ProductData = {
+export const STATIC_DATA: ProductData = {
   title: "15 Days Europe Group Trip 2026: Paris, Amsterdam & Switzerland",
   heroImages: [HERO_LARGE, HERO_T1, HERO_T2, HERO_T3, HERO_MAIN],
   displayPrice: "62,999/-",
@@ -405,7 +407,7 @@ const STATIC_DATA: ProductData = {
 
 // ── Small components ──────────────────────────────────────────────────────────
 
-function SharedTransfer({ from: fromCity, to: toCity }: { from: string; to: string }) {
+export function SharedTransfer({ from: fromCity, to: toCity }: { from: string; to: string }) {
   return (
     <div className="tdp2-st">
       <div className="tdp2-st-inner">
@@ -440,13 +442,13 @@ function SharedTransfer({ from: fromCity, to: toCity }: { from: string; to: stri
   );
 }
 
-function parseCityStrip(entry: string): { nights: string; city: string } {
+export function parseCityStrip(entry: string): { nights: string; city: string } {
   const m = entry.match(/^(\d+)N\s+(.+)$/i);
   if (m) return { nights: `${m[1]} Night${Number(m[1]) > 1 ? "s" : ""}`, city: m[2] };
   return { nights: "", city: entry };
 }
 
-function CityCard({ entry, photo }: { entry: string; photo: string }) {
+export function CityCard({ entry, photo }: { entry: string; photo: string }) {
   const { nights, city } = parseCityStrip(entry);
   return (
     <div className="tdp2-city-card">
@@ -484,7 +486,7 @@ function FaqItem({ index, question, answer, isOpen, onToggle }: {
 }
 
 
-function TiFitRow({ label, rating }: { label: string; rating: number }) {
+export function TiFitRow({ label, rating }: { label: string; rating: number }) {
   const icon = FIT_ICONS[label] ?? `${TI}icon-culture.svg`;
   return (
     <div className="tdp2-ti-fit-row">
@@ -513,7 +515,7 @@ function chipIcon(label: string): string {
   return "/figma/itin-section/icon-transfer.svg";
 }
 
-function DayCard({ day, index, isOpen, onToggle }: {
+export function DayCard({ day, index, isOpen, onToggle }: {
   day: DayItinerary;
   index: number;
   isOpen: boolean;
@@ -737,9 +739,30 @@ function DayCard({ day, index, isOpen, onToggle }: {
   );
 }
 
+// ── Shared FAQ copy (reused by the desktop product page) ──────────────────────
+export const TDP_FAQS = [
+  {
+    q: "How early should I book Europe trip packages from India?",
+    a: "Three to six months ahead is the right window. It gets you better flight prices, more hotel options, and enough time to sort the Schengen visa without any last-minute panic, especially if you're travelling in summer.",
+  },
+  {
+    q: "Are flights included in Europe trip packages from India?",
+    a: "Most WanderOn Europe packages do not include international flights, which keeps the base price transparent and lets you book from your preferred city. Our travel experts can help you find the best flight options to match your batch dates if needed.",
+  },
+  {
+    q: "Do Europe tour packages include Schengen visa assistance?",
+    a: "Yes, we provide complete Schengen visa assistance — from preparing your documentation checklist to advising on the right consulate to apply through. Visa approval is subject to the consulate's decision, but we make sure your application is as strong as possible.",
+  },
+  {
+    q: "What visa and travel documents are required for Europe tours from India?",
+    a: "You will need a valid Schengen visa, a passport with at least six months of validity beyond your return date, travel insurance with a minimum €30,000 medical coverage, confirmed hotel bookings, flight itineraries, and proof of sufficient funds. Our team will share a complete checklist once your booking is confirmed.",
+  },
+];
+
 // ── Main component ────────────────────────────────────────────────────────────
 export default function TripDetail() {
   const data = STATIC_DATA;
+  const isDesktop = useIsDesktop();
   const navigate = useNavigate();
   const location = useLocation();
   const { slug: routeSlug } = useParams();
@@ -851,24 +874,11 @@ export default function TripDetail() {
   const moreVmB = relatedTrips[1]?.image ?? MORE_TRIP_B;
   const moreHref = `/search?destination=${encodeURIComponent(productDest)}`;
 
-  const faqs = [
-    {
-      q: "How early should I book Europe trip packages from India?",
-      a: "Three to six months ahead is the right window. It gets you better flight prices, more hotel options, and enough time to sort the Schengen visa without any last-minute panic, especially if you're travelling in summer.",
-    },
-    {
-      q: "Are flights included in Europe trip packages from India?",
-      a: "Most WanderOn Europe packages do not include international flights, which keeps the base price transparent and lets you book from your preferred city. Our travel experts can help you find the best flight options to match your batch dates if needed.",
-    },
-    {
-      q: "Do Europe tour packages include Schengen visa assistance?",
-      a: "Yes, we provide complete Schengen visa assistance — from preparing your documentation checklist to advising on the right consulate to apply through. Visa approval is subject to the consulate's decision, but we make sure your application is as strong as possible.",
-    },
-    {
-      q: "What visa and travel documents are required for Europe tours from India?",
-      a: "You will need a valid Schengen visa, a passport with at least six months of validity beyond your return date, travel insurance with a minimum €30,000 medical coverage, confirmed hotel bookings, flight itineraries, and proof of sufficient funds. Our team will share a complete checklist once your booking is confirmed.",
-    },
-  ];
+  const faqs = TDP_FAQS;
+
+  if (isDesktop) {
+    return <DesktopTripDetail />;
+  }
 
   return (
     <div className="tdp2-page">
