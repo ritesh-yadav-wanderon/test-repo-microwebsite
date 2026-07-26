@@ -9,20 +9,47 @@ export interface WhyTravellerCardProps {
   img: string;
   /** Dark text for cards whose photo is light at the top (Figma variants) */
   darkText?: boolean;
-  onMore?: () => void;
+  /** Expanded (open) state content */
+  expandedTitle: string;
+  expandedBody: string;
+  open?: boolean;
+  onToggle?: () => void;
 }
 
 /** Value-prop photo card from "Why travellers choose WanderOn"
- *  (Figma component instance 5224:12932, 268x350). */
-export default function WhyTravellerCard({ title, sub, img, darkText, onMore }: WhyTravellerCardProps) {
+ *  (Figma component instance 5224:12932, 268x350). Mirrors the mobile
+ *  WhyWanderon card's two modes: collapsed photo / expanded text. */
+export default function WhyTravellerCard({
+  title,
+  sub,
+  img,
+  darkText,
+  expandedTitle,
+  expandedBody,
+  open = false,
+  onToggle,
+}: WhyTravellerCardProps) {
+  const cls = [
+    "wtcard",
+    open ? "wtcard--open" : "",
+    darkText && !open ? "wtcard--dark-text" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div className={`wtcard${darkText ? " wtcard--dark-text" : ""}`}>
-      <img className="wtcard__img" src={`${BASE}/${img}`} alt="" loading="lazy" />
+    <div className={cls}>
+      {!open && <img className="wtcard__img" src={`${BASE}/${img}`} alt="" loading="lazy" />}
       <div className="wtcard__text">
-        <p className="wtcard__title">{title}</p>
-        <p className="wtcard__sub">{sub}</p>
+        <p className="wtcard__title">{open ? expandedTitle : title}</p>
+        <p className="wtcard__sub">{open ? expandedBody : sub}</p>
       </div>
-      <button className="wtcard__plus" aria-label={`More about ${title}`} onClick={onMore}>
+      <button
+        className="wtcard__plus"
+        aria-label={open ? `Collapse ${title}` : `More about ${title}`}
+        aria-expanded={open}
+        onClick={onToggle}
+      >
         <img src={`${BASE}/why-plus.svg`} alt="" />
       </button>
     </div>

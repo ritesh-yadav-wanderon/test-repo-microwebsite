@@ -12,28 +12,28 @@ export default function DesktopHero() {
     <section className="dhero">
       <img
         className="dhero__art"
-        src={`${BASE}/hero-art.jpg`}
+        src={`${BASE}/hero-art-v2.png`}
         alt="Built for the ones who wander together — travellers on a misty forest road"
       />
       <div className="dhero__rating">
         <img className="dhero__rating-google" src={`${BASE}/google-g.svg`} alt="Google" />
-        <img className="dhero__laurel" src={`${BASE}/laurel.png`} alt="" />
+        <img className="dhero__laurel" src="/figma/reviews/laurel.png" alt="" />
         <span className="dhero__rating-score">4.9</span>
-        <img className="dhero__laurel dhero__laurel--flip" src={`${BASE}/laurel.png`} alt="" />
+        <img className="dhero__laurel dhero__laurel--flip" src="/figma/reviews/laurel.png" alt="" />
         <span className="dhero__rating-count">from 14,921 Reviews</span>
       </div>
       <div className="dhero__search" role="search">
         <button className="dhero__search-field" onClick={openSearch}>
-          <img src={`${BASE}/icon-distance.svg`} alt="" className="dhero__search-pin" />
+          <img src={`${BASE}/icon-distance-white.svg`} alt="" className="dhero__search-pin" />
           <span>Where</span>
         </button>
         <span className="dhero__search-divider" />
         <button className="dhero__search-field" onClick={openSearch}>
-          <img src={`${BASE}/icon-calendar.svg`} alt="" className="dhero__search-cal" />
+          <img src={`${BASE}/icon-calendar-white.svg`} alt="" className="dhero__search-cal" />
           <span>When</span>
         </button>
         <button className="dhero__search-btn" onClick={openSearch} aria-label="Search trips">
-          <img src={`${BASE}/icon-search.svg`} alt="" />
+          <img src={`${BASE}/search-fab.svg`} alt="" />
         </button>
       </div>
     </section>

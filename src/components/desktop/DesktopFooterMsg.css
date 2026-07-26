@@ -1,6 +1,6 @@
 .dfmsg {
   max-width: 1280px;
-  margin: 60px auto 0;
+  margin: 0 auto;
   padding: 60px 80px;
 }
 
@@ -19,9 +19,4 @@
 .dfmsg__line--medium {
   font-weight: 500;
   margin-bottom: 7px;
-}
-
-.dfooter-band {
-  height: 150px;
-  background: #015f74;
 }

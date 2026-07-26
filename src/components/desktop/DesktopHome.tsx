@@ -6,7 +6,6 @@ import DesktopCategoryTabs from "./DesktopCategoryTabs";
 import DesktopDestinations from "./DesktopDestinations";
 import DesktopTrips from "./DesktopTrips";
 import DesktopWhyChooseUs from "./DesktopWhyChooseUs";
-import DesktopDestBanner from "./DesktopDestBanner";
 import DesktopPlot from "./DesktopPlot";
 import DesktopWhyTravellers from "./DesktopWhyTravellers";
 import DesktopOriginals from "./DesktopOriginals";
@@ -34,10 +33,9 @@ export default function DesktopHome({ trips, loading }: Props) {
       <DesktopDestinations />
       <DesktopTrips trips={trips} loading={loading} />
       <DesktopWhyChooseUs />
-      <DesktopDestBanner />
+      <DesktopOriginals />
       <DesktopPlot />
       <DesktopWhyTravellers />
-      <DesktopOriginals />
       <DesktopQuery />
       <DesktopFooterMsg />
       <DesktopFooter />

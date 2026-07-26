@@ -16,7 +16,7 @@ export default function DesktopOriginals() {
         <div className="dorig__mountain">
           <img src={`${BASE}/originals-mountain.png`} alt="" loading="lazy" />
         </div>
-        <img className="dorig__birds" src={`${BASE}/originals-birds.png`} alt="" loading="lazy" />
+        <img className="dorig__birds" src="/figma/originals/birds.png" alt="" loading="lazy" />
         <img className="dorig__flags" src={`${BASE}/originals-flags.png`} alt="" loading="lazy" />
         <div className="dorig__copy">
           <h2 className="dorig__title">We don't do surface level</h2>

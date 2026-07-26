@@ -76,7 +76,7 @@ export default function DesktopDestination({
 
   return (
     <div className="ddpage">
-      <DesktopNav />
+      <DesktopNav alwaysShowSearch />
 
       {/* ── Hero (Figma 5746:6534) ── */}
       <section className="ddp-hero">

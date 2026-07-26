@@ -20,12 +20,14 @@ import { getScrollTop, onAppScroll } from "../utils/scroll";
 
 // ── Figma-downloaded assets ──────────────────────────────────────────────────
 const FIG = "/trip-detail/";
+/* hero-thumb-2/3, hero-main and itin-map were byte-identical copies of the
+ * trip-hero / itin-section assets, so the shared files are reused instead. */
 const HERO_LARGE = "/figma/trip-hero/hero-bg.png";
 const HERO_T1    = `${FIG}hero-thumb-1.png`;
-const HERO_T2    = `${FIG}hero-thumb-2.png`;
-const HERO_T3    = `${FIG}hero-thumb-3.png`;
-const HERO_MAIN  = `${FIG}hero-main.png`;  // fallback / extra thumb
-const ITIN_MAP   = `${FIG}itin-map.png`;
+const HERO_T2    = "/figma/trip-hero/hero-bg.png";
+const HERO_T3    = `${FIG}hero-thumb-1.png`;
+const HERO_MAIN  = "/figma/trip-hero/hero-bg.png";  // fallback / extra thumb
+const ITIN_MAP   = "/figma/itin-section/route-map.png";
 const CAPTAIN_PHOTO = `${FIG}captain-photo.jpeg`;
 
 

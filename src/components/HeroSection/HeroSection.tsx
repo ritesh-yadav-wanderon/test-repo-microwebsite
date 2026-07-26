@@ -58,9 +58,9 @@ export default function HeroSection({ onSearchClick }: Props) {
         <div className="hero-rating" aria-label="4.9 rating from 14,921 Google reviews">
           <GoogleIcon />
           <div className="hero-rating-wreath">
-            <img className="hero-laurel hero-laurel--l" src="/figma/hero/laurel.png" alt="" aria-hidden />
+            <img className="hero-laurel hero-laurel--l" src="/figma/reviews/laurel.png" alt="" aria-hidden />
             <span className="hero-rating-score">4.9</span>
-            <img className="hero-laurel hero-laurel--r" src="/figma/hero/laurel.png" alt="" aria-hidden />
+            <img className="hero-laurel hero-laurel--r" src="/figma/reviews/laurel.png" alt="" aria-hidden />
           </div>
           <span className="hero-rating-label">from 14,921 Reviews</span>
         </div>

@@ -24,83 +24,12 @@
   position: relative;
   background: #fff;
   min-height: 100vh;
+  /* The shared DesktopNav is position: fixed (72px bar), so reserve its
+     height here — the old page-local header was sticky and in-flow. */
+  padding-top: 72px;
   color: #3d3d3d;
   font-family: "Roboto", system-ui, sans-serif;
 }
-
-/* ── Light sticky header ─────────────────────────────────────────────────── */
-.dtdp-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 72px;
-  padding: 12px 40px;
-  background: #fff;
-  box-shadow: 0 4px 36.7px rgba(0, 0, 0, 0.11);
-}
-.dtdp-header-logo {
-  width: 60px;
-  height: 60px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: 0;
-}
-.dtdp-header-logo img {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-}
-.dtdp-header-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-.dtdp-header-link {
-  border: none;
-  background: none;
-  font-size: 14px;
-  color: #3d3d3d;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.dtdp-header-search {
-  width: 45px;
-  height: 36px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: 0;
-  display: block;
-}
-.dtdp-header-search svg { display: block; width: 45px; height: 36px; }
-.dtdp-header-events {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 36px;
-  width: 106px;
-  border: none;
-  border-radius: 68px;
-  background-image: linear-gradient(190deg, #3c2f44 1.6%, #9775aa 110%);
-  box-shadow: 0 4px 17.3px rgba(0, 0, 0, 0.11);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-}
-.dtdp-header-profile {
-  width: 36px;
-  height: 36px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  padding: 0;
-}
-.dtdp-header-profile img { width: 36px; height: 36px; }
 
 /* ── Product title + meta + services (Figma 5652:12023) ──────────────────── */
 .dtdp-ptitle {
