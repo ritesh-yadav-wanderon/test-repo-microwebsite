@@ -70,24 +70,37 @@ interface Props {
 
 export default function DestinationStrip({ activeCategory, onCategoryChange }: Props) {
   const sentinelRef = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLElement>(null);
   const [stuck, setStuck] = useState(false);
+  const [navH, setNavH] = useState(0);
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
+    // Stuck only once the sentinel scrolls ABOVE the 72px line — NOT while it's
+    // still below the fold (both are "not intersecting", but only the former
+    // should pin the bar; otherwise it floats over the hero from page load).
     const observer = new IntersectionObserver(
-      ([entry]) => setStuck(!entry.isIntersecting),
+      ([entry]) => setStuck(entry.boundingClientRect.top <= 72),
       { rootMargin: "-72px 0px 0px 0px", threshold: 0 }
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, []);
 
+  // Measure the tab bar height so we can reserve its space when it goes fixed.
+  useEffect(() => {
+    const measure = () => setNavH(navRef.current?.offsetHeight ?? 0);
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
   return (
     <div className="dest-section">
       <div ref={sentinelRef} className="dest-cats-sentinel" />
-      {/* Category tabs */}
-      <nav className={`dest-cats${stuck ? " dest-cats--stuck" : ""}`} aria-label="Trip categories">
+      {/* Category tabs — fixed once scrolled so they stay pinned for the whole page */}
+      <nav ref={navRef} className={`dest-cats${stuck ? " dest-cats--stuck" : ""}`} aria-label="Trip categories">
         {/* All Trips — home icon */}
         <button
           className={`dest-cat-tab${activeCategory === 0 ? " dest-cat-tab--active" : ""}`}
@@ -116,6 +129,8 @@ export default function DestinationStrip({ activeCategory, onCategoryChange }: P
           {"See all\ncategories"}
         </button>
       </nav>
+      {/* Reserve the tab bar's space once it's lifted into a fixed position. */}
+      {stuck && <div className="dest-cats-spacer" style={{ height: navH }} aria-hidden />}
 
       {/* Domestic */}
       <div className="dest-block">

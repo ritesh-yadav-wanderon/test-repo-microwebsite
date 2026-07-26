@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { DEST_REGIONS } from "../../data/destinations";
+import { setAppScrollLocked } from "../../utils/scroll";
 import "./DestinationSheet.css";
 
 const M = "/figma/menu/";
@@ -25,8 +26,8 @@ export default function DestinationSheet({ isOpen, onClose, onSelect }: Destinat
   }, [isOpen]);
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    setAppScrollLocked(isOpen);
+    return () => setAppScrollLocked(false);
   }, [isOpen]);
 
   if (!hasOpened) return null;

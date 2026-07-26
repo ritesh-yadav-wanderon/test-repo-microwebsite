@@ -16,6 +16,7 @@ import { SAMPLE_UPCOMING_TRIPS } from "../api/sampleData";
 import { TripCardItem, ViewMoreCard } from "../components/UpcomingTrips/TripCardItem";
 import { useIsDesktop } from "../hooks/useIsDesktop";
 import DesktopTripDetail from "../components/desktop/DesktopTripDetail";
+import { getScrollTop, onAppScroll } from "../utils/scroll";
 
 // ── Figma-downloaded assets ──────────────────────────────────────────────────
 const FIG = "/trip-detail/";
@@ -828,10 +829,9 @@ export default function TripDetail() {
   // WhatsApp FAB — appears once the user scrolls past the first fold (hero).
   const [showWhatsApp, setShowWhatsApp] = useState(false);
   useEffect(() => {
-    const onScroll = () => setShowWhatsApp(window.scrollY > 420);
+    const onScroll = () => setShowWhatsApp(getScrollTop() > 420);
     onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return onAppScroll(onScroll);
   }, []);
 
   const openGallery = (imgs: string[], idx = 0) => {

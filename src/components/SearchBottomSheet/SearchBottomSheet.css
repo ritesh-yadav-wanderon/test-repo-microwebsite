@@ -13,8 +13,8 @@
   display: flex;
   justify-content: center;
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(0,0,0,0.8));
+  -webkit-backdrop-filter: blur(16px);
+  background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
 }
 
 /* ── Sheet ── */
@@ -56,10 +56,11 @@
 .sbs-cats {
   display: flex;
   align-items: flex-end;
-  padding: 0 4px 6px;
-  overflow-x: auto;
+  padding: 40px 0px 16px 0px;
+  overflow-x: scroll;
   scrollbar-width: none;
   flex-shrink: 0;
+  gap: 8px;
 }
 .sbs-cats::-webkit-scrollbar { display: none; }
 
@@ -80,14 +81,14 @@
 .sbs-cat-label {
   font-size: 14px;
   font-weight: 400;
-  color: #ffffff;
+  color: #121212;
   text-align: center;
   line-height: 16px;
 }
-.sbs-cat--active .sbs-cat-label { font-weight: 500; color: #ffffff; }
+.sbs-cat--active .sbs-cat-label { font-weight: 500; color: #121212; }
 .sbs-cat-bar {
   position: absolute;
-  bottom: -4px;
+  bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
   width: 60px;
@@ -96,13 +97,41 @@
   border-radius: 20px;
 }
 
+/* ── Category scroll indicator ── */
+.sbs-scroll-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 0px 10px 0px;
+  flex-shrink: 0;
+}
+.sbs-scroll-track {
+  position: relative;
+  width: 120px;
+  height: 6px;
+  background: #fbfbfb;
+  border: 1px solid #e5e5e5;
+  border-radius: 32px;
+  box-sizing: border-box;
+}
+.sbs-scroll-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  min-width: 20px;
+  background: #757575;
+  border-radius: 32px;
+  transition: transform 0.05s linear;
+}
+
 /* ── Scrollable content ── */
 .sbs-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  gap: 12px;
+  justify-content: flex-start;
+  gap: 16px;
   padding: 16px 16px 16px;
   overflow-y: auto;
 }
@@ -112,7 +141,7 @@
   background: #fff;
   border-radius: 16px;
   padding: 16px;
-  box-shadow: 0 0 4px rgba(0,0,0,0.12);
+  box-shadow: 0 0 4px rgba(0,0,0,0.40);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -179,6 +208,23 @@
 
 /* ── Destination suggestions ── */
 .sbs-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.sbs-sugg-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.sbs-sugg-heading {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: #757575;
+  line-height: 21px;
+}
+.sbs-sugg-list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -190,13 +236,28 @@
   align-items: center;
   gap: 8px;
   height: 34px;
-  padding: 6px 12px;
+  padding: 6px 0px;
   border-radius: 8px;
   border: 1px solid transparent;
   cursor: pointer;
   font-size: 14px;
   color: #202020;
   line-height: 21px;
+}
+.sbs-suggestion-ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: #575757;
+  flex-shrink: 0;
+}
+.sbs-suggestion-img {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 .sbs-suggestion--active {
   background: #eef2fc;
@@ -441,13 +502,15 @@
   gap: 12px;
   flex-shrink: 0;
   padding: 20px 0;
+  margin-top: auto;
   box-sizing: content-box;
 }
 .sbs-clear {
   flex: 1;
   background: transparent;
   font-size: 16px;
-  color: #fff;
+  font-weight: 500;
+  color: #121212;
   text-align: left;
   padding: 0;
   line-height: 24px;
@@ -455,12 +518,13 @@
   font-family: inherit;
 }
 .sbs-find {
-  background: #121212;
-  border-radius: 60px;
+  background: #01AFD1;
+  border-radius: 8px;
   height: 48px;
   width: 160px;
   padding: 0;
   font-size: 16px;
+  font-weight: 500;
   color: #fff;
   display: flex;
   align-items: center;

@@ -142,13 +142,6 @@ export default function LoginSheet({ isOpen, onClose, onSuccess }: LoginSheetPro
         <div className="ls-header">
           <div className="ls-hbg" aria-hidden>
             <div className="ls-hbg-col">
-              <div className="ls-blob ls-blob--sq-br" />
-              <div className="ls-hbg-row">
-                <div className="ls-blob ls-blob--sq-tl" />
-                <div className="ls-blob ls-blob--sq-tr" />
-              </div>
-            </div>
-            <div className="ls-hbg-col">
               <div className="ls-blob ls-blob--sq-bl" />
               <div className="ls-hbg-row">
                 <div className="ls-blob ls-blob--sq-tr" />
@@ -175,10 +168,11 @@ export default function LoginSheet({ isOpen, onClose, onSuccess }: LoginSheetPro
               <p className="ls-phone-label">Enter your mobile number.</p>
               <div className="ls-step1-inputs">
                 <PhoneInput
-                  label="Contact Number"
+                  label="Mobile Number"
                   value={phone}
                   onChange={v => { setPhone(v); setPhoneError(undefined); }}
                   error={phoneError}
+                  initialCountryCode={countryCode}
                   onCountryChange={handleCountryChange}
                 />
                 <button className="ls-action-btn" type="button" onClick={handleRequestOtp}>
@@ -190,10 +184,31 @@ export default function LoginSheet({ isOpen, onClose, onSuccess }: LoginSheetPro
 
           {step === 2 && (
             <div className="ls-step2">
-              <div className="ls-phone-row">
-                <div className="ls-phone-code">{countryCode}</div>
-                <div className="ls-phone-num">{phone}</div>
-              </div>
+              <button
+                className="ls-back"
+                type="button"
+                onClick={() => setStep(1)}
+                aria-label="Edit mobile number"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path
+                    d="M15 18l-6-6 6-6"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span>Change number</span>
+              </button>
+
+              <PhoneInput
+                label="Contact Number"
+                value={phone}
+                onChange={() => {}}
+                disabled
+                initialCountryCode={countryCode}
+              />
 
               <div className="ls-otp-section">
                 <p className="ls-otp-hint">Enter 4 digit OTP sent to your mobile number.</p>

@@ -923,12 +923,12 @@
   white-space: nowrap;
 }
 .mb-due-btn {
-  height: 48px;
+  height: 44px;
   width: 140px;
   flex-shrink: 0;
   border-radius: 60px;
-  background: #121212;
-  color: #ffffff;
+  background: #01AFD1;
+  color: #FFFFFF;
   font-size: 14px;
   font-weight: 500;
 }

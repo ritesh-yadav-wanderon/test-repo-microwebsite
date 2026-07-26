@@ -10,6 +10,9 @@ export interface PhoneInputProps {
   onChange: (v: string) => void;
   error?: string;
   className?: string;
+  disabled?: boolean;
+  /** Preselect the country by dial code (e.g. "+91"). */
+  initialCountryCode?: string;
   onCountryChange?: (country: { code: string; digits: [number, number] }) => void;
 }
 
@@ -19,11 +22,17 @@ export default function PhoneInput({
   onChange,
   error,
   className,
+  disabled = false,
+  initialCountryCode,
   onCountryChange,
 }: PhoneInputProps) {
   const [focused, setFocused] = useState(false);
   const [countryOpen, setCountryOpen] = useState(false);
-  const [country, setCountry] = useState(COUNTRIES[0]);
+  const [country, setCountry] = useState(
+    () =>
+      (initialCountryCode && COUNTRIES.find(c => c.code === initialCountryCode)) ||
+      COUNTRIES[0]
+  );
   const [touched, setTouched] = useState(false);
   const [search, setSearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -89,7 +98,10 @@ export default function PhoneInput({
   }
 
   return (
-    <div className={`phi-wrap${className ? ` ${className}` : ""}`} ref={wrapRef}>
+    <div
+      className={`phi-wrap${className ? ` ${className}` : ""}${disabled ? " phi-wrap--disabled" : ""}`}
+      ref={wrapRef}
+    >
       <div className="phi-row">
         <button
           type="button"
@@ -97,7 +109,8 @@ export default function PhoneInput({
           style={{ borderColor: pillBorder }}
           aria-label={`Country: ${country.name} ${country.code}`}
           aria-expanded={countryOpen}
-          onClick={() => { setCountryOpen(o => !o); setFocused(false); }}
+          disabled={disabled}
+          onClick={() => { if (disabled) return; setCountryOpen(o => !o); setFocused(false); }}
         >
           <span className="phi-pill-text">{country.code}</span>
           <img
@@ -119,6 +132,7 @@ export default function PhoneInput({
               inputMode="numeric"
               maxLength={max}
               value={value}
+              disabled={disabled}
               placeholder={hasValue ? "" : label}
               onChange={e => onChange(e.target.value.replace(/\D/g, ""))}
               onFocus={() => { setFocused(true); setCountryOpen(false); }}

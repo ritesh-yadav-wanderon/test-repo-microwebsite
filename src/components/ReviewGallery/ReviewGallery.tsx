@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { setAppScrollLocked } from "../../utils/scroll";
 import "./ReviewGallery.css";
 
 const R = "/figma/reviews/";
@@ -39,10 +40,8 @@ export default function ReviewGallery({
       setIndex(initialIndex);
       setActiveCat(0);
     }
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    setAppScrollLocked(isOpen);
+    return () => setAppScrollLocked(false);
   }, [isOpen, initialIndex]);
 
   const onScroll = () => {

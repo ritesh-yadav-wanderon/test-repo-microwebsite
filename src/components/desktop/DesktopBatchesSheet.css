@@ -1,0 +1,380 @@
+/* Desktop "all departures" page — Figma 4375:7360 */
+
+.dbat {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #fff;
+  overflow-y: auto;
+  font-family: "Roboto", system-ui, -apple-system, sans-serif;
+  color: #3d3d3d;
+}
+
+/* Header */
+.dbat-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 12px 80px;
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dbat-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.dbat-back img {
+  width: 20px;
+  height: 20px;
+}
+
+.dbat-head-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.dbat-head-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #3d3d3d;
+}
+
+.dbat-head-dur {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dbat-head-dur img {
+  width: 16px;
+  height: 16px;
+}
+
+.dbat-head-dur span {
+  font-size: 12px;
+  font-weight: 500;
+  color: #757575;
+}
+
+/* Body */
+.dbat-body {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 28px 20px 64px;
+}
+
+/* Month tabs */
+.dbat-months {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+
+.dbat-month {
+  height: 40px;
+  padding: 0 20px;
+  border: 1px solid #d6d6d6;
+  border-radius: 40px;
+  background: #fff;
+  font-size: 14px;
+  color: #3d3d3d;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+.dbat-month:hover {
+  border-color: #adadad;
+}
+
+.dbat-month--active {
+  border-color: #01afd1;
+  color: #01afd1;
+  background: #f0fbfd;
+  font-weight: 500;
+}
+
+/* Cards */
+.dbat-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.dbat-card {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #d6d6d6;
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.dbat-card-left {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Date row */
+.dbat-date-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dbat-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.dbat-day-num {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #3d3d3d;
+}
+
+.dbat-day-mon {
+  font-size: 12px;
+  line-height: 15.6px;
+  color: #757575;
+}
+
+.dbat-day-div {
+  width: 1px;
+  height: 30px;
+  background: #adadad;
+  flex-shrink: 0;
+}
+
+.dbat-range {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 320px;
+  max-width: 100%;
+}
+
+.dbat-range-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.dbat-range-date {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #3d3d3d;
+  white-space: nowrap;
+}
+
+.dbat-range-day {
+  font-size: 12px;
+  line-height: 16px;
+  color: #575757;
+}
+
+.dbat-range-line {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.dbat-range-line svg {
+  width: 100%;
+  height: 20px;
+  display: block;
+}
+
+/* Group size row */
+.dbat-group-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dbat-group-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.dbat-group-text {
+  display: inline-flex;
+  gap: 4px;
+  font-size: 14px;
+  line-height: 21px;
+  color: #3d3d3d;
+}
+
+.dbat-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.dbat-badge--available,
+.dbat-badge--filling {
+  background: #d3f8d3;
+  color: #005300;
+}
+
+.dbat-badge--sold-out {
+  background: #eeeeee;
+  color: #757575;
+}
+
+/* Interested row */
+.dbat-people {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  background: #f9fafa;
+  border-radius: 8px;
+}
+
+.dbat-avatars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.dbat-avatar {
+  width: 22px;
+  height: 22px;
+  padding: 2px;
+  border-radius: 30px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.dbat-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.dbat-people-text {
+  font-size: 14px;
+  line-height: 21px;
+  color: #3d3d3d;
+}
+
+/* Right column: price + CTA */
+.dbat-card-right {
+  width: 220px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dbat-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.dbat-price-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dbat-disc {
+  padding: 2px 8px;
+  border-radius: 30px;
+  background: #f5f5f5;
+  color: #4d4d4d;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.dbat-strike {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #ababab;
+  text-decoration: line-through;
+  white-space: nowrap;
+}
+
+.dbat-price-bottom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dbat-price-main {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #3d3d3d;
+  white-space: nowrap;
+}
+
+.dbat-price-sub {
+  font-size: 12px;
+  line-height: 16px;
+  color: #4d4d4d;
+}
+
+.dbat-cta {
+  width: 100%;
+  height: 44px;
+  border: none;
+  border-radius: 8px;
+  background: #01afd1;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 21px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.dbat-cta:hover {
+  background: #029ebd;
+}
+
+.dbat-cta--sold {
+  background: #e0e0e0;
+  color: #757575;
+  cursor: not-allowed;
+}

@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Trip, TripGroup } from "../../types";
 import { useCompare } from "../../context/CompareContext";
+import { useAuth } from "../../context/AuthContext";
+import { openLoginSheet } from "../../utils/login";
 import { SAMPLE_UPCOMING_TRIPS } from "../../api/sampleData";
 import {
   STATIC_DATA,
@@ -15,11 +17,12 @@ import {
 import "../../pages/TripDetail.css";
 import GallerySheet from "../GallerySheet/GallerySheet";
 import ShareSheet from "../ShareSheet/ShareSheet";
-import BatchesSheet from "../BatchesSheet/BatchesSheet";
+import DesktopBatchesSheet from "./DesktopBatchesSheet";
 import DesktopWhyChooseUs from "./DesktopWhyChooseUs";
 import DesktopTrips from "./DesktopTrips";
 import DesktopQuery from "./DesktopQuery";
 import DesktopFooterMsg from "./DesktopFooterMsg";
+import DesktopFooter from "./DesktopFooter";
 import "./DesktopTripDetail.css";
 
 const TI = "/figma/trip-info/";
@@ -78,6 +81,7 @@ const TAB_SECTIONS = [
 export default function DesktopTripDetail() {
   const data = STATIC_DATA;
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   const [wishlisted, setWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
@@ -277,7 +281,11 @@ export default function DesktopTripDetail() {
           <button className="dtdp-header-events" onClick={() => navigate("/events")}>
             Events
           </button>
-          <button className="dtdp-header-profile" onClick={() => navigate("/profile")} aria-label="Profile">
+          <button
+            className="dtdp-header-profile"
+            onClick={() => (isLoggedIn ? navigate("/profile") : openLoginSheet("/profile"))}
+            aria-label="Profile"
+          >
             <img src={`${BOOK}hd-profile.svg`} alt="" aria-hidden />
           </button>
         </nav>
@@ -555,6 +563,13 @@ export default function DesktopTripDetail() {
               <button className="dtdp-book-cta" type="button" onClick={() => setBatchesOpen(true)}>
                 View Batches
               </button>
+              <button
+                className="dtdp-book-departures"
+                type="button"
+                onClick={() => setBatchesOpen(true)}
+              >
+                See all departures
+              </button>
             </div>
 
             <div className="dtdp-book-women">
@@ -644,6 +659,7 @@ export default function DesktopTripDetail() {
       <DesktopQuery title="Your next group is forming." sub="Tell us where. We'll find your people." />
 
       <DesktopFooterMsg />
+      <DesktopFooter />
 
       {/* ── Sheets ──────────────────────────────────────────────────────── */}
       <GallerySheet
@@ -662,7 +678,13 @@ export default function DesktopTripDetail() {
         duration={data.duration}
         price={data.displayPrice}
       />
-      <BatchesSheet isOpen={batchesOpen} onClose={() => setBatchesOpen(false)} tripTitle={data.title} nights={7} />
+      <DesktopBatchesSheet
+        isOpen={batchesOpen}
+        onClose={() => setBatchesOpen(false)}
+        tripTitle={data.title}
+        duration={data.duration}
+        nights={7}
+      />
     </div>
   );
 }

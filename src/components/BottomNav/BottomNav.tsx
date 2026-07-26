@@ -35,31 +35,17 @@ export default function BottomNav({ variant = "light" }: BottomNavProps) {
     <nav className={`bottom-nav${dark ? " bottom-nav--dark" : ""}`} aria-label="Primary">
       <div className={`bn-pill${dark ? " bn-pill--dark" : ""}`}>
 
-        {/* First tab — Trips (dark/Events page) or Events (default) */}
-        {dark ? (
-          <NavLink
-            to="/"
-            end
-            className={({ isActive }) => `bn-item${isActive ? " bn-item--active" : ""}`}
-            aria-label="Trips"
-          >
-            <span className="bn-ico">
-              <img src={`${P}trips.svg`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
-            </span>
-            <span className="bn-label">Trips</span>
-          </NavLink>
-        ) : (
-          <NavLink
-            to="/events"
-            className={({ isActive }) => `bn-item${isActive ? " bn-item--active" : ""}`}
-            aria-label="Events"
-          >
-            <span className="bn-ico">
-              <img src={`${P}icon-events.svg`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
-            </span>
-            <span className="bn-label">Events</span>
-          </NavLink>
-        )}
+        {/* First tab — Events (same on every page, including the Events page) */}
+        <NavLink
+          to="/events"
+          className={({ isActive }) => `bn-item${isActive ? " bn-item--active" : ""}`}
+          aria-label="Events"
+        >
+          <span className="bn-ico">
+            <img src={`${P}${dark ? "events.svg" : "icon-events.svg"}`} width={20} height={20} alt="" aria-hidden loading="eager" />
+          </span>
+          <span className="bn-label">Events</span>
+        </NavLink>
 
         {/* Compare (Figma 5396:14828) */}
         <NavLink
@@ -68,7 +54,7 @@ export default function BottomNav({ variant = "light" }: BottomNavProps) {
           aria-label="Compare"
         >
           <span className="bn-ico">
-            <img src={`${P}${dark ? "compare.svg" : "icon-compare.svg"}`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
+            <img src={`${P}${dark ? "compare.svg" : "icon-compare.svg"}`} width={20} height={20} alt="" aria-hidden loading="eager" />
           </span>
           <span className="bn-label">Compare</span>
           {compareCount > 0 && (
@@ -76,16 +62,17 @@ export default function BottomNav({ variant = "light" }: BottomNavProps) {
           )}
         </NavLink>
 
-        {/* Logo — home */}
+        {/* Trips — home */}
         <NavLink
           to="/"
           end
-          className={({ isActive }) => `bn-item bn-item--logo${isActive ? " bn-item--active" : ""}`}
-          aria-label="Home"
+          className={({ isActive }) => `bn-item${isActive ? " bn-item--active" : ""}`}
+          aria-label="Trips"
         >
-          <span className="bn-ico bn-ico--logo">
-            <img src={`${P}logo.png`} width={40} height={40} alt="WanderOn" loading="eager" fetchPriority="high" />
+          <span className="bn-ico">
+            <img src={`${P}${dark ? "trips.svg" : "icon-trips.svg"}`} width={20} height={20} alt="" aria-hidden loading="eager" />
           </span>
+          <span className="bn-label">Trips</span>
         </NavLink>
 
         {/* Account — gated */}
@@ -96,7 +83,7 @@ export default function BottomNav({ variant = "light" }: BottomNavProps) {
           onClick={handleAccount}
         >
           <span className="bn-ico">
-            <img src={`${P}${dark ? "account.svg" : "icon-account.svg"}`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
+            <img src={`${P}${dark ? "account.svg" : "icon-account.svg"}`} width={20} height={20} alt="" aria-hidden loading="eager" />
           </span>
           <span className="bn-label">Account</span>
         </button>
@@ -109,7 +96,7 @@ export default function BottomNav({ variant = "light" }: BottomNavProps) {
           onClick={() => window.open(WHATSAPP_URL, "_blank", "noopener,noreferrer")}
         >
           <span className="bn-ico">
-            <img src={`${P}${dark ? "chat.svg" : "icon-chat.svg"}`} width={20} height={20} alt="" aria-hidden loading="eager" fetchPriority="high" />
+            <img src={`${P}${dark ? "chat.svg" : "icon-chat.svg"}`} width={20} height={20} alt="" aria-hidden loading="eager" />
           </span>
           <span className="bn-label">Chat</span>
         </button>

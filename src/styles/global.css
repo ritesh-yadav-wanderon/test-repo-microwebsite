@@ -41,11 +41,18 @@
   padding: 0;
 }
 
-html {
-  background: #ffffff;
+/* The document itself never scrolls — `.app-shell` is the scroll container.
+   Keeping the body fixed stops mobile browsers (esp. iOS Safari/Chrome) from
+   collapsing their URL/toolbar on scroll, which used to reveal a white strip
+   over the fixed bottom nav on the first scroll. */
+html,
+body,
+#root {
+  height: 100%;
 }
 
 html {
+  background: #ffffff;
   scrollbar-width: none;
 }
 
@@ -58,8 +65,9 @@ body {
   background: #ffffff;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow: hidden;
   scrollbar-width: none;
+  overscroll-behavior: none;
 }
 
 body::-webkit-scrollbar {
@@ -103,8 +111,18 @@ ul {
   max-width: var(--app-width);
   margin-left: auto;
   margin-right: auto;
-  min-height: 100vh;   /* universal fallback */
-  min-height: 100svh;  /* modern: excludes collapsible URL bar */
+  /* Fixed-height scroll container. Because the body is locked (overflow:hidden),
+     the browser toolbar never collapses, so the fixed bottom nav no longer
+     flashes on the first scroll. NOTE: intentionally NO
+     `-webkit-overflow-scrolling: touch` — on iOS that reparents `position:fixed`
+     descendants to the scroller (they'd scroll away); omitting it keeps the nav
+     and sheets pinned to the viewport per spec. */
+  height: 100%;       /* fallback via html/body/#root height chain */
+  height: 100dvh;     /* stable here: the body doesn't scroll, so the toolbar
+                         never collapses and dvh stays constant */
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: none;
   background: var(--surface);
   position: relative;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.18);

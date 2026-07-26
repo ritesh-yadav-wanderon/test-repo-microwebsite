@@ -14,6 +14,11 @@
   max-width: var(--app-width);
   z-index: 1000;
   will-change: transform;
+  /* Own stacking + compositing context so transient sibling layers (e.g. the
+     listing card entrance transforms) can't merge with / disturb this fixed
+     bar and flash it white on the first scroll. (No `paint` containment — it
+     would clip the pill's glow shadow.) */
+  isolation: isolate;
   contain: layout style;
   padding: 0 12px 10px;
   box-sizing: border-box;
@@ -26,19 +31,18 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* Near-opaque white instead of a translucent + backdrop-filter surface.
-     backdrop-filter forced the fixed pill to re-sample (and flicker) whenever
-     on-page animations like the culture photo stack repainted. */
-  background: rgba(255, 255, 255, 0.97);
+  /* Fully opaque white. A translucent (or backdrop-filter) surface forces the
+     fixed pill to re-blend against the content behind it every frame, so any
+     on-page animation (the culture photo stack, the listing card entrance
+     transforms, etc.) makes it flash a blank white layer during scroll. An
+     opaque fill has nothing to re-sample, killing the flicker. */
+  background: #ffffff;
   border: 1px solid #ddd;
   border-radius: 60px;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.12);
   padding: 4px;
   box-sizing: border-box;
   overflow: hidden;
-  transform: translateZ(0);
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
 }
 
 /* Nav item — shared by NavLink and button */
@@ -107,8 +111,6 @@
 .bn-pill--dark {
   background: #141414;
   border: 1px solid #303030;
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
 }
 
 .bn-pill--dark .bn-label {

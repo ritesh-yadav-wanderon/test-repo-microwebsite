@@ -1,0 +1,176 @@
+/* Desktop footer — Figma 6439:15473 */
+.dft {
+  width: 100%;
+  background: #f7f7f7;
+  display: flex;
+  justify-content: center;
+  padding: 40px 80px 100px;
+  box-sizing: border-box;
+}
+
+.dft-inner {
+  width: 100%;
+  max-width: 1120px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.dft-top {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dft-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: #4e4e4e;
+}
+
+.dft-cols {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.dft-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 200px;
+}
+
+.dft-col-head {
+  margin: 0;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #3d3d3d;
+}
+
+.dft-col-head--light {
+  font-weight: 600;
+  color: #4e4e4e;
+  letter-spacing: 0.5px;
+}
+
+.dft-col-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.dft-link {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #757575;
+  text-align: left;
+  transition: color 0.15s ease;
+}
+
+.dft-link:hover {
+  color: #015f74;
+}
+
+.dft-divider {
+  width: 100%;
+  height: 1px;
+  background: #ccc;
+  opacity: 0.4;
+}
+
+.dft-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.dft-company {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dft-company-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #3d3d3d;
+}
+
+.dft-company-addr {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #757575;
+}
+
+.dft-contact {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.dft-contact-item {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #757575;
+  text-decoration: none;
+}
+
+.dft-contact-item:hover {
+  color: #015f74;
+}
+
+.dft-legal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dft-copy {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #757575;
+}
+
+.dft-social {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dft-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+  transition: opacity 0.15s ease;
+}
+
+.dft-social-link:hover {
+  opacity: 1;
+}

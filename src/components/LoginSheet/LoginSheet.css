@@ -8,11 +8,14 @@
   z-index: 1099;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
 }
 .ls-backdrop--open {
   opacity: 1;
   pointer-events: auto;
+  visibility: visible;
+  transition: opacity 0.3s ease;
 }
 
 /* ── Sheet ── */
@@ -30,10 +33,13 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  visibility: hidden;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.3s;
 }
 .ls-sheet--open {
   transform: translateX(-50%) translateY(0);
+  visibility: visible;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ── Teal stripe ── */
@@ -172,8 +178,8 @@
 /* ── Shared action button ── */
 .ls-action-btn {
   width: 100%;
-  height: 48px;
-  background: #121212;
+  height: 44px;
+  background: #01AFD1;
   border: none;
   border-radius: 60px;
   font-family: var(--font);
@@ -210,6 +216,25 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+/* Back / change-number button */
+.ls-back {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  color: #01afd1;
+}
+.ls-back svg {
+  display: block;
 }
 
 /* Phone display row */
@@ -374,4 +399,39 @@
   color: #757575;
   font-weight: 600;
   letter-spacing: 0.5px;
+}
+
+/* ── Desktop: centered modal ─────────────────────────────────────────────
+   Same markup/UI as mobile — only the positioning changes: instead of sliding
+   up from the bottom edge it scales in from the middle of the viewport. */
+@media (min-width: 1024px) {
+  .ls-sheet {
+    top: 50%;
+    bottom: auto;
+    max-height: 90dvh;
+    border-radius: 24px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.18);
+    transform: translate(-50%, -50%) scale(0.96);
+    opacity: 0;
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.22s ease,
+                visibility 0s linear 0.22s;
+  }
+
+  .ls-sheet--open {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+    transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.22s ease;
+  }
+
+  /* Match the sheet's rounded top corners. */
+  .ls-stripe {
+    border-radius: 24px 24px 0 0;
+  }
+
+  /* Keep the taller OTP step inside the viewport in a centered dialog. */
+  .ls-body {
+    min-height: 0;
+    overflow-y: auto;
+  }
 }

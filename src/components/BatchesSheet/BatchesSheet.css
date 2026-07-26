@@ -7,12 +7,20 @@
   background: rgba(0, 0, 0, 0);
   pointer-events: none;
   overflow: hidden;
-  transition: background 0.3s ease;
+  /* When closed, the sheet stays mounted (for the slide-out animation) but its
+     off-screen 100dvh white panel is a fixed, transformed layer sitting above
+     the bottom nav — on mobile it repainted over the nav during scroll / URL-bar
+     movement, causing the white flash. `visibility: hidden` drops it from the
+     paint & compositing tree entirely; the delay lets the slide-out finish. */
+  visibility: hidden;
+  transition: background 0.3s ease, visibility 0s linear 0.35s;
 }
 
 .bsh-overlay--open {
   background: rgba(0, 0, 0, 0.5);
   pointer-events: all;
+  visibility: visible;
+  transition: background 0.3s ease;
 }
 
 .bsh-sheet {
@@ -475,9 +483,9 @@
   align-items: center;
   justify-content: center;
   width: 160px;
-  height: 48px;
+  height: 44px;
   padding: 10px;
-  background: #121212;
+  background: #01AFD1;
   border-radius: 60px;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
