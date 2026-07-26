@@ -2,19 +2,23 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import PageSkeleton from "../components/Skeleton/PageSkeleton";
+import { useIsDesktop } from "../hooks/useIsDesktop";
+import DesktopProfile from "../components/desktop/DesktopProfile";
 import "./Profile.css";
 
 const P = "/figma/profile/";
+const DP = "/figma/desktop-profile/";
 
 interface MenuItem {
   label: string;
   icon: string;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export default function Profile() {
   const { isLoggedIn, authReady, user, logout } = useAuth();
   const navigate = useNavigate();
+  const isDesktop = useIsDesktop();
 
   // Gate: once auth is verified, if not logged in, open login and go home.
   useEffect(() => {
@@ -31,6 +35,8 @@ export default function Profile() {
   // show the profile skeleton instead of a blank screen.
   if (!authReady || !isLoggedIn) return <PageSkeleton variant="profile" />;
 
+  if (isDesktop) return <DesktopProfile />;
+
   const phone = user?.phone ?? "";
   const countryCode = user?.countryCode ?? "+91";
   const name = user?.name;
@@ -43,14 +49,27 @@ export default function Profile() {
   };
 
   const group1: MenuItem[] = [
-    { label: "My Profile", icon: `${P}v2-icon-profile.svg`, onClick: () => navigate("/my-profile") },
-    { label: "My bookings", icon: `${P}v2-icon-bookings.svg`, onClick: () => navigate("/bookings") },
-    { label: "Your feedback", icon: `${P}v2-icon-feedback.svg`, onClick: () => navigate("/feedback") },
+    { label: "My Profile", icon: `${DP}icon-profile.svg`, onClick: () => navigate("/my-profile") },
+    { label: "My bookings", icon: `${DP}icon-bookings.svg`, onClick: () => navigate("/bookings") },
+    { label: "Feedback", icon: `${DP}icon-feedback.svg`, onClick: () => navigate("/feedback") },
+    {
+      label: "Wishlist",
+      icon: `${DP}icon-wishlist.svg`,
+      onClick: () => window.dispatchEvent(new Event("wanderon:open-wishlist")),
+    },
+    { label: "Payments", icon: `${DP}icon-payments.svg` },
+    { label: "Referrals", icon: `${DP}icon-referrals.svg` },
+    { label: "Add Friends & Family", icon: `${DP}icon-friends.svg` },
+    { label: "Notifications", icon: `${DP}icon-notifications.svg` },
   ];
 
   const group2: MenuItem[] = [
-    { label: "Legal", icon: `${P}v2-icon-legal.svg`, onClick: () => navigate("/legal") },
-    { label: "Log out", icon: `${P}v2-icon-logout.svg`, onClick: handleLogout },
+    { label: "My Preferences", icon: `${DP}icon-preferences.svg` },
+    {
+      label: "Help  & Support",
+      icon: `${DP}icon-help.svg`,
+      onClick: () => window.dispatchEvent(new Event("wanderon:open-enquire")),
+    },
   ];
 
   const renderRow = (item: MenuItem) => (
@@ -110,10 +129,6 @@ export default function Profile() {
           <div className="prf-menu">
             <div className="prf-menu-group">{group1.map(renderRow)}</div>
 
-            <div className="prf-menu-divider" aria-hidden>
-              <img src={`${P}v2-divider.svg`} alt="" />
-            </div>
-
             <div className="prf-menu-group">{group2.map(renderRow)}</div>
 
             {/* Referral banner */}
@@ -125,13 +140,9 @@ export default function Profile() {
             </div>
           </div>
 
-          {/* Support */}
-          <button
-            className="prf-support"
-            type="button"
-            onClick={() => window.dispatchEvent(new Event("wanderon:open-enquire"))}
-          >
-            Support
+          {/* Log out */}
+          <button className="prf-support" type="button" onClick={handleLogout}>
+            Log out
           </button>
         </div>
       </div>

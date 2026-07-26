@@ -46,6 +46,16 @@ export default function Booking() {
     setPhone,
     email,
     setEmail,
+    panNumber,
+    setPanNumber,
+    panFile,
+    setPanFile,
+    passportNumber,
+    setPassportNumber,
+    passportValidUpto,
+    setPassportValidUpto,
+    passportFile,
+    setPassportFile,
     femaleMin,
     maleMin,
     effectiveFemale,
@@ -250,6 +260,92 @@ export default function Booking() {
               />
               <label htmlFor="bkg-email" className="bkg-flabel">Email address*</label>
             </div>
+          </div>
+        </section>
+
+        <div className="bkg-strip" />
+
+        {/* ── Documents ─────────────────────────────────────── */}
+        <section className="bkg-section bkg-section--gap">
+          <div className="bkg-subhead">
+            <span className="bkg-section-icon">
+              <img src={`${A}icon-id-card.svg`} width={16} height={16} alt="" aria-hidden />
+            </span>
+            <span className="bkg-section-title">Documents</span>
+          </div>
+
+          <div className="bkg-form">
+            <p className="bkg-doc-group">PAN Card</p>
+
+            <div className="bkg-field">
+              <input
+                id="bkg-pan"
+                className="bkg-input"
+                placeholder=" "
+                value={panNumber}
+                onChange={(e) => setPanNumber(e.target.value.toUpperCase())}
+              />
+              <label htmlFor="bkg-pan" className="bkg-flabel">PAN Number*</label>
+            </div>
+
+            <label className={`bkg-upload${panFile ? " bkg-upload--filled" : ""}`}>
+              <span className="bkg-upload-label">
+                {panFile ? panFile.name : "Upload PAN Card Front Image*"}
+              </span>
+              <img src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
+              <input
+                type="file"
+                accept="image/*,.pdf"
+                className="bkg-upload-input"
+                onChange={(e) => setPanFile(e.target.files?.[0] ?? null)}
+              />
+            </label>
+
+            <p className="bkg-doc-group">Passport</p>
+
+            <div className="bkg-doc-tag">
+              <img src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
+              <span>Minimum passport validity upto 3rd January 2027.</span>
+            </div>
+
+            <div className="bkg-doc-row">
+              <div className="bkg-field bkg-field--grow">
+                <input
+                  id="bkg-passport"
+                  className="bkg-input"
+                  placeholder=" "
+                  value={passportNumber}
+                  onChange={(e) => setPassportNumber(e.target.value.toUpperCase())}
+                />
+                <label htmlFor="bkg-passport" className="bkg-flabel">Passport Number*</label>
+              </div>
+              <div className="bkg-field bkg-field--grow">
+                <input
+                  id="bkg-passport-valid"
+                  className="bkg-input"
+                  placeholder=" "
+                  value={passportValidUpto}
+                  onChange={(e) => setPassportValidUpto(e.target.value)}
+                />
+                <label htmlFor="bkg-passport-valid" className="bkg-flabel">Passport Valid Upto*</label>
+                <span className="bkg-field-icon" aria-hidden>
+                  <img src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
+                </span>
+              </div>
+            </div>
+
+            <label className={`bkg-upload${passportFile ? " bkg-upload--filled" : ""}`}>
+              <span className="bkg-upload-label">
+                {passportFile ? passportFile.name : "Upload Passport Front*"}
+              </span>
+              <img src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
+              <input
+                type="file"
+                accept="image/*,.pdf"
+                className="bkg-upload-input"
+                onChange={(e) => setPassportFile(e.target.files?.[0] ?? null)}
+              />
+            </label>
           </div>
         </section>
 

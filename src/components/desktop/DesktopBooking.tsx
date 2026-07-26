@@ -46,6 +46,16 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
     setPhone,
     email,
     setEmail,
+    panNumber,
+    setPanNumber,
+    panFile,
+    setPanFile,
+    passportNumber,
+    setPassportNumber,
+    passportValidUpto,
+    setPassportValidUpto,
+    passportFile,
+    setPassportFile,
     femaleMin,
     maleMin,
     effectiveFemale,
@@ -233,6 +243,92 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                   />
                   <label htmlFor="dbk-email" className="dbk-flabel">Email address*</label>
                 </div>
+              </div>
+            </div>
+
+            {/* Documents */}
+            <div className="dbk-panel">
+              <div className="dbk-subhead">
+                <span className="dbk-section-icon">
+                  <img src={`${A}icon-id-card.svg`} width={16} height={16} alt="" aria-hidden />
+                </span>
+                <span className="dbk-section-title">Documents</span>
+              </div>
+
+              <div className="dbk-form">
+                <p className="dbk-doc-group">PAN Card</p>
+
+                <div className="dbk-field">
+                  <input
+                    id="dbk-pan"
+                    className="dbk-input"
+                    placeholder=" "
+                    value={panNumber}
+                    onChange={(e) => setPanNumber(e.target.value.toUpperCase())}
+                  />
+                  <label htmlFor="dbk-pan" className="dbk-flabel">PAN Number*</label>
+                </div>
+
+                <label className={`dbk-upload${panFile ? " dbk-upload--filled" : ""}`}>
+                  <span className="dbk-upload-label">
+                    {panFile ? panFile.name : "Upload PAN Card Front Image*"}
+                  </span>
+                  <img src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
+                  <input
+                    type="file"
+                    accept="image/*,.pdf"
+                    className="dbk-upload-input"
+                    onChange={(e) => setPanFile(e.target.files?.[0] ?? null)}
+                  />
+                </label>
+
+                <p className="dbk-doc-group">Passport</p>
+
+                <div className="dbk-doc-tag">
+                  <img src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
+                  <span>Minimum passport validity upto 3rd January 2027.</span>
+                </div>
+
+                <div className="dbk-doc-row">
+                  <div className="dbk-field dbk-field--grow">
+                    <input
+                      id="dbk-passport"
+                      className="dbk-input"
+                      placeholder=" "
+                      value={passportNumber}
+                      onChange={(e) => setPassportNumber(e.target.value.toUpperCase())}
+                    />
+                    <label htmlFor="dbk-passport" className="dbk-flabel">Passport Number*</label>
+                  </div>
+                  <div className="dbk-field dbk-field--grow">
+                    <input
+                      id="dbk-passport-valid"
+                      className="dbk-input"
+                      placeholder=" "
+                      value={passportValidUpto}
+                      onChange={(e) => setPassportValidUpto(e.target.value)}
+                    />
+                    <label htmlFor="dbk-passport-valid" className="dbk-flabel">
+                      Passport Valid Upto*
+                    </label>
+                    <span className="dbk-field-icon" aria-hidden>
+                      <img src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
+                    </span>
+                  </div>
+                </div>
+
+                <label className={`dbk-upload${passportFile ? " dbk-upload--filled" : ""}`}>
+                  <span className="dbk-upload-label">
+                    {passportFile ? passportFile.name : "Upload Passport Front*"}
+                  </span>
+                  <img src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
+                  <input
+                    type="file"
+                    accept="image/*,.pdf"
+                    className="dbk-upload-input"
+                    onChange={(e) => setPassportFile(e.target.files?.[0] ?? null)}
+                  />
+                </label>
               </div>
             </div>
           </section>
