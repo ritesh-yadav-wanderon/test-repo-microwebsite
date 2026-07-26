@@ -42,14 +42,8 @@ export default function DesktopTrips({
     <section className="dtrips">
       <div className="dtrips__head">
         <h2 className="dtrips__title">{title}</h2>
-        <button
-          className="dtrips__head-arrow"
-          aria-label="See all trips"
-          onClick={() => navigate(seeAllHref)}
-        >
-          <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
-            <path d="M4 12h15m0 0-5.5-5.5M19 12l-5.5 5.5" stroke="#3d3d3d" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+        <button className="dtrips__seeall" onClick={() => navigate(seeAllHref)}>
+          See all
         </button>
       </div>
 
@@ -69,10 +63,10 @@ export default function DesktopTrips({
           <button className="dtrips__more" onClick={() => navigate(seeAllHref)}>
             <span className="dtrips__more-stack">
               <span className="dtrips__more-mini dtrips__more-mini--left">
-                <img src={flat[0]?.image || `${BASE}/trip-demo.png`} alt="" />
+                <img src={flat[0]?.image || "/figma/trips/trip-1.jpg"} alt="" />
               </span>
               <span className="dtrips__more-mini dtrips__more-mini--right">
-                <img src={flat[1]?.image || `${BASE}/trip-demo.png`} alt="" />
+                <img src={flat[1]?.image || "/figma/trips/trip-1.jpg"} alt="" />
               </span>
             </span>
             View More Trips
@@ -111,7 +105,7 @@ function DesktopTripCard({ trip }: { trip: Trip }) {
   return (
     <article className="dtrips__card" onClick={() => navigate(`/trip/${trip.slug}`)}>
       <div className="dtrips__img">
-        <img src={trip.image || `${BASE}/trip-demo.png`} alt={trip.title} loading="lazy" />
+        <img src={trip.image || "/figma/trips/trip-1.jpg"} alt={trip.title} loading="lazy" />
         <button
           className="dtrips__wishlist"
           aria-label="Add to wishlist"

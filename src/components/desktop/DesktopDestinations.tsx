@@ -3,18 +3,30 @@ import { useNavigate } from "react-router-dom";
 import "./DesktopDestinations.css";
 
 const BASE = "/figma/desktop";
+const MOBILE = "/figma/dest";
 
-const DESTINATIONS = [
-  { name: "Egypt", img: "monument-egypt.png", slug: "egypt" },
-  { name: "Bali", img: "monument-bali.png", slug: "bali" },
-  { name: "Japan", img: "monument-japan.png", slug: "japan" },
-  { name: "Thailand", img: "monument-thailand.png", slug: "thailand" },
-  { name: "Rajasthan", img: "monument-rajasthan.png", slug: "rajasthan", flip: true },
-  { name: "Europe", img: "monument-europe.png", slug: "europe" },
-  { name: "Kerala", img: "monument-kerala.png", slug: "kerala" },
-  { name: "Vietnam", img: "monument-vietnam.png", slug: "vietnam" },
-  { name: "Egypt", img: "monument-egypt.png", slug: "egypt" },
-  { name: "Bali", img: "monument-bali.png", slug: "bali" },
+type Destination = { name: string; img: string; flip?: boolean };
+
+/* Same destination lists as the mobile DestinationStrip component.
+ * Desktop monument art is used where it exists; the remaining cutouts
+ * come from the shared mobile set. */
+const INTERNATIONAL: Destination[] = [
+  { name: "Egypt", img: `${BASE}/monument-egypt.png` },
+  { name: "Bali", img: `${MOBILE}/bali.png` },
+  { name: "Japan", img: `${MOBILE}/japan.png` },
+  { name: "Thailand", img: `${MOBILE}/thailand.png` },
+  { name: "Europe", img: `${MOBILE}/meghalaya.png` },
+  { name: "Dubai", img: `${MOBILE}/dubai.png` },
+  { name: "Vietnam", img: `${MOBILE}/vietnam.png` },
+];
+
+const DOMESTIC: Destination[] = [
+  { name: "Kerala", img: `${BASE}/monument-kerala.png` },
+  { name: "Rajasthan", img: `${MOBILE}/rajasthan.png`, flip: true },
+  { name: "Spiti", img: `${MOBILE}/spiti.png` },
+  { name: "Meghalaya", img: `${MOBILE}/meghalaya.png` },
+  { name: "Kashmir", img: `${MOBILE}/kashmir.png` },
+  { name: "Ladakh", img: `${MOBILE}/ladakh.png`, flip: true },
 ];
 
 /** "Destinations for the Wanderon community" monuments carousel (Figma 4715:22657). */
@@ -23,6 +35,14 @@ export default function DesktopDestinations() {
   const [tab, setTab] = useState<"international" | "domestic">("international");
   const trackRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
+
+  const destinations = tab === "international" ? INTERNATIONAL : DOMESTIC;
+
+  const switchTab = (next: "international" | "domestic") => {
+    setTab(next);
+    trackRef.current?.scrollTo({ left: 0 });
+    setProgress(0);
+  };
 
   const onScroll = () => {
     const el = trackRef.current;
@@ -37,29 +57,29 @@ export default function DesktopDestinations() {
       <div className="ddest__pills">
         <button
           className={`ddest__pill${tab === "international" ? " ddest__pill--active" : ""}`}
-          onClick={() => setTab("international")}
+          onClick={() => switchTab("international")}
         >
           International
         </button>
         <button
           className={`ddest__pill${tab === "domestic" ? " ddest__pill--active" : ""}`}
-          onClick={() => setTab("domestic")}
+          onClick={() => switchTab("domestic")}
         >
           Domestic
         </button>
       </div>
       <div className="ddest__track" ref={trackRef} onScroll={onScroll}>
-        {DESTINATIONS.map((d, i) => (
+        {destinations.map((d) => (
           <button
-            key={`${d.slug}-${i}`}
+            key={d.name}
             className="ddest__item"
-            onClick={() => navigate(`/destination/${d.slug}`)}
+            onClick={() => navigate(`/destination/${d.name.toLowerCase()}`)}
           >
             <span className="ddest__figure">
               <img className="ddest__shadow" src={`${BASE}/monument-shadow.svg`} alt="" />
               <img
                 className={`ddest__monument${d.flip ? " ddest__monument--flip" : ""}`}
-                src={`${BASE}/${d.img}`}
+                src={d.img}
                 alt={d.name}
               />
             </span>

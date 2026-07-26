@@ -1,7 +1,8 @@
 .dwhy {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 60px 80px 0;
+  width: 100vw;
+  margin: 60px auto 0;
+  padding: 64px 80px;
+  background: #fafafa;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,7 +17,7 @@
 }
 
 .dwhy__title {
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 600;
   line-height: 24px;
   letter-spacing: 0.5px;
@@ -32,26 +33,38 @@
   text-align: center;
 }
 
-.dwhy__ratings {
+/* Stats row — Google reviews / Best Travel Brand / 5.0 stars */
+.dwhy__stats {
   display: flex;
   justify-content: space-between;
-  width: 900px;
+  width: 758px;
   max-width: 100%;
+  height: 82px;
 }
 
-.dwhy__rating {
+.dwhy__stat {
   display: flex;
   flex-direction: column;
-  gap: 2.83px;
-  align-items: center;
-  width: 251.9px;
-}
-
-.dwhy__laurels {
-  display: flex;
+  gap: 3.77px;
   align-items: center;
   justify-content: center;
-  gap: 9.43px;
+  width: 248px;
+}
+
+.dwhy__stat--award {
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.dwhy__stat-google {
+  width: 22px;
+  height: 22px;
+}
+
+.dwhy__stat-label {
+  font-size: 18px;
+  line-height: 22.64px;
+  color: rgba(117, 117, 117, 0.7);
 }
 
 .dwhy__laurel {
@@ -64,60 +77,48 @@
   transform: scaleX(-1);
 }
 
-.dwhy__score {
-  font-size: 38px;
+.dwhy__stat-award {
+  font-size: 18px;
   font-weight: 500;
+  line-height: 22.64px;
+  color: #3d3d3d;
+  text-align: center;
+}
+
+.dwhy__stat-score {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 22.64px;
   color: #3d3d3d;
 }
 
-.dwhy__brand {
+.dwhy__stars {
   display: flex;
-  align-items: center;
-  gap: 3.77px;
-  font-size: 22px;
-  color: rgba(117, 117, 117, 0.7);
+  gap: 2.28px;
 }
 
-.dwhy__brand--google {
-  width: 32.08px;
-  height: 32.08px;
+.dwhy__stars img {
+  width: 13.65px;
+  height: 13.65px;
 }
 
-.dwhy__brand--ta {
-  width: 41.51px;
-  height: 26.57px;
-}
-
-.dwhy__brand--fb {
-  width: 37.74px;
-  height: 37.74px;
-}
-
-.dwhy__reviews {
-  display: flex;
-  gap: 20px;
-  width: 100%;
-}
-
-.dwhy__review-wrap {
-  display: flex;
-  gap: 20px;
-  flex: 1;
-  min-width: 0;
-}
-
-.dwhy__divider {
-  width: 1px;
-  align-self: stretch;
-  background: #e5e5e5;
+/* Review carousel — text left, phone screenshots right (Figma 5736:6420) */
+.dwhy__carousel {
+  position: relative;
+  width: 865px;
+  max-width: 100%;
+  height: 340px;
 }
 
 .dwhy__review {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(calc(-50% - 13px));
+  width: 434px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  flex: 1;
-  min-width: 0;
+  gap: 26px;
   filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.06));
 }
 
@@ -132,7 +133,6 @@
   height: 60px;
   border-radius: 50%;
   object-fit: cover;
-  box-shadow: 0 0 0 1px rgba(1, 95, 116, 0.08);
 }
 
 .dwhy__review-name {
@@ -176,6 +176,72 @@
   color: #202020;
   text-decoration: underline;
   padding: 0;
+  margin-top: -16px;
+}
+
+.dwhy__phones {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.dwhy__phone {
+  position: absolute;
+  object-fit: cover;
+  border-radius: 11.6px;
+  box-shadow: 0 3.9px 56.9px rgba(0, 0, 0, 0.15);
+  transition: left 0.35s ease, top 0.35s ease, width 0.35s ease, height 0.35s ease;
+}
+
+.dwhy__phone--top {
+  left: 602px;
+  top: -4px;
+  width: 226px;
+  height: 217px;
+  border-radius: 12px;
+  object-position: center 30%;
+  z-index: 1;
+}
+
+.dwhy__phone--back {
+  left: 581px;
+  top: 19px;
+  width: 258.7px;
+  height: 248.1px;
+  z-index: 2;
+}
+
+.dwhy__phone--front {
+  left: 561px;
+  top: 46px;
+  width: 293.5px;
+  height: 281.4px;
+  z-index: 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dwhy__phone {
+    transition: none;
+  }
+}
+
+.dwhy__arrows {
+  position: absolute;
+  left: 362px;
+  top: 277px;
+  display: flex;
+  justify-content: space-between;
+  width: 72px;
+}
+
+.dwhy__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #e6e6e6;
 }
 
 .dwhy__show-all {

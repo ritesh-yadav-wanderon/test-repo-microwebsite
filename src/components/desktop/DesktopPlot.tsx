@@ -29,7 +29,7 @@ export default function DesktopPlot() {
       <DesktopPovCarousel
         cards={CARDS}
         base={BASE}
-        playIcon={`${BASE}/plot-play.svg`}
+        playIcon="/figma/plot/play-circle.svg"
         initialCenter={3}
       />
     </section>
