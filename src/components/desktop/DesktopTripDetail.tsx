@@ -1,9 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import type { Trip, TripGroup } from "../../types";
 import { useCompare } from "../../context/CompareContext";
-import { useAuth } from "../../context/AuthContext";
-import { openLoginSheet } from "../../utils/login";
 import { SAMPLE_UPCOMING_TRIPS } from "../../api/sampleData";
 import {
   STATIC_DATA,
@@ -17,6 +14,7 @@ import {
 import "../../pages/TripDetail.css";
 import GallerySheet from "../GallerySheet/GallerySheet";
 import ShareSheet from "../ShareSheet/ShareSheet";
+import DesktopNav from "./DesktopNav";
 import DesktopBatchesSheet from "./DesktopBatchesSheet";
 import DesktopWhyChooseUs from "./DesktopWhyChooseUs";
 import DesktopTrips from "./DesktopTrips";
@@ -80,8 +78,6 @@ const TAB_SECTIONS = [
  *  from the mobile product page via the shared STATIC_DATA export. */
 export default function DesktopTripDetail() {
   const data = STATIC_DATA;
-  const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
 
   const [wishlisted, setWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
@@ -252,44 +248,8 @@ export default function DesktopTripDetail() {
 
   return (
     <div className="dtdp">
-      {/* ── Light sticky header (Figma 6184:24375 "default-header") ──────── */}
-      <header className="dtdp-header">
-        <button className="dtdp-header-logo" onClick={() => navigate("/")} aria-label="WanderOn home">
-          <img src="/figma/nav2/logo.png" alt="WanderOn" />
-        </button>
-        <nav className="dtdp-header-right">
-          <span className="dtdp-header-link">MICE</span>
-          <button className="dtdp-header-link" onClick={() => navigate("/")}>
-            Destinations
-          </button>
-          <button className="dtdp-header-search" aria-label="Search">
-            <svg width="45" height="36" viewBox="0 0 45 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-              <rect x="0.45" y="0.45" width="44.1" height="35.1" rx="17.55" fill="black" />
-              <rect x="0.45" y="0.45" width="44.1" height="35.1" rx="17.55" stroke="#4D4D4D" strokeWidth="0.9" />
-              <path
-                d="M22.602 14.3252C22.7819 14.1022 23.1113 14.0653 23.3054 14.276C23.4996 14.4869 23.6685 14.7209 23.8064 14.9738C24.0273 15.3788 24.1667 15.8235 24.2159 16.2823C24.265 16.741 24.2225 17.2053 24.0923 17.648C24.0111 17.9241 23.8966 18.189 23.7515 18.4361C23.6063 18.683 23.2756 18.7165 23.0526 18.5367C22.8296 18.3569 22.8008 18.0317 22.9302 17.7761C22.9984 17.6416 23.0545 17.5005 23.0972 17.3552C23.1889 17.0434 23.2175 16.7164 23.183 16.3932C23.1484 16.0699 23.0505 15.7556 22.8948 15.4702C22.8223 15.3374 22.7381 15.2118 22.6431 15.095C22.4624 14.8726 22.422 14.5483 22.602 14.3252Z"
-                fill="white"
-              />
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M20.7215 10.8C23.9559 10.8 26.5778 13.422 26.5778 16.6563C26.5778 17.8199 26.2365 18.9029 25.6514 19.8144L29.705 23.1211C30.2061 23.5301 30.2798 24.2682 29.8709 24.7693C29.4619 25.2703 28.7249 25.3451 28.2238 24.9363L24.0134 21.5003C23.0753 22.1391 21.9421 22.5126 20.7215 22.5126C17.4872 22.5126 14.8652 19.8907 14.8652 16.6563C14.8652 13.422 17.4872 10.8 20.7215 10.8ZM20.7215 11.9713C18.0102 11.9713 16.0365 13.945 16.0365 16.6563C16.0365 19.3677 18.0102 21.3413 20.7215 21.3413C23.4329 21.3413 25.4066 19.3677 25.4066 16.6563C25.4066 13.945 23.4329 11.9713 20.7215 11.9713Z"
-                fill="white"
-              />
-            </svg>
-          </button>
-          <button className="dtdp-header-events" onClick={() => navigate("/events")}>
-            Events
-          </button>
-          <button
-            className="dtdp-header-profile"
-            onClick={() => (isLoggedIn ? navigate("/profile") : openLoginSheet("/profile"))}
-            aria-label="Profile"
-          >
-            <img src={`${BOOK}hd-profile.svg`} alt="" aria-hidden />
-          </button>
-        </nav>
-      </header>
+      {/* ── Shared fixed header (always solid — no dark hero on this page) ─ */}
+      <DesktopNav alwaysSolid />
 
       {/* ── Hero gallery (Figma 5652:12023) ─────────────────────────────── */}
       <section className="dtdp-gallery">

@@ -42,14 +42,8 @@ export default function DesktopTrips({
     <section className="dtrips">
       <div className="dtrips__head">
         <h2 className="dtrips__title">{title}</h2>
-        <button
-          className="dtrips__head-arrow"
-          aria-label="See all trips"
-          onClick={() => navigate(seeAllHref)}
-        >
-          <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
-            <path d="M4 12h15m0 0-5.5-5.5M19 12l-5.5 5.5" stroke="#3d3d3d" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
+        <button className="dtrips__seeall" onClick={() => navigate(seeAllHref)}>
+          See all
         </button>
       </div>
 

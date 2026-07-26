@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { getScrollTop, onAppScroll } from "../utils/scroll";
 
 /**
- * Homepage: purely IntersectionObserver-driven.
+ * Homepage: driven by the hero search bar's visibility.
  *   - Hero search IN viewport  → logo header visible, compact nav hidden
- *   - Hero search OUT viewport → compact nav visible, logo header hidden
+ *   - Hero search OUT viewport → compact search-bar nav (same header style
+ *     the inner pages use), logo header hidden
  *
  * Non-home pages: scroll-direction-driven.
  *   - At top (<80px) or scrolling UP  → logo header
@@ -27,7 +28,7 @@ export function useScrollNav(isHome: boolean) {
     lastY.current = getScrollTop();
 
     if (isHome) {
-      // ── Homepage: IntersectionObserver only ──
+      // ── Homepage: swap once the hero search bar leaves the viewport ──
       const attach = () => {
         const el = document.querySelector("[data-hero-search]");
         if (!el) return false;

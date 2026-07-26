@@ -80,8 +80,11 @@ export default function DestinationStrip({ activeCategory, onCategoryChange }: P
     // Stuck only once the sentinel scrolls ABOVE the 72px line — NOT while it's
     // still below the fold (both are "not intersecting", but only the former
     // should pin the bar; otherwise it floats over the hero from page load).
+    // `isIntersecting` must gate the check: when scrolling back up, the
+    // crossing event fires with the sentinel still at ~72px, so the raw
+    // `top <= 72` test alone would leave the bar stuck at its original spot.
     const observer = new IntersectionObserver(
-      ([entry]) => setStuck(entry.boundingClientRect.top <= 72),
+      ([entry]) => setStuck(!entry.isIntersecting && entry.boundingClientRect.top <= 72),
       { rootMargin: "-72px 0px 0px 0px", threshold: 0 }
     );
     observer.observe(sentinel);

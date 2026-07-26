@@ -1,7 +1,5 @@
 import "./DesktopQuery.css";
 
-const BASE = "/figma/desktop";
-
 interface Props {
   title?: string;
   sub?: string;
@@ -25,11 +23,13 @@ export default function DesktopQuery({
             Enquire Now
           </button>
         </div>
-        <img
+        <video
           className="dquery__travellers"
-          src={`${BASE}/query-travellers.png`}
-          alt="WanderOn trip captains"
-          loading="lazy"
+          src="/figma/enquire/contact-animation.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
         />
       </div>
     </section>

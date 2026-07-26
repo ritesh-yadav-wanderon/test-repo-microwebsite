@@ -59,17 +59,6 @@ function CalendarIcon() {
   );
 }
 
-function ArrowIcon() {
-  return (
-    <svg viewBox="0 0 16 7.36396" fill="none" aria-hidden>
-      <path
-        d="M0.5 3.18198C0.223858 3.18198 0 3.40584 0 3.68198C0 3.95812 0.223858 4.18198 0.5 4.18198V3.68198V3.18198ZM15.8536 4.03553C16.0488 3.84027 16.0488 3.52369 15.8536 3.32843L12.6716 0.146447C12.4763 -0.0488155 12.1597 -0.0488155 11.9645 0.146447C11.7692 0.341709 11.7692 0.658291 11.9645 0.853554L14.7929 3.68198L11.9645 6.51041C11.7692 6.70567 11.7692 7.02225 11.9645 7.21751C12.1597 7.41278 12.4763 7.41278 12.6716 7.21751L15.8536 4.03553ZM0.5 3.68198V4.18198H15.5V3.68198V3.18198H0.5V3.68198Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
-
 export interface TripCardProps {
   trip: Trip;
   theme?: "default" | "teal";
@@ -220,7 +209,6 @@ export default function TripCard({ trip, onSeeAllDates, eager, showFeatures = tr
           </div>
           <button className="tc-cta" type="button" onClick={goToTrip}>
             View Trip
-            <ArrowIcon />
           </button>
         </div>
       </div>

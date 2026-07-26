@@ -12,10 +12,18 @@
   overflow: hidden;
   box-shadow: 0 4px 58.9px rgba(0, 0, 0, 0.15);
   color: #fff;
+  transition: background 0.35s ease, box-shadow 0.35s ease;
 }
 
 .wtcard--dark-text {
   color: #202020;
+}
+
+/* Expanded mode — grey panel with the long copy (mirrors mobile .ww-card--open) */
+.wtcard--open {
+  background: #e7e7e7;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  color: #3d3d3d;
 }
 
 .wtcard__img {
@@ -35,6 +43,16 @@
   gap: 5px;
   width: 100%;
   height: 61px;
+}
+
+.wtcard--open .wtcard__text {
+  height: auto;
+  gap: 12px;
+}
+
+.wtcard--open .wtcard__sub {
+  margin-top: 20px;
+  line-height: 18px;
 }
 
 .wtcard__title {
@@ -65,4 +83,17 @@
 .wtcard__plus img {
   width: 17.72px;
   height: 17.72px;
+  transition: transform 0.35s cubic-bezier(0.16, 0.84, 0.3, 1);
+}
+
+/* Plus rotates 45° into a cross when the card is open */
+.wtcard--open .wtcard__plus img {
+  transform: rotate(45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wtcard,
+  .wtcard__plus img {
+    transition: none;
+  }
 }
