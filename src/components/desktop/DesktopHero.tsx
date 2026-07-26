@@ -17,9 +17,9 @@ export default function DesktopHero() {
       />
       <div className="dhero__rating">
         <img className="dhero__rating-google" src={`${BASE}/google-g.svg`} alt="Google" />
-        <img className="dhero__laurel" src={`${BASE}/laurel.png`} alt="" />
+        <img className="dhero__laurel" src="/figma/reviews/laurel.png" alt="" />
         <span className="dhero__rating-score">4.9</span>
-        <img className="dhero__laurel dhero__laurel--flip" src={`${BASE}/laurel.png`} alt="" />
+        <img className="dhero__laurel dhero__laurel--flip" src="/figma/reviews/laurel.png" alt="" />
         <span className="dhero__rating-count">from 14,921 Reviews</span>
       </div>
       <div className="dhero__search" role="search">

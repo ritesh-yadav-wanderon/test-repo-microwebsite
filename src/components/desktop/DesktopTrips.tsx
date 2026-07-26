@@ -63,10 +63,10 @@ export default function DesktopTrips({
           <button className="dtrips__more" onClick={() => navigate(seeAllHref)}>
             <span className="dtrips__more-stack">
               <span className="dtrips__more-mini dtrips__more-mini--left">
-                <img src={flat[0]?.image || `${BASE}/trip-demo.png`} alt="" />
+                <img src={flat[0]?.image || "/figma/trips/trip-1.jpg"} alt="" />
               </span>
               <span className="dtrips__more-mini dtrips__more-mini--right">
-                <img src={flat[1]?.image || `${BASE}/trip-demo.png`} alt="" />
+                <img src={flat[1]?.image || "/figma/trips/trip-1.jpg"} alt="" />
               </span>
             </span>
             View More Trips
@@ -105,7 +105,7 @@ function DesktopTripCard({ trip }: { trip: Trip }) {
   return (
     <article className="dtrips__card" onClick={() => navigate(`/trip/${trip.slug}`)}>
       <div className="dtrips__img">
-        <img src={trip.image || `${BASE}/trip-demo.png`} alt={trip.title} loading="lazy" />
+        <img src={trip.image || "/figma/trips/trip-1.jpg"} alt={trip.title} loading="lazy" />
         <button
           className="dtrips__wishlist"
           aria-label="Add to wishlist"

@@ -202,7 +202,7 @@ export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = fal
           </div>
 
           <div className="dnav__menu-photo">
-            <img src={`${BASE}/dest-menu-photo.png`} alt="" loading="lazy" />
+            <img src="/figma/trip-hero/hero-bg.png" alt="" loading="lazy" />
             <button
               className="dnav__menu-all"
               onClick={() => {

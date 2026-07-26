@@ -5,4 +5,4 @@ dist-ssr
 .DS_Store
 .env
 .vite
-.tsconfig.tsbuildinfotsconfig.tsbuildinfo
+tsconfig.tsbuildinfo

@@ -12,17 +12,17 @@ type Destination = { name: string; img: string; flip?: boolean };
  * come from the shared mobile set. */
 const INTERNATIONAL: Destination[] = [
   { name: "Egypt", img: `${BASE}/monument-egypt.png` },
-  { name: "Bali", img: `${BASE}/monument-bali.png` },
-  { name: "Japan", img: `${BASE}/monument-japan.png` },
-  { name: "Thailand", img: `${BASE}/monument-thailand.png` },
-  { name: "Europe", img: `${BASE}/monument-europe.png` },
+  { name: "Bali", img: `${MOBILE}/bali.png` },
+  { name: "Japan", img: `${MOBILE}/japan.png` },
+  { name: "Thailand", img: `${MOBILE}/thailand.png` },
+  { name: "Europe", img: `${MOBILE}/meghalaya.png` },
   { name: "Dubai", img: `${MOBILE}/dubai.png` },
-  { name: "Vietnam", img: `${BASE}/monument-vietnam.png` },
+  { name: "Vietnam", img: `${MOBILE}/vietnam.png` },
 ];
 
 const DOMESTIC: Destination[] = [
   { name: "Kerala", img: `${BASE}/monument-kerala.png` },
-  { name: "Rajasthan", img: `${BASE}/monument-rajasthan.png`, flip: true },
+  { name: "Rajasthan", img: `${MOBILE}/rajasthan.png`, flip: true },
   { name: "Spiti", img: `${MOBILE}/spiti.png` },
   { name: "Meghalaya", img: `${MOBILE}/meghalaya.png` },
   { name: "Kashmir", img: `${MOBILE}/kashmir.png` },

@@ -23,7 +23,13 @@ const REVIEWS = [
   },
 ];
 
-const PHONES = ["review-phone-1.png", "review-phone-2.png", "review-phone-3.png"];
+/* review-phone-2/3 are the same images as the mobile Plot section, so the
+ * shared /figma/plot copies are reused instead of duplicating them here. */
+const PHONES = [
+  `${BASE}/review-phone-1.png`,
+  "/figma/plot/plot-4.jpg",
+  "/figma/plot/plot-2.jpg",
+];
 
 /* Stack slots in visual order: small top phone, middle phone, front phone.
  * Advancing the carousel rotates each image one slot forward, so the image
@@ -52,13 +58,13 @@ export default function DesktopWhyChooseUs() {
           <span className="dwhy__stat-label">140001 Reviews</span>
         </div>
         <div className="dwhy__stat dwhy__stat--award">
-          <img className="dwhy__laurel" src={`${BASE}/laurel-gold.png`} alt="" />
+          <img className="dwhy__laurel" src="/figma/reviews/laurel.png" alt="" />
           <span className="dwhy__stat-award">
             Best
             <br />
             Travel Brand
           </span>
-          <img className="dwhy__laurel dwhy__laurel--flip" src={`${BASE}/laurel-gold.png`} alt="" />
+          <img className="dwhy__laurel dwhy__laurel--flip" src="/figma/reviews/laurel.png" alt="" />
         </div>
         <div className="dwhy__stat">
           <span className="dwhy__stat-score">5.0</span>
@@ -73,11 +79,11 @@ export default function DesktopWhyChooseUs() {
       <div className="dwhy__carousel">
         <article className="dwhy__review" key={review.name}>
           <header className="dwhy__review-head">
-            <img className="dwhy__avatar" src={`${BASE}/review-avatar.png`} alt="" />
+            <img className="dwhy__avatar" src="/figma/reviews/avatar-inner.png" alt="" />
             <div>
               <p className="dwhy__review-name">{review.name}</p>
               <div className="dwhy__review-meta">
-                <img src={`${BASE}/review-stars.svg`} alt="5 out of 5 stars" />
+                <img src="/figma/reviews/stars-5.svg" alt="5 out of 5 stars" />
                 <span>{review.date}</span>
               </div>
             </div>
@@ -93,7 +99,7 @@ export default function DesktopWhyChooseUs() {
               <img
                 key={img}
                 className={`dwhy__phone dwhy__phone--${slot}`}
-                src={`${BASE}/${img}`}
+                src={img}
                 alt=""
                 loading="lazy"
               />
