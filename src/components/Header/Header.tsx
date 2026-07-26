@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { getScrollTop, onAppScroll } from "../../utils/scroll";
 import "./Header.css";
 
 export interface HeaderProps {
@@ -8,10 +10,19 @@ export interface HeaderProps {
 
 export default function Header({ visible, onMenu }: HeaderProps) {
   const tab = visible ? 0 : -1;
+  // Add a blurred backdrop to the header once the user starts scrolling.
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setScrolled(getScrollTop() > 4);
+    onScroll();
+    return onAppScroll(onScroll);
+  }, []);
 
   return (
     <header
-      className={`site-header${visible ? " site-header--visible" : " site-header--hidden"}`}
+      className={`site-header${visible ? " site-header--visible" : " site-header--hidden"}${
+        scrolled ? " site-header--scrolled" : ""
+      }`}
       aria-hidden={!visible}
     >
       <a

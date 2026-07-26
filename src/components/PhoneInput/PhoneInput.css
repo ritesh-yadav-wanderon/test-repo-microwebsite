@@ -89,6 +89,25 @@
   line-height: 21px;
   padding: 0;
 }
+
+/* ── Disabled state (e.g. OTP phase — locked number) ── */
+.phi-wrap--disabled .phi-pill,
+.phi-wrap--disabled .phi-field {
+  background: #f5f5f5;
+  border-color: #e5e5e5 !important;
+  cursor: not-allowed;
+}
+.phi-wrap--disabled .phi-pill-text,
+.phi-wrap--disabled .phi-input {
+  color: #757575;
+  -webkit-text-fill-color: #757575;
+}
+.phi-wrap--disabled .phi-input {
+  cursor: not-allowed;
+}
+.phi-wrap--disabled .phi-chevron {
+  opacity: 0.4;
+}
 .phi-input::placeholder {
   font-size: 12px;
   color: #ababab;

@@ -960,12 +960,12 @@
   align-items: center;
   justify-content: center;
   gap: 6px;
-  height: 48px;
+  height: 44px;
   width: 200px;
   padding: 10px 16px;
   border-radius: 56px;
-  background: #01afd1;
-  color: #ffffff;
+  background: #01AFD1;
+  color: #FFFFFF;
   flex-shrink: 0;
 }
 .bkg-cta-btn span {

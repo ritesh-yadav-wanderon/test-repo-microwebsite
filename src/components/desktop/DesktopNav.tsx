@@ -1,4 +1,6 @@
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { openLoginSheet } from "../../utils/login";
 import "./DesktopNav.css";
 
 const BASE = "/figma/desktop";
@@ -6,6 +8,7 @@ const BASE = "/figma/desktop";
 /** Sticky top navigation overlaid on the desktop hero (Figma 5195:26835). */
 export default function DesktopNav() {
   const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
 
   return (
     <div className="dnav">
@@ -26,7 +29,11 @@ export default function DesktopNav() {
           <img src={`${BASE}/nav-mask.svg`} alt="" className="dnav__mask" />
           Try Events
         </button>
-        <button className="dnav__profile" onClick={() => navigate("/profile")} aria-label="Profile">
+        <button
+          className="dnav__profile"
+          onClick={() => (isLoggedIn ? navigate("/profile") : openLoginSheet("/profile"))}
+          aria-label="Profile"
+        >
           <img src={`${BASE}/nav-profile.svg`} alt="" />
         </button>
         <button className="dnav__burger" aria-label="Menu">

@@ -2548,7 +2548,12 @@
   position: fixed;
   bottom: 0;
   left: 50%;
-  transform: translateX(-50%);
+  /* translateZ(0) promotes the bar to its own compositing layer so mobile
+     browsers don't re-rasterize (and briefly flash the blank white background)
+     during scroll. */
+  transform: translateX(-50%) translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
   width: 100%;
   max-width: var(--app-width);
   display: flex;
@@ -2644,8 +2649,6 @@
   padding: 6px 8px;
   box-sizing: border-box;
   background: #f1ebff;
-  -webkit-backdrop-filter: blur(7px);
-  backdrop-filter: blur(7px);
   overflow: hidden;
 }
 .tdp2-sticky-tag-left {
@@ -2757,10 +2760,10 @@
   align-items: center;
   justify-content: center;
   width: 148px;
-  height: 48px;
+  height: 44px;
   padding: 10px 12px;
   box-sizing: border-box;
-  background: #00a3c7;
+  background: #01AFD1;
   border: none;
   border-radius: 56px;
   cursor: pointer;

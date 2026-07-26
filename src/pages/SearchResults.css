@@ -3,6 +3,7 @@
 .sr-page {
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   background: #ffffff;
   position: relative;
 }
@@ -135,6 +136,7 @@ button.sr-spill {
 .sr-main {
   padding-top: 0;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 /* Sticky filter bar */
@@ -239,13 +241,44 @@ button.sr-spill {
   gap: 20px;
 }
 
-/* Trip count */
+/* Trip count + Show features toggle */
+.sr-count-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
 .sr-count {
   font-family: "Roboto", sans-serif;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   color: #4d4d4d;
   margin: 0;
+}
+
+/* Show features toggle */
+.sr-features-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: "Roboto", sans-serif;
+  flex-shrink: 0;
+}
+.sr-features-toggle-label {
+  font-size: 14px;
+  font-weight: 400;
+  color: #4d4d4d;
+  line-height: 1;
+}
+.sr-features-toggle-switch {
+  display: block;
+  height: 30px;
+  width: auto;
+  flex-shrink: 0;
 }
 
 /* Cards list */
@@ -273,10 +306,12 @@ button.sr-spill {
   cursor: pointer;
 }
 
-/* Card entrance animation — triggers on initial render and on load-more */
+/* Card entrance animation — triggers on initial render and on load-more.
+   Opacity-only (no transform) so cards don't spin up transient GPU layers that
+   get torn down on the first scroll and flash the fixed bottom nav. */
 @keyframes sr-card-in {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: none; }
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 .sr-cards > * {
   animation: sr-card-in 0.25s ease both;
@@ -351,9 +386,17 @@ button.sr-spill {
   inset: 0;
   z-index: 1300;
   pointer-events: none;
+  /* Always mounted, so when closed the white panel below the viewport must be
+     dropped from the paint/compositing tree — otherwise it flashes over the
+     bottom nav on the first scroll (it re-rasterizes as a fixed layer above
+     the nav). The delay lets the close slide-down finish before hiding. */
+  visibility: hidden;
+  transition: visibility 0s linear 0.3s;
 }
 .sr-sort--open {
   pointer-events: auto;
+  visibility: visible;
+  transition: none;
 }
 
 .sr-sort-overlay {

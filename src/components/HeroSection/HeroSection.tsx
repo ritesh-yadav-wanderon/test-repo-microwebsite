@@ -49,7 +49,7 @@ export default function HeroSection({ onSearchClick }: Props) {
         className="hero-bg-img"
         src="/figma/hero-bg-v2.png"
         alt="Built for the ones who wander together"
-        fetchPriority="high"
+        loading="eager"
       />
 
       {/* Bottom content stack */}

@@ -12,6 +12,7 @@ import DesktopWhyTravellers from "./DesktopWhyTravellers";
 import DesktopOriginals from "./DesktopOriginals";
 import DesktopQuery from "./DesktopQuery";
 import DesktopFooterMsg from "./DesktopFooterMsg";
+import DesktopFooter from "./DesktopFooter";
 import "./DesktopHome.css";
 
 interface Props {
@@ -39,6 +40,7 @@ export default function DesktopHome({ trips, loading }: Props) {
       <DesktopOriginals />
       <DesktopQuery />
       <DesktopFooterMsg />
+      <DesktopFooter />
     </div>
   );
 }

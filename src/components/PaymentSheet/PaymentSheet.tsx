@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { startTripPayment, TEST_CARD, type RazorpayPrefill } from "../../api/payment";
 import { PAYMENT_MODE } from "../../api/config";
+import { setAppScrollLocked } from "../../utils/scroll";
 import "./PaymentSheet.css";
 
 const P = "/figma/payment/";
@@ -150,10 +151,8 @@ export default function PaymentSheet({
   };
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    setAppScrollLocked(isOpen);
+    return () => setAppScrollLocked(false);
   }, [isOpen]);
 
   // ── Swipe-to-pay drag interaction ──────────────────────────────────────────

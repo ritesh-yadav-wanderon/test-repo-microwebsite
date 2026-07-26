@@ -6,11 +6,16 @@
   z-index: 1009;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.35s ease;
+  /* Hidden when closed so it can't repaint over the fixed bottom nav on
+     scroll; delay preserves the fade-out animation. */
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0s linear 0.35s;
 }
 .cbs-overlay--visible {
   opacity: 1;
   pointer-events: auto;
+  visibility: visible;
+  transition: opacity 0.35s ease;
 }
 
 /* ── Sheet ── */
@@ -28,12 +33,15 @@
   z-index: 1010;
   border-radius: 12px 12px 0 0;
   transform: translateY(100%);
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.35s;
   max-width: var(--app-width);
   margin: 0 auto;
+  visibility: hidden;
 }
 .cbs--open {
   transform: translateY(0);
+  visibility: visible;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .cbs-close {

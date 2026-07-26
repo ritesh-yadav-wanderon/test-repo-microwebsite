@@ -1,6 +1,8 @@
 import { useState } from "react";
 import FooterMessage from "../components/FooterMessage/FooterMessage";
 import { useNavigate } from "react-router-dom";
+import { useIsDesktop } from "../hooks/useIsDesktop";
+import DesktopFooter from "../components/desktop/DesktopFooter";
 import "./MyProfile.css";
 
 const MP = "/figma/my-profile/";
@@ -123,12 +125,14 @@ function HalfField({ label, value }: { label: string; value: string }) {
 /* ── Page ── */
 export default function MyProfile() {
   const navigate = useNavigate();
+  const isDesktop = useIsDesktop();
   const [form, setForm] = useState(INIT);
   const [bannerVisible, setBannerVisible] = useState(true);
 
   const set = (key: keyof typeof INIT) => (v: string) => setForm(f => ({ ...f, [key]: v }));
 
   return (
+    <>
     <div className="mprf-page">
 
       {/* Header */}
@@ -240,5 +244,7 @@ export default function MyProfile() {
       <FooterMessage />
       </div>
     </div>
+    {isDesktop && <DesktopFooter />}
+    </>
   );
 }

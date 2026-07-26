@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { setAppScrollLocked } from "../../utils/scroll";
 import "./CancelBookingSheet.css";
 
 const C = "/figma/cancel/";
@@ -29,10 +30,8 @@ export default function CancelBookingSheet({
   }, [isOpen]);
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    setAppScrollLocked(isOpen);
+    return () => setAppScrollLocked(false);
   }, [isOpen]);
 
   if (!hasOpened) return null;
