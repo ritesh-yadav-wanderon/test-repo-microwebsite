@@ -494,46 +494,58 @@ export default function Destination() {
       <TribeStories />
 
       <div className="dp-section-div" aria-hidden />
-      {/* ── Cultural and Local Voices (Figma 5390:5939) ── */}
+      {/* ── Cultural and Local Voices (Figma 4518:29298) ── */}
       <section className="dp-culture">
         <div className="dp-culture-head">
           <h2 className="dp-culture-title">Cultural and Local Voices</h2>
           <p className="dp-culture-sub">Every city a new rhythm, every night a new reason to celebrate.</p>
         </div>
 
-        {/* Top row: two polaroids — left straight, right tilted with stamp */}
-        <div className="dp-culture-row">
-          <figure className="dp-pol dp-pol--left">
+        {/* Collage: main Paris polaroid (with stamp) over side Seville polaroid */}
+        <div className="dp-cult-collage">
+          <figure className="dp-cult-pol dp-cult-pol--main">
             <img
-              className="dp-pol-flat"
-              src="/figma/culture/image-1.png"
-              alt="Germany — raise your stein with a thousand strangers like old friends"
+              className="dp-cult-pol-photo"
+              src="/figma/desktop-dest/cult-photo-paris.png"
+              alt="Eiffel Tower over the Seine, Paris"
+              loading="lazy"
+            />
+            <img className="dp-cult-pol-frame" src="/figma/desktop-dest/cult-frame.png" alt="" aria-hidden />
+            <figcaption className="dp-cult-pol-caption">
+              From Paris cafés to Roman backstreets, travellers arrive chasing
+              the postcard and leave with the version no postcard shows.
+            </figcaption>
+            <img
+              className="dp-cult-stamp"
+              src="/figma/desktop-dest/cult-stamp.png"
+              alt="WanderOn approved"
               loading="lazy"
             />
           </figure>
 
-          <figure className="dp-pol dp-pol--right">
+          <figure className="dp-cult-pol dp-cult-pol--side">
             <img
-              className="dp-pol-flat"
-              src="/figma/culture/image-2.png"
-              alt="Amsterdam — canals, bicycles, and golden-hour gables"
+              className="dp-cult-pol-photo"
+              src="/figma/desktop-dest/cult-photo-flamenco.png"
+              alt="Flamenco dancers in Plaza de España, Seville"
               loading="lazy"
             />
+            <img className="dp-cult-pol-frame" src="/figma/desktop-dest/cult-frame.png" alt="" aria-hidden />
+            <figcaption className="dp-cult-pol-caption">
+              For many, Europe is the first great trip: the continent that
+              turns a traveller into a storyteller
+            </figcaption>
           </figure>
         </div>
 
-        {/* Center: La Tomatina polaroid */}
-        <figure className="dp-pol dp-pol--center">
-          <img
-            className="dp-pol-flat"
-            src="/figma/culture/image-3.png"
-            alt="La Tomatina — one town, forty tons of tomatoes, zero rules"
-            loading="lazy"
-          />
-        </figure>
-
-        {/* Quote */}
-        <p className="dp-culture-quote">Europe isn&apos;t meant to be watched from the sidelines. From Munich&apos;s beer halls to Amsterdam&apos;s canals to a tomato-soaked street in Buñol, this is a continent best lived out loud.</p>
+        {/* Violin cutout + quote (Figma 6550:26539) */}
+        <div className="dp-cult-quote-row">
+          <div className="dp-cult-violin" aria-hidden>
+            <img className="dp-cult-violin-blur" src="/figma/desktop-dest/cult-violin.png" alt="" loading="lazy" />
+            <img className="dp-cult-violin-img" src="/figma/desktop-dest/cult-violin.png" alt="" loading="lazy" />
+          </div>
+          <p className="dp-culture-quote">Europe isn&apos;t meant to be watched from the sidelines. From Munich&apos;s beer halls to Amsterdam&apos;s canals to a tomato-soaked street in Buñol, this is a continent best lived out loud.</p>
+        </div>
 
         {/* Interactive photo stack (kept — Figma 4518:26092) */}
         <div className="dp-culture-stack">

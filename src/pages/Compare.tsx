@@ -1,91 +1,114 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Compare.css";
 
 const P = "/figma/compare/";
 
-const TRIPS = [
+interface InclusionPill {
+  icon: string;
+  label: string;
+}
+
+interface ItineraryDay {
+  day: number;
+  place: string;
+}
+
+interface Experience {
+  img: string;
+  label: string;
+}
+
+interface CompareTrip {
+  id: number;
+  image: string;
+  title: string;
+  price: string;
+  days: string;
+  places: string;
+  groupSize: string;
+  inclusions: InclusionPill[];
+  itinerary: ItineraryDay[];
+  experiences: Experience[];
+}
+
+const INCLUSIONS: InclusionPill[] = [
+  { icon: `${P}icon-concierge.svg`, label: "9N Accommodation" },
+  { icon: `${P}icon-meal.svg`, label: "12 Meals" },
+  { icon: `${P}icon-taxi.svg`, label: "10 Shared Transfers" },
+  { icon: `${P}icon-hiking.svg`, label: "12 Activities" },
+  { icon: `${P}icon-guide.svg`, label: "Trip Captains, Local Guides" },
+];
+
+const ITINERARY: ItineraryDay[] = [
+  { day: 1, place: "London" },
+  { day: 2, place: "Paris" },
+  { day: 3, place: "Paris" },
+  { day: 4, place: "Swiss Alps" },
+  { day: 5, place: "Beaujolais Wine Region" },
+  { day: 6, place: "Barcelona" },
+  { day: 7, place: "French Riviera" },
+  { day: 8, place: "Florence" },
+];
+
+const EXPERIENCES: Experience[] = [
+  { img: `${P}exp-1.png`, label: "Paris City Sightseeing Tour - Paris City Tour On A Shared Basis" },
+  { img: `${P}exp-2.png`, label: "Eiffel Tower Guided Tour With Summit Access" },
+  { img: `${P}exp-3.png`, label: "Palace of Versailles" },
+  { img: `${P}exp-4.png`, label: "1 Hour Seine River Cruise" },
+  { img: `${P}exp-4.png`, label: "Paris Night Tour On A Shared Basis" },
+];
+
+const TRIPS: CompareTrip[] = [
   {
     id: 1,
-    image: `${P}trip-hero.png`,
-    title: "15-Day Europe Group Trip 2026: Paris to Budapest",
-    priceLabel: "Starting Price:",
+    image: `${P}trip-hero.jpg`,
+    title: "8-Day Europe Group Trip 2026: Paris to Budapest",
     price: "Rs.98,990/- Per Person",
-    route: "3N Paris → 3N Amsterdam → 3N Prague → 2N Vienna",
-    inclusions: [
-      "Paris - Eiffel Tower Visit, Seine River Cruise, Disneyland/Louvre Museum",
-      "Amsterdam - Canal Cruise, Heineken Experience, Dutch Villages of Zaanse Schans",
-      "Prague - Old Town Square, Charles Bridge, Prague Castle",
-      "Vienna - St. Stephen's Cathedral, Hofburg Palace",
-      "Budapest - Boat Party, Szechenyi Thermal Baths, Central Market Hall, Buda Castle",
-    ],
-    services: [
-      {
-        icon: `${P}icon-hotel.svg`,
-        label: "Stay + Breakfast",
-        desc: "Paris, Amsterdam, Prague, Vienna, Budapest",
-      },
-      {
-        icon: `${P}icon-taxi.svg`,
-        label: "Transport",
-        desc: "All Transportation by A/C Vehicles on a shared basis",
-      },
-    ],
-    exclusions: [
-      {
-        icon: `${P}icon-flight.svg`,
-        label: "Flights",
-        desc: "Round-trip Airfare and Taxes",
-      },
-      {
-        icon: `${P}icon-passport.svg`,
-        label: "Visa",
-        desc: "Visa Services and Charges",
-      },
-    ],
+    days: "7 Nights / 8 Days",
+    places: "Paris, Amsterdam, Prague, Vienna, Budapest",
+    groupSize: "50 People",
+    inclusions: INCLUSIONS,
+    itinerary: ITINERARY,
+    experiences: EXPERIENCES,
   },
   {
     id: 2,
-    image: `${P}trip-hero.png`,
-    title: "15-Day Europe Group Trip 2026: Paris to Budapest",
-    priceLabel: "Starting Price:",
-    price: "Rs.98,990/- Per Person",
-    route: "3N Paris → 3N Amsterdam → 3N Prague → 2N Vienna",
-    inclusions: [
-      "Paris - Eiffel Tower Visit, Seine River Cruise, Disneyland/Louvre Museum",
-      "Amsterdam - Canal Cruise, Heineken Experience, Dutch Villages of Zaanse Schans",
-      "Prague - Old Town Square, Charles Bridge, Prague Castle",
-      "Vienna - St. Stephen's Cathedral, Hofburg Palace",
-      "Budapest - Boat Party, Szechenyi Thermal Baths, Central Market Hall, Buda Castle",
-    ],
-    services: [
-      {
-        icon: `${P}icon-hotel.svg`,
-        label: "Stay + Breakfast",
-        desc: "Paris, Amsterdam, Prague, Vienna, Budapest",
-      },
-      {
-        icon: `${P}icon-taxi.svg`,
-        label: "Transport",
-        desc: "All Transportation by A/C Vehicles on a shared basis",
-      },
-    ],
-    exclusions: [
-      {
-        icon: `${P}icon-flight.svg`,
-        label: "Flights",
-        desc: "Round-trip Airfare and Taxes",
-      },
-      {
-        icon: `${P}icon-passport.svg`,
-        label: "Visa",
-        desc: "Visa Services and Charges",
-      },
-    ],
+    image: `${P}trip-hero.jpg`,
+    title: "12-Day European Discovery 2026: Paris to Budapest",
+    price: "Rs.1,20,000/- Per Person",
+    days: "11 Nights / 12 Days",
+    places: "England, France, Netherlands, Germany, Italy, Switzerland",
+    groupSize: "50 People",
+    inclusions: INCLUSIONS,
+    itinerary: ITINERARY,
+    experiences: EXPERIENCES,
   },
 ];
 
+/* Fields the "Highlights Differences" toggle can flag */
+const DIFF_FIELDS = ["price", "days", "places", "groupSize"] as const;
+type DiffField = (typeof DIFF_FIELDS)[number];
+
+const DIFFERING_FIELDS = new Set<DiffField>(
+  DIFF_FIELDS.filter((f) => new Set(TRIPS.map((t) => t[f])).size > 1)
+);
+
+function SectionHead({ icon, label }: { icon: string; label: string }) {
+  return (
+    <div className="cpt-section-hd">
+      <img src={icon} alt="" width={16} height={16} loading="lazy" />
+      <span>{label}</span>
+    </div>
+  );
+}
+
 export default function Compare() {
   const navigate = useNavigate();
+  const [showDiff, setShowDiff] = useState(false);
+
+  const diffClass = (field: DiffField) =>
+    showDiff && DIFFERING_FIELDS.has(field) ? " cpt-val--diff" : "";
 
   return (
     <div className="cpt-page">
@@ -105,12 +128,38 @@ export default function Compare() {
       {/* AI comparison banner */}
       <div className="cpt-ai-banner">
         <div className="cpt-ai-label">
-          <img src={`${P}wand-shine.svg`} alt="" width={16} height={16} loading="lazy" />
           <span>Trip Comparison</span>
+          <img src={`${P}wand-shine.svg`} alt="" width={16} height={16} loading="lazy" />
         </div>
         <p className="cpt-ai-text">
-          Both trips cover the same 15-day Paris → Budapest itinerary at ₹98,990/person with identical inclusions — stay, breakfast, and shared A/C transport across 5 cities. Neither includes flights or visa. Check departure dates and batch availability to make your pick.
+          <strong>Italy: Trekking through the Dolomites </strong>
+          offers alpine hikes and Prosecco, a cool mountain escape unlike our tropical routes,
+          perfect for those craving crisp air. Egypt 360°: From the Giza Pyramids to the Red Sea
+          explores ancient wonders and desert history, contrasting with our nature-heavy trips,
+          ideal for those wanting to channel their inner Indiana Jones.{" "}
+          <strong>Indonesia 360°: Java, Bali and the Gili islands blends</strong>
+          {" "}volcano trekking and surfing for a high-energy tropical fix unlike our historical
+          routes, perfect for those seeking pure island vibes.
         </p>
+      </div>
+
+      {/* Highlights Differences toggle — same switch as the listing page */}
+      <div className="cpt-diff-row">
+        <button
+          type="button"
+          role="switch"
+          aria-checked={showDiff}
+          className="cpt-diff-toggle"
+          onClick={() => setShowDiff((v) => !v)}
+        >
+          <span className="cpt-diff-label">Highlights Differences</span>
+          <img
+            className="cpt-diff-toggle-switch"
+            src={`/figma/listing/toggle/toggle-${showDiff ? "on" : "off"}.svg`}
+            alt=""
+            aria-hidden
+          />
+        </button>
       </div>
 
       {/* Horizontally scrollable comparison area */}
@@ -129,67 +178,74 @@ export default function Compare() {
                   </button>
                 </div>
 
-                {/* Title + price + route */}
+                {/* Title + price */}
                 <div className="cpt-card-info">
                   <p className="cpt-card-title">{trip.title}</p>
                   <div className="cpt-card-price-row">
                     <span className="cpt-card-price-prefix">
                       <img src={`${P}icon-discount.svg`} alt="" width={14} height={14} loading="lazy" />
-                      <span className="cpt-card-price-label">{trip.priceLabel}</span>
+                      <span>Starting Price:</span>
                     </span>
-                    <span className="cpt-card-price">{trip.price}</span>
+                    <span className={`cpt-card-price${diffClass("price")}`}>{trip.price}</span>
                   </div>
-                  <p className="cpt-card-route">{trip.route}</p>
                 </div>
 
-                {/* Inclusions — activities */}
+                {/* Number of Days */}
                 <div className="cpt-section">
-                  <div className="cpt-section-hd">
-                    <img src={`${P}icon-hiking.svg`} alt="" width={14} height={14} loading="lazy" />
-                    <span>Inclusions</span>
-                  </div>
-                  <ul className="cpt-bullet-list">
-                    {trip.inclusions.map((item) => (
-                      <li key={item}>{item}</li>
+                  <SectionHead icon={`${P}icon-calendar.svg`} label="Number of Days" />
+                  <p className={`cpt-val${diffClass("days")}`}>{trip.days}</p>
+                </div>
+
+                {/* Number of Places */}
+                <div className="cpt-section cpt-section--places">
+                  <SectionHead icon={`${P}icon-location.svg`} label="Number of Places" />
+                  <p className={`cpt-val${diffClass("places")}`}>{trip.places}</p>
+                </div>
+
+                {/* Group Size */}
+                <div className="cpt-section">
+                  <SectionHead icon={`${P}icon-groups.svg`} label="Group Size" />
+                  <p className={`cpt-val${diffClass("groupSize")}`}>{trip.groupSize}</p>
+                </div>
+
+                {/* Inclusions */}
+                <div className="cpt-section">
+                  <SectionHead icon={`${P}icon-inclusions.svg`} label="Inclusions" />
+                  <div className="cpt-pills">
+                    {trip.inclusions.map((inc) => (
+                      <span key={inc.label} className="cpt-pill">
+                        <img src={inc.icon} alt="" width={12} height={12} loading="lazy" />
+                        <span>{inc.label}</span>
+                      </span>
                     ))}
-                  </ul>
+                  </div>
                 </div>
 
-                {/* Inclusions — services */}
+                {/* Itinerary */}
                 <div className="cpt-section">
-                  <div className="cpt-section-hd">
-                    <img src={`${P}icon-checklist.svg`} alt="" width={14} height={14} loading="lazy" />
-                    <span>Inclusions</span>
-                  </div>
-                  <div className="cpt-service-rows">
-                    {trip.services.map((s) => (
-                      <div key={s.label} className="cpt-service-row">
-                        <span className="cpt-service-pill cpt-service-pill--green">
-                          <img src={s.icon} alt="" width={12} height={12} loading="lazy" />
-                          <span>{s.label}</span>
-                        </span>
-                        <p className="cpt-service-desc">{s.desc}</p>
+                  <SectionHead icon={`${P}icon-itinerary.svg`} label="Itinerary" />
+                  <div className="cpt-itin">
+                    {trip.itinerary.map((d) => (
+                      <div key={d.day} className="cpt-itin-row">
+                        <span>Day {d.day}:</span>
+                        <span>{d.place}</span>
                       </div>
                     ))}
+                    <span className="cpt-show-more">Show More</span>
                   </div>
                 </div>
 
-                {/* Exclusions */}
+                {/* Experiences */}
                 <div className="cpt-section">
-                  <div className="cpt-section-hd">
-                    <img src={`${P}icon-block.svg`} alt="" width={14} height={14} loading="lazy" />
-                    <span>Exclusions</span>
-                  </div>
-                  <div className="cpt-service-rows">
-                    {trip.exclusions.map((e) => (
-                      <div key={e.label} className="cpt-service-row">
-                        <span className="cpt-service-pill cpt-service-pill--grey">
-                          <img src={e.icon} alt="" width={12} height={12} loading="lazy" />
-                          <span>{e.label}</span>
-                        </span>
-                        <p className="cpt-service-desc">{e.desc}</p>
+                  <SectionHead icon={`${P}icon-experiences.svg`} label="Experiences" />
+                  <div className="cpt-exps">
+                    {trip.experiences.map((exp) => (
+                      <div key={exp.label} className="cpt-exp-row">
+                        <img className="cpt-exp-img" src={exp.img} alt="" loading="lazy" />
+                        <p className="cpt-exp-text">{exp.label}</p>
                       </div>
                     ))}
+                    <span className="cpt-show-more">Show More</span>
                   </div>
                 </div>
 
