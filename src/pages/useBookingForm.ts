@@ -70,6 +70,13 @@ export function useBookingForm() {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
 
+  // Documents
+  const [panNumber, setPanNumber] = useState("");
+  const [panFile, setPanFile] = useState<File | null>(null);
+  const [passportNumber, setPassportNumber] = useState("");
+  const [passportValidUpto, setPassportValidUpto] = useState("");
+  const [passportFile, setPassportFile] = useState<File | null>(null);
+
   // Who are you booking for
   const [femaleCount, setFemaleCount] = useState(0);
   const [maleCount, setMaleCount] = useState(0);
@@ -201,6 +208,16 @@ export function useBookingForm() {
     setPhone,
     email,
     setEmail,
+    panNumber,
+    setPanNumber,
+    panFile,
+    setPanFile,
+    passportNumber,
+    setPassportNumber,
+    passportValidUpto,
+    setPassportValidUpto,
+    passportFile,
+    setPassportFile,
     femaleMin,
     maleMin,
     effectiveFemale,

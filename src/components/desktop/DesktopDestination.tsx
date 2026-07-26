@@ -73,8 +73,6 @@ export default function DesktopDestination({
     [trips]
   );
   const seeAllHref = `/search?destination=${encodeURIComponent(destination)}`;
-  const enquire = () =>
-    window.dispatchEvent(new CustomEvent("wanderon:open-enquire"));
 
   return (
     <div className="ddpage">
@@ -98,21 +96,16 @@ export default function DesktopDestination({
               <span className="ddp-info-value">{destination}</span>
             </div>
             <div className="ddp-info-col">
-              <span className="ddp-info-label">Starting Price:</span>
-              <span className="ddp-info-value">{startingPrice} Per Person</span>
-            </div>
-            <div className="ddp-info-col">
               <span className="ddp-info-label">Vibes:</span>
-              <span className="ddp-info-vibes">
-                {vibes.slice(0, 3).map((v) => (
-                  <span key={v}>{v}</span>
-                ))}
-              </span>
+              <span className="ddp-info-vibes">{vibes.slice(0, 3).join(" | ")}</span>
             </div>
           </div>
-          <button className="ddp-info-enquire" type="button" onClick={enquire}>
-            Enquire Now
-          </button>
+          <div className="ddp-info-col">
+            <span className="ddp-info-label">Starting Price:</span>
+            <span className="ddp-info-value">
+              {startingPrice} <span className="ddp-info-per">Per Person</span>
+            </span>
+          </div>
         </div>
       </section>
 

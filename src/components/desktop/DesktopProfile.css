@@ -1,0 +1,471 @@
+/* Desktop profile ("Account") page — Figma 3996:11227 */
+
+/* Break out of the 460px mobile app-shell and hide mobile chrome, matching the
+   other desktop pages. Active only ≥1024px while .dpr is mounted. */
+@media (min-width: 1024px) {
+  .app-shell:has(.dpr) {
+    max-width: none;
+    box-shadow: none;
+    background: #fff;
+  }
+
+  .app-shell:has(.dpr) .site-header,
+  .app-shell:has(.dpr) .ostn,
+  .app-shell:has(.dpr) .bottom-nav {
+    display: none;
+  }
+}
+
+.dpr {
+  width: 100%;
+  min-height: 100vh;
+  background: #fff;
+  font-family: var(--font);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+.dpr-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 70px;
+  padding: 0 max(80px, calc((100% - 1120px) / 2));
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.dpr-header-back {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dpr-header-back img {
+  width: 100%;
+  height: 100%;
+}
+
+.dpr-header-title {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #3d3d3d;
+}
+
+/* ── Two-column body ────────────────────────────────────────────────── */
+.dpr-body {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 21px;
+  padding: 44px max(80px, calc((100% - 1120px) / 2)) 80px;
+}
+
+/* ── Left rail ──────────────────────────────────────────────────────── */
+.dpr-rail {
+  width: 338px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.dpr-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.dpr-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #f8f0d3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dpr-avatar span {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.06px;
+  color: #755d05;
+}
+
+.dpr-name {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0.04px;
+  color: #202020;
+}
+
+.dpr-menu {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 20px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.04);
+}
+
+.dpr-menu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  padding: 16px 0;
+  border: none;
+  border-bottom: 1px solid #f2f2f2;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dpr-menu-row:last-child {
+  border-bottom: none;
+}
+
+.dpr-menu-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.dpr-menu-left img {
+  flex-shrink: 0;
+}
+
+.dpr-menu-label {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #3d3d3d;
+  white-space: nowrap;
+}
+
+.dpr-menu-chevron {
+  flex-shrink: 0;
+}
+
+.dpr-referral {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #f5f5f5;
+}
+
+.dpr-referral img {
+  flex-shrink: 0;
+}
+
+.dpr-referral p {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.048px;
+  color: #757575;
+}
+
+.dpr-logout {
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0.035px;
+  color: #202020;
+}
+
+/* ── Right column ───────────────────────────────────────────────────── */
+.dpr-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.dpr-card {
+  width: 100%;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.04);
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dpr-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+}
+
+.dpr-card-head img {
+  flex-shrink: 0;
+}
+
+.dpr-card-head span {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18.2px;
+  color: #202020;
+}
+
+/* ── Form (floating labels, mirrors DesktopBooking) ─────────────────── */
+.dpr-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 6px 23px 0;
+}
+
+.dpr-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.dpr-row .dpr-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.dpr-field {
+  position: relative;
+  width: 100%;
+}
+
+.dpr-input {
+  width: 100%;
+  height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  background: #ffffff;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #3c3c3c;
+  outline: none;
+}
+
+.dpr-input:focus {
+  border-color: #01afd1;
+}
+
+.dpr-input::placeholder {
+  color: #ababab;
+  font-size: 14px;
+}
+
+.dpr-input--medium {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.dpr-flabel {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #ababab;
+  pointer-events: none;
+  transition: all 0.15s ease;
+  background: #ffffff;
+}
+
+.dpr-input:focus + .dpr-flabel,
+.dpr-input:not(:placeholder-shown) + .dpr-flabel,
+.dpr-field--float .dpr-flabel {
+  top: -8px;
+  transform: none;
+  padding: 2px 4px;
+  font-size: 10px;
+  line-height: 14px;
+  left: 10px;
+}
+
+.dpr-field-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.dpr-field-icon img {
+  display: block;
+}
+
+.dpr-input--trail2 {
+  padding-right: 52px;
+}
+
+.dpr-select {
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  padding-right: 40px;
+}
+
+.dpr-select--empty {
+  color: transparent;
+}
+
+.dpr-select.dpr-select--empty + .dpr-flabel {
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0;
+  font-size: 14px;
+  line-height: 21px;
+  left: 12px;
+}
+
+.dpr-select:focus + .dpr-flabel {
+  top: -8px;
+  transform: none;
+  padding: 2px 4px;
+  font-size: 10px;
+  line-height: 14px;
+  left: 10px;
+}
+
+/* Phone rows */
+.dpr-phone {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+.dpr-phone-code {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 14px 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #ffffff;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #4e4e4e;
+  flex-shrink: 0;
+}
+
+.dpr-phone-code img {
+  width: 8px;
+  height: 6px;
+}
+
+.dpr-field--grow {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Address */
+.dpr-addr {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.dpr-addr-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dpr-addr-note img {
+  flex-shrink: 0;
+}
+
+.dpr-addr-note p {
+  flex: 1;
+  min-width: 0;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 12px;
+  color: #757575;
+}
+
+/* Save button */
+.dpr-save {
+  width: 180px;
+  height: 44px;
+  border: none;
+  border-radius: 8px;
+  background: #121212;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #ffffff;
+}
+
+.dpr-save:hover {
+  filter: brightness(0.96);
+}
+
+/* ── Footer (same as the desktop booking page) ──────────────────────── */
+.dpr-footer {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px max(80px, calc((100% - 1120px) / 2));
+  background: #f7f7f7;
+  flex-shrink: 0;
+}
+
+.dpr-footer p {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #757575;
+}
