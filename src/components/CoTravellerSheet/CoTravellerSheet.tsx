@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { setAppScrollLocked } from "../../utils/scroll";
 import "./CoTravellerSheet.css";
 
 const A = "/figma/booking/";
@@ -82,10 +83,8 @@ export default function CoTravellerSheet({
   }, [isOpen]);
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    setAppScrollLocked(isOpen);
+    return () => setAppScrollLocked(false);
   }, [isOpen]);
 
   // Reset the form each time the sheet is freshly opened.

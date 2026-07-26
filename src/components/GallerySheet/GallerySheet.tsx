@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { setAppScrollLocked } from "../../utils/scroll";
 import "./GallerySheet.css";
 import ScrollButtons from "../ScrollButtons/ScrollButtons";
 
@@ -68,8 +69,8 @@ export default function GallerySheet({
   }, [isOpen, startIndex]);
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    setAppScrollLocked(isOpen);
+    return () => setAppScrollLocked(false);
   }, [isOpen]);
 
   const handleScroll = useCallback(() => {

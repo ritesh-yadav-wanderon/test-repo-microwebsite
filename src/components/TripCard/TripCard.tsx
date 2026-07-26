@@ -78,9 +78,11 @@ export interface TripCardProps {
   cardPillBg?: string;
   onSeeAllDates?: () => void;
   eager?: boolean;
+  /** Show the highlight features list. Defaults to true. */
+  showFeatures?: boolean;
 }
 
-export default function TripCard({ trip, onSeeAllDates, eager }: TripCardProps) {
+export default function TripCard({ trip, onSeeAllDates, eager, showFeatures = true }: TripCardProps) {
   const navigate = useNavigate();
   const { isInCompare, toggle } = useCompare();
   const [wishlisted, setWishlisted] = useState(false);
@@ -195,14 +197,16 @@ export default function TripCard({ trip, onSeeAllDates, eager }: TripCardProps) 
 
           <div className="tc-route">{route}</div>
 
-          <ul className="tc-features">
-            {featureList.map((f, i) => (
-              <li key={i}>
-                <span className="tc-feat-dot" aria-hidden />
-                {f}
-              </li>
-            ))}
-          </ul>
+          {showFeatures && (
+            <ul className="tc-features">
+              {featureList.map((f, i) => (
+                <li key={i}>
+                  <span className="tc-feat-dot" aria-hidden />
+                  {f}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         {/* Price + CTA */}

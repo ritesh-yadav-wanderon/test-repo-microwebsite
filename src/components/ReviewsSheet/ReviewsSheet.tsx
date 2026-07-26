@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { setAppScrollLocked } from "../../utils/scroll";
 import "./ReviewsSheet.css";
 import DestinationSheet, { type DestinationSelection } from "../DestinationSheet/DestinationSheet";
 import ReviewGallery from "../ReviewGallery/ReviewGallery";
@@ -116,8 +117,8 @@ export default function ReviewsSheet({ isOpen, onClose }: { isOpen: boolean; onC
 
   useEffect(() => {
     if (isOpen) setHasOpened(true);
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    setAppScrollLocked(isOpen);
+    return () => setAppScrollLocked(false);
   }, [isOpen]);
 
   if (!hasOpened) return null;

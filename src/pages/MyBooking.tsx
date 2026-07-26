@@ -8,6 +8,7 @@ import CancelBookingSheet from "../components/CancelBookingSheet/CancelBookingSh
 import PaymentSheet from "../components/PaymentSheet/PaymentSheet";
 import { useBooking } from "../context/BookingContext";
 import { BILL_ITEMS, TOTAL_TRIP_COST } from "../data/bookingBill";
+import { scrollAppToTop } from "../utils/scroll";
 import "./MyBooking.css";
 
 const A = "/figma/booking/";
@@ -198,7 +199,7 @@ export default function MyBooking() {
       return;
     }
     setSaved(true);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollAppToTop("smooth");
   };
 
   const errCls = (key: string) => (errors.has(key) ? " mb-input--error" : "");

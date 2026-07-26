@@ -7,11 +7,16 @@
   background: rgba(0, 0, 0, 0);
   pointer-events: none;
   overflow: hidden;
-  transition: background 0.3s ease;
+  /* Hidden when closed so the off-screen white panel can't repaint over the
+     fixed bottom nav on scroll; delay preserves the slide-out animation. */
+  visibility: hidden;
+  transition: background 0.3s ease, visibility 0s linear 0.35s;
 }
 .wl-overlay--open {
   background: rgba(0, 0, 0, 0.5);
   pointer-events: all;
+  visibility: visible;
+  transition: background 0.3s ease;
 }
 
 /* Sheet panel — slides up from bottom */

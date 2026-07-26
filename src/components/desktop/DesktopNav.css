@@ -1,0 +1,87 @@
+.dnav {
+  position: absolute;
+  top: 8px;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+}
+
+.dnav__logo {
+  width: 59px;
+  height: 60px;
+}
+
+.dnav__logo img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.dnav__right {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 349px;
+  height: 34px;
+}
+
+.dnav__destinations {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 400;
+  color: #fff;
+  line-height: 13.882px;
+}
+
+.dnav__chevron {
+  width: 11.15px;
+  height: 6.55px;
+}
+
+.dnav__events {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 106px;
+  height: 40px;
+  padding: 4px 0 2px;
+  border-radius: 68px;
+  background-image: linear-gradient(2.37deg, rgb(60, 47, 68) 4.88%, rgb(26, 22, 28) 95.12%);
+  font-size: 10px;
+  font-weight: 500;
+  color: #e5e5e5;
+  line-height: 12px;
+}
+
+.dnav__mask {
+  width: 20px;
+  height: 20px;
+}
+
+.dnav__profile {
+  width: 36px;
+  height: 36px;
+}
+
+.dnav__profile img {
+  width: 100%;
+  height: 100%;
+}
+
+.dnav__burger {
+  display: flex;
+  align-items: center;
+  height: 36px;
+}
+
+.dnav__burger img {
+  width: 24px;
+  height: 18px;
+}

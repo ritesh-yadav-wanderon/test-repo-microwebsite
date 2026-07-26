@@ -323,8 +323,8 @@
 /* ── Book Trip CTA — Figma: bg #fee60b, h-38, rounded-73px ── */
 .cpt-book-btn {
   width: 100%;
-  height: 48px;
-  background: #121212;
+  height: 44px;
+  background: #01AFD1;
   border-radius: 60px;
   border: none;
   font-family: var(--font);

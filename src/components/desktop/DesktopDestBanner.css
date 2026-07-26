@@ -1,0 +1,85 @@
+.dbanner {
+  max-width: 1280px;
+  margin: 60px auto 0;
+  padding: 0 43px;
+}
+
+.dbanner__inner {
+  position: relative;
+  height: 380px;
+  border-radius: 24px;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+.dbanner__card {
+  position: absolute;
+  left: 31px;
+  top: 40px;
+  width: 496px;
+  height: 311px;
+  padding: 28px 40px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 12px;
+  background: rgba(67, 67, 67, 0.27);
+  backdrop-filter: blur(2px);
+  color: #fff;
+}
+
+.dbanner__eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.485px;
+}
+
+.dbanner__title {
+  margin-top: 6px;
+  font-family: "Roboto Condensed", var(--font);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.485px;
+}
+
+.dbanner__desc {
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 21.34px;
+  letter-spacing: 0.97px;
+  text-align: justify;
+}
+
+.dbanner__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 142px;
+  height: 39px;
+  margin-top: 24px;
+  border: 1px solid #fff;
+  border-radius: 47px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.97px;
+  color: #fff;
+}
+
+.dbanner__bars {
+  position: absolute;
+  right: 130px;
+  bottom: 29px;
+  display: flex;
+  gap: 17px;
+}
+
+.dbanner__bar {
+  width: 153px;
+  height: 5px;
+  background: #969696;
+}
+
+.dbanner__bar--active {
+  background: #fff;
+}

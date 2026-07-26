@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { getScrollTop, onAppScroll } from "../utils/scroll";
 
 /**
  * Homepage: purely IntersectionObserver-driven.
@@ -23,7 +24,7 @@ export function useScrollNav(isHome: boolean) {
 
   useEffect(() => {
     setCompact(false);
-    lastY.current = window.scrollY;
+    lastY.current = getScrollTop();
 
     if (isHome) {
       // ── Homepage: IntersectionObserver only ──
@@ -57,7 +58,7 @@ export function useScrollNav(isHome: boolean) {
         if (ticking) return;
         ticking = true;
         requestAnimationFrame(() => {
-          const y = window.scrollY;
+          const y = getScrollTop();
           if (y < THRESHOLD) {
             setCompact(false);
           } else if (y > lastY.current) {
@@ -70,8 +71,7 @@ export function useScrollNav(isHome: boolean) {
         });
       };
 
-      window.addEventListener("scroll", onScroll, { passive: true });
-      return () => window.removeEventListener("scroll", onScroll);
+      return onAppScroll(onScroll);
     }
   }, [isHome]);
 

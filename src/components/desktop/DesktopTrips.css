@@ -1,0 +1,230 @@
+.dtrips {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 60px 80px 0;
+}
+
+.dtrips__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 10px 30px;
+}
+
+.dtrips__title {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 24px;
+  color: var(--text-primary);
+}
+
+.dtrips__head-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #d9d9d9;
+}
+
+.dtrips__track {
+  display: flex;
+  gap: 30px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+
+.dtrips__track::-webkit-scrollbar {
+  display: none;
+}
+
+.dtrips__card {
+  flex-shrink: 0;
+  width: 198px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  scroll-snap-align: start;
+}
+
+.dtrips__img {
+  position: relative;
+  width: 198px;
+  height: 198px;
+  border-radius: 14.85px;
+  border: 0.62px solid var(--grey-2);
+  background: var(--grey-neutral);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.dtrips__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dtrips__wishlist {
+  position: absolute;
+  top: 11.76px;
+  right: 11.76px;
+  width: 37.13px;
+  height: 34.65px;
+  padding: 0;
+}
+
+.dtrips__wishlist img {
+  width: 100%;
+  height: 100%;
+}
+
+.dtrips__card-title {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 26px;
+  color: #202020;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 44px;
+}
+
+.dtrips__route {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  line-height: 15.6px;
+  color: rgba(117, 117, 117, 0.7);
+}
+
+.dtrips__route img {
+  width: 16px;
+  height: 16px;
+}
+
+.dtrips__duration {
+  display: flex;
+  align-items: center;
+  gap: 4.95px;
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 17.3px;
+  color: #575757;
+}
+
+.dtrips__duration img {
+  width: 17.33px;
+  height: 17.33px;
+}
+
+.dtrips__dates {
+  margin-top: 5px;
+  font-size: 14px;
+  line-height: 17.3px;
+  color: #575757;
+}
+
+.dtrips__dates strong {
+  font-weight: 500;
+}
+
+.dtrips__price-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  line-height: 29.7px;
+}
+
+.dtrips__price-old {
+  font-size: 14px;
+  color: #757575;
+  text-decoration: line-through;
+}
+
+.dtrips__price-now {
+  font-size: 18px;
+  font-weight: 700;
+  color: #015f74;
+}
+
+.dtrips__price-sub {
+  font-size: 14px;
+  line-height: 14.85px;
+  color: #9ab3b6;
+}
+
+.dtrips__more {
+  flex-shrink: 0;
+  width: 198px;
+  height: 198px;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #fbfbfb;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.16);
+  font-size: 16px;
+  font-weight: 500;
+  color: #4d4d4d;
+}
+
+.dtrips__more-stack {
+  display: flex;
+}
+
+.dtrips__more-mini {
+  display: block;
+  width: 40px;
+  height: 50px;
+  border: 2px solid var(--grey-2);
+  border-radius: 4px;
+  background: #fbfbfb;
+  overflow: hidden;
+}
+
+.dtrips__more-mini img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dtrips__more-mini--left {
+  transform: rotate(-5deg);
+  margin-right: -12px;
+}
+
+.dtrips__more-mini--right {
+  transform: rotate(5deg);
+}
+
+.dtrips__pager {
+  display: flex;
+  gap: 12px;
+  margin: 30px 10px 0;
+}
+
+.dtrips__pager-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #d9d9d9;
+  background: #fff;
+}
+
+/* skeleton sizing */
+.dtrips__card .sk-line {
+  height: 14px;
+  margin-top: 8px;
+}

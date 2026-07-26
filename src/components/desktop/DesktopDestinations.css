@@ -1,0 +1,130 @@
+.ddest {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 0 0;
+  background: #fff;
+}
+
+.ddest__title {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: #3d3d3d;
+  text-align: center;
+}
+
+.ddest__pills {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.ddest__pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  padding: 0 10px;
+  min-width: 90px;
+  border: 1px solid #757575;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #3d3d3d;
+  background: #fff;
+}
+
+.ddest__pill--active {
+  background: #f2f2f2;
+}
+
+.ddest__track {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 1280px;
+  margin-top: 30px;
+  padding: 0 80px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.ddest__track::-webkit-scrollbar {
+  display: none;
+}
+
+.ddest__item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+  width: 90px;
+}
+
+.ddest__figure {
+  position: relative;
+  display: block;
+  width: 90px;
+  height: 101.77px;
+}
+
+.ddest__shadow {
+  position: absolute;
+  left: 13.88px;
+  top: 15.58px;
+  width: 65.47px;
+  height: 65.47px;
+}
+
+.ddest__monument {
+  position: absolute;
+  left: 0;
+  top: 16.51px;
+  width: 89.47px;
+  height: 85.26px;
+  object-fit: cover;
+}
+
+.ddest__monument--flip {
+  transform: scaleX(-1);
+}
+
+.ddest__name {
+  font-family: "Roboto Condensed", var(--font);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #3d3d3d;
+  text-align: center;
+  width: 100%;
+}
+
+.ddest__progress {
+  position: relative;
+  height: 14px;
+  padding: 4px 10px;
+  margin-top: 20px;
+}
+
+.ddest__progress-track {
+  display: block;
+  width: 120px;
+  height: 6px;
+  border-radius: 32px;
+  background: #fbfbfb;
+  border: 1px solid #e6e6e6;
+}
+
+.ddest__progress-thumb {
+  position: absolute;
+  top: 4px;
+  width: 33px;
+  height: 6px;
+  border-radius: 32px;
+  background: #01afd1;
+  transition: left 0.15s linear;
+}

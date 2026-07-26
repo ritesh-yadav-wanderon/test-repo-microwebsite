@@ -1,0 +1,255 @@
+/* Desktop Destination page — active only ≥1024px, only while .ddpage is
+   mounted. The mobile Destination layout is untouched. */
+@media (min-width: 1024px) {
+  .app-shell:has(.ddpage) {
+    max-width: none;
+    box-shadow: none;
+  }
+
+  /* Mobile chrome (if injected globally) is not part of the desktop design */
+  .app-shell:has(.ddpage) .site-header,
+  .app-shell:has(.ddpage) .ostn,
+  .app-shell:has(.ddpage) .bottom-nav {
+    display: none;
+  }
+}
+
+.ddpage {
+  position: relative;
+  background: #fff;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
+
+/* Shared section head (centered title + sub) */
+.ddp-sec-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.ddp-sec-title {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: #3d3d3d;
+  text-align: center;
+}
+
+.ddp-sec-sub {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: #969696;
+  text-align: center;
+}
+
+/* ── Hero ── */
+.ddp-hero {
+  position: relative;
+  width: 100%;
+  height: 626px;
+  overflow: hidden;
+  background: #7ec2f3;
+}
+
+.ddp-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ── Info bar ── */
+.ddp-infobar {
+  background: #f5faff;
+}
+
+.ddp-infobar-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.ddp-info-cols {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(48px, 7vw, 108px);
+}
+
+.ddp-info-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ddp-info-label {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.06px;
+  color: #3d3d3d;
+}
+
+.ddp-info-value {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 21px;
+  color: #3d3d3d;
+  white-space: nowrap;
+}
+
+.ddp-info-vibes {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #3d3d3d;
+}
+
+.ddp-info-enquire {
+  flex-shrink: 0;
+  width: 240px;
+  height: 44px;
+  border-radius: 56px;
+  background: #fee60b;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #3d3d3d;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.ddp-info-enquire:hover {
+  filter: brightness(0.96);
+}
+
+/* ── Culture ── */
+.ddp-culture {
+  max-width: 1280px;
+  margin: 60px auto 0;
+  padding: 0 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ddp-cult-collage {
+  width: 100%;
+  max-width: 1120px;
+  height: auto;
+  display: block;
+}
+
+.ddp-cult-quote {
+  max-width: 632px;
+  margin: 0 auto;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 37px;
+  letter-spacing: 0.5px;
+  color: #3d3d3d;
+  text-align: center;
+}
+
+.ddp-cult-road {
+  width: 500px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin-top: 8px;
+}
+
+/* ── Stories ── */
+.ddp-stories {
+  max-width: 1280px;
+  margin: 60px auto 0;
+  padding: 30px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  border-radius: 8px;
+}
+
+.ddp-stories .ddp-sec-head {
+  margin-bottom: 0;
+}
+
+/* ── FAQs ── */
+.ddp-faq {
+  max-width: 1280px;
+  margin: 60px auto 0;
+  padding: 0 87px;
+}
+
+.ddp-faq-list {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ddp-faq-row {
+  border-bottom: 1px solid #ededed;
+}
+
+.ddp-faq-row:last-child {
+  border-bottom: none;
+}
+
+.ddp-faq-row--open {
+  background: #fafafa;
+  border-radius: 8px;
+}
+
+.ddp-faq-head {
+  display: flex;
+  align-items: center;
+  gap: 52px;
+  width: 100%;
+  padding: 18px 20px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ddp-faq-num {
+  flex-shrink: 0;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 36px;
+  color: #c8c8c8;
+  min-width: 40px;
+}
+
+.ddp-faq-q {
+  flex: 1;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 22px;
+  color: #3d3d3d;
+}
+
+.ddp-faq-toggle {
+  flex-shrink: 0;
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+  color: #3d3d3d;
+}
+
+.ddp-faq-a {
+  padding: 0 20px 20px 112px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 22px;
+  color: #6b6b6b;
+}

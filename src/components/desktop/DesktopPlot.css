@@ -1,0 +1,158 @@
+/* The Plot — Figma 5252:12895. Zoom-in-center carousel, same interaction as
+   the mobile PlotBanner, at desktop sizes/typography. */
+
+.dplot {
+  margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.dplot__head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  height: 58px;
+  justify-content: center;
+}
+
+.dplot__title {
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: #3d3d3d;
+}
+
+.dplot__sub {
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: rgba(117, 117, 117, 0.7);
+  text-align: center;
+}
+
+/* Side padding lets the first/last card reach the centre. */
+.dplot__row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  overflow-x: auto;
+  padding: 10px calc(50% - 132.5px);
+  scrollbar-width: none;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.dplot__row::-webkit-scrollbar {
+  display: none;
+}
+
+/* Native size 265x394 (centre size); JS scales to 0.864 (=340px) off-centre. */
+.dplot__card {
+  position: relative;
+  flex: 0 0 265px;
+  width: 265px;
+  height: 394px;
+  border-radius: 24px;
+  overflow: hidden;
+  transform: scale(0.864);
+  transform-origin: center center;
+  transition: transform 0.25s ease;
+  will-change: transform;
+  cursor: pointer;
+}
+
+.dplot__card > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  border-radius: 24px;
+}
+
+.dplot__overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.dplot__overlay--on {
+  opacity: 1;
+}
+
+.dplot__overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: linear-gradient(0.16deg, rgba(0, 0, 0, 0.74) 0%, rgba(0, 0, 0, 0) 60%);
+}
+
+.dplot__play {
+  position: absolute;
+  top: 173px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 46px;
+  height: 47px;
+  object-fit: contain;
+  z-index: 2;
+}
+
+.dplot__cap {
+  position: absolute;
+  bottom: 20px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: center;
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
+
+.dplot__cap strong {
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #fff;
+}
+
+.dplot__cap span {
+  font-size: 12px;
+  line-height: 15px;
+  color: #d6d6d6;
+}
+
+.dplot__progress {
+  display: flex;
+  justify-content: center;
+}
+
+.dplot__track {
+  position: relative;
+  width: 120px;
+  height: 6px;
+  border-radius: 32px;
+  background: #fbfbfb;
+  border: 1px solid #e6e6e6;
+}
+
+.dplot__fill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 33px;
+  border-radius: 32px;
+  background: #01afd1;
+  transition: left 0.3s ease;
+}

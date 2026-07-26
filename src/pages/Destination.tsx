@@ -13,6 +13,8 @@ import PhotoStack from "../components/PhotoStack/PhotoStack";
 import "./Destination.css";
 import SiteHeader2 from "../components/SiteHeader2";
 import "../components/UpcomingTrips/UpcomingTrips.css";
+import { useIsDesktop } from "../hooks/useIsDesktop";
+import DesktopDestination from "../components/desktop/DesktopDestination";
 
 interface DestData {
   heroImage: string;
@@ -318,6 +320,7 @@ function tripMatchesDestination(t: Trip, dest: string): boolean {
 export default function Destination() {
   const { slug = "Europe" } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const isDesktop = useIsDesktop();
   const data = DEST_DATA[slug] ?? DEFAULT_DATA;
   const heroTitle = slug in DEST_DATA ? data.heroTitle : `Group trips to ${slug}`;
 
@@ -346,6 +349,18 @@ export default function Destination() {
   const vmSource = hasUpcoming ? stripTrips : customiseTrips;
   const vmImgA = vmSource[0]?.image ?? "/figma/trips/trip-1.jpg";
   const vmImgB = vmSource[1]?.image ?? "/figma/trips/trip-2.jpg";
+
+  if (isDesktop) {
+    return (
+      <DesktopDestination
+        destination={slug}
+        startingPrice={data.startingPrice}
+        vibes={data.tags}
+        trips={hasUpcoming ? destTrips : customiseTrips}
+        loading={loading}
+      />
+    );
+  }
 
   return (
     <div className="dp-page">

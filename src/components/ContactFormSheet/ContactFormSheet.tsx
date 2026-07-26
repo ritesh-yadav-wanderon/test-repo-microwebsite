@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { DEST_REGIONS } from "../../data/destinations";
 import { COUNTRIES, type Country } from "../../data/countries";
+import { setAppScrollLocked } from "../../utils/scroll";
 import "./ContactFormSheet.css";
 
 const M = "/figma/menu/";
@@ -28,8 +29,8 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
   useEffect(() => { if (isOpen) setHasOpened(true); }, [isOpen]);
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    setAppScrollLocked(isOpen);
+    return () => setAppScrollLocked(false);
   }, [isOpen]);
 
   // Pin the sheet to the visual viewport so it hugs the on-screen keyboard

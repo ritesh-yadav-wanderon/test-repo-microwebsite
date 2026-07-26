@@ -1,0 +1,27 @@
+.dfmsg {
+  max-width: 1280px;
+  margin: 60px auto 0;
+  padding: 60px 80px;
+}
+
+.dfmsg__heart {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+}
+
+.dfmsg__line {
+  font-size: 30px;
+  font-weight: 600;
+  color: #d2d2d2;
+}
+
+.dfmsg__line--medium {
+  font-weight: 500;
+  margin-bottom: 7px;
+}
+
+.dfooter-band {
+  height: 150px;
+  background: #015f74;
+}

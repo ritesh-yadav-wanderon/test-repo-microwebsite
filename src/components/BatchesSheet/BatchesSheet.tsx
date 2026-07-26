@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import LoginSheet from "../LoginSheet/LoginSheet";
+import { setAppScrollLocked } from "../../utils/scroll";
 import "./BatchesSheet.css";
 
 const ASSETS = "/figma/batches/";
@@ -288,10 +289,8 @@ export default function BatchesSheet({
   }, [isOpen]);
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    setAppScrollLocked(isOpen);
+    return () => setAppScrollLocked(false);
   }, [isOpen]);
 
   const months = useMemo(() => {
