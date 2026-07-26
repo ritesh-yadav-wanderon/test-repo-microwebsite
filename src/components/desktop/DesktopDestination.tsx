@@ -6,6 +6,7 @@ import DesktopWhyChooseUs from "./DesktopWhyChooseUs";
 import DesktopQuery from "./DesktopQuery";
 import DesktopFooterMsg from "./DesktopFooterMsg";
 import DesktopPovCarousel, { type PovCard } from "./DesktopPovCarousel";
+import PhotoStack from "../PhotoStack/PhotoStack";
 import "./DesktopDestination.css";
 
 const BASE = "/figma/desktop-dest";
@@ -134,13 +135,62 @@ export default function DesktopDestination({
             Choose from hundreds of destinations – provided by trusted pros
           </p>
         </div>
-        <img className="ddp-cult-collage" src={`${BASE}/cult-collage.png`} alt="" />
+
+        <div className="ddp-cult-collage">
+          {/* Violin cutout with soft blurred shadow (Figma 6047:20231) */}
+          <div className="ddp-cult-violin" aria-hidden>
+            <img className="ddp-cult-violin-blur" src={`${BASE}/cult-violin.png`} alt="" loading="lazy" />
+            <img className="ddp-cult-violin-img" src={`${BASE}/cult-violin.png`} alt="" loading="lazy" />
+          </div>
+
+          {/* Main polaroid — Paris (Figma 5746:7079) */}
+          <figure className="ddp-cult-pol ddp-cult-pol--main">
+            <img
+              className="ddp-cult-pol-photo"
+              src={`${BASE}/cult-photo-paris.png`}
+              alt="Eiffel Tower over the Seine, Paris"
+              loading="lazy"
+            />
+            <img className="ddp-cult-pol-frame" src={`${BASE}/cult-frame.png`} alt="" aria-hidden />
+            <figcaption className="ddp-cult-pol-caption">
+              From Paris cafés to Roman backstreets, travellers arrive chasing
+              the postcard and leave with the version no postcard shows.
+            </figcaption>
+            <img
+              className="ddp-cult-stamp"
+              src={`${BASE}/cult-stamp.png`}
+              alt="WanderOn approved"
+              loading="lazy"
+            />
+          </figure>
+
+          {/* Side polaroid — Seville (Figma 5746:7080) */}
+          <figure className="ddp-cult-pol ddp-cult-pol--side">
+            <img
+              className="ddp-cult-pol-photo"
+              src={`${BASE}/cult-photo-flamenco.png`}
+              alt="Flamenco dancers in Plaza de España, Seville"
+              loading="lazy"
+            />
+            <img className="ddp-cult-pol-frame" src={`${BASE}/cult-frame.png`} alt="" aria-hidden />
+            <figcaption className="ddp-cult-pol-caption">
+              For many, Europe is the first great trip: the continent that
+              turns a traveller into a storyteller
+            </figcaption>
+          </figure>
+        </div>
+
         <p className="ddp-cult-quote">
-          Eastern Thailand is half mountain, half ocean. Although there aren&rsquo;t
-          many provinces here, it still has a lot of amazing sights and stunning
-          locations to visit.
+          Europe is a hundred worlds within walking distance a language, a
+          coastline, a way of eating dinner, all changing by the hour. You
+          don&rsquo;t tick it off. You wander it slowly, with a group that
+          lingers over the long lunch instead of racing to the next stop.
         </p>
-        <img className="ddp-cult-road" src={`${BASE}/cult-roadstack.png`} alt="" />
+
+        {/* Interactive photo stack — shared with the mobile culture section */}
+        <div className="ddp-cult-stack">
+          <PhotoStack />
+        </div>
       </section>
 
       {/* ── Stories of our travellers (Figma 5746:7091) ── */}
