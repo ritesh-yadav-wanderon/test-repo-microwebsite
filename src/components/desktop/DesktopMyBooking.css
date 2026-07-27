@@ -1,0 +1,834 @@
+/* Desktop booking detail — "My Bookings / <ref>" (Figma 6219:25591) */
+
+/* Break out of the mobile app-shell and hide mobile chrome. */
+@media (min-width: 1024px) {
+  .app-shell:has(.dmb) {
+    max-width: none;
+    box-shadow: none;
+    background: #fff;
+  }
+
+  .app-shell:has(.dmb) .site-header,
+  .app-shell:has(.dmb) .ostn,
+  .app-shell:has(.dmb) .bottom-nav {
+    display: none;
+  }
+}
+
+.dmb {
+  width: 100%;
+  min-height: 100vh;
+  background: #fff;
+  font-family: var(--font);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+.dmb-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 70px;
+  padding: 0 max(80px, calc((100% - 1120px) / 2));
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+.dmb-header-back {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dmb-header-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 14px;
+  color: #202020;
+}
+
+/* ── Two-column body ────────────────────────────────────────────────── */
+.dmb-body {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 38px max(80px, calc((100% - 1120px) / 2)) 60px;
+}
+
+.dmb-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Tabs */
+.dmb-tabs {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #d9d9d9;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+  padding: 0 20px;
+}
+
+.dmb-tab {
+  flex: 1;
+  height: 40px;
+  border: none;
+  background: none;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19.6px;
+  color: #4e4e4e;
+  cursor: pointer;
+}
+
+.dmb-tab--active {
+  font-weight: 500;
+  color: #015f74;
+  box-shadow: inset 0 -2px 0 #015f74;
+}
+
+/* Left card shell */
+.dmb-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  padding: 20px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Trip package summary */
+.dmb-package {
+  display: flex;
+  gap: 12px;
+}
+
+.dmb-package-thumb {
+  width: 140px;
+  height: 140px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.dmb-package-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dmb-package-name {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #202020;
+}
+
+.dmb-package-duration {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dmb-dur-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #757575;
+}
+
+.dmb-dur-values {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  line-height: 16px;
+  color: #202020;
+}
+
+.dmb-package-pd {
+  display: flex;
+  align-items: center;
+}
+
+.dmb-pd-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.dmb-pd-col--right {
+  align-items: flex-end;
+}
+
+.dmb-pd-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #757575;
+}
+
+.dmb-pd-place {
+  font-size: 12px;
+  line-height: 16px;
+  color: #202020;
+}
+
+/* Cities pill */
+.dmb-cities {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  background: #f2f2f2;
+  overflow: hidden;
+}
+
+.dmb-city {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  line-height: 16.5px;
+  color: #002a33;
+  white-space: nowrap;
+}
+
+.dmb-city-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #002a33;
+}
+
+/* Primary traveller */
+.dmb-primary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dmb-primary-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dmb-primary-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #202020;
+}
+
+.dmb-primary-edit {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.dmb-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dmb-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.dmb-row-label {
+  flex: 1;
+  min-width: 0;
+  color: #3d3d3d;
+  text-transform: capitalize;
+}
+
+.dmb-row-value {
+  font-weight: 500;
+  color: #3d3d3d;
+  text-align: right;
+}
+
+.dmb-row-value--multiline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* Co-travellers tab (Figma 6237:27264) */
+.dmb-co-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dmb-co-chip {
+  padding: 2px 8px;
+  border-radius: 46px;
+  background: #ebfcff;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0.25px;
+  color: #015f74;
+  text-transform: capitalize;
+}
+
+.dmb-co-pending {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  color: #757575;
+  text-transform: capitalize;
+}
+
+.dmb-co-formtitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18.2px;
+  color: #202020;
+}
+
+.dmb-co-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #e6e6e6;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18.2px;
+  color: #3d3d3d;
+}
+
+/* Inline co-traveller form: floating-label inputs (44px, radius 8) */
+.dmb-co-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dmb-form-row2 {
+  display: flex;
+  gap: 16px;
+}
+
+.dmb-form-row2 > .dmb-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.dmb-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.dmb-field--grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.dmb-input {
+  width: 100%;
+  height: 44px;
+  padding: 8px 12px;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  background: #fff;
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 20px;
+  color: #3c3c3c;
+  outline: none;
+}
+
+.dmb-input:focus {
+  border-color: #01afd1;
+}
+
+.dmb-input--error {
+  border-color: #d93025;
+}
+
+.dmb-select {
+  appearance: none;
+}
+
+.dmb-flabel {
+  position: absolute;
+  left: 10px;
+  top: 12px;
+  padding: 2px 4px;
+  background: #fff;
+  font-size: 14px;
+  line-height: 20px;
+  color: #ababab;
+  pointer-events: none;
+  transition: top 0.15s ease, font-size 0.15s ease;
+}
+
+.dmb-input:focus + .dmb-flabel,
+.dmb-input:not(:placeholder-shown) + .dmb-flabel,
+.dmb-select:valid + .dmb-flabel,
+.dmb-flabel--fixed {
+  top: -10px;
+  font-size: 10px;
+  line-height: 14px;
+}
+
+.dmb-field-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+}
+
+.dmb-phone {
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+}
+
+.dmb-phone-code {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 10px;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  background: #fff;
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 21px;
+  color: #4e4e4e;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.dmb-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dmb-form-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  line-height: 12px;
+  color: #757575;
+}
+
+.dmb-form-error {
+  font-size: 12px;
+  line-height: 16px;
+  color: #d93025;
+}
+
+/* Cancel / Save Details CTA */
+.dmb-co-cta {
+  display: flex;
+  gap: 16px;
+  padding: 12px 0 0;
+  border-top: 1px solid #f5f5f5;
+}
+
+.dmb-co-cancel,
+.dmb-co-save {
+  flex: 1;
+  height: 44px;
+  border-radius: 8px;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.dmb-co-cancel {
+  border: 1px solid #000;
+  background: #fff;
+  color: #1f1f1f;
+}
+
+.dmb-co-save {
+  border: none;
+  background: #01afd1;
+  color: #fff;
+}
+
+/* Add Co-Traveller button below the card */
+.dmb-co-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 44px;
+  padding: 4px 10px;
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.04);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 21px;
+  color: #3d3d3d;
+  cursor: pointer;
+}
+
+/* Right-rail share pill + note (co tab) */
+.dmb-share-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 12px 12px 16px;
+  border-radius: 60px;
+  background: #ebfcff;
+}
+
+.dmb-share-label {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #3d3d3d;
+  text-transform: capitalize;
+}
+
+.dmb-share-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 12px 0 8px;
+  border: none;
+  border-radius: 100px;
+  background: rgba(1, 95, 116, 0.1);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.25px;
+  color: #015f74;
+  text-transform: capitalize;
+  cursor: pointer;
+}
+
+.dmb-squad-note {
+  width: 100%;
+  text-align: center;
+}
+
+.dmb-squad-note p {
+  font-size: 12px;
+  line-height: 19.6px;
+  color: #757575;
+}
+
+/* Payments tab (Figma 6237:27699) */
+.dmb-pay-section-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4d4d4d;
+}
+
+.dmb-txns {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.dmb-txn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  background: #fafafa;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font);
+}
+
+.dmb-txn-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.dmb-txn-ref {
+  font-size: 12px;
+  line-height: 16px;
+  color: #333;
+}
+
+.dmb-txn-amount {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #333;
+}
+
+.dmb-txn-date {
+  font-size: 10px;
+  line-height: 14px;
+  color: #666;
+}
+
+.dmb-card--payments .dmb-rows {
+  width: 100%;
+}
+
+.dmb-card--payments .dmb-row-label {
+  color: #333;
+  text-transform: none;
+}
+
+/* ── Right rail ─────────────────────────────────────────────────────── */
+.dmb-rail {
+  width: 355px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dmb-bill-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 23px rgba(0, 0, 0, 0.07);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dmb-bill-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  height: 32px;
+  padding: 6px 12px 6px 10px;
+  border-radius: 30px;
+  background: #e4f1e0;
+  font-size: 12px;
+  font-weight: 500;
+  color: #435c3d;
+}
+
+.dmb-bill-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dmb-bill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #3d3d3d;
+}
+
+.dmb-bill-divider {
+  height: 1px;
+  background: #f0f0f0;
+}
+
+.dmb-bill-totals {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dmb-bill-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #3d3d3d;
+}
+
+.dmb-pay-error {
+  font-size: 12px;
+  line-height: 16px;
+  color: #c62828;
+}
+
+.dmb-bill-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 4px;
+}
+
+.dmb-bill-price-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.dmb-bill-price {
+  font-size: 20px;
+  font-weight: 500;
+  color: #323232;
+}
+
+.dmb-bill-fee {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 12px;
+  color: #818181;
+}
+
+.dmb-bill-pay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  min-width: 170px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 25px;
+  background: #01afd1;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.dmb-bill-pay:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Action buttons */
+.dmb-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dmb-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.dmb-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: 1;
+  height: 48px;
+  padding: 4px 10px;
+  border: none;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 21px;
+  color: #3d3d3d;
+  cursor: pointer;
+}
+
+.dmb-action-btn--full {
+  width: 100%;
+}
+
+.dmb-action-btn--pending {
+  color: #b25e09;
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────── */
+.dmb-footer {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px max(80px, calc((100% - 1120px) / 2));
+  background: #f7f7f7;
+  flex-shrink: 0;
+}
+
+.dmb-footer p {
+  font-size: 14px;
+  line-height: 21px;
+  color: #757575;
+}

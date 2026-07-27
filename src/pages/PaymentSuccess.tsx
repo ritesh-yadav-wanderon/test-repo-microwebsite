@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import PaymentConfirmation from "../components/PaymentConfirmation/PaymentConfirmation";
+import { useIsDesktop } from "../hooks/useIsDesktop";
 import "./PaymentSuccess.css";
 
 const M = "/figma/my-booking/";
+const A = "/figma/booking/";
 const TRIP_THUMB = "/figma/trip-hero/hero-bg.png";
 
 /** How long the confirmation stays up before moving to the booking. */
@@ -42,6 +44,7 @@ const DEFAULTS = {
 };
 
 export default function PaymentSuccess() {
+  const isDesktop = useIsDesktop();
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
@@ -67,7 +70,22 @@ export default function PaymentSuccess() {
     navigate(nextPath, { replace: true, state: nextState });
 
   return (
-    <div className="ps-page">
+    <div className={`ps-page${isDesktop ? " ps-page--desktop" : ""}`}>
+      {/* Desktop-only header bar (Figma 6600:37853) */}
+      {isDesktop && (
+        <header className="ps-dheader">
+          <button
+            className="ps-dheader-back"
+            type="button"
+            aria-label="Back"
+            onClick={handleContinue}
+          >
+            <img src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+          </button>
+          <span className="ps-dheader-title">Payment Confirmations</span>
+        </header>
+      )}
+
       <div className="ps-inner">
         <div className="ps-header">
           <div className="ps-avatars">
