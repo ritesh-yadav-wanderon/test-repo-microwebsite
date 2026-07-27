@@ -16,6 +16,7 @@ const NAV_ITEMS = [
   { label: "Upcoming Community Trips", icon: `${M}icon-community.svg`,    to: "/trips",         subView: null },
   { label: "Bike Trips",               icon: `${M}icon-bike.svg`,         to: null,             subView: "bike-trips" as const },
   { label: "Categories",              icon: `${M}icon-categories.svg`,   to: null,             subView: "categories" as const },
+  { label: "Wishlist",                icon: "/figma/desktop-profile/icon-wishlist.svg", to: "/wishlist", subView: null },
   { label: "Events",                  icon: `${M}icon-events.svg`,       to: "/events",        subView: null },
   { label: "MICE",                    icon: `${M}icon-mice.svg`,         to: "/mice",          subView: null },
   { label: "Blogs",                   icon: `${M}icon-blogs.svg`,        to: "/blog",          subView: null },

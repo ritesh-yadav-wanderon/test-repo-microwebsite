@@ -1,6 +1,7 @@
 import { useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Trip, TripGroup } from "../../types";
+import { useWishlist } from "../../context/WishlistContext";
 import "./DesktopTrips.css";
 
 const BASE = "/figma/desktop";
@@ -92,6 +93,8 @@ export default function DesktopTrips({
 
 function DesktopTripCard({ trip }: { trip: Trip }) {
   const navigate = useNavigate();
+  const { isWishlisted, toggle: toggleWishlist } = useWishlist();
+  const wishlisted = isWishlisted(trip.slug);
   const batches = trip.batches ?? [];
   const shown = batches.slice(0, 2).map(fmtDate).join(", ");
   const extra = Math.max(batches.length - 2, 0);
@@ -107,11 +110,19 @@ function DesktopTripCard({ trip }: { trip: Trip }) {
       <div className="dtrips__img">
         <img src={trip.image || "/figma/trips/trip-1.jpg"} alt={trip.title} loading="lazy" />
         <button
-          className="dtrips__wishlist"
-          aria-label="Add to wishlist"
+          className={`dtrips__wishlist${wishlisted ? " dtrips__wishlist--saved" : ""}`}
+          aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+          aria-pressed={wishlisted}
           onClick={(e) => {
             e.stopPropagation();
-            window.dispatchEvent(new CustomEvent("wanderon:open-wishlist"));
+            toggleWishlist({
+              slug: trip.slug,
+              title: trip.title,
+              image: trip.image || "/figma/trips/trip-1.jpg",
+              price: String(trip.startingPrice ?? ""),
+              duration: trip.duration ? `${trip.duration.nights}N/${trip.duration.days}D` : undefined,
+              route: trip.pickDropPoint,
+            });
           }}
         >
           <img src={`${BASE}/wishlist-btn.svg`} alt="" />

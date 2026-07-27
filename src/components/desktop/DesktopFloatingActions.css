@@ -1,0 +1,55 @@
+/* Floating WhatsApp + scroll-to-top stack, bottom-right of the viewport. */
+
+.dfa {
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.dfa--visible {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.dfa__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.dfa__btn:hover {
+  transform: translateY(-2px);
+}
+
+.dfa__btn--top {
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+}
+
+/* The WhatsApp logo is itself the green bubble — render it full-bleed. */
+.dfa__btn--wa {
+  background: none;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.25));
+}
+
+.dfa__btn--wa img {
+  width: 48px;
+  height: 48px;
+}

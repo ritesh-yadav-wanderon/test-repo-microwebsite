@@ -1,0 +1,375 @@
+/* Desktop review-booking page (Figma 6597:36834). Shares the .dbk shell
+   (header, body grid, package block, bill rows) from DesktopBooking.css. */
+
+/* ── Personal details recap card ────────────────────────────────────── */
+.drb-details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 16px;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+}
+
+.drb-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  padding: 2px 8px;
+  border-radius: 46px;
+  background: #eaeaea;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #202020;
+}
+
+.drb-pill--plain {
+  color: #3c3c3c;
+  letter-spacing: 0.25px;
+}
+
+.drb-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.drb-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 21px;
+  color: #3d3d3d;
+}
+
+.drb-row-label {
+  flex: 1;
+  min-width: 0;
+  text-transform: capitalize;
+}
+
+.drb-row-value {
+  text-align: right;
+}
+
+.drb-empty {
+  margin: 0;
+  font-size: 14px;
+  color: #757575;
+}
+
+/* ── Bill summary card ──────────────────────────────────────────────── */
+.drb-bill {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 16px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(14, 14, 14, 0.06);
+}
+
+.drb-bill-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  align-self: flex-start;
+  height: 32px;
+  padding: 6px 12px 6px 10px;
+  border-radius: 30px;
+  background: #e4f1e0;
+  font-size: 14px;
+  font-weight: 500;
+  color: #435c3d;
+}
+
+/* ── Right rail: payment card ───────────────────────────────────────── */
+.drb-pay-card {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 3.6px 71.7px rgba(0, 0, 0, 0.07);
+}
+
+/* Payment options */
+.drb-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 16px;
+}
+
+.drb-opt-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #202020;
+}
+
+.drb-opt-sub {
+  font-size: 12px;
+  line-height: 16px;
+  color: #202020;
+}
+
+/* Book now & pay later — white card on a soft green gradient footer */
+.drb-later {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  background: linear-gradient(to bottom, #e8f6ec 86%, rgba(255, 255, 255, 0.4));
+  overflow: hidden;
+}
+
+.drb-later-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 12px 12px 8px;
+  background: #fff;
+  border: 1px solid #f2f2f2;
+  border-radius: 12px;
+  box-shadow: 0 4px 8.6px rgba(14, 14, 14, 0.02);
+  cursor: pointer;
+  text-align: left;
+}
+
+.drb-opt--active .drb-later-card,
+.drb-full.drb-opt--active {
+  border-color: #01afd1;
+}
+
+.drb-opt-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 10px;
+}
+
+.drb-timeline {
+  display: flex;
+  align-items: stretch;
+  gap: 14px;
+  padding-left: 2px;
+}
+
+.drb-timeline-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 0;
+}
+
+.drb-rail-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  border: 0.5px solid #ababab;
+  border-radius: 50%;
+  font-size: 9px;
+  line-height: 1;
+  color: #ababab;
+  flex-shrink: 0;
+}
+
+.drb-rail-line {
+  flex: 1;
+  width: 1px;
+  background: #d9d9d9;
+}
+
+.drb-timeline-rows {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.drb-timeline-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #202020;
+}
+
+.drb-later-foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 10px;
+  line-height: 12px;
+  color: #25793d;
+}
+
+.drb-foot-dot {
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #25793d;
+}
+
+/* Pay full amount now */
+.drb-full {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 12px 12px 8px;
+  background: #fff;
+  border: 1px solid #f2f2f2;
+  border-radius: 12px;
+  box-shadow: 0 4px 8.6px rgba(14, 14, 14, 0.02);
+  cursor: pointer;
+  text-align: left;
+}
+
+.drb-full-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.drb-full-amount {
+  font-size: 12px;
+  line-height: 16px;
+  color: #202020;
+  align-self: center;
+}
+
+/* Test card chip (frontend-test mode only) */
+.drb-testcard {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 16px;
+  padding: 8px 10px;
+  border: 1px dashed #c5c5c5;
+  border-radius: 8px;
+  background: #fafafa;
+  font-size: 12px;
+  color: #3d3d3d;
+  cursor: pointer;
+}
+
+.drb-testcard-tag {
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #ffe9c2;
+  font-size: 10px;
+  font-weight: 700;
+  color: #8a5b00;
+}
+
+.drb-testcard-meta {
+  color: #757575;
+}
+
+.drb-testcard-copy {
+  margin-left: auto;
+  font-weight: 500;
+  color: #01afd1;
+}
+
+/* Savings banner + CTA */
+.drb-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.drb-saved {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 32px;
+  padding: 0 8px;
+  background: linear-gradient(to right, rgba(254, 230, 11, 0.06), rgba(1, 175, 209, 0.06)), #f1ebff;
+}
+
+.drb-saved-amt {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 15.6px;
+  color: #435c3d;
+}
+
+.drb-saved-text {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15.6px;
+  color: #316868;
+}
+
+.drb-status {
+  margin: 0;
+  padding: 0 16px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #316868;
+}
+
+.drb-status--error {
+  color: #c62828;
+}
+
+.drb-cta-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 6px 16px 0;
+}
+
+.drb-cta-price-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.drb-cta-price {
+  font-size: 20px;
+  font-weight: 500;
+  color: #323232;
+}
+
+.drb-book {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 206px;
+  height: 44px;
+  border: none;
+  border-radius: 25px;
+  background: #01afd1;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.drb-book:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

@@ -5,9 +5,10 @@ import OnScrollTopNav from "../OnScrollTopNav";
 import SearchBottomSheet from "../SearchBottomSheet/SearchBottomSheet";
 import BurgerMenu from "../BurgerMenu/BurgerMenu";
 import FilterSheet from "../FilterSheet/FilterSheet";
-import WishlistSheet from "../WishlistSheet/WishlistSheet";
 import LoginSheet from "../LoginSheet/LoginSheet";
 import ContactFormSheet from "../ContactFormSheet/ContactFormSheet";
+import DesktopCompareFab from "../desktop/DesktopCompareFab";
+import DesktopFloatingActions from "../desktop/DesktopFloatingActions";
 import { useScrollNav } from "../../hooks/useScrollNav";
 
 export default function SiteChrome() {
@@ -19,7 +20,6 @@ export default function SiteChrome() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
-  const [wishlistOpen, setWishlistOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [enquireOpen, setEnquireOpen] = useState(false);
   const loginRedirectRef = useRef<string | null>(null);
@@ -27,7 +27,6 @@ export default function SiteChrome() {
   useEffect(() => {
     const onSearch = () => setSearchOpen(true);
     const onFilter = () => setFilterOpen(true);
-    const onWishlist = () => setWishlistOpen(true);
     const onEnquire = () => setEnquireOpen(true);
     const onLogin = (e: Event) => {
       const detail = (e as CustomEvent<{ redirectTo?: string }>).detail;
@@ -37,13 +36,11 @@ export default function SiteChrome() {
 
     window.addEventListener("wanderon:open-search", onSearch);
     window.addEventListener("wanderon:open-filter", onFilter);
-    window.addEventListener("wanderon:open-wishlist", onWishlist);
     window.addEventListener("wanderon:open-enquire", onEnquire);
     window.addEventListener("wanderon:open-login", onLogin);
     return () => {
       window.removeEventListener("wanderon:open-search", onSearch);
       window.removeEventListener("wanderon:open-filter", onFilter);
-      window.removeEventListener("wanderon:open-wishlist", onWishlist);
       window.removeEventListener("wanderon:open-enquire", onEnquire);
       window.removeEventListener("wanderon:open-login", onLogin);
     };
@@ -67,9 +64,10 @@ export default function SiteChrome() {
       />
       <SearchBottomSheet isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
       <BurgerMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
-      <WishlistSheet isOpen={wishlistOpen} onClose={() => setWishlistOpen(false)} />
       <ContactFormSheet isOpen={enquireOpen} onClose={() => setEnquireOpen(false)} />
       {!isSearch && <FilterSheet isOpen={filterOpen} onClose={() => setFilterOpen(false)} />}
+      <DesktopCompareFab />
+      <DesktopFloatingActions />
       {isHome && <Header visible={showHeroHeader} onSearch={openSearch} onMenu={openMenu} />}
       {isHome && (
         <OnScrollTopNav

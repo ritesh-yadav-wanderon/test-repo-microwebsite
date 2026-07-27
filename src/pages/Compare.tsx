@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useIsDesktop } from "../hooks/useIsDesktop";
+import DesktopCompare from "../components/desktop/DesktopCompare";
 import "./Compare.css";
 
 const P = "/figma/compare/";
@@ -105,7 +107,10 @@ function SectionHead({ icon, label }: { icon: string; label: string }) {
 
 export default function Compare() {
   const navigate = useNavigate();
+  const isDesktop = useIsDesktop();
   const [showDiff, setShowDiff] = useState(false);
+
+  if (isDesktop) return <DesktopCompare />;
 
   const diffClass = (field: DiffField) =>
     showDiff && DIFFERING_FIELDS.has(field) ? " cpt-val--diff" : "";

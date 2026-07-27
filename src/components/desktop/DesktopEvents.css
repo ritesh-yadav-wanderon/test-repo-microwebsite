@@ -1,0 +1,470 @@
+/* Desktop events listing (Figma 5326:22442) — dark full-width layout. */
+
+.app-shell:has(.devt) {
+  max-width: none;
+  box-shadow: none;
+}
+
+.devt {
+  position: relative;
+  min-height: 100vh;
+  /* Top padding clears the fixed 72px global header */
+  padding: 96px 80px 80px;
+  background: #161616;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* Blurred wash of the featured image behind the top of the page */
+.devt__backdrop {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1280px;
+  height: 633px;
+  filter: blur(27px);
+  opacity: 0.41;
+  pointer-events: none;
+}
+
+.devt__backdrop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.devt__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 1120px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+/* ── Featured hero ── */
+.devt__hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+}
+
+.devt__hero-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 385px;
+  height: 343px;
+  padding: 50px 18px;
+  box-sizing: border-box;
+}
+
+.devt__hero-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.devt__hero-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 36px;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  color: #fff;
+}
+
+.devt__hero-host {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: #adadad;
+  text-transform: capitalize;
+}
+
+.devt__hero-avatar {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.devt__hero-facts {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.devt__hero-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 64px;
+  height: 20px;
+  padding: 4px;
+  border-radius: 66px;
+  background: #fff;
+  color: #3d3d3d;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 12px;
+  box-sizing: border-box;
+}
+
+.devt__hero-fact {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.devt__hero-fact span {
+  display: flex;
+  flex-direction: column;
+  letter-spacing: 0.5px;
+}
+
+.devt__hero-fact em {
+  font-style: normal;
+  font-size: 16px;
+  line-height: 24px;
+  color: #fff;
+  text-transform: capitalize;
+}
+
+.devt__hero-fact small {
+  font-size: 12px;
+  line-height: 16px;
+  color: #adadad;
+}
+
+.devt__hero-media {
+  width: 490px;
+  height: 343px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.devt__hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Carousel controls (dots + arrows) ── */
+.devt__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.devt__dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.devt__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #5a5a5a;
+}
+
+.devt__dot--active {
+  width: 18px;
+  border-radius: 3px;
+  background: #e6e6e6;
+}
+
+.devt__arrows {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.devt__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: #e6e6e6;
+  cursor: pointer;
+}
+
+/* ── Sections ── */
+.devt__sep {
+  margin: 0;
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.devt__section {
+  display: flex;
+  flex-direction: column;
+  gap: 31px;
+}
+
+.devt__sec-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+  color: #fff;
+}
+
+/* ── Browse by category ── */
+.devt__cats {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.devt__cat {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  filter: drop-shadow(0 1.4px 4.3px rgba(0, 0, 0, 0.08));
+}
+
+.devt__cat-text {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  text-align: left;
+}
+
+.devt__cat-text em {
+  font-style: normal;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 15px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.devt__cat-text small {
+  font-size: 14px;
+  line-height: 15px;
+  color: #ababab;
+}
+
+/* ── Wanderon Originals grid ── */
+.devt__originals {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 92px;
+  row-gap: 60px;
+}
+
+.devt__orig {
+  display: flex;
+  gap: 9px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  filter: drop-shadow(0 1.4px 4.3px rgba(0, 0, 0, 0.08));
+}
+
+.devt__orig-img {
+  width: 85px;
+  height: 85px;
+  border-radius: 17px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.devt__orig-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-self: stretch;
+  line-height: 15px;
+}
+
+.devt__orig-text em {
+  font-style: normal;
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff;
+  white-space: nowrap;
+  margin-bottom: 9px;
+}
+
+.devt__orig-text small {
+  font-size: 14px;
+  color: #ababab;
+}
+
+/* ── Wide event cards ── */
+.devt__cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 42px;
+}
+
+.devt__card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.devt__card-media {
+  height: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.devt__card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.devt__card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 12px;
+}
+
+.devt__card-loc {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.4px;
+  color: #fff;
+}
+
+.devt__card-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 22px;
+  color: #fff;
+}
+
+.devt__card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.devt__card-date {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 25px;
+  background: #f2f2f2;
+  color: #202020;
+  font-size: 10px;
+  line-height: 13px;
+}
+
+.devt__card-price {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0.08px;
+  color: #fff;
+}
+
+/* ── Founders Circle ── */
+.devt__fc {
+  display: flex;
+  align-items: flex-start;
+  gap: 28px;
+}
+
+.devt__fc-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 120px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.devt__fc-media {
+  position: relative;
+  display: block;
+  width: 120px;
+  height: 120px;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.devt__fc-media--gradient {
+  background: linear-gradient(180deg, #015f74 0%, #fee60b 50%, #01afd1 100%);
+}
+
+.devt__fc-media--dark {
+  background: #000;
+}
+
+.devt__fc-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+}
+
+.devt__fc-logo {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+}
+
+.devt__fc-contain {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.devt__fc-name {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #fff;
+  text-align: center;
+}

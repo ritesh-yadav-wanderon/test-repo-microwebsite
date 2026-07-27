@@ -5,11 +5,10 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import type { Trip } from "../../types";
 import { getListingTrips } from "../../api";
 import TripCard from "../TripCard";
-import FilterSheet from "../FilterSheet/FilterSheet";
+import DesktopFilterSheet from "./DesktopFilterSheet";
 import DesktopBatchesSheet from "./DesktopBatchesSheet";
 import DesktopFooter from "./DesktopFooter";
-import { useAuth } from "../../context/AuthContext";
-import { openLoginSheet } from "../../utils/login";
+import DesktopNav from "./DesktopNav";
 import {
   filterTrips,
   sortTrips,
@@ -22,8 +21,6 @@ import "./DesktopSearchResults.css";
 const PAGE_SIZE = 6; // two rows of three cards
 const LI = "/figma/listing/";
 const AS = "/figma/desktop-listing/";
-const NAV = "/figma/nav2/";
-const TRIP = "/figma/desktop-trip/";
 
 type Chip = { key: string; label: string; onRemove: () => void };
 
@@ -45,7 +42,6 @@ function TripCardShimmer() {
  *  TripCard and the shared listing filter/sort helpers. */
 export default function DesktopSearchResults() {
   const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
   const [searchParams] = useSearchParams();
 
   const [allTrips, setAllTrips] = useState<Trip[]>([]);
@@ -126,15 +122,19 @@ export default function DesktopSearchResults() {
   if (accommodation) accommodation.split(",").forEach((acc) => chips.push({ key: `ac-${acc}`, label: acc, onRemove: () => removeOneFromParam("accommodation", acc) }));
   selBucket.forEach((entry) => chips.push({ key: `b-${entry}`, label: entry, onRemove: () => removeOneFromParam("bucketList", entry) }));
 
-  const openFilter = (tab: number) => {
+  // Toggles the anchored filters popover; clicking the same pill again closes it.
+  const openFilter = (e: React.MouseEvent, tab: number) => {
+    e.stopPropagation();
+    if (filterOpen && filterTab === tab) {
+      setFilterOpen(false);
+      return;
+    }
     setFilterTab(tab);
     setFilterOpen(true);
   };
 
   return (
     <div className="dsr">
-      <FilterSheet isOpen={filterOpen} onClose={() => setFilterOpen(false)} initialTab={filterTab} />
-
       <DesktopBatchesSheet
         isOpen={!!batchesTrip}
         onClose={() => setBatchesTrip(null)}
@@ -154,55 +154,39 @@ export default function DesktopSearchResults() {
         }}
       />
 
-      {/* ── Header ─────────────────────────────────────────────────────── */}
-      <header className="dsr-header">
-        <button className="dsr-header-logo" onClick={() => navigate("/")} aria-label="WanderOn home">
-          <img src={`${NAV}logo.png`} alt="WanderOn" />
-        </button>
-        <nav className="dsr-header-right">
-          <button className="dsr-header-link" onClick={() => navigate("/")}>
-            Destinations
-          </button>
-          <button className="dsr-header-events" onClick={() => navigate("/events")}>
-            Events
-          </button>
-          <button
-            className="dsr-header-profile"
-            onClick={() => (isLoggedIn ? navigate("/profile") : openLoginSheet("/profile"))}
-            aria-label="Profile"
-          >
-            <img src={`${TRIP}hd-profile.svg`} alt="" aria-hidden />
-          </button>
-        </nav>
-      </header>
+      {/* ── Shared global header (always solid — no dark hero here) ────── */}
+      <DesktopNav alwaysSolid alwaysShowSearch />
 
       {/* ── Filter bar ─────────────────────────────────────────────────── */}
       <div className="dsr-filterbar">
         <div className="dsr-fpills">
-          <button className="dsr-fpill" type="button" onClick={() => openFilter(0)}>
+          <button className="dsr-fpill" type="button" onClick={(e) => openFilter(e, 0)}>
             <span>Filters</span>
             <img src={`${LI}filter-icon.svg`} alt="" className="dsr-fpill-ico" />
           </button>
-          <button className="dsr-fpill" type="button" onClick={() => openFilter(7)}>
+          <button className="dsr-fpill" type="button" onClick={(e) => openFilter(e, 7)}>
             <span>Bucket List</span>
             <img src={`${LI}list-alt-add.svg`} alt="" className="dsr-fpill-ico" />
           </button>
-          <button className="dsr-fpill" type="button" onClick={() => openFilter(3)}>
+          <button className="dsr-fpill" type="button" onClick={(e) => openFilter(e, 3)}>
             <span>Budget</span>
             <img src={`${AS}arrow-down.svg`} alt="" className="dsr-fpill-caret" />
           </button>
-          <button className="dsr-fpill" type="button" onClick={() => openFilter(2)}>
+          <button className="dsr-fpill" type="button" onClick={(e) => openFilter(e, 2)}>
             <span>Months</span>
             <img src={`${AS}arrow-down.svg`} alt="" className="dsr-fpill-caret" />
           </button>
-          <button className="dsr-fpill" type="button" onClick={() => openFilter(3)}>
+          <button className="dsr-fpill" type="button" onClick={(e) => openFilter(e, 3)}>
             <span>Categories</span>
             <img src={`${AS}arrow-down.svg`} alt="" className="dsr-fpill-caret" />
           </button>
-          <button className="dsr-fpill" type="button" onClick={() => openFilter(2)}>
+          <button className="dsr-fpill" type="button" onClick={(e) => openFilter(e, 2)}>
             <span>Duration</span>
             <img src={`${AS}arrow-down.svg`} alt="" className="dsr-fpill-caret" />
           </button>
+
+          {/* Anchored filters popover — opens alongside the filter pills */}
+          <DesktopFilterSheet isOpen={filterOpen} onClose={() => setFilterOpen(false)} initialTab={filterTab} />
         </div>
       </div>
 

@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import DestinationSheet from "../DestinationSheet/DestinationSheet";
 import "./DestinationStrip.css";
 
 const CAT_SEP = "/figma/dest/cat-sep.png";
@@ -69,10 +70,20 @@ interface Props {
 }
 
 export default function DestinationStrip({ activeCategory, onCategoryChange }: Props) {
+  const navigate = useNavigate();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const [stuck, setStuck] = useState(false);
   const [navH, setNavH] = useState(0);
+  // Destination sheet (same design as the burger menu's destinations panel);
+  // opened via the block-header arrows with the matching region expanded.
+  const [destSheetOpen, setDestSheetOpen] = useState(false);
+  const [destSheetRegion, setDestSheetRegion] = useState("india");
+
+  const openDestSheet = (region: string) => {
+    setDestSheetRegion(region);
+    setDestSheetOpen(true);
+  };
 
   useEffect(() => {
     const sentinel = sentinelRef.current;
@@ -100,6 +111,7 @@ export default function DestinationStrip({ activeCategory, onCategoryChange }: P
   }, []);
 
   return (
+    <>
     <div className="dest-section">
       <div ref={sentinelRef} className="dest-cats-sentinel" />
       {/* Category tabs — fixed once scrolled so they stay pinned for the whole page */}
@@ -137,7 +149,7 @@ export default function DestinationStrip({ activeCategory, onCategoryChange }: P
 
       {/* Domestic */}
       <div className="dest-block">
-        <button className="dest-block-header" type="button">
+        <button className="dest-block-header" type="button" onClick={() => openDestSheet("india")}>
           <span className="dest-block-title">Domestic Destinations</span>
           <div className="dest-block-arrow">
             <img src="/figma/dest/arrow-right.svg" width={20} height={20} alt="" aria-hidden loading="lazy" />
@@ -150,7 +162,7 @@ export default function DestinationStrip({ activeCategory, onCategoryChange }: P
 
       {/* International */}
       <div className="dest-block">
-        <button className="dest-block-header" type="button">
+        <button className="dest-block-header" type="button" onClick={() => openDestSheet("europe")}>
           <span className="dest-block-title">International Destinations</span>
           <div className="dest-block-arrow">
             <img src="/figma/dest/arrow-right.svg" width={20} height={20} alt="" aria-hidden loading="lazy" />
@@ -160,6 +172,17 @@ export default function DestinationStrip({ activeCategory, onCategoryChange }: P
           {INTERNATIONAL.map((d) => <DestItem key={d.name} dest={d} />)}
         </div>
       </div>
+
     </div>
+
+    {/* Rendered outside .dest-section: its z-index:3 stacking context would
+        otherwise trap the fixed overlay beneath the bottom nav (z-index 1000). */}
+    <DestinationSheet
+      isOpen={destSheetOpen}
+      onClose={() => setDestSheetOpen(false)}
+      initialRegion={destSheetRegion}
+      onSelect={(dest) => navigate(`/search?destination=${dest.slug}`)}
+    />
+    </>
   );
 }

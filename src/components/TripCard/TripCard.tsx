@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Trip } from "../../types";
 import { useCompare } from "../../context/CompareContext";
+import { useWishlist } from "../../context/WishlistContext";
 import "./TripCard.css";
 
 function fmtDate(d: string): string {
@@ -74,7 +74,7 @@ export interface TripCardProps {
 export default function TripCard({ trip, onSeeAllDates, eager, showFeatures = true }: TripCardProps) {
   const navigate = useNavigate();
   const { isInCompare, toggle } = useCompare();
-  const [wishlisted, setWishlisted] = useState(false);
+  const { isWishlisted, toggle: toggleWishlist } = useWishlist();
   const {
     title,
     image,
@@ -84,6 +84,20 @@ export default function TripCard({ trip, onSeeAllDates, eager, showFeatures = tr
     recommended,
     batches = [],
   } = trip;
+
+  const wishlisted = isWishlisted(trip.slug);
+  const toggleWish = () =>
+    toggleWishlist({
+      slug: trip.slug,
+      title,
+      image,
+      price: String(startingPrice ?? ""),
+      duration:
+        duration?.nights && duration?.days
+          ? `${duration.nights}N/${duration.days}D`
+          : STATIC_DURATION,
+      route: trip.pickDropPoint,
+    });
 
   const inCompare = isInCompare(trip.slug);
   const toggleCompare = () =>
@@ -133,7 +147,7 @@ export default function TripCard({ trip, onSeeAllDates, eager, showFeatures = tr
             type="button"
             aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
             aria-pressed={wishlisted}
-            onClick={() => setWishlisted((w) => !w)}
+            onClick={toggleWish}
           >
             <HeartIcon filled={wishlisted} />
           </button>

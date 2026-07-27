@@ -14,16 +14,25 @@ interface DestinationSheetProps {
   isOpen: boolean;
   onClose: () => void;
   onSelect?: (dest: DestinationSelection) => void;
+  /** Region slug expanded when the sheet opens (defaults to "india"). */
+  initialRegion?: string;
 }
 
-export default function DestinationSheet({ isOpen, onClose, onSelect }: DestinationSheetProps) {
+export default function DestinationSheet({
+  isOpen,
+  onClose,
+  onSelect,
+  initialRegion = "india",
+}: DestinationSheetProps) {
   const [hasOpened, setHasOpened] = useState(false);
-  const [expandedRegion, setExpandedRegion] = useState<string>("india");
+  const [expandedRegion, setExpandedRegion] = useState<string>(initialRegion);
 
   useEffect(() => {
     if (isOpen) setHasOpened(true);
-    if (!isOpen) setExpandedRegion("india");
-  }, [isOpen]);
+    // Sync on open (the caller may request a different region each time) and
+    // reset after close so the next open starts from the requested region.
+    setExpandedRegion(initialRegion);
+  }, [isOpen, initialRegion]);
 
   useEffect(() => {
     setAppScrollLocked(isOpen);

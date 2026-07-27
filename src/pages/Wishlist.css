@@ -1,0 +1,199 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   Mobile wishlist page — Figma 5621:14864
+   ══════════════════════════════════════════════════════════════════════════ */
+
+.wlp {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 100dvh;
+  background: #fff;
+  padding-bottom: 90px;
+}
+
+/* ── Header ── */
+.wlp-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 64px;
+  padding: 20px 16px;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.wlp-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+}
+
+.wlp-header-title {
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.08px;
+  color: #202020;
+}
+
+/* ── Grid ── */
+.wlp-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding: 0 16px;
+}
+
+/* ── Card ── */
+.wlp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.wlp-card-img {
+  position: relative;
+  aspect-ratio: 1;
+  border: 0.5px solid #e5e5e5;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fbfbfb;
+}
+
+.wlp-card-img > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wlp-card-overlays {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  align-items: stretch;
+}
+
+.wlp-card-heart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 32px;
+  padding: 0;
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(2px);
+}
+
+.wlp-card-compare {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 32px;
+  width: 124px;
+  padding: 8px;
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(2px);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 12px;
+  letter-spacing: 0.03px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.wlp-card-compare--active {
+  background: rgba(1, 95, 116, 0.7);
+}
+
+/* ── Card body ── */
+.wlp-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.wlp-card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #202020;
+}
+
+.wlp-card-dur {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 14px;
+  color: #575757;
+}
+
+.wlp-card-price-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.wlp-card-price {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #015f74;
+}
+
+.wlp-card-price-sub {
+  font-size: 10px;
+  line-height: 12px;
+  color: #9ab3b6;
+}
+
+/* ── Empty state ── */
+.wlp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 80px 32px;
+  text-align: center;
+}
+
+.wlp-empty-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  color: #202020;
+}
+
+.wlp-empty-sub {
+  margin: 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: #757575;
+}
+
+.wlp-empty-cta {
+  margin-top: 12px;
+  padding: 10px 24px;
+  border-radius: 73px;
+  background: #121212;
+  font-size: 14px;
+  font-weight: 500;
+  color: #fff;
+}

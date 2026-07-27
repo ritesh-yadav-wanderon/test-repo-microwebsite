@@ -55,7 +55,7 @@ export default function Profile() {
     {
       label: "Wishlist",
       icon: `${DP}icon-wishlist.svg`,
-      onClick: () => window.dispatchEvent(new Event("wanderon:open-wishlist")),
+      onClick: () => navigate("/wishlist"),
     },
     { label: "Payments", icon: `${DP}icon-payments.svg` },
     { label: "Referrals", icon: `${DP}icon-referrals.svg` },
