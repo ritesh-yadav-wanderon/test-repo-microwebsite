@@ -121,3 +121,72 @@
   font-size: 12px;
   line-height: 16px;
 }
+
+/* ── Desktop (Figma 6600:37853) ─────────────────────────────────────────
+   Same confirmation content centered on a plain white page (no green
+   gradient) beneath a "Payment Confirmations" header bar. */
+@media (min-width: 1024px) {
+  .app-shell:has(.ps-page--desktop) {
+    max-width: none;
+    box-shadow: none;
+    background: #fff;
+  }
+
+  .app-shell:has(.ps-page--desktop) .site-header,
+  .app-shell:has(.ps-page--desktop) .ostn,
+  .app-shell:has(.ps-page--desktop) .bottom-nav {
+    display: none;
+  }
+
+  .ps-page--desktop {
+    max-width: none;
+    background: #fff;
+  }
+
+  .ps-dheader {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 70px;
+    padding: 0 max(80px, calc((100% - 1120px) / 2));
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .ps-dheader-back {
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ps-dheader-title {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #3d3d3d;
+  }
+
+  .ps-page--desktop .ps-inner {
+    width: 390px;
+    margin: 0 auto;
+  }
+
+  /* White-on-gradient amount would vanish on the white page. */
+  .ps-page--desktop .ps-amount {
+    color: #005227;
+  }
+
+  /* The desktop design has no bottom CTA; the auto-redirect still runs. */
+  .ps-page--desktop .ps-cta-bar {
+    display: none;
+  }
+}
