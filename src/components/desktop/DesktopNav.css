@@ -17,6 +17,23 @@
   box-shadow: 0 4px 36.7px rgba(0, 0, 0, 0.11);
 }
 
+/* Dark variant (events pages) — on scroll the header fills with a blurred
+   black backdrop instead of white; text and icons stay light. */
+.dnav--dark.dnav--solid {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 36.7px rgba(0, 0, 0, 0.35);
+}
+
+.dnav--dark.dnav--solid .dnav__link {
+  color: #fff;
+}
+
+.dnav--dark .dnav__link--dest-open {
+  box-shadow: inset 0 -2px 0 #fff;
+}
+
 .dnav__bar {
   display: flex;
   align-items: center;
@@ -73,6 +90,60 @@
 .dnav__search {
   width: 45px;
   height: 36px;
+}
+
+/* Expanded search strip below the bar (Airbnb-style). The Where/When
+   dropdown panels hang below the header, so no overflow clipping here. */
+.dnav__searchbar {
+  display: flex;
+  justify-content: center;
+  padding: 4px 40px 20px;
+}
+
+/* Burger dropdown (Figma 6467:26761) — right edge aligned with the burger
+   button (bar padding is 40px). */
+.dnav__burger-menu {
+  position: absolute;
+  top: 76px;
+  right: 40px;
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8.9px rgba(0, 0, 0, 0.22);
+}
+
+.dnav__bm-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 14px;
+  line-height: 21px;
+  color: #3d3d3d;
+  text-align: left;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.dnav__bm-item:hover {
+  color: #000;
+}
+
+.dnav__bm-item img {
+  flex-shrink: 0;
+}
+
+.dnav__bm-sep {
+  width: 100%;
+  height: 1px;
+  background: #e0e0e0;
 }
 
 .dnav__search img {

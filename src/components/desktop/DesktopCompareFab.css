@@ -1,0 +1,29 @@
+/* Vertical compare tab pinned to the right viewport edge (Figma 6487:27730) */
+.dcfab {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  min-height: 187px;
+  padding: 10px 0 10px 12px;
+  border: 0.789px solid rgba(117, 117, 117, 0);
+  border-radius: 12px 0 0 12px;
+  background: #3d3d3d;
+  filter: drop-shadow(0 4px 4.45px rgba(0, 0, 0, 0.25));
+  cursor: pointer;
+}
+
+.dcfab__label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 11px;
+  color: #fff;
+  white-space: nowrap;
+}

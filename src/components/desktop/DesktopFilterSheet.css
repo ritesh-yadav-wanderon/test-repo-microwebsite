@@ -1,0 +1,121 @@
+/* Desktop filters popover (Figma 6595:32717) — anchored to the Filters button.
+   The option panes reuse the mobile FilterSheet fs-* styles. */
+
+.dfs {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 200;
+  width: 522px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 24px;
+  box-shadow: 0 4px 62.4px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  text-align: left;
+}
+
+/* ── Header ── */
+.dfs__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: 70px;
+  padding: 12px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.dfs__title {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #3d3d3d;
+}
+
+.dfs__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: #e6e6e6;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.dfs__close:hover {
+  background: #dcdcdc;
+}
+
+/* ── Body — tab rail + option pane ── */
+.dfs__card {
+  display: flex;
+  flex-direction: row;
+  height: 480px;
+  min-height: 0;
+  margin: 0 20px;
+  border: 1px solid #e0e8eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.dfs__card .fs-tabs {
+  overflow-y: auto;
+}
+
+.dfs__card .fs-content {
+  flex: 1;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+/* Figma shows region group heads at 16px medium (mobile uses 14px regular) */
+.dfs .fs-region-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #3d3d3d;
+}
+
+/* ── Footer ── */
+.dfs__foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  flex-shrink: 0;
+}
+
+.dfs__clear,
+.dfs__show {
+  flex: 1;
+  height: 40px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 21px;
+  cursor: pointer;
+}
+
+.dfs__clear {
+  background: #fff;
+  border: 1px solid #757575;
+  color: #757575;
+  font-weight: 400;
+}
+
+.dfs__show {
+  background: #121212;
+  border: none;
+  color: #fff;
+  font-weight: 500;
+}
+
+.dfs__show:hover {
+  background: #000;
+}

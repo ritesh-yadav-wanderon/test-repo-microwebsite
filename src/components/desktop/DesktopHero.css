@@ -1,7 +1,9 @@
 .dhero {
   position: relative;
   height: 640px;
-  overflow: hidden;
+  /* Search dropdown panels hang below the hero, so no overflow clipping;
+     z-index keeps them above the sections that follow. */
+  z-index: 5;
   background: #0f1f1c;
 }
 
@@ -49,68 +51,11 @@
   line-height: 16px;
 }
 
-.dhero__search {
+/* Interactive search bar (DesktopSearch) anchored where the old static bar sat. */
+.dhero__search-slot {
   position: absolute;
   top: 431px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
-  display: flex;
-  align-items: center;
-  width: 620px;
-  height: 48px;
-  padding: 8px 5px 8px 20px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(17px);
-  -webkit-backdrop-filter: blur(17px);
-  border: 1.256px solid rgba(255, 255, 255, 0.4);
-  border-radius: 78px;
-}
-
-.dhero__search-field {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  height: 100%;
-  font-size: 14px;
-  color: #fff;
-  text-align: left;
-}
-
-.dhero__search-pin {
-  width: 11.5px;
-  height: 17.2px;
-}
-
-.dhero__search-cal {
-  width: 16.5px;
-  height: 19.2px;
-}
-
-.dhero__search-divider {
-  width: 1px;
-  height: 20.4px;
-  background: rgba(255, 255, 255, 0.6);
-  margin-right: 19px;
-}
-
-/* Black 50x40 pill shipped as a flattened asset incl. drop shadow (Figma 5675:12037) */
-.dhero__search-btn {
-  position: relative;
-  width: 50px;
-  height: 40px;
-  flex-shrink: 0;
-  border-radius: 20px;
-  background: none;
-  padding: 0;
-}
-
-.dhero__search-btn img {
-  position: absolute;
-  top: 0;
-  left: -4px;
-  width: 58px;
-  height: 48px;
-  max-width: none;
 }

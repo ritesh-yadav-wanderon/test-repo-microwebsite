@@ -107,6 +107,11 @@
   flex-direction: column;
   gap: 30px;
 }
+
+/* Desktop-only header row inside the body (logo + grey close). */
+.cfs-body-bar {
+  display: none;
+}
 .cfs-title {
   font-size: 24px;
   font-weight: 700;
@@ -346,4 +351,70 @@
   color: #ababab;
   line-height: 1.3;
   margin: 0;
+}
+
+/* ── Desktop — centered two-pane overlay modal (Figma 5154:26476) ── */
+@media (min-width: 1024px) {
+  .cfs {
+    inset: 0;
+    margin: auto;
+    width: 780px;
+    height: 538px;
+    max-width: none;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: row;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 111px rgba(0, 0, 0, 0.25);
+    /* Scale/fade in place instead of the mobile slide-up. */
+    transform: scale(0.96);
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+  }
+
+  .cfs--open {
+    transform: none;
+    opacity: 1;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  /* Left pane — the mobile hero image, full-bleed. */
+  .cfs-hero {
+    width: 390px;
+    height: auto;
+    flex-shrink: 0;
+  }
+
+  .cfs-hero-bar,
+  .cfs-hero-overlay {
+    display: none;
+  }
+
+  /* Right pane — form column. */
+  .cfs-body {
+    width: 390px;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .cfs-body-bar {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .cfs-body-logo {
+    width: 59px;
+    height: 60px;
+    object-fit: contain;
+  }
+
+  .cfs-close--grey {
+    background: #e6e6e6;
+  }
+
+  .cfs-submit {
+    height: 48px;
+  }
 }

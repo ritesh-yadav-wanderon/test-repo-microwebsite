@@ -699,7 +699,7 @@ export default function Booking() {
       <div className="bkg-cta">
         <div className="bkg-cta-tags">
           <img src={`${A}icon-your-trips.svg`} width={16} height={16} alt="" aria-hidden />
-          <span className="bkg-cta-tag">{data.tripName}</span>
+          <span className="bkg-cta-tag">Europe Trip</span>
           <span className="bkg-cta-dot" aria-hidden />
           <span className="bkg-cta-tag">{data.dateRange}</span>
           {travelers > 0 && (

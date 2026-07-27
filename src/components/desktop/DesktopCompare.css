@@ -1,0 +1,618 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   Desktop compare page — Figma 6509:30416
+   Active only ≥1024px, only while .dcmp is mounted.
+   ══════════════════════════════════════════════════════════════════════════ */
+@media (min-width: 1024px) {
+  .app-shell:has(.dcmp) {
+    max-width: none;
+    box-shadow: none;
+    background: #fff;
+  }
+  .app-shell:has(.dcmp) .site-header,
+  .app-shell:has(.dcmp) .ostn,
+  .app-shell:has(.dcmp) .bottom-nav {
+    display: none;
+  }
+}
+
+.dcmp {
+  position: relative;
+  background: #fff;
+  min-height: 100vh;
+  /* The shared DesktopNav is fixed (72px bar); reserve its height. */
+  padding-top: 72px;
+  color: #3d3d3d;
+  font-family: "Roboto", system-ui, sans-serif;
+}
+
+/* ── Page title row ─────────────────────────────────────────────────────── */
+.dcmp-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 80px 0 90px;
+}
+
+.dcmp-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.dcmp-head-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dcmp-head-title h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: 0.72px;
+  color: #3d3d3d;
+}
+
+/* ── Two-column body: rail + main ───────────────────────────────────────── */
+.dcmp-body {
+  display: flex;
+  align-items: flex-start;
+  gap: 38px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 80px 60px;
+}
+
+/* Left rail — offset so "Basic Info" lines up with the columns' detail rows */
+.dcmp-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 73px;
+  width: 164px;
+  flex-shrink: 0;
+  margin-top: 270px;
+}
+
+.dcmp-rail-card {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.dcmp-rail-head {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 12px;
+  background: #f5f5f5;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0.08px;
+  color: #757575;
+}
+
+.dcmp-rail-item {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 12px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+  color: #3d3d3d;
+}
+
+.dcmp-rail-item + .dcmp-rail-item {
+  border-top: 1px solid #e5e5e5;
+}
+
+/* ── Main column ────────────────────────────────────────────────────────── */
+.dcmp-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* AI comparison banner (Component 212) */
+.dcmp-ai {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 12px 8px 12px 12px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #f4f1f9 0%, #e8faff 100%);
+}
+
+.dcmp-ai-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15.6px;
+  color: #1b0052;
+}
+
+.dcmp-ai-text {
+  margin: 0;
+  font-size: 12px;
+  line-height: 15.6px;
+  color: #333;
+}
+
+.dcmp-ai-text strong {
+  font-weight: 500;
+}
+
+/* Highlights Differences toggle */
+.dcmp-diff-row {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.dcmp-diff-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  background: none;
+  font-size: 14px;
+  line-height: 21px;
+  color: #4d4d4d;
+}
+
+.dcmp-diff-toggle img {
+  display: block;
+  height: 30px;
+  width: auto;
+}
+
+/* Highlighted differing values */
+.dcmp-diff {
+  background: rgba(1, 95, 116, 0.1);
+  border-radius: 4px;
+  padding: 0 4px;
+}
+
+/* ── Comparison grid ────────────────────────────────────────────────────── */
+.dcmp-grid {
+  display: flex;
+  align-items: flex-start;
+  /* Columns are fixed at 300px — scroll horizontally if they don't all fit. */
+  overflow-x: auto;
+}
+
+.dcmp-col-wrap {
+  display: flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+}
+
+.dcmp-vline {
+  width: 1px;
+  align-self: stretch;
+  background: #e5e5e5;
+  flex-shrink: 0;
+}
+
+.dcmp-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 300px;
+  padding: 0 16px;
+}
+
+.dcmp-col-wrap:first-child .dcmp-col {
+  padding-left: 0;
+}
+
+.dcmp-col-img {
+  position: relative;
+  height: 80px;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.dcmp-col-img > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dcmp-col-bin {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 75px;
+  background: #fff;
+}
+
+.dcmp-col-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dcmp-col-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 42px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #202020;
+}
+
+.dcmp-col-price-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.dcmp-col-price-label {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.06px;
+  color: #757575;
+  white-space: nowrap;
+}
+
+.dcmp-col-price {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #121212;
+  white-space: nowrap;
+}
+
+/* Basic-info rows — 40px heights match the left rail items */
+.dcmp-col-basics {
+  display: flex;
+  flex-direction: column;
+}
+
+.dcmp-col-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  font-size: 14px;
+  line-height: 21px;
+  color: #202020;
+}
+
+.dcmp-col-row img {
+  flex-shrink: 0;
+}
+
+/* Places row: icon top-aligned since the list can wrap to two lines */
+.dcmp-col-row--top {
+  align-items: flex-start;
+}
+
+.dcmp-col-row--top img {
+  margin-top: 3px;
+}
+
+.dcmp-col-services {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  padding: 10px 0;
+}
+
+.dcmp-service {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 16px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #139b79;
+  white-space: nowrap;
+}
+
+/* Itinerary */
+.dcmp-col-itin {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 0;
+  margin-top: 32px;
+}
+
+.dcmp-itin-row {
+  display: flex;
+  gap: 6px;
+  font-size: 14px;
+  line-height: 21px;
+  color: #202020;
+
+  span {
+    font-size: 14px;
+    line-height: 21px;
+    color: #202020;
+    text-wrap: nowrap;
+  }
+}
+
+.dcmp-show-more {
+  align-self: flex-end;
+  padding: 0;
+  background: none;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #202020;
+  text-decoration: underline;
+}
+
+/* Experiences */
+.dcmp-col-exps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 0;
+  margin-top: 32px;
+}
+
+.dcmp-exp-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 50px;
+}
+
+.dcmp-exp-row img {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.dcmp-exp-row p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: #202020;
+}
+
+/* Book Trip CTA */
+.dcmp-book {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  margin-top: 8px;
+  padding: 8px 16px;
+  border-radius: 73px;
+  background: #121212;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 14px;
+  color: #fff;
+}
+
+/* ── Add-another-trip column ────────────────────────────────────────────── */
+.dcmp-add {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  width: 296px;
+  flex-shrink: 0;
+  margin-left: 16px;
+  padding: 12px;
+  border: 1px solid rgba(117, 117, 117, 0.3);
+  border-radius: 12px;
+}
+
+.dcmp-add-search-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.dcmp-add-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  width: 100%;
+  padding: 6px 16px 6px 11px;
+  border: 1px solid rgba(117, 117, 117, 0.2);
+  border-radius: 30px;
+  background: #fff;
+  cursor: text;
+}
+
+.dcmp-add-search:focus-within {
+  border-color: rgba(117, 117, 117, 0.5);
+}
+
+.dcmp-add-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 12px;
+  line-height: 16px;
+  color: #3d3d3d;
+}
+
+.dcmp-add-search input::placeholder {
+  color: #757575;
+}
+
+/* Hide the native WebKit clear button — keeps the pill styling clean. */
+.dcmp-add-search input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+.dcmp-add-noresults {
+  align-self: flex-start;
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: #757575;
+}
+
+.dcmp-add-hint {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: #757575;
+}
+
+.dcmp-add-label {
+  align-self: flex-start;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: rgba(61, 61, 61, 0.83);
+}
+
+/* Suggested trip mini-card */
+.dcmp-sug {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 232px;
+}
+
+.dcmp-sug-img {
+  position: relative;
+  aspect-ratio: 1;
+  border: 0.62px solid #e5e5e5;
+  border-radius: 15px;
+  overflow: hidden;
+  background: #fbfbfb;
+}
+
+.dcmp-sug-img > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dcmp-sug-add {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 8px;
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.4);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 12px;
+  letter-spacing: 0.03px;
+  color: #fff;
+}
+
+.dcmp-sug-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dcmp-sug-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 26px;
+  color: #202020;
+}
+
+.dcmp-sug-loc {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  line-height: 15.6px;
+  color: rgba(117, 117, 117, 0.7);
+}
+
+.dcmp-sug-dur {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 17px;
+  color: #575757;
+}
+
+.dcmp-sug-dates {
+  margin: 0;
+  font-size: 14px;
+  line-height: 17px;
+  color: #575757;
+}
+
+.dcmp-sug-dates strong {
+  font-weight: 500;
+}
+
+.dcmp-sug-price-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.dcmp-sug-strike {
+  font-size: 14px;
+  line-height: 30px;
+  color: #757575;
+  text-decoration: line-through;
+}
+
+.dcmp-sug-price {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 30px;
+  color: #015f74;
+}
+
+.dcmp-sug-sub {
+  margin: 0;
+  font-size: 14px;
+  line-height: 15px;
+  color: #9ab3b6;
+}

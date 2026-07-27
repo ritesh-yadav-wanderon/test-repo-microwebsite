@@ -1,11 +1,27 @@
 .dtabs {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 60px;
   height: 60px;
   padding: 0 80px;
   background: #fff;
   border-bottom: 1px solid #f4f4f4;
+}
+
+/* Zero-height marker at the bar's original position; drives the observer. */
+.dtabs__sentinel {
+  height: 0;
+}
+
+/* Pinned below the fixed 72px header once scrolled past it. */
+.dtabs--stuck {
+  position: fixed;
+  top: 72px;
+  left: 0;
+  right: 0;
+  z-index: 90; /* beneath the DesktopNav (100) */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
 }
 
 .dtabs__tab {

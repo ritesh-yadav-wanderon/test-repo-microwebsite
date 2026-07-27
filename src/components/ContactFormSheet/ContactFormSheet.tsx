@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { DEST_REGIONS } from "../../data/destinations";
 import { COUNTRIES, type Country } from "../../data/countries";
 import { setAppScrollLocked } from "../../utils/scroll";
+import { useIsDesktop } from "../../hooks/useIsDesktop";
 import "./ContactFormSheet.css";
 
 const M = "/figma/menu/";
@@ -12,6 +13,7 @@ interface ContactFormSheetProps {
 }
 
 export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetProps) {
+  const isDesktop = useIsDesktop();
   const [hasOpened, setHasOpened] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -35,9 +37,10 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
 
   // Pin the sheet to the visual viewport so it hugs the on-screen keyboard
   // (avoids the gap/overlap left by position:fixed when the keyboard opens).
+  // Desktop renders a centered modal instead, so no pinning there.
   useEffect(() => {
     const vv = window.visualViewport;
-    if (!isOpen || !vv) return;
+    if (!isOpen || !vv || isDesktop) return;
     const update = () => {
       const overlap = window.innerHeight - vv.height - vv.offsetTop;
       if (sheetRef.current) {
@@ -56,7 +59,7 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
         sheetRef.current.style.maxHeight = "";
       }
     };
-  }, [isOpen]);
+  }, [isOpen, isDesktop]);
 
   // Collapse dropdowns whenever the sheet closes.
   useEffect(() => {
@@ -144,6 +147,23 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
 
         {/* Body */}
         <div className="cfs-body">
+          {/* Desktop modal header — colored logo + grey close (Figma 5154:26476).
+              Hidden on mobile, where the hero bar carries these. */}
+          <div className="cfs-body-bar" aria-hidden={!isDesktop}>
+            <img src="/figma/desktop/nav-logo-color.png" alt="WanderOn" className="cfs-body-logo" />
+            <button
+              className="cfs-close cfs-close--grey"
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              tabIndex={isDesktop ? 0 : -1}
+            >
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
+                <path d="M1 1L15 15M15 1L1 15" stroke="#3d3d3d" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </button>
+          </div>
+
           <h2 className="cfs-title">
             Live the magic between Ocean waves and emerald Skies!
           </h2>

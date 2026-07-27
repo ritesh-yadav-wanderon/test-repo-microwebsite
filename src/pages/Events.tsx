@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "../components/BottomNav";
 import BurgerMenu from "../components/BurgerMenu/BurgerMenu";
+import DesktopEvents from "../components/desktop/DesktopEvents";
+import { useIsDesktop } from "../hooks/useIsDesktop";
 import "./Events.css";
 
 const A = "/figma/events/";
@@ -101,10 +103,14 @@ function EventCard({ item, onOpen }: { item: EventItem; onOpen: (slug: string) =
 
 export default function Events() {
   const navigate = useNavigate();
+  const isDesktop = useIsDesktop();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeCat, setActiveCat] = useState(0);
   const [playing, setPlaying] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Desktop renders its own dark layout (Figma 5326:22442).
+  if (isDesktop) return <DesktopEvents />;
 
   const togglePlay = () => {
     const v = videoRef.current;

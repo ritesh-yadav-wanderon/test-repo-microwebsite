@@ -1,3 +1,4 @@
+import DesktopSearch from "./DesktopSearch";
 import "./DesktopHero.css";
 
 const BASE = "/figma/desktop";
@@ -6,8 +7,6 @@ const BASE = "/figma/desktop";
  *  riders are a single baked artwork in the design (text interleaves behind the
  *  people), so it ships as one image; the rating strip and search bar are live. */
 export default function DesktopHero() {
-  const openSearch = () => window.dispatchEvent(new CustomEvent("wanderon:open-search"));
-
   return (
     <section className="dhero">
       <img
@@ -22,19 +21,8 @@ export default function DesktopHero() {
         <img className="dhero__laurel dhero__laurel--flip" src="/figma/reviews/laurel.png" alt="" />
         <span className="dhero__rating-count">from 14,921 Reviews</span>
       </div>
-      <div className="dhero__search" role="search">
-        <button className="dhero__search-field" onClick={openSearch}>
-          <img src={`${BASE}/icon-distance-white.svg`} alt="" className="dhero__search-pin" />
-          <span>Where</span>
-        </button>
-        <span className="dhero__search-divider" />
-        <button className="dhero__search-field" onClick={openSearch}>
-          <img src={`${BASE}/icon-calendar-white.svg`} alt="" className="dhero__search-cal" />
-          <span>When</span>
-        </button>
-        <button className="dhero__search-btn" onClick={openSearch} aria-label="Search trips">
-          <img src={`${BASE}/search-fab.svg`} alt="" />
-        </button>
+      <div className="dhero__search-slot">
+        <DesktopSearch />
       </div>
     </section>
   );

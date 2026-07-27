@@ -1,6 +1,6 @@
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { Trip } from "../../types";
+import { useWishlist } from "../../context/WishlistContext";
 import "./UpcomingTrips.css";
 import "./TripCardItem.css";
 
@@ -45,7 +45,8 @@ function HeartIcon({ filled }: { filled?: boolean }) {
 
 /** Shared trip card — the "tdp2-more-card-v2" design used across all pages. */
 export function TripCardItem({ trip, batchesText, href }: { trip: Trip; batchesText?: string; href?: string }) {
-  const [wishlisted, setWishlisted] = useState(false);
+  const { isWishlisted, toggle: toggleWishlist } = useWishlist();
+  const wishlisted = isWishlisted(trip.slug);
   const dur = trip.duration ? `${trip.duration.nights}N/${trip.duration.days}D` : "";
   const batches = batchesText ?? formatBatches(trip.batches);
 
@@ -60,7 +61,17 @@ export function TripCardItem({ trip, batchesText, href }: { trip: Trip; batchesT
           className="tdp2-more-cv2-wish"
           type="button"
           aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
-          onClick={e => { e.preventDefault(); setWishlisted(w => !w); }}
+          onClick={e => {
+            e.preventDefault();
+            toggleWishlist({
+              slug: trip.slug,
+              title: trip.title,
+              image: trip.image || "/figma/trips/trip-1.jpg",
+              price: String(trip.startingPrice ?? ""),
+              duration: dur || undefined,
+              route: trip.pickDropPoint,
+            });
+          }}
         >
           <HeartIcon filled={wishlisted} />
         </button>
