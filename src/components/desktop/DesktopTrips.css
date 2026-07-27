@@ -78,6 +78,12 @@
 .dtrips__wishlist img {
   width: 100%;
   height: 100%;
+  transition: filter 0.2s ease;
+}
+
+/* Saved: tint the white heart glyph red-ish so the state is visible. */
+.dtrips__wishlist--saved img {
+  filter: invert(48%) sepia(60%) saturate(2500%) hue-rotate(325deg);
 }
 
 .dtrips__card-title {

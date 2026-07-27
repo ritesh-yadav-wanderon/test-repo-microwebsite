@@ -4,7 +4,7 @@ import "./FilterSheet.css";
 
 /* ── Static data ── */
 
-const TABS = [
+export const TABS = [
   "Destinations",
   "Planning With",
   "Date & Duration",
@@ -83,16 +83,16 @@ const INTL_REGIONS: IntlRegion[] = [
   },
 ];
 
-type FilterOption = { label: string; price: string; packages: string };
+export type FilterOption = { label: string; price: string; packages: string };
 
-const PLANNING_WITH: FilterOption[] = [
+export const PLANNING_WITH: FilterOption[] = [
   { label: "Group", price: "Rs.21,999 Onwards", packages: "50+ packages" },
   { label: "Friends(Your Group)", price: "Rs.21,999 Onwards", packages: "50+ packages" },
   { label: "Family", price: "Rs.21,999 Onwards", packages: "50+ packages" },
   { label: "Romantic Escapes", price: "Rs.21,999 Onwards", packages: "50+ packages" },
 ];
 
-const CATEGORIES: FilterOption[] = [
+export const CATEGORIES: FilterOption[] = [
   { label: "Adventure", price: "Rs.21,999 Onwards", packages: "50+ packages" },
   { label: "Luxury", price: "Rs.21,999 Onwards", packages: "50+ packages" },
   { label: "Budget Trips", price: "Rs.21,999 Onwards", packages: "50+ packages" },
@@ -100,18 +100,18 @@ const CATEGORIES: FilterOption[] = [
   { label: "Wellness", price: "Rs.21,999 Onwards", packages: "50+ packages" },
 ];
 
-const ADDONS: FilterOption[] = [
+export const ADDONS: FilterOption[] = [
   { label: "With Flights", price: "Rs.21,999 Onwards", packages: "50+ packages" },
   { label: "Visa", price: "Rs.21,999 Onwards", packages: "50+ packages" },
 ];
 
-const DEPARTURE_CITIES: FilterOption[] = [
+export const DEPARTURE_CITIES: FilterOption[] = [
   { label: "Ex-Delhi", price: "Rs.21,999 Onwards", packages: "50+ packages" },
   { label: "Ex-Mumbai", price: "Rs.21,999 Onwards", packages: "50+ packages" },
   { label: "Ex-Chennai", price: "Rs.21,999 Onwards", packages: "50+ packages" },
 ];
 
-const ACCOMMODATION_TYPES: FilterOption[] = [
+export const ACCOMMODATION_TYPES: FilterOption[] = [
   { label: "Double Sharing Room", price: "Rs.21,999 Onwards", packages: "50+ packages" },
   { label: "Single Sharing Room", price: "Rs.21,999 Onwards", packages: "50+ packages" },
   { label: "Triple Sharing Room", price: "Rs.21,999 Onwards", packages: "50+ packages" },
@@ -183,7 +183,7 @@ function FilterCheckRow({ label, price, packages, checked, onToggle }: {
 }
 
 /* ── Destinations panel ── */
-function DestinationsPanel({ sel, onToggle }: { sel: Set<string>; onToggle: (v: string) => void }) {
+export function DestinationsPanel({ sel, onToggle }: { sel: Set<string>; onToggle: (v: string) => void }) {
   const [expandedGroup, setExpandedGroup] = useState<string>("india");
   const [showAll, setShowAll] = useState(false);
 
@@ -262,7 +262,7 @@ function DestinationsPanel({ sel, onToggle }: { sel: Set<string>; onToggle: (v: 
 }
 
 /* ── Generic filter list panel ── */
-function FilterListPanel({ items, sel, onToggle }: {
+export function FilterListPanel({ items, sel, onToggle }: {
   items: FilterOption[]; sel: Set<string>; onToggle: (v: string) => void;
 }) {
   return (
@@ -362,7 +362,7 @@ const MONTH_NAMES = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"];
 const DOW_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
 
-function DateDurationPanel({ sel, onToggle }: { sel: Set<string>; onToggle: (v: string) => void }) {
+export function DateDurationPanel({ sel, onToggle }: { sel: Set<string>; onToggle: (v: string) => void }) {
   const [mode, setMode] = useState<"months" | "dates">("months");
   const fromStr = [...sel].find(v => v.startsWith("from:"))?.slice(5) ?? null;
   const toStr = [...sel].find(v => v.startsWith("to:"))?.slice(3) ?? null;
@@ -473,7 +473,7 @@ function DateDurationPanel({ sel, onToggle }: { sel: Set<string>; onToggle: (v: 
 }
 
 /* ── URL param builder ── */
-function buildSearchParams(selections: Record<string, Set<string>>): string {
+export function buildSearchParams(selections: Record<string, Set<string>>): string {
   const p = new URLSearchParams();
   const dest = [...(selections["Destinations"] ?? [])];
   if (dest.length) p.set("destination", dest.join(","));
@@ -501,7 +501,7 @@ function buildSearchParams(selections: Record<string, Set<string>>): string {
 
 
 /* ── BucketListPanel ── */
-function BucketListPanel({ sel, onAdd, onRemove }: {
+export function BucketListPanel({ sel, onAdd, onRemove }: {
   sel: Set<string>;
   onAdd: (v: string) => void;
   onRemove: (v: string) => void;
@@ -565,6 +565,24 @@ function BucketListPanel({ sel, onAdd, onRemove }: {
   );
 }
 
+/* ── Seed selections from the current URL search params ── */
+export function seedFromParams(params: URLSearchParams): Record<string, Set<string>> {
+  const s: Record<string, Set<string>> = Object.fromEntries(TABS.map(t => [t, new Set<string>()]));
+  params.get("destination")?.split(",").filter(Boolean).forEach(v => s["Destinations"].add(v));
+  params.get("months")?.split(",").filter(Boolean).forEach(v => s["Date & Duration"].add(v));
+  const from = params.get("from");
+  if (from) s["Date & Duration"].add(`from:${from}`);
+  const to = params.get("to");
+  if (to) s["Date & Duration"].add(`to:${to}`);
+  params.get("category")?.split(",").filter(Boolean).forEach(v => s["Category"].add(v));
+  params.get("planningWith")?.split(",").filter(Boolean).forEach(v => s["Planning With"].add(v));
+  params.get("addons")?.split(",").filter(Boolean).forEach(v => s["Add-Ons"].add(v));
+  params.get("fromCity")?.split(",").filter(Boolean).forEach(v => s["Departure City"].add(v));
+  params.get("accommodation")?.split(",").filter(Boolean).forEach(v => s["Accommodation Type"].add(v));
+  params.get("bucketList")?.split(",").map(x => x.trim()).filter(Boolean).forEach(v => s["Bucket List"].add(v));
+  return s;
+}
+
 /* ── FilterSheet ── */
 export default function FilterSheet({ isOpen, onClose, initialTab = 0 }: { isOpen: boolean; onClose: () => void; initialTab?: number }) {
   const [hasOpened, setHasOpened] = useState(false);
@@ -574,23 +592,6 @@ export default function FilterSheet({ isOpen, onClose, initialTab = 0 }: { isOpe
   );
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-
-  function seedFromParams(params: URLSearchParams): Record<string, Set<string>> {
-    const s: Record<string, Set<string>> = Object.fromEntries(TABS.map(t => [t, new Set<string>()]));
-    params.get("destination")?.split(",").filter(Boolean).forEach(v => s["Destinations"].add(v));
-    params.get("months")?.split(",").filter(Boolean).forEach(v => s["Date & Duration"].add(v));
-    const from = params.get("from");
-    if (from) s["Date & Duration"].add(`from:${from}`);
-    const to = params.get("to");
-    if (to) s["Date & Duration"].add(`to:${to}`);
-    params.get("category")?.split(",").filter(Boolean).forEach(v => s["Category"].add(v));
-    params.get("planningWith")?.split(",").filter(Boolean).forEach(v => s["Planning With"].add(v));
-    params.get("addons")?.split(",").filter(Boolean).forEach(v => s["Add-Ons"].add(v));
-    params.get("fromCity")?.split(",").filter(Boolean).forEach(v => s["Departure City"].add(v));
-    params.get("accommodation")?.split(",").filter(Boolean).forEach(v => s["Accommodation Type"].add(v));
-    params.get("bucketList")?.split(",").map(x => x.trim()).filter(Boolean).forEach(v => s["Bucket List"].add(v));
-    return s;
-  }
 
   useEffect(() => { if (isOpen) setHasOpened(true); }, [isOpen]);
   useEffect(() => {

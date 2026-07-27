@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { openLoginSheet } from "../../utils/login";
 import { getScrollTop, onAppScroll } from "../../utils/scroll";
+import DesktopSearch from "./DesktopSearch";
 import "./DesktopNav.css";
 
 const BASE = "/figma/desktop";
@@ -55,6 +56,16 @@ const GROUPS: Group[] = [
   },
 ];
 
+/* Burger dropdown items (Figma 6467:26761). */
+const BURGER_ITEMS = [
+  { label: "Find your trip",  icon: "menu-find-trip.svg",  to: "/search" },
+  { label: "Community Trips", icon: "menu-community.svg",  to: "/trips" },
+  { label: "Bike Trips",      icon: "menu-bike.svg",       to: "/search" },
+  { label: "Categories",      icon: "menu-categories.svg", to: "/search" },
+  { label: "Wishlist",        icon: "/figma/desktop-profile/icon-wishlist.svg", to: "/wishlist" },
+  { label: "Blogs",           icon: "menu-blogs.svg",      to: "/blog" },
+];
+
 function ChevronDown() {
   return (
     <svg className="dnav__dest-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
@@ -78,18 +89,23 @@ interface DesktopNavProps {
   /** Render the white header from the start. Used on pages without a dark
    *  hero behind the nav (e.g. trip detail). */
   alwaysSolid?: boolean;
+  /** Dark-page variant (events pages): transparent by default, and on scroll
+   *  fills with a blurred black backdrop instead of white. */
+  dark?: boolean;
 }
 
 /** Fixed top navigation (Figma 6447:16452 / 6184:24322 / 6184:24323).
  *  Transparent over the hero on load; fills white once the page scrolls or
- *  the destinations dropdown opens. */
-export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = false }: DesktopNavProps) {
+ *  the destinations dropdown opens (black blur instead when `dark`). */
+export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = false, dark = false }: DesktopNavProps) {
   const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, logout } = useAuth();
   const rootRef = useRef<HTMLDivElement>(null);
 
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [burgerOpen, setBurgerOpen] = useState(false);
   const [groupIdx, setGroupIdx] = useState(0);
 
   useEffect(() => {
@@ -100,12 +116,17 @@ export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = fal
   }, []);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open && !searchOpen && !burgerOpen) return;
+    const closeAll = () => {
+      setOpen(false);
+      setSearchOpen(false);
+      setBurgerOpen(false);
+    };
     const onDown = (e: MouseEvent) => {
-      if (!rootRef.current?.contains(e.target as Node)) setOpen(false);
+      if (!rootRef.current?.contains(e.target as Node)) closeAll();
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") closeAll();
     };
     document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onKey);
@@ -113,9 +134,11 @@ export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = fal
       document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
     };
-  }, [open]);
+  }, [open, searchOpen, burgerOpen]);
 
-  const solid = alwaysSolid || scrolled || open;
+  const solid = alwaysSolid || scrolled || open || searchOpen || burgerOpen;
+  // Dark pages keep the white logo/burger — the solid state is a black blur.
+  const lightAssets = dark || !solid;
   const group = GROUPS[groupIdx];
 
   const goDestination = (name: string) => {
@@ -124,10 +147,10 @@ export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = fal
   };
 
   return (
-    <div ref={rootRef} className={`dnav${solid ? " dnav--solid" : ""}`}>
+    <div ref={rootRef} className={`dnav${solid ? " dnav--solid" : ""}${dark ? " dnav--dark" : ""}`}>
       <div className="dnav__bar">
         <button className="dnav__logo" onClick={() => navigate("/")} aria-label="WanderOn home">
-          <img src={`${BASE}/${solid ? "nav-logo-color.png" : "nav-logo.png"}`} alt="WanderOn" />
+          <img src={`${BASE}/${lightAssets ? "nav-logo.png" : "nav-logo-color.png"}`} alt="WanderOn" />
         </button>
         <div className="dnav__right">
           <button className="dnav__link" onClick={() => navigate("/search")}>
@@ -137,7 +160,10 @@ export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = fal
             className={`dnav__link dnav__link--dest${open ? " dnav__link--dest-open" : ""}`}
             aria-expanded={open}
             aria-haspopup="menu"
-            onClick={() => setOpen((v) => !v)}
+            onClick={() => {
+              setSearchOpen(false);
+              setOpen((v) => !v);
+            }}
           >
             Destinations
             <ChevronDown />
@@ -146,7 +172,11 @@ export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = fal
             <button
               className="dnav__search"
               aria-label="Search trips"
-              onClick={() => window.dispatchEvent(new CustomEvent("wanderon:open-search"))}
+              aria-expanded={searchOpen}
+              onClick={() => {
+                setOpen(false);
+                setSearchOpen((v) => !v);
+              }}
             >
               <img src={`${BASE}/nav-search-fab.svg`} alt="" />
             </button>
@@ -161,11 +191,85 @@ export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = fal
             <img src={`${BASE}/nav-person.svg`} alt="" />
             {isLoggedIn ? "Profile" : "Log In"}
           </button>
-          <button className="dnav__burger" aria-label="Menu">
-            <img src={`${BASE}/${solid ? "nav-burger-dark.svg" : "nav-burger.svg"}`} alt="" />
+          <button
+            className="dnav__burger"
+            aria-label="Menu"
+            aria-expanded={burgerOpen}
+            aria-haspopup="menu"
+            onClick={() => {
+              setOpen(false);
+              setSearchOpen(false);
+              setBurgerOpen((v) => !v);
+            }}
+          >
+            <img src={`${BASE}/${lightAssets ? "nav-burger.svg" : "nav-burger-dark.svg"}`} alt="" />
           </button>
         </div>
       </div>
+
+      {/* Expanded header search (Airbnb-style strip) — reuses DesktopSearch
+          with its Where / When dropdown panels. */}
+      {searchOpen && (
+        <div className="dnav__searchbar">
+          <DesktopSearch
+            variant="light"
+            autoOpenWhere
+            onSearched={() => setSearchOpen(false)}
+            onClose={() => setSearchOpen(false)}
+          />
+        </div>
+      )}
+
+      {/* Burger dropdown (Figma 6467:26761) — below the header, right-aligned
+          with the burger button. */}
+      {burgerOpen && (
+        <div className="dnav__burger-menu" role="menu">
+          {BURGER_ITEMS.map((item) => (
+            <button
+              key={item.label}
+              className="dnav__bm-item"
+              role="menuitem"
+              onClick={() => {
+                setBurgerOpen(false);
+                navigate(item.to);
+              }}
+            >
+              <img
+                src={item.icon.startsWith("/") ? item.icon : `${BASE}/${item.icon}`}
+                width={16}
+                height={16}
+                alt=""
+                aria-hidden
+              />
+              {item.label}
+            </button>
+          ))}
+          <div className="dnav__bm-sep" />
+          <button
+            className="dnav__bm-item"
+            role="menuitem"
+            onClick={() => {
+              setBurgerOpen(false);
+              navigate("/about-us");
+            }}
+          >
+            <img src={`${BASE}/menu-about.svg`} width={16} height={16} alt="" aria-hidden />
+            About WanderOn
+          </button>
+          <button
+            className="dnav__bm-item"
+            role="menuitem"
+            onClick={() => {
+              setBurgerOpen(false);
+              if (isLoggedIn) logout();
+              else openLoginSheet();
+            }}
+          >
+            <img src={`${BASE}/menu-logout.svg`} width={16} height={16} alt="" aria-hidden />
+            {isLoggedIn ? "Log out" : "Log In"}
+          </button>
+        </div>
+      )}
 
       {open && (
         <div className="dnav__menu" role="menu">

@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { BookingProvider } from "./context/BookingContext";
 import { CompareProvider } from "./context/CompareContext";
+import { WishlistProvider } from "./context/WishlistContext";
 import App from "./App";
 import "./styles/global.css";
 
@@ -16,7 +17,9 @@ createRoot(root).render(
       <AuthProvider>
         <BookingProvider>
           <CompareProvider>
-            <App />
+            <WishlistProvider>
+              <App />
+            </WishlistProvider>
           </CompareProvider>
         </BookingProvider>
       </AuthProvider>

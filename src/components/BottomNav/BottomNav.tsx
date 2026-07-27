@@ -8,7 +8,8 @@ interface BottomNavProps {
   variant?: "light" | "dark";
 }
 
-const WHATSAPP_URL =
+/** WhatsApp chat deep-link — shared with the desktop floating chat button. */
+export const WHATSAPP_URL =
   "https://api.whatsapp.com/send?phone=918130288566&text=Hi+WanderOn%2C+I+have+a+query%21";
 
 export default function BottomNav({ variant = "light" }: BottomNavProps) {

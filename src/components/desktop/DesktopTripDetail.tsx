@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import type { Trip, TripGroup } from "../../types";
 import { useCompare } from "../../context/CompareContext";
 import { SAMPLE_UPCOMING_TRIPS } from "../../api/sampleData";
@@ -12,7 +13,6 @@ import {
   parseCityStrip,
 } from "../../pages/TripDetail";
 import "../../pages/TripDetail.css";
-import GallerySheet from "../GallerySheet/GallerySheet";
 import ShareSheet from "../ShareSheet/ShareSheet";
 import DesktopNav from "./DesktopNav";
 import DesktopBatchesSheet from "./DesktopBatchesSheet";
@@ -78,6 +78,8 @@ const TAB_SECTIONS = [
  *  from the mobile product page via the shared STATIC_DATA export. */
 export default function DesktopTripDetail() {
   const data = STATIC_DATA;
+  const navigate = useNavigate();
+  const { slug = "trip" } = useParams<{ slug: string }>();
 
   const [wishlisted, setWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
@@ -93,8 +95,6 @@ export default function DesktopTripDetail() {
   const ptitleRef = useRef<HTMLElement>(null);
 
   // Sheets
-  const [galleryOpen, setGalleryOpen] = useState(false);
-  const [galleryIndex, setGalleryIndex] = useState(0);
   const [batchesOpen, setBatchesOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
 
@@ -116,10 +116,8 @@ export default function DesktopTripDetail() {
     : "";
 
   const gallery = data.gallery.length ? data.gallery : data.heroImages;
-  const openGallery = (idx = 0) => {
-    setGalleryIndex(idx);
-    setGalleryOpen(true);
-  };
+  /* Hero image / "View Gallery" clicks open the dedicated gallery page. */
+  const openGallery = (idx = 0) => navigate(`/trip/${slug}/gallery?i=${idx}`);
 
   function scrollToSection(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -622,14 +620,6 @@ export default function DesktopTripDetail() {
       <DesktopFooter />
 
       {/* ── Sheets ──────────────────────────────────────────────────────── */}
-      <GallerySheet
-        isOpen={galleryOpen}
-        onClose={() => setGalleryOpen(false)}
-        images={gallery}
-        startIndex={galleryIndex}
-        title={data.title}
-        tags={data.cityStrip.map((c) => parseCityStrip(c).city)}
-      />
       <ShareSheet
         isOpen={shareOpen}
         onClose={() => setShareOpen(false)}

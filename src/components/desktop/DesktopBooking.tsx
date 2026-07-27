@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import PaymentSheet from "../PaymentSheet/PaymentSheet";
 import Voucher from "../Voucher/Voucher";
+import DesktopReviewBooking from "./DesktopReviewBooking";
 import { formatINR, type BookingForm } from "../../pages/useBookingForm";
 import "./DesktopBooking.css";
 
@@ -29,9 +30,6 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
     setNotesOpen,
     agreed,
     setAgreed,
-    paymentOpen,
-    setPaymentOpen,
-    bookingReferenceId,
     firstName,
     setFirstName,
     middleName,
@@ -65,8 +63,15 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
     appliedVoucher,
     setAppliedVoucher,
     pricing,
-    handlePaymentSuccess,
   } = form;
+
+  // "Book Now" advances to the review-booking step (Figma 6597:36834) instead
+  // of opening the mobile payment bottom sheet.
+  const [reviewOpen, setReviewOpen] = useState(false);
+
+  if (reviewOpen) {
+    return <DesktopReviewBooking form={form} onBack={() => setReviewOpen(false)} />;
+  }
 
   return (
     <div className="dbk">
@@ -634,7 +639,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
             <div className="dbk-rail-bottom">
               <div className="dbk-rail-tags">
                 <img src={`${A}icon-your-trips.svg`} width={14} height={14} alt="" aria-hidden />
-                <span className="dbk-rail-tag">{data.tripName}</span>
+                <span className="dbk-rail-tag">Europe Trip</span>
                 <span className="dbk-rail-dot" aria-hidden />
                 <span className="dbk-rail-tag">{data.dateRange}</span>
                 {travelers > 0 && (
@@ -660,7 +665,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                   className="dbk-rail-btn"
                   type="button"
                   disabled={!agreed}
-                  onClick={() => setPaymentOpen(true)}
+                  onClick={() => setReviewOpen(true)}
                 >
                   Book Now
                 </button>
@@ -674,21 +679,6 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
       <footer className="dbk-footer">
         <p>&copy; WANDERON EXPERIENCES PVT LTD, All rights reserved.</p>
       </footer>
-
-      <PaymentSheet
-        isOpen={paymentOpen}
-        onClose={() => setPaymentOpen(false)}
-        totalAmount={formatINR(pricing.toPay)}
-        savedAmount={String(pricing.saved)}
-        bookingReferenceId={bookingReferenceId}
-        description={data.tripName}
-        prefill={{
-          name: [firstName, middleName, lastName].filter(Boolean).join(" ").trim(),
-          email,
-          contact: phone,
-        }}
-        onPaymentSuccess={handlePaymentSuccess}
-      />
     </div>
   );
 }

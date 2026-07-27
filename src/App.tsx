@@ -7,9 +7,11 @@ import PageSkeleton, { type SkeletonVariant } from "./components/Skeleton/PageSk
 const SearchResults = lazy(() => import("./pages/SearchResults"));
 const Destination = lazy(() => import("./pages/Destination"));
 const TripDetail = lazy(() => import("./pages/TripDetail"));
+const TripGallery = lazy(() => import("./pages/TripGallery"));
 const Profile = lazy(() => import("./pages/Profile"));
 const MyProfile = lazy(() => import("./pages/MyProfile"));
 const Compare = lazy(() => import("./pages/Compare"));
+const Wishlist = lazy(() => import("./pages/Wishlist"));
 const Legal   = lazy(() => import("./pages/Legal"));
 const Events = lazy(() => import("./pages/Events"));
 const EventDetail = lazy(() => import("./pages/EventDetail"));
@@ -34,6 +36,7 @@ export default function App() {
         <Route path="/search" element={withSkeleton(<SearchResults />, "list")} />
         <Route path="/destination/:slug" element={withSkeleton(<Destination />, "destination")} />
         <Route path="/trip/:slug" element={withSkeleton(<TripDetail />, "product")} />
+        <Route path="/trip/:slug/gallery" element={withSkeleton(<TripGallery />, "generic")} />
         <Route path="/profile" element={withSkeleton(<Profile />, "profile")} />
         <Route path="/my-profile" element={withSkeleton(<MyProfile />, "form")} />
         <Route path="/events" element={withSkeleton(<Events />, "list")} />
@@ -46,6 +49,7 @@ export default function App() {
           }
         />
         <Route path="/compare" element={withSkeleton(<Compare />, "list")} />
+        <Route path="/wishlist" element={withSkeleton(<Wishlist />, "list")} />
         <Route path="/legal" element={withSkeleton(<Legal />, "generic")} />
         <Route path="/booking" element={withSkeleton(<Booking />, "form")} />
         <Route path="/bookings" element={withSkeleton(<MyBookings />, "list")} />
