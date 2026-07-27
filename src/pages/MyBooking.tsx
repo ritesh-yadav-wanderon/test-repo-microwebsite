@@ -6,6 +6,8 @@ import CoTravellerSheet, {
 } from "../components/CoTravellerSheet/CoTravellerSheet";
 import CancelBookingSheet from "../components/CancelBookingSheet/CancelBookingSheet";
 import PaymentSheet from "../components/PaymentSheet/PaymentSheet";
+import DesktopMyBooking from "../components/desktop/DesktopMyBooking";
+import { useIsDesktop } from "../hooks/useIsDesktop";
 import { useBooking } from "../context/BookingContext";
 import { BILL_ITEMS, TOTAL_TRIP_COST } from "../data/bookingBill";
 import { scrollAppToTop } from "../utils/scroll";
@@ -87,6 +89,7 @@ const REQUIRED_FIELDS = [
 ] as const;
 
 export default function MyBooking() {
+  const isDesktop = useIsDesktop();
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
@@ -147,6 +150,19 @@ export default function MyBooking() {
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
   }, [fromList, navigate]);
+
+  // Desktop renders its own two-column layout (Figma 6219:25591). Placed after
+  // all hooks so the hook order stays consistent across renders.
+  if (isDesktop) {
+    return (
+      <DesktopMyBooking
+        data={data}
+        refId={ref}
+        initialTab={state.initialTab}
+        fromList={fromList}
+      />
+    );
+  }
 
   // Snapshot of this booking passed to the Cancellation screen.
   const cancellationState = {
