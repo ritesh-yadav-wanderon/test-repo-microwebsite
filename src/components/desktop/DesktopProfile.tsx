@@ -1,6 +1,8 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import ProfileWatermark from "./ProfileWatermark";
+import { getLastMainPage } from "../../utils/lastMainPage";
 import "./DesktopProfile.css";
 
 const DP = "/figma/desktop-profile/";
@@ -31,15 +33,51 @@ interface MenuItem {
   onClick?: () => void;
 }
 
-/** Desktop Profile ("Account") page — Figma 3996:11227. Combines the mobile
- *  profile menu and the personal-information form into a two-column layout. */
-export default function DesktopProfile() {
+/** Header shared by the desktop account pages. Back steps up to /profile
+ *  (or exits from /profile itself); the cross always returns to the last
+ *  visited main-site page (home / listing / destination / trip details). */
+export function ProfileHeader() {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const exit = () => navigate(getLastMainPage());
+  const back = () => (pathname === "/profile" ? exit() : navigate("/profile"));
+
+  return (
+    <header className="dpr-header">
+      <button className="dpr-header-back" type="button" aria-label="Back" onClick={back}>
+        <img src={`${P}v2-icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+      </button>
+      <span className="dpr-header-title">Profile</span>
+      <button
+        className="dpr-header-close"
+        type="button"
+        aria-label="Back to website"
+        onClick={exit}
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path d="M6 6l12 12M18 6 6 18" stroke="#3d3d3d" strokeWidth="1.8" strokeLinecap="round" />
+        </svg>
+      </button>
+    </header>
+  );
+}
+
+/** Left rail (avatar + menu + referral tag + logout) shared by the desktop
+ *  Profile and My Bookings pages — Figma 3996:11227 / 3996:12266. */
+export function ProfileRail() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const [form, setForm] = useState(INIT);
 
-  const set = (key: keyof typeof INIT) => (v: string) =>
-    setForm((f) => ({ ...f, [key]: v }));
+  // Warm the allied account-page chunks so rail navigation renders instantly
+  // instead of suspending into the loading skeleton.
+  useEffect(() => {
+    import("../../pages/Profile");
+    import("../../pages/MyProfile");
+    import("../../pages/MyBookings");
+    import("../../pages/MyBooking");
+    import("../../pages/Support");
+  }, []);
 
   const name = user?.name ?? "Shivam Trivedi";
   const initial = name.charAt(0).toUpperCase();
@@ -48,11 +86,6 @@ export default function DesktopProfile() {
     { label: "My Profile", icon: `${DP}icon-profile.svg`, onClick: () => navigate("/my-profile") },
     { label: "My bookings", icon: `${DP}icon-bookings.svg`, onClick: () => navigate("/bookings") },
     { label: "Your feedback", icon: `${DP}icon-feedback.svg`, onClick: () => navigate("/feedback") },
-    {
-      label: "Wishlist",
-      icon: `${DP}icon-wishlist.svg`,
-      onClick: () => navigate("/wishlist"),
-    },
     { label: "Payments", icon: `${DP}icon-payments.svg` },
     { label: "Referrals", icon: `${DP}icon-referrals.svg` },
     { label: "Add Friends & Family", icon: `${DP}icon-friends.svg` },
@@ -61,7 +94,7 @@ export default function DesktopProfile() {
     {
       label: "Help  & Support",
       icon: `${DP}icon-help.svg`,
-      onClick: () => window.dispatchEvent(new Event("wanderon:open-enquire")),
+      onClick: () => navigate("/support"),
     },
   ];
 
@@ -71,63 +104,64 @@ export default function DesktopProfile() {
   };
 
   return (
+    <aside className="dpr-rail">
+      <div className="dpr-user">
+        <div className="dpr-avatar">
+          <span>{initial}</span>
+        </div>
+        <p className="dpr-name">Hi! {name}</p>
+      </div>
+
+      <nav className="dpr-menu">
+        {menu.map((item) => (
+          <button
+            key={item.label}
+            type="button"
+            className="dpr-menu-row"
+            onClick={item.onClick}
+          >
+            <span className="dpr-menu-left">
+              <img src={item.icon} width={20} height={20} alt="" aria-hidden loading="lazy" />
+              <span className="dpr-menu-label">{item.label}</span>
+            </span>
+            <img
+              className="dpr-menu-chevron"
+              src={`${P}v2-icon-chevron.svg`}
+              width={16}
+              height={16}
+              alt=""
+              aria-hidden
+            />
+          </button>
+        ))}
+      </nav>
+
+      <div className="dpr-referral">
+        <img src={`${DP}icon-refer.svg`} width={16} height={16} alt="" aria-hidden />
+        <p>Get &#8377;500 OFF every time your invitee does their first booking.</p>
+      </div>
+
+      <button className="dpr-logout" type="button" onClick={handleLogout}>
+        Log Out
+      </button>
+    </aside>
+  );
+}
+
+/** Desktop Profile ("Account") page — Figma 3996:11227. Combines the mobile
+ *  profile menu and the personal-information form into a two-column layout. */
+export default function DesktopProfile() {
+  const [form, setForm] = useState(INIT);
+
+  const set = (key: keyof typeof INIT) => (v: string) =>
+    setForm((f) => ({ ...f, [key]: v }));
+
+  return (
     <div className="dpr">
-      {/* ── Header ─────────────────────────────────────────── */}
-      <header className="dpr-header">
-        <button
-          className="dpr-header-back"
-          type="button"
-          aria-label="Back"
-          onClick={() => navigate(-1)}
-        >
-          <img src={`${P}v2-icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
-        </button>
-        <span className="dpr-header-title">Profile</span>
-      </header>
+      <ProfileHeader />
 
       <div className="dpr-body">
-        {/* ── Left rail ────────────────────────────────────── */}
-        <aside className="dpr-rail">
-          <div className="dpr-user">
-            <div className="dpr-avatar">
-              <span>{initial}</span>
-            </div>
-            <p className="dpr-name">Hi! {name}</p>
-          </div>
-
-          <nav className="dpr-menu">
-            {menu.map((item) => (
-              <button
-                key={item.label}
-                type="button"
-                className="dpr-menu-row"
-                onClick={item.onClick}
-              >
-                <span className="dpr-menu-left">
-                  <img src={item.icon} width={20} height={20} alt="" aria-hidden loading="lazy" />
-                  <span className="dpr-menu-label">{item.label}</span>
-                </span>
-                <img
-                  className="dpr-menu-chevron"
-                  src={`${P}v2-icon-chevron.svg`}
-                  width={16}
-                  height={16}
-                  alt=""
-                  aria-hidden
-                />
-              </button>
-            ))}
-          </nav>
-
-          <div className="dpr-referral">
-            <img src={`${DP}icon-refer.svg`} width={16} height={16} alt="" aria-hidden />
-            <p>Get &#8377;500 OFF every time your invitee does their first booking.</p>
-          </div>
-
-          <button className="dpr-logout" type="button" onClick={handleLogout}>
-            Log Out
-          </button>
-        </aside>
+        <ProfileRail />
 
         {/* ── Personal information ─────────────────────────── */}
         <div className="dpr-main">
@@ -346,6 +380,9 @@ export default function DesktopProfile() {
           <button className="dpr-save" type="button">Save Details</button>
         </div>
       </div>
+
+      {/* Grey sign-off — page level, aligned with the content gutter */}
+      <ProfileWatermark />
 
       {/* Same minimal footer as the desktop booking page */}
       <footer className="dpr-footer">

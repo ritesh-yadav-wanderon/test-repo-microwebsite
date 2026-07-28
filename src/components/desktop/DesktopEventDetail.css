@@ -6,6 +6,7 @@
 }
 
 .depd {
+  position: relative;
   min-height: 100vh;
   /* Top padding clears the fixed 72px global header */
   padding: 96px 0 80px;
@@ -13,7 +14,37 @@
   color: #fff;
 }
 
+/* ── Blurred gif backdrop behind the hero (Figma 6626:9523) ── */
+.depd__backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 640px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.depd__backdrop img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(26.85px);
+  opacity: 0.2;
+  /* Oversize to keep the blur's transparent edges outside the frame */
+  transform: scale(1.12);
+}
+
+/* Fade the backdrop into the page background */
+.depd__backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(22, 22, 22, 0) 55%, #161616 100%);
+}
+
 .depd__inner {
+  position: relative;
   max-width: 1120px;
   margin: 0 auto;
   padding: 0 80px;

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { CoTravellerData } from "../CoTravellerSheet/CoTravellerSheet";
 import CancelBookingSheet from "../CancelBookingSheet/CancelBookingSheet";
+import ProfileWatermark from "./ProfileWatermark";
 import { useBooking } from "../../context/BookingContext";
 import { BILL_ITEMS } from "../../data/bookingBill";
 import { startTripPayment } from "../../api/payment";
@@ -12,7 +13,8 @@ const MB = "/figma/my-booking/";
 const PROF = "/figma/my-profile/";
 const PAY = "/figma/payments/";
 const CT = "/figma/co-travellers/";
-const TRIP_THUMB = "/figma/trip-hero/hero-bg.png";
+/* Trip thumbnail from the Figma design (6219:25591) */
+const TRIP_THUMB = "/figma/my-booking/trip-thumb.png";
 
 const CITIES = ["3N Paris", "3N Amsterdam", "2N Berlin", "2N Prague"];
 
@@ -144,7 +146,8 @@ export default function DesktopMyBooking({
   const dueNum = Number(String(data.dueBalance).replace(/[^\d]/g, ""));
   const hasDue = dueNum > 0;
 
-  const goBack = () => (fromList ? navigate(-1) : navigate("/", { replace: true }));
+  // Per design feedback, the desktop back button always lands on the profile page.
+  const goBack = () => navigate("/profile");
 
   const goToCancellation = () =>
     navigate(`/bookings/${refId}/cancellation`, {
@@ -627,6 +630,9 @@ export default function DesktopMyBooking({
           )}
         </aside>
       </div>
+
+      {/* Grey sign-off — page level, aligned with the content gutter */}
+      <ProfileWatermark />
 
       {/* ── Footer ───────────────────────────────────────────── */}
       <footer className="dmb-footer">

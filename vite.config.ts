@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     server: {
-      port: 5173,
+      port: 5050,
       proxy: {
         "/cms-api": {
           target: "https://cms-backend-staging-b2yue.ondigitalocean.app",

@@ -1,0 +1,195 @@
+/* Mobile Notifications screen — profile segment (Figma 3626:9518) */
+
+.ntf-page {
+  min-height: 100vh;
+  background: #fff;
+  font-family: var(--font);
+  display: flex;
+  flex-direction: column;
+  /* Clear the floating bottom nav */
+  padding-bottom: 100px;
+}
+
+/* ── Header (same bar as Help & Support) ────────────────────────────── */
+.ntf-nav {
+  position: sticky;
+  top: 0;
+  z-index: 21;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 16px;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.ntf-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.ntf-back {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.ntf-title {
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.08px;
+  color: #202020;
+}
+
+.ntf-close {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* ── Filter chips (Figma 3626:9525) ─────────────────────────────────── */
+.ntf-filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 16px 0;
+}
+
+.ntf-chip {
+  height: 28px;
+  padding: 2px 18px;
+  border: 1px solid #757575;
+  border-radius: 8px;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 15.6px;
+  color: #757575;
+}
+
+.ntf-chip--active {
+  border-color: #017f98;
+  background: #017f98;
+  font-weight: 500;
+  color: #fbfbfb;
+}
+
+/* ── Notification cards (Figma 3626:9527) ───────────────────────────── */
+.ntf-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 16px;
+}
+
+.ntf-card {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.04);
+}
+
+.ntf-card-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.ntf-card-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 15.6px;
+  color: #202020;
+}
+
+.ntf-card-body {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 15.6px;
+  color: #4e4e4e;
+}
+
+/* Thumbnail variant (Figma 6750:16018) */
+.ntf-card-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.ntf-thumb {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.ntf-card-texts {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Unread indicator */
+.ntf-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+}
+
+/* Layered wave emoji icon (Figma 5077:36825) */
+.ntf-wave {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: block;
+}
+
+.ntf-wave-layer {
+  position: absolute;
+}
+
+.ntf-wave-layer img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.ntf-empty {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 14px;
+  color: #757575;
+}

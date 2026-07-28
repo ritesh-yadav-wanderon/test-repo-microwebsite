@@ -19,20 +19,22 @@
   position: relative;
   background: #fff;
   min-height: 100vh;
-  /* The shared DesktopNav is fixed (72px bar); reserve its height. */
-  padding-top: 72px;
   color: #3d3d3d;
   font-family: "Roboto", system-ui, sans-serif;
 }
 
-/* ── Page title row ─────────────────────────────────────────────────────── */
-.dcmp-head {
+/* ── Slim page header (Figma 6674:26125) ────────────────────────────────── */
+.dcmp-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
   display: flex;
   align-items: center;
-  gap: 12px;
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 40px 80px 0 90px;
+  gap: 20px;
+  height: 70px;
+  padding: 0 max(80px, calc((100% - 1120px) / 2));
+  background: #fff;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .dcmp-back {
@@ -41,20 +43,14 @@
   justify-content: center;
   width: 24px;
   height: 24px;
+  flex-shrink: 0;
 }
 
-.dcmp-head-title {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.dcmp-head-title h1 {
+.dcmp-header-title {
   margin: 0;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 500;
-  line-height: 21px;
-  letter-spacing: 0.72px;
+  line-height: 24px;
   color: #3d3d3d;
 }
 
@@ -110,6 +106,14 @@
 
 .dcmp-rail-item + .dcmp-rail-item {
   border-top: 1px solid #e5e5e5;
+}
+
+/* Spans the itinerary block height so the next label ("Experiences")
+   aligns with the experiences section of the trip columns. */
+.dcmp-rail-item--itin {
+  height: 279px;
+  align-items: flex-start;
+  padding-top: 9px;
 }
 
 /* ── Main column ────────────────────────────────────────────────────────── */

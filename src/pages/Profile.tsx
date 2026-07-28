@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import PageSkeleton from "../components/Skeleton/PageSkeleton";
 import { useIsDesktop } from "../hooks/useIsDesktop";
 import DesktopProfile from "../components/desktop/DesktopProfile";
+import { getLastMainPage } from "../utils/lastMainPage";
 import "./Profile.css";
 
 const P = "/figma/profile/";
@@ -52,15 +53,10 @@ export default function Profile() {
     { label: "My Profile", icon: `${DP}icon-profile.svg`, onClick: () => navigate("/my-profile") },
     { label: "My bookings", icon: `${DP}icon-bookings.svg`, onClick: () => navigate("/bookings") },
     { label: "Feedback", icon: `${DP}icon-feedback.svg`, onClick: () => navigate("/feedback") },
-    {
-      label: "Wishlist",
-      icon: `${DP}icon-wishlist.svg`,
-      onClick: () => navigate("/wishlist"),
-    },
-    { label: "Payments", icon: `${DP}icon-payments.svg` },
+    { label: "Payments", icon: `${DP}icon-payments.svg`, onClick: () => navigate("/payments") },
     { label: "Referrals", icon: `${DP}icon-referrals.svg` },
     { label: "Add Friends & Family", icon: `${DP}icon-friends.svg` },
-    { label: "Notifications", icon: `${DP}icon-notifications.svg` },
+    { label: "Notifications", icon: `${DP}icon-notifications.svg`, onClick: () => navigate("/notifications") },
   ];
 
   const group2: MenuItem[] = [
@@ -68,7 +64,7 @@ export default function Profile() {
     {
       label: "Help  & Support",
       icon: `${DP}icon-help.svg`,
-      onClick: () => window.dispatchEvent(new Event("wanderon:open-enquire")),
+      onClick: () => navigate("/support"),
     },
   ];
 
@@ -87,14 +83,31 @@ export default function Profile() {
       {/* ── Header ── */}
       <header className="prf-header">
         <div className="prf-header-left">
-          <button className="prf-header-back" type="button" onClick={() => navigate(-1)} aria-label="Go back">
+          <button
+            className="prf-header-back"
+            type="button"
+            onClick={() => navigate(getLastMainPage())}
+            aria-label="Go back"
+          >
             <img src={`${P}v2-icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
           <span className="prf-header-title">Profile</span>
         </div>
-        <button className="prf-header-bell" type="button" aria-label="Notifications">
-          <img src={`${P}v2-icon-bell.svg`} width={36} height={36} alt="" aria-hidden />
-        </button>
+        <div className="prf-header-right">
+          <button className="prf-header-bell" type="button" aria-label="Notifications">
+            <img src={`${P}v2-icon-bell.svg`} width={36} height={36} alt="" aria-hidden />
+          </button>
+          <button
+            className="prf-header-close"
+            type="button"
+            aria-label="Back to website"
+            onClick={() => navigate(getLastMainPage())}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+              <path d="M6 6l12 12M18 6 6 18" stroke="#202020" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
       </header>
 
       <div className="prf-content">
@@ -109,15 +122,15 @@ export default function Profile() {
         {/* ── Wallet + Coupons ── */}
         <div className="prf-stats">
           <div className="prf-stat">
-            <div className="prf-stat-img">
-              <img src={`${P}v2-wallet.png`} alt="" aria-hidden loading="lazy" />
+            <div className="prf-stat-img prf-stat-img--wallet">
+              <img src={`${P}stat-wallet.png`} alt="" aria-hidden loading="lazy" />
             </div>
             <p className="prf-stat-value">&#8377;0</p>
             <p className="prf-stat-label">WanderOn wallet</p>
           </div>
           <div className="prf-stat">
-            <div className="prf-stat-img">
-              <img className="prf-stat-img--gift" src={`${P}v2-gift.png`} alt="" aria-hidden loading="lazy" />
+            <div className="prf-stat-img prf-stat-img--gift">
+              <img src={`${P}stat-gift.png`} alt="" aria-hidden loading="lazy" />
             </div>
             <p className="prf-stat-value">2 new</p>
             <p className="prf-stat-label">Your coupons</p>

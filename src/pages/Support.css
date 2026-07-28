@@ -1,0 +1,325 @@
+/* Help & Support — desktop (Figma 6454:9447) and mobile mirror. */
+
+/* ── Desktop panel ──────────────────────────────────────────────────── */
+.sup-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Tab bar — rounded top, soft shadow (Figma 6700:9652) */
+.sup-tabs {
+  display: flex;
+  width: 100%;
+  height: 80px;
+  padding: 0 20px;
+  border-radius: 12px 12px 0 0;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.sup-tab {
+  flex: 1;
+  min-width: 0;
+  padding: 30px 0px 0px 0px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19.6px;
+  color: #4e4e4e;
+}
+
+.sup-tab--active {
+  font-weight: 500;
+  line-height: 18.2px;
+  color: #015f74;
+  border-bottom-color: #015f74;
+}
+
+/* ── Ticket form card (Figma 6700:9580) ─────────────────────────────── */
+.sup-card {
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sup-card-mail {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 20px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #3d3d3d;
+}
+
+.sup-card-issue {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 20px;
+  border-top: 1px solid #f7f7f7;
+  border-bottom: 1px solid #f7f7f7;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #3d3d3d;
+}
+
+.sup-card-body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+  min-height: 332px;
+  padding: 20px;
+}
+
+.sup-attach {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 44px;
+  padding: 8px 12px 8px 6px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(1, 175, 209, 0.1);
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #01afd1;
+}
+
+.sup-textarea {
+  flex: 1;
+  width: 100%;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #202020;
+}
+
+.sup-textarea::placeholder {
+  color: #ababab;
+}
+
+.sup-note {
+  align-self: center;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #666;
+}
+
+/* Submit — right-aligned 180px on desktop (Figma 6700:9601) */
+.sup-submit {
+  align-self: flex-end;
+  width: 180px;
+  height: 44px;
+  border: none;
+  border-radius: 8px;
+  background: #121212;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #fff;
+}
+
+.sup-submit:disabled {
+  background: rgba(18, 18, 18, 0.2);
+  color: #757575;
+  cursor: default;
+}
+
+/* ── Ticket list (Open / Resolved tabs) ─────────────────────────────── */
+.sup-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.sup-ticket {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.04);
+}
+
+.sup-ticket-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sup-ticket-id {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #202020;
+}
+
+.sup-ticket-status {
+  padding: 4px 10px;
+  border-radius: 30px;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.sup-ticket-status--open {
+  background: #fff9e7;
+  color: #a27e17;
+}
+
+.sup-ticket-status--resolved {
+  background: #e8f6ee;
+  color: #1d7a4d;
+}
+
+.sup-ticket-text {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #3d3d3d;
+}
+
+.sup-ticket-date {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #757575;
+}
+
+.sup-empty {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 14px;
+  color: #757575;
+}
+
+/* ── Mobile ─────────────────────────────────────────────────────────── */
+.sup-m {
+  min-height: 100vh;
+  background: #fff;
+  font-family: var(--font);
+  display: flex;
+  flex-direction: column;
+}
+
+.sup-m-nav {
+  position: sticky;
+  top: 0;
+  z-index: 21;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 16px;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.sup-m-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* Cross — exits to the last visited main-site page (Figma 6750:15510) */
+.sup-m-close {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.sup-m-back {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.sup-m-title {
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.08px;
+  color: #202020;
+}
+
+.sup-m-tabs {
+  position: sticky;
+  top: 64px;
+  z-index: 20;
+  height: 40px;
+  /* 10px breathing room under the header (Figma: tabs sit at y=74) */
+  margin-top: 10px;
+  display: flex;
+  align-items: stretch;
+  padding: 0 20px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+}
+
+/* Mobile bar is 40px tall — recentre the labels (desktop uses a taller bar) */
+.sup-m .sup-tab {
+  padding: 10px 0;
+}
+
+.sup-m-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 16px;
+}
+
+/* Mobile: full-width submit with a larger label (Figma 6750:15554) */
+.sup-m .sup-submit {
+  align-self: stretch;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+/* Compose area height matches the design (Figma 6750:15542) */
+.sup-m .sup-card-body {
+  min-height: 332px;
+}
