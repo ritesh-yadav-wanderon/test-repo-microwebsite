@@ -5,6 +5,9 @@
   min-height: 100vh;
   background: #ffffff;
   padding-bottom: 110px;
+  /* Flex column so the sign-off (.ftmsg) can pin to the bottom */
+  display: flex;
+  flex-direction: column;
 }
 .mb-page--no-due {
   padding-bottom: 20px;
@@ -93,6 +96,7 @@
 }
 
 .mb-body {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 20px;

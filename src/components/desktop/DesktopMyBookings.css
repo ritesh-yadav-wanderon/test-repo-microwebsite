@@ -1,0 +1,247 @@
+/* Desktop "My Bookings" — profile shell + bookings panel (Figma 3996:12266).
+   The page shell (header, rail, footer, app-shell breakout) comes from
+   DesktopProfile.css via the shared .dpr classes. */
+
+/* ── Right panel ────────────────────────────────────────────────────── */
+.dmbl-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* ── Tabs ───────────────────────────────────────────────────────────── */
+.dmbl-tabs {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid rgba(117, 117, 117, 0.3);
+}
+
+.dmbl-tab {
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  padding: 10px 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 19.6px;
+  color: #4e4e4e;
+}
+
+.dmbl-tab--active {
+  font-weight: 500;
+  line-height: 18.2px;
+  color: #015f74;
+  box-shadow: inset 0 -2px 0 #015f74;
+}
+
+/* ── Cards grid ─────────────────────────────────────────────────────── */
+.dmbl-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: stretch;
+  width: 100%;
+}
+
+/* Shadow lives on the wrapper so it follows the ticket-notch mask below. */
+.dmbl-card-wrap {
+  display: flex;
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.08));
+}
+
+.dmbl-card {
+  /* Side notches align with the divider under the trip title:
+     12 pad + 16 head + 8 gap + 1 rule + 8 gap + 40 trip + 8 gap */
+  --notch-y: 93px;
+  width: 358px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  border: none;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font);
+  -webkit-mask:
+    radial-gradient(circle at 0 var(--notch-y), transparent 8px, #000 8.5px) 0 0 / 51% 100% no-repeat,
+    radial-gradient(circle at 100% var(--notch-y), transparent 8px, #000 8.5px) 100% 0 / 51% 100% no-repeat;
+  mask:
+    radial-gradient(circle at 0 var(--notch-y), transparent 8px, #000 8.5px) 0 0 / 51% 100% no-repeat,
+    radial-gradient(circle at 100% var(--notch-y), transparent 8px, #000 8.5px) 100% 0 / 51% 100% no-repeat;
+}
+
+.dmbl-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #202020;
+}
+
+.dmbl-card-rule {
+  width: 100%;
+  height: 1px;
+  background: #f0f0f0;
+}
+
+.dmbl-card-trip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.dmbl-card-thumb {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.dmbl-card-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 14px;
+  color: #4e4e4e;
+}
+
+.dmbl-card-dates {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 14px;
+  color: #4e4e4e;
+}
+
+.dmbl-card-duration {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dmbl-card-route {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.dmbl-card-place {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.dmbl-card-place--right {
+  align-items: flex-end;
+}
+
+.dmbl-card-place-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 14px;
+  color: #757575;
+}
+
+.dmbl-card-place-name {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 14px;
+  color: #4e4e4e;
+}
+
+.dmbl-status {
+  margin-top: 4px;
+  padding: 4px 10px;
+  border-radius: 30px;
+  background: #ffebed;
+  font-size: 10px;
+  font-weight: 500;
+  color: #520008;
+}
+
+.dmbl-info-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: #fff9e7;
+}
+
+.dmbl-info-tag img {
+  flex-shrink: 0;
+}
+
+.dmbl-info-tag p {
+  flex: 1;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.048px;
+  color: #a27e17;
+}
+
+.dmbl-cancel-note {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: #f4f1f2;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #4e4e4e;
+}
+
+.dmbl-empty {
+  padding: 40px 0;
+  text-align: center;
+  font-size: 14px;
+  color: #757575;
+}
+
+.dmbl-cancel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  align-self: center;
+  padding: 10px 16px;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  color: #4e4e4e;
+}

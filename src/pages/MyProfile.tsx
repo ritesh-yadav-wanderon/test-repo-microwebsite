@@ -2,7 +2,7 @@ import { useState } from "react";
 import FooterMessage from "../components/FooterMessage/FooterMessage";
 import { useNavigate } from "react-router-dom";
 import { useIsDesktop } from "../hooks/useIsDesktop";
-import DesktopFooter from "../components/desktop/DesktopFooter";
+import DesktopProfile from "../components/desktop/DesktopProfile";
 import "./MyProfile.css";
 
 const MP = "/figma/my-profile/";
@@ -131,6 +131,9 @@ export default function MyProfile() {
 
   const set = (key: keyof typeof INIT) => (v: string) => setForm(f => ({ ...f, [key]: v }));
 
+  // Desktop uses the two-column profile page (Figma 3996:11227).
+  if (isDesktop) return <DesktopProfile />;
+
   return (
     <>
     <div className="mprf-page">
@@ -138,7 +141,7 @@ export default function MyProfile() {
       {/* Header */}
       <header className="mprf-header">
         <div className="mprf-header-left">
-          <button className="mprf-header-back" type="button" onClick={() => navigate(-1)} aria-label="Go back">
+          <button className="mprf-header-back" type="button" onClick={() => navigate("/profile")} aria-label="Go back">
             <img src={`${P}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
           <span className="mprf-header-title">My Profile</span>
@@ -244,7 +247,6 @@ export default function MyProfile() {
       <FooterMessage />
       </div>
     </div>
-    {isDesktop && <DesktopFooter />}
     </>
   );
 }

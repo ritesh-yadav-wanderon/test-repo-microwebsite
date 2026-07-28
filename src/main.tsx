@@ -13,7 +13,9 @@ if (!root) throw new Error("Root element not found");
 
 createRoot(root).render(
   <StrictMode>
-    <BrowserRouter>
+    {/* v7_startTransition keeps the current page on screen while a lazy route
+        chunk loads, instead of flashing the skeleton fallback. */}
+    <BrowserRouter future={{ v7_startTransition: true }}>
       <AuthProvider>
         <BookingProvider>
           <CompareProvider>
