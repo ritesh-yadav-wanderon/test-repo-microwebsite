@@ -9,6 +9,9 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+  /* In flex-column pages with no footer this pins the sign-off to the
+     bottom of the viewport; in normal flow it has no effect. */
+  margin-top: auto;
 }
 
 .ftmsg-logo {

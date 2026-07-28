@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import type { Trip } from "../../types";
 import { useCompare } from "../../context/CompareContext";
 import { SAMPLE_UPCOMING_TRIPS } from "../../api/sampleData";
-import DesktopNav from "./DesktopNav";
 import DesktopFooter from "./DesktopFooter";
 import "./DesktopCompare.css";
 
@@ -182,18 +181,13 @@ export default function DesktopCompare() {
 
   return (
     <div className="dcmp">
-      <DesktopNav alwaysSolid />
-
-      {/* ── Page title ── */}
-      <div className="dcmp-head">
+      {/* ── Slim page header (Figma 6674:26125) ── */}
+      <header className="dcmp-header">
         <button className="dcmp-back" type="button" aria-label="Go back" onClick={() => navigate(-1)}>
           <img src={`${P}arrow-back.svg`} alt="" width={24} height={24} />
         </button>
-        <div className="dcmp-head-title">
-          <img src={`${D}your-trips.svg`} alt="" width={32} height={32} aria-hidden />
-          <h1>Compare Trips</h1>
-        </div>
-      </div>
+        <h1 className="dcmp-header-title">Compare Trips</h1>
+      </header>
 
       <div className="dcmp-body">
         {/* ── Left section rail ── */}
@@ -211,11 +205,10 @@ export default function DesktopCompare() {
           <div className="dcmp-rail-card">
             <div className="dcmp-rail-head">Trip Details</div>
             <div className="dcmp-rail-items">
-              {["Itinerary", "Experiences"].map((label) => (
-                <div key={label} className="dcmp-rail-item">
-                  {label}
-                </div>
-              ))}
+              {/* Tall row spans the itinerary block so "Experiences" lines up
+                  with the experiences section in the columns (Figma 6581:15021). */}
+              <div className="dcmp-rail-item dcmp-rail-item--itin">Itinerary</div>
+              <div className="dcmp-rail-item">Experiences</div>
             </div>
           </div>
         </aside>

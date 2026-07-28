@@ -1,0 +1,23 @@
+/* "Life's a Trip" sign-off — sits below the two-column body at page level,
+   left-aligned with the content gutter, just above the page footer. */
+.pwm {
+  width: 100%;
+  padding: 0 max(80px, calc((100% - 1120px) / 2)) 40px;
+}
+
+.pwm img {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.pwm-line {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: normal;
+  color: #d2d2d2;
+}
+
+.pwm-line--medium {
+  font-weight: 500;
+  margin-bottom: 7px;
+}

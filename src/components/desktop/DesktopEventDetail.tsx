@@ -10,6 +10,10 @@ const EV = "/figma/events/";
 const HERO_VIDEO =
   "https://wanderon-images.gumlet.io/events-and-festivals/events-and-festivals/tomorrowland-thailand/tomorrowland.mp4";
 
+/* Blurred animated backdrop behind the hero (Figma 6626:9523), served from the CDN. */
+const HERO_BACKDROP =
+  "https://wanderon-images.gumlet.io/new-website-test/event-pdt-page-hero-bg.gif";
+
 /* Content reused from the mobile event product page (src/pages/EventDetail.tsx). */
 const EVENT = {
   title: "Tomorrowland Belgium | ORBYZ",
@@ -126,6 +130,11 @@ export default function DesktopEventDetail() {
 
   return (
     <div className="depd">
+      {/* Blurred gif backdrop behind the hero (Figma 6626:9523) */}
+      <div className="depd__backdrop" aria-hidden>
+        <img src={HERO_BACKDROP} alt="" />
+      </div>
+
       {/* Global header — transparent by default, black blur on scroll */}
       <DesktopNav dark alwaysShowSearch />
 
