@@ -518,20 +518,12 @@
   font-family: inherit;
 }
 .sbs-find {
-  background: #01AFD1;
-  border-radius: 8px;
   height: 48px;
   width: 160px;
   padding: 0;
-  font-size: 16px;
-  font-weight: 500;
-  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   letter-spacing: 0.08px;
-  line-height: 24px;
-  font-family: inherit;
-  cursor: pointer;
   flex-shrink: 0;
 }

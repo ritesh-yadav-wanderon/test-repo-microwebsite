@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import LoginSheet from "../LoginSheet/LoginSheet";
 import { DEFAULT_BATCHES, type BatchItem } from "../BatchesSheet/BatchesSheet";
 import { setAppScrollLocked } from "../../utils/scroll";
 import "./DesktopBatchesSheet.css";
@@ -159,7 +157,7 @@ function DBatchCard({
         </div>
         <button
           type="button"
-          className={`dbat-cta${isSoldOut ? " dbat-cta--sold" : ""}`}
+          className={`wo-cta dbat-cta${isSoldOut ? " dbat-cta--sold" : ""}`}
           disabled={isSoldOut}
           onClick={() => onBook(batch, startDate, endDate)}
         >
@@ -181,10 +179,7 @@ export default function DesktopBatchesSheet({
   onSelectBatch,
 }: Props) {
   const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
   const [selectedMonth, setSelectedMonth] = useState("");
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [pendingBooking, setPendingBooking] = useState<Record<string, unknown> | null>(null);
 
   useEffect(() => {
     setAppScrollLocked(isOpen);
@@ -227,23 +222,8 @@ export default function DesktopBatchesSheet({
       perPerson: formatPrice(batch.price),
       travelers: 2,
     };
-    if (isLoggedIn) {
-      onClose();
-      goToBooking(bookingState);
-      return;
-    }
-    setPendingBooking(bookingState);
     onClose();
-    setLoginOpen(true);
-  };
-
-  const handleLoginSuccess = () => {
-    setLoginOpen(false);
-    if (pendingBooking) {
-      const state = pendingBooking;
-      setPendingBooking(null);
-      goToBooking(state);
-    }
+    goToBooking(bookingState);
   };
 
   return (
@@ -299,7 +279,6 @@ export default function DesktopBatchesSheet({
         </div>
       )}
 
-      <LoginSheet isOpen={loginOpen} onClose={() => setLoginOpen(false)} onSuccess={handleLoginSuccess} />
     </>
   );
 }

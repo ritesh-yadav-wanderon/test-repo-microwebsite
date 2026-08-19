@@ -358,23 +358,20 @@
 .dbat-cta {
   width: 100%;
   height: 44px;
-  border: none;
-  border-radius: 8px;
-  background: #01afd1;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 21px;
-  cursor: pointer;
-  transition: background 0.15s ease;
+  transition: filter 0.15s ease;
 }
 
 .dbat-cta:hover {
-  background: #029ebd;
+  filter: brightness(0.96);
 }
 
 .dbat-cta--sold {
   background: #e0e0e0;
+  box-shadow: none;
   color: #757575;
   cursor: not-allowed;
+}
+
+.dbat-cta--sold:hover {
+  filter: none;
 }

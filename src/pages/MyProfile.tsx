@@ -242,7 +242,7 @@ export default function MyProfile() {
         </div>
 
         {/* Save button */}
-        <button className="mprf-save-btn" type="button">Save Details</button>
+        <button className="wo-cta mprf-save-btn" type="button">Save Details</button>
 
       <FooterMessage />
       </div>

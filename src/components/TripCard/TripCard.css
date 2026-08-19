@@ -304,16 +304,7 @@
   width: 120px;
   height: 44px;
   padding: 0 16px;
-  border: none;
-  border-radius: 40px;
-  background: #01AFD1;
-  color: #fff;
-  font-family: inherit;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 21px;
   white-space: nowrap;
-  cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: filter 0.15s ease;
 }

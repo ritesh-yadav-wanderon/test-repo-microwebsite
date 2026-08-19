@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { AppliedVoucher } from "../components/Voucher/Voucher";
+import { useAuth } from "../context/AuthContext";
 
 /** Add-on & tax rates used to build the bill dynamically. */
 export const FLEX_CANCEL_PP = 5999; // Flexible cancellation, per traveller
@@ -21,9 +22,19 @@ export interface BookingState {
   perPerson?: string;
   perPersonStrike?: string;
   travelers?: number;
+  draft?: BookingDraft;
 }
 
-export const BOOKING_DEFAULTS: Required<BookingState> = {
+export interface BookingDraft {
+  travelers: number;
+  mixedGender: boolean;
+  privateRoom: boolean;
+  flexibleCancel: boolean;
+  appliedVoucher: AppliedVoucher | null;
+  bookingReferenceId: string;
+}
+
+export const BOOKING_DEFAULTS: Required<Omit<BookingState, "draft">> = {
   tripTitle:
     "11 Days European Pathways Community Trip - France, Netherlands, Germany, Czechia",
   tripName: "Europe Trip",
@@ -47,19 +58,24 @@ export type BookingForm = ReturnType<typeof useBookingForm>;
 export function useBookingForm() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isLoggedIn, authReady, user } = useAuth();
   const state = (location.state as BookingState) || {};
   const data = { ...BOOKING_DEFAULTS, ...state };
+  const draft = state.draft;
+  const isPersonalDetails = location.pathname === "/booking/personal-details";
 
   const [accommodationOpen, setAccommodationOpen] = useState(true);
-  const [travelers, setTravelers] = useState(1);
-  const [mixedGender, setMixedGender] = useState(false);
-  const [privateRoom, setPrivateRoom] = useState(true);
-  const [flexibleCancel, setFlexibleCancel] = useState(false);
+  const [travelers, setTravelers] = useState(draft?.travelers ?? state.travelers ?? 1);
+  const [mixedGender, setMixedGender] = useState(draft?.mixedGender ?? false);
+  const [privateRoom, setPrivateRoom] = useState(draft?.privateRoom ?? true);
+  const [flexibleCancel, setFlexibleCancel] = useState(draft?.flexibleCancel ?? false);
   const [notesOpen, setNotesOpen] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const [paymentOpen, setPaymentOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const loginSucceededRef = useRef(false);
   // Stable per-session reference until a real booking id is available from the PMS.
-  const [bookingReferenceId] = useState(() => `WO-${Date.now()}`);
+  const [bookingReferenceId] = useState(() => draft?.bookingReferenceId ?? `WO-${Date.now()}`);
 
   // Personal details
   const [firstName, setFirstName] = useState("");
@@ -67,7 +83,7 @@ export function useBookingForm() {
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("");
   const [dob, setDob] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState(user?.phone ?? "");
   const [email, setEmail] = useState("");
 
   // Documents
@@ -88,7 +104,67 @@ export function useBookingForm() {
   const effectiveMale = Math.max(maleCount, maleMin);
 
   // Applied coupon/voucher (drives the bill discount)
-  const [appliedVoucher, setAppliedVoucher] = useState<AppliedVoucher | null>(null);
+  const [appliedVoucher, setAppliedVoucher] = useState<AppliedVoucher | null>(
+    draft?.appliedVoucher ?? null
+  );
+
+  const checkoutState: BookingState = {
+    ...data,
+    travelers,
+    draft: {
+      travelers,
+      mixedGender,
+      privateRoom,
+      flexibleCancel,
+      appliedVoucher,
+      bookingReferenceId,
+    },
+  };
+
+  const goToPersonalDetails = () => {
+    if (isLoggedIn) {
+      navigate("/booking/personal-details", { state: checkoutState });
+    } else {
+      setLoginOpen(true);
+    }
+  };
+
+  const goBack = () => {
+    if (isPersonalDetails) {
+      navigate("/booking", { state: checkoutState });
+    } else {
+      navigate(-1);
+    }
+  };
+
+  const handleLoginSuccess = () => {
+    loginSucceededRef.current = true;
+    setLoginOpen(false);
+    navigate("/booking/personal-details", { state: checkoutState });
+  };
+
+  const handleLoginClose = () => {
+    setLoginOpen(false);
+    if (loginSucceededRef.current) {
+      loginSucceededRef.current = false;
+      return;
+    }
+    if (isPersonalDetails && !isLoggedIn) {
+      navigate("/booking", { replace: true, state: checkoutState });
+    }
+  };
+
+  // A direct link to personal details is protected at the page boundary.
+  useEffect(() => {
+    if (!isPersonalDetails || !authReady) return;
+    setLoginOpen(!isLoggedIn);
+  }, [authReady, isLoggedIn, isPersonalDetails]);
+
+  // Login completes immediately before this route mounts; copy the verified
+  // account number into the contact field once AuthContext catches up.
+  useEffect(() => {
+    if (!phone && user?.phone) setPhone(user.phone);
+  }, [phone, user?.phone]);
 
   // ── Dynamic bill: recomputed from pax + selected services + voucher ──
   const pricing = useMemo(() => {
@@ -177,6 +253,12 @@ export function useBookingForm() {
   return {
     navigate,
     data,
+    isPersonalDetails,
+    loginOpen,
+    goToPersonalDetails,
+    goBack,
+    handleLoginSuccess,
+    handleLoginClose,
     accommodationOpen,
     setAccommodationOpen,
     travelers,

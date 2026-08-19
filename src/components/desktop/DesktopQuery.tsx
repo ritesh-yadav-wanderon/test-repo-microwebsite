@@ -17,7 +17,7 @@ export default function DesktopQuery({
           <h2 className="dquery__title">{title}</h2>
           <p className="dquery__sub">{sub}</p>
           <button
-            className="dquery__cta"
+            className="wo-cta dquery__cta"
             onClick={() => window.dispatchEvent(new CustomEvent("wanderon:open-enquire"))}
           >
             Enquire Now

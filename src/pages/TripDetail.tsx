@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useCompare } from "../context/CompareContext";
 import "./TripDetail.css";
@@ -8,14 +8,13 @@ import QueryBanner from "../components/QueryBanner";
 import GallerySheet from "../components/GallerySheet/GallerySheet";
 import ShareSheet from "../components/ShareSheet/ShareSheet";
 import BatchesSheet from "../components/BatchesSheet/BatchesSheet";
-import LoginSheet from "../components/LoginSheet/LoginSheet";
-import { useAuth } from "../context/AuthContext";
 import FooterMessage from "../components/FooterMessage/FooterMessage";
 import Footer from "../components/Footer";
 import { SAMPLE_UPCOMING_TRIPS } from "../api/sampleData";
 import { TripCardItem, ViewMoreCard } from "../components/UpcomingTrips/TripCardItem";
 import { useIsDesktop } from "../hooks/useIsDesktop";
 import DesktopTripDetail from "../components/desktop/DesktopTripDetail";
+import ItineraryCustomiser, { selectionPrice } from "../components/ItineraryCustomiser/ItineraryCustomiser";
 import { getScrollTop, onAppScroll } from "../utils/scroll";
 
 // ── Figma-downloaded assets ──────────────────────────────────────────────────
@@ -28,6 +27,8 @@ const HERO_T2    = "/figma/trip-hero/hero-bg.png";
 const HERO_T3    = `${FIG}hero-thumb-1.png`;
 const HERO_MAIN  = "/figma/trip-hero/hero-bg.png";  // fallback / extra thumb
 const ITIN_MAP   = "/figma/itin-section/route-map.png";
+/* Same on/off switch art the listing page uses for its "Show Features" toggle. */
+const LISTING_TOGGLE = "/figma/listing/toggle/";
 const CAPTAIN_PHOTO = `${FIG}captain-photo.jpeg`;
 
 
@@ -81,10 +82,80 @@ const FIT_ICONS: Record<string, string> = {
   "City and Culture":     `${TI}icon-culture.svg`,
 };
 
+type PackageType = "hotel" | "hostel";
+
+const HL_ICON = "/figma/itin-highlights/";
+
+/** Meals and activities per night on the full route, used to size those counts
+ *  for a shorter selection. Everything else comes from the selection itself. */
+const PER_NIGHT = {
+  hotel:  { meals: 12 / 18, activities: 12 / 18 },
+  hostel: { meals:  8 / 18, activities: 12 / 18 },
+};
+
+function packageServices(type: PackageType, trip: SelectedTrip) {
+  const per = PER_NIGHT[type];
+  const count = (rate: number) => Math.max(1, Math.round(rate * trip.nights));
+  const stay = type === "hotel" ? "Hotel" : "Hostel";
+  return [
+    { icon: `${HL_ICON}icon-accommodation.svg`, label: `${trip.nights}N ${stay} Accommodation` },
+    { icon: `${HL_ICON}icon-meals.svg`, label: `${count(per.meals)} Meals` },
+    // Hotel packages pick you up and drop you off; hostel packages do not.
+    ...(type === "hotel"
+      ? [{ icon: `${HL_ICON}icon-transfers.svg`, label: "Airport Transfer" }]
+      : []),
+    { icon: `${HL_ICON}icon-transfers.svg`, label: `${trip.legs} Shared Transfers` },
+    { icon: `${HL_ICON}icon-activities.svg`, label: `${count(per.activities)} Activities` },
+    { icon: `${HL_ICON}icon-guides.svg`, label: "Trip Captains, Local Guides" },
+  ];
+}
+
+/** The trip the page is currently describing: the customiser's applied
+ *  selection, or the whole mother itinerary before the traveller narrows it. */
+export interface SelectedTrip {
+  start: number;
+  end: number;
+  cities: string[];
+  /** Stops covered, and the transfer legs between them. */
+  stops: number;
+  legs: number;
+  nights: number;
+  days: number;
+  price: number;
+  /** Price formatted the way the page prints it, e.g. "14,000/-". */
+  priceLabel: string;
+  durationLabel: string;
+  isFullRoute: boolean;
+}
+
+export function selectedTrip(
+  data: ProductData,
+  selection: { start: number; end: number } | null,
+  basePrice: number
+): SelectedTrip {
+  const lastStation = data.motherItinerary.length - 1;
+  const start = selection?.start ?? 0;
+  const end = selection?.end ?? lastStation;
+  const nights = data.motherNights.slice(start, end + 1).reduce((a, b) => a + b, 0);
+  const price = selectionPrice(basePrice, end - start, lastStation);
+  return {
+    start,
+    end,
+    cities: data.motherItinerary.slice(start, end + 1),
+    stops: end - start + 1,
+    legs: Math.max(0, end - start),
+    nights,
+    days: nights + 1,
+    price,
+    priceLabel: `${price.toLocaleString("en-IN")}/-`,
+    durationLabel: `${nights}N · ${nights + 1}D`,
+    isFullRoute: start === 0 && end === lastStation,
+  };
+}
+
 // ── Type definitions ──────────────────────────────────────────────────────────
 export interface DayActivity {
   title: string;
-  ticketsIncluded?: boolean;
   photos?: string[];
   isLeisure?: boolean;
   leisureDesc?: string;
@@ -108,9 +179,6 @@ export interface DayItinerary {
   stayMeals?: string[];
   activities?: DayActivity[];
   photos?: string[];
-  transferFrom?: string;
-  transferTo?: string;
-  isStaticCard?: boolean;
 }
 export interface ProductData {
   title: string;
@@ -132,6 +200,10 @@ export interface ProductData {
   drop: string;
   duration: string;
   cityStrip: string[];
+  /** Full mother-itinerary stations, in travel order, for the customiser. */
+  motherItinerary: string[];
+  /** Nights spent at each mother-itinerary station. */
+  motherNights: number[];
   womenBadge: string;
   fitTags: { label: string; rating: number }[];
   mapImage: string;
@@ -153,6 +225,11 @@ export const STATIC_DATA: ProductData = {
   drop: "Budapest Ferenc Liszt International Airport",
   duration: "7N · 8D",
   cityStrip: ["3N Paris", "1N Amsterdam", "3N Switzerland"],
+  motherItinerary: [
+    "Paris", "Brussels", "Amsterdam", "Cologne", "Heidelberg",
+    "Rhine Falls", "Zurich", "Lucerne", "Vienna", "Budapest",
+  ],
+  motherNights: [3, 1, 2, 1, 1, 1, 2, 2, 2, 3],
   womenBadge: "60% Women travellers have joined!",
   fitTags: [
     { label: "Party & Night Life",   rating: 3 },
@@ -243,17 +320,14 @@ export const STATIC_DATA: ProductData = {
         },
         {
           title: "2- Eiffel Tower Guided Tour With Summit Access",
-          ticketsIncluded: true,
           photos: ["/figma/itin-section/d2-a2-1.jpg", "/figma/itin-section/d2-a2-2.jpg", "/figma/itin-section/d2-a2-3.jpg"],
         },
         {
           title: "3- Palace of Versailles",
-          ticketsIncluded: true,
           photos: ["/figma/itin-section/d2-a3-1.jpg", "/figma/itin-section/d2-a3-2.jpg", "/figma/itin-section/d2-a3-3.jpg"],
         },
         {
           title: "4- 1 Hour Seine River Cruise",
-          ticketsIncluded: true,
           photos: ["/figma/itin-section/d2-a4-1.jpg", "/figma/itin-section/d2-a4-2.jpg", "/figma/itin-section/d2-a4-3.jpg"],
         },
         {
@@ -275,7 +349,6 @@ export const STATIC_DATA: ProductData = {
       activities: [
         {
           title: "1- Disneyland Paris Visit",
-          ticketsIncluded: true,
           photos: [
             "/figma/itin-section/d3-a1-1.jpg",
             "/figma/itin-section/d3-a1-2.jpg",
@@ -283,8 +356,6 @@ export const STATIC_DATA: ProductData = {
           ],
         },
       ],
-      transferFrom: "Paris Hotel",
-      transferTo: "Amsterdam Hotel",
     },
     {
       days: "Day 4",
@@ -319,7 +390,6 @@ export const STATIC_DATA: ProductData = {
         },
         {
           title: "2- Mini Europe Brussels Tour",
-          ticketsIncluded: true,
           photos: [
             "/figma/itin-section/d4-a2-1.jpg",
             "/figma/itin-section/d4-a2-2.jpg",
@@ -327,8 +397,6 @@ export const STATIC_DATA: ProductData = {
           ],
         },
       ],
-      transferFrom: "Paris Hotel",
-      transferTo: "Amsterdam Hotel",
     },
     {
       days: "Day 5",
@@ -348,11 +416,9 @@ export const STATIC_DATA: ProductData = {
       stayNote: "Stays will be allocated based on availability or similar category.",
       stayMeals: ["Breakfast", "Dinner"],
       activities: [
-        { title: "1- Keukenhof Tour, Amsterdam On A Shared Basis", ticketsIncluded: true, photos: ["/figma/itin-section/d5-a1-1.jpg", "/figma/itin-section/d5-a1-2.jpg", "/figma/itin-section/d5-a1-3.jpg"] },
-        { title: "2- Amsterdam Canal Cruise On A Shared Basis", ticketsIncluded: true, photos: ["/figma/itin-section/d5-a2-1.jpg", "/figma/itin-section/d5-a2-2.jpg", "/figma/itin-section/d5-a2-3.jpg"] },
+        { title: "1- Keukenhof Tour, Amsterdam On A Shared Basis", photos: ["/figma/itin-section/d5-a1-1.jpg", "/figma/itin-section/d5-a1-2.jpg", "/figma/itin-section/d5-a1-3.jpg"] },
+        { title: "2- Amsterdam Canal Cruise On A Shared Basis", photos: ["/figma/itin-section/d5-a2-1.jpg", "/figma/itin-section/d5-a2-2.jpg", "/figma/itin-section/d5-a2-3.jpg"] },
       ],
-      transferFrom: "Paris Hotel",
-      transferTo: "Amsterdam Hotel",
     },
     {
       days: "Day 6",
@@ -372,7 +438,7 @@ export const STATIC_DATA: ProductData = {
       stayMeals: ["Breakfast", "Dinner"],
       activities: [
         { title: "1- Walking Tour In Heidelberg", photos: ["/figma/itin-section/d6-a1-1.jpg", "/figma/itin-section/d6-a1-2.jpg", "/figma/itin-section/d6-a1-3.jpg"] },
-        { title: "2- Rhine Falls Boat Tour, Switzerland On A Shared Basis", ticketsIncluded: true, photos: ["/figma/itin-section/d6-a2-1.jpg", "/figma/itin-section/d6-a2-2.jpg", "/figma/itin-section/d6-a2-3.jpg"] },
+        { title: "2- Rhine Falls Boat Tour, Switzerland On A Shared Basis", photos: ["/figma/itin-section/d6-a2-1.jpg", "/figma/itin-section/d6-a2-2.jpg", "/figma/itin-section/d6-a2-3.jpg"] },
       ],
     },
     {
@@ -388,7 +454,7 @@ export const STATIC_DATA: ProductData = {
       stayName: "Same Accommodation as of Day-1",
       stayMeals: ["Breakfast"],
       activities: [
-        { title: "1- Day Trip To Jungfraujoch On A Shared Basis", ticketsIncluded: true, photos: ["/figma/itin-section/d7-a1-1.jpg", "/figma/itin-section/d7-a1-2.jpg", "/figma/itin-section/d7-a1-3.jpg"] },
+        { title: "1- Day Trip To Jungfraujoch On A Shared Basis", photos: ["/figma/itin-section/d7-a1-1.jpg", "/figma/itin-section/d7-a1-2.jpg", "/figma/itin-section/d7-a1-3.jpg"] },
       ],
     },
     {
@@ -400,9 +466,6 @@ export const STATIC_DATA: ProductData = {
       items: [],
       description: "In the morning, check out from your hotel and get transferred to Zurich airport for your flight back home. This marks the end of your trip.",
       stayName: "Check Out from your hotel",
-      isStaticCard: true,
-      transferFrom: "Paris Hotel",
-      transferTo: "Amsterdam Hotel",
     },
   ],
 };
@@ -410,38 +473,39 @@ export const STATIC_DATA: ProductData = {
 
 // ── Small components ──────────────────────────────────────────────────────────
 
-export function SharedTransfer({ from: fromCity, to: toCity }: { from: string; to: string }) {
+export interface TransferLeg {
+  from: string;
+  to: string;
+  duration?: string;
+}
+
+/** Transfer leg shown at the top of an expanded day (Figma 7165:7171). */
+export function DayTransfer({ from: fromCity, to: toCity, duration }: TransferLeg) {
   return (
-    <div className="tdp2-st">
-      <div className="tdp2-st-inner">
-        <p className="tdp2-st-title">Shared Transfer</p>
-        <div className="tdp2-st-row">
-          {/* From pill */}
-          <div className="tdp2-st-pill">
-            <img src="/figma/itin-section/st-apartment.svg" alt="" className="tdp2-st-pill-icon" aria-hidden loading="lazy" />
-            <div className="tdp2-st-pill-divider" />
-            <div className="tdp2-st-pill-info">
-              <span className="tdp2-st-pill-label">From</span>
-              <span className="tdp2-st-pill-city">{fromCity}</span>
-            </div>
-          </div>
-          {/* Car icon between pills */}
-          <div className="tdp2-st-car">
-            <img src="/figma/itin-section/st-car.svg" alt="" className="tdp2-st-car-icon" aria-hidden loading="lazy" />
-          </div>
-          {/* To pill */}
-          <div className="tdp2-st-pill">
-            <img src="/figma/itin-section/st-apartment.svg" alt="" className="tdp2-st-pill-icon" aria-hidden loading="lazy" />
-            <div className="tdp2-st-pill-divider" />
-            <div className="tdp2-st-pill-info">
-              <span className="tdp2-st-pill-label">To</span>
-              <span className="tdp2-st-pill-city">{toCity}</span>
-            </div>
-          </div>
-        </div>
+    <div className="tdp2-day-tr-row">
+      <span className="tdp2-day-tr-city">{fromCity}</span>
+      <span className="tdp2-day-tr-line" aria-hidden />
+      <div className="tdp2-day-tr-pill">
+        <span className="tdp2-day-tr-car">
+          <img src="/figma/itin-section/transfer-car.svg" alt="" aria-hidden loading="lazy" />
+        </span>
+        {duration && <span className="tdp2-day-tr-dur">{duration}</span>}
       </div>
-      <img src="/figma/itin-section/st-dots.svg" alt="" className="tdp2-st-dots" aria-hidden loading="lazy" />
+      <span className="tdp2-day-tr-line tdp2-day-tr-line--arrow" aria-hidden />
+      <span className="tdp2-day-tr-city">{toCity}</span>
     </div>
+  );
+}
+
+/** Transfer legs implied by the itinerary skeleton: a day whose city differs
+ *  from the day before is a travel day. The closing day is the journey home
+ *  rather than a city-to-city leg, so it carries no transfer. */
+export function itineraryTransfers(data: ProductData): (TransferLeg | undefined)[] {
+  const days = data.itinerary;
+  return days.map((day, i) =>
+    i === 0 || i === days.length - 1 || days[i - 1].city === day.city
+      ? undefined
+      : { from: days[i - 1].city, to: day.city }
   );
 }
 
@@ -510,91 +574,88 @@ export function TiFitRow({ label, rating }: { label: string; rating: number }) {
   );
 }
 
-function chipIcon(label: string): string {
-  const l = label.toLowerCase();
-  if (l.includes("hotel") || l.includes("camp") || l.includes("hostel")) return "/figma/itin-section/day-icon-hotel.svg";
-  if (l.includes("meal") || l.includes("breakfast") || l.includes("dinner") || l.includes("lunch")) return "/figma/itin-section/day-icon-meal.svg";
-  if (l.includes("activit") || l.includes("tour")) return "/figma/itin-section/day-icon-hiking.svg";
-  return "/figma/itin-section/icon-transfer.svg";
+export function ItineraryMapToggle({ checked, onChange }: {
+  checked: boolean;
+  onChange: () => void;
+}) {
+  return (
+    <div className="tdp2-itin-map-toggle">
+      <span>Show Map</span>
+      <button
+        type="button"
+        className="tdp2-itin-switch"
+        role="switch"
+        aria-checked={checked}
+        aria-label={checked ? "Hide trip map" : "Show trip map"}
+        onClick={onChange}
+      >
+        <img
+          className="tdp2-itin-switch-img"
+          src={`${LISTING_TOGGLE}toggle-${checked ? "on" : "off"}.svg`}
+          alt=""
+          aria-hidden
+        />
+      </button>
+    </div>
+  );
 }
 
-export function DayCard({ day, index, isOpen, onToggle }: {
+export function DayCard({ day, index, isOpen, onToggle, transfer }: {
   day: DayItinerary;
   index: number;
   isOpen: boolean;
   onToggle: () => void;
+  transfer?: TransferLeg;
 }) {
   const title = day.summary?.[0] ?? day.city;
-  const chips = day.chips ?? [];
   const hasStay = Boolean(day.stayName);
   const hasActivities = Boolean(day.activities?.length);
 
-  const isStatic = Boolean(day.isStaticCard);
-
   return (
-    <div id={`day-${index}`} className={`tdp2-day-card${(isStatic || isOpen) ? " open" : ""}`} style={{ scrollMarginTop: "186px" }}>
-      {/* Header */}
-      {isStatic ? (
-        <div className="tdp2-day-card-header tdp2-day-card-header--static">
-          <div className="tdp2-day-card-header-left">
-            <span className="tdp2-day-badge">{`Day ${index + 1}`}</span>
-            <span className="tdp2-day-card-title">{title}</span>
-          </div>
+    <div id={`day-${index}`} className={`tdp2-day-card${isOpen ? " open" : ""}`} style={{ scrollMarginTop: "186px" }}>
+      <button className="tdp2-day-card-header" onClick={onToggle}>
+        <div className="tdp2-day-card-header-left">
+          <span className="tdp2-day-badge">{`Day ${index + 1}`}</span>
+          <span className="tdp2-day-card-title">{title}</span>
         </div>
-      ) : (
-        <button className="tdp2-day-card-header" onClick={onToggle}>
-          <div className="tdp2-day-card-header-left">
-            <span className="tdp2-day-badge">{`Day ${index + 1}`}</span>
-            <span className="tdp2-day-card-title">{title}</span>
-          </div>
-          <img
-            src="/figma/itin-section/day-chevron-dropdown.svg"
-            alt=""
-            className={`tdp2-day-card-chevron${isOpen ? " open" : ""}`}
-            aria-hidden
-          loading="lazy" />
-        </button>
-      )}
+        <img
+          src={isOpen
+            ? "/figma/itin-section/itinerary-arrow-up.svg"
+            : "/figma/itin-section/itinerary-arrow-down.svg"}
+          alt=""
+          className="tdp2-day-card-chevron"
+          aria-hidden
+          loading="lazy"
+        />
+      </button>
 
-      {/* Collapsed: subtitle lines + chips */}
-      <div className="tdp2-day-card-summary">
-        {day.items.length > 0 && (
-          <div className="tdp2-day-card-subtitle-block">
-            {day.items.map((item, ii) => (
-              <p key={ii} className="tdp2-day-card-subtitle">{item}</p>
-            ))}
-          </div>
-        )}
-        {chips.length > 0 && (
-          <div className="tdp2-day-card-chips">
-            {chips.map((chip, ci) => (
-              <div key={ci} className="tdp2-day-chip">
-                <img src={chipIcon(chip)} alt="" className="tdp2-day-chip-icon" aria-hidden loading="lazy" />
-                <span className="tdp2-day-chip-label">{chip}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Expanded detail */}
-      {(isStatic || isOpen) && (
+      {isOpen && (
         <div className="tdp2-day-card-expanded">
-          {/* Full description */}
-          {day.description && (
-            <p className="tdp2-day-exp-desc">{day.description}</p>
+          {transfer && (
+            <div className="tdp2-day-tl-item">
+              <div className="tdp2-day-tl-left">
+                <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
+                {(hasStay || hasActivities) && <div className="tdp2-day-tl-line" />}
+              </div>
+              <div className="tdp2-day-tl-content">
+                <div className="tdp2-day-tl-section-hd">
+                  <img src="/figma/itin-section/transfer-taxi.svg" alt="" className="tdp2-day-tl-sec-icon" aria-hidden loading="lazy" />
+                  <span className="tdp2-day-tl-sec-label">Shared Transfer</span>
+                </div>
+                <DayTransfer {...transfer} />
+              </div>
+            </div>
           )}
 
-          {/* Stay timeline section */}
           {hasStay && (
             <div className="tdp2-day-tl-item">
               <div className="tdp2-day-tl-left">
-                <img src="/figma/itin-section/day-timeline-pin.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
+                <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
                 {hasActivities && <div className="tdp2-day-tl-line" />}
               </div>
               <div className="tdp2-day-tl-content">
                 <div className="tdp2-day-tl-section-hd">
-                  <img src="/figma/itin-section/day-apt.svg" alt="" className="tdp2-day-tl-sec-icon" aria-hidden loading="lazy" />
+                  <img src="/figma/itin-section/itinerary-stay.svg" alt="" className="tdp2-day-tl-sec-icon" aria-hidden loading="lazy" />
                   <span className="tdp2-day-tl-sec-label">Stay</span>
                   {day.stayNights && (
                     <>
@@ -603,49 +664,34 @@ export function DayCard({ day, index, isOpen, onToggle }: {
                     </>
                   )}
                 </div>
-                <p className="tdp2-day-stay-name">{day.stayName}</p>
-                {day.stayCheckIn && day.stayCheckOut && (
-                  <div className="tdp2-day-stay-checkinout">
-                    <div className="tdp2-day-stay-ci-col">
-                      <span className="tdp2-day-stay-ci-label">Check In</span>
-                      <span className="tdp2-day-stay-ci-time">{day.stayCheckIn}</span>
-                    </div>
-                    <img src="/figma/itin-section/day-exchange.svg" alt="" className="tdp2-day-stay-exchange" aria-hidden loading="lazy" />
-                    <div className="tdp2-day-stay-co-col">
-                      <span className="tdp2-day-stay-co-label">Check Out</span>
-                      <span className="tdp2-day-stay-co-time">{day.stayCheckOut}</span>
-                    </div>
-                  </div>
-                )}
                 {day.stayNote && (
                   <div className="tdp2-day-stay-note">
-                    <img src="/figma/itin-section/day-info.svg" alt="" className="tdp2-day-stay-note-icon" aria-hidden loading="lazy" />
+                    <img src="/figma/itin-section/itinerary-info.svg" alt="" className="tdp2-day-stay-note-icon" aria-hidden loading="lazy" />
                     <span className="tdp2-day-stay-note-text">{day.stayNote}</span>
+                    <img src="/figma/itin-section/itinerary-note-tail.svg" alt="" className="tdp2-day-stay-note-tail" aria-hidden loading="lazy" />
                   </div>
                 )}
                 {day.stayPhotos && day.stayPhotos.length > 0 && (
-                  <div className="tdp2-day-stay-photos">
-                    <img src={day.stayPhotos[0]} alt="" className="tdp2-day-stay-photos-main" loading="lazy" />
-                    {day.stayPhotos.length > 1 && (
-                      <div className="tdp2-day-stay-photos-row">
-                        {day.stayPhotos.slice(1).map((ph, pi) => (
-                          <img key={pi} src={ph} alt="" className="tdp2-day-stay-photos-thumb" loading="lazy" />
-                        ))}
+                  <div className="tdp2-day-hotel-options">
+                    {day.stayPhotos.slice(0, 2).map(photo => (
+                      <div className="tdp2-day-hotel-option" key={photo}>
+                        <img src={photo} alt={day.stayName ?? ""} className="tdp2-day-hotel-photo" loading="lazy" />
+                        <p className="tdp2-day-hotel-name">{day.stayName}</p>
                       </div>
-                    )}
+                    ))}
                   </div>
                 )}
+                {!day.stayPhotos?.length && <p className="tdp2-day-stay-name">{day.stayName}</p>}
                 {day.stayMeals && day.stayMeals.length > 0 && (
                   <div className="tdp2-day-meals-bar">
-                    <span className="tdp2-day-meals-incl">Included:</span>
                     <div className="tdp2-day-meals-list">
                       {day.stayMeals.map((meal, mi) => (
                         <React.Fragment key={mi}>
                           {mi > 0 && <div className="tdp2-day-meal-sep" />}
                           <div className="tdp2-day-meal-item">
-                            <img src="/figma/itin-section/day-icon-meal.svg" alt="" className="tdp2-day-meal-icon" aria-hidden loading="lazy" />
+                            <img src="/figma/itin-section/itinerary-meal.svg" alt="" className="tdp2-day-meal-icon" aria-hidden loading="lazy" />
                             <span className="tdp2-day-meal-label">{meal}</span>
-                            <img src="/figma/itin-section/day-done.svg" alt="" className="tdp2-day-meal-done" aria-hidden loading="lazy" />
+                            <img src="/figma/itin-section/itinerary-done.svg" alt="" className="tdp2-day-meal-done" aria-hidden loading="lazy" />
                           </div>
                         </React.Fragment>
                       ))}
@@ -660,11 +706,11 @@ export function DayCard({ day, index, isOpen, onToggle }: {
           {hasActivities && (
             <div className="tdp2-day-tl-item">
               <div className="tdp2-day-tl-left">
-                <img src="/figma/itin-section/day-timeline-pin.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
+                <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
               </div>
-              <div className="tdp2-day-tl-content">
+              <div className="tdp2-day-tl-content tdp2-day-tl-content--act">
                 <div className="tdp2-day-tl-section-hd">
-                  <img src="/figma/itin-section/day-icon-nature.svg" alt="" className="tdp2-day-tl-sec-icon" aria-hidden loading="lazy" />
+                  <img src="/figma/itin-section/itinerary-activity.svg" alt="" className="tdp2-day-tl-sec-icon tdp2-day-tl-sec-icon--act" aria-hidden loading="lazy" />
                   <span className="tdp2-day-tl-sec-label">Activity</span>
                 </div>
                 {day.activities!.map((act, ai) => (
@@ -672,16 +718,17 @@ export function DayCard({ day, index, isOpen, onToggle }: {
                     {ai > 0 && <div className="tdp2-day-act-divider" />}
                     {act.isLeisure ? (
                       <div className="tdp2-day-leisure-card">
-                        <img src="/figma/itin-section/day-leisure.svg" alt="" className="tdp2-day-leisure-icon" aria-hidden loading="lazy" />
+                        <img src="/figma/itin-section/itinerary-leisure.svg" alt="" className="tdp2-day-leisure-icon" aria-hidden loading="lazy" />
                         <span className="tdp2-day-leisure-label">{act.title}</span>
                       </div>
                     ) : (
-                      <p className="tdp2-day-act-title">{act.title}</p>
-                    )}
-                    {act.ticketsIncluded && (
-                      <div className="tdp2-day-ticket-badge">
-                        <span>Tickets Included</span>
-                        <img src="/figma/itin-section/day-done-white.svg" alt="" className="tdp2-day-ticket-done" aria-hidden loading="lazy" />
+                      <div className="tdp2-day-act-row">
+                        <div className="tdp2-day-act-text">
+                          <p className="tdp2-day-act-title">{act.title}</p>
+                        </div>
+                        {act.photos?.[0] && (
+                          <img src={act.photos[0]} alt="" className="tdp2-day-act-thumb" loading="lazy" />
+                        )}
                       </div>
                     )}
                     {act.leisureDesc && (
@@ -694,13 +741,6 @@ export function DayCard({ day, index, isOpen, onToggle }: {
                           </>
                         ) : act.leisureDesc}
                       </p>
-                    )}
-                    {act.photos && act.photos.length > 0 && (
-                      <div className="tdp2-day-act-photos">
-                        {act.photos.map((ph, pi) => (
-                          <img key={pi} src={ph} alt="" className="tdp2-day-act-photo" loading="lazy" />
-                        ))}
-                      </div>
                     )}
                     {act.leisurePhotos && act.leisurePhotos.length > 0 && (
                       <div className="tdp2-day-leisure-photos">
@@ -721,7 +761,7 @@ export function DayCard({ day, index, isOpen, onToggle }: {
               {day.items.map((item, ti) => (
                 <div key={ti} className="tdp2-day-tl-item">
                   <div className="tdp2-day-tl-left">
-                    <img src="/figma/itin-section/day-timeline-pin.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
+                    <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
                     {ti < day.items.length - 1 && <div className="tdp2-day-tl-line" />}
                   </div>
                   <p className="tdp2-day-tl-text">{item}</p>
@@ -729,13 +769,6 @@ export function DayCard({ day, index, isOpen, onToggle }: {
               ))}
             </div>
           )}
-        </div>
-      )}
-
-      {/* Embedded transfer to next city — shown for last day of each city group */}
-      {day.transferFrom && day.transferTo && (
-        <div className="tdp2-day-transfer-wrap">
-          <SharedTransfer from={day.transferFrom} to={day.transferTo} />
         </div>
       )}
     </div>
@@ -776,28 +809,25 @@ export default function TripDetail() {
   const [selectedBatch, setSelectedBatch] = useState<{ dateRange: string; price: string } | null>(
     navState?.from === "batches" ? navState.selectedBatch ?? null : null
   );
-  const { isLoggedIn } = useAuth();
-  const [loginOpen, setLoginOpen] = useState(false);
+  // Itinerary customiser sheet (interactive train model). `tripSel` holds
+  // the trip start/end chosen in the sheet; null = full mother itinerary.
+  const [customiserOpen, setCustomiserOpen] = useState(false);
+  const [tripSel, setTripSel] = useState<{ start: number; end: number } | null>(null);
+
+  // Everything the page quotes — price, duration, service counts — describes
+  // the applied selection, priced off the chosen batch when there is one.
+  const basePrice = Number(String(selectedBatch?.price ?? data.displayPrice).replace(/[^\d]/g, ""));
+  const trip = useMemo(() => selectedTrip(data, tripSel, basePrice), [data, tripSel, basePrice]);
 
   const buildBookingState = () => ({
     tripTitle: stickyTitle,
     tripName: stickyTitle,
     dateRange: selectedBatch?.dateRange ?? "",
-    durationLabel: "7N/8D",
-    perPerson: (selectedBatch?.price ?? "").replace("/-", ""),
+    durationLabel: `${trip.nights}N/${trip.days}D`,
+    perPerson: trip.priceLabel.replace("/-", ""),
     travelers: 2,
   });
-  const handleContinueBook = () => {
-    if (isLoggedIn) {
-      navigate("/booking", { state: buildBookingState() });
-    } else {
-      setLoginOpen(true);
-    }
-  };
-  const handleLoginSuccess = () => {
-    setLoginOpen(false);
-    navigate("/booking", { state: buildBookingState() });
-  };
+  const handleContinueBook = () => navigate("/booking", { state: buildBookingState() });
   const compareSlug = routeSlug ?? "current-trip";
   const { isInCompare, toggle: toggleCompareTrip } = useCompare();
   const inCompare = isInCompare(compareSlug);
@@ -806,14 +836,17 @@ export default function TripDetail() {
       slug: compareSlug,
       title: data.title,
       image: data.heroImages[0],
-      price: String(data.displayPrice ?? ""),
+      price: trip.priceLabel,
     });
 
   const [wishlisted, setWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [activeDay, setActiveDay] = useState(0);
   const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set([0]));
-  const [openDays, setOpenDays] = useState<Set<number>>(new Set());
+  const [openDays, setOpenDays] = useState<Set<number>>(new Set([0]));
+  const [showItineraryMap, setShowItineraryMap] = useState(false);
+  const transfers = useMemo(() => itineraryTransfers(data), [data]);
+  const [packageType, setPackageType] = useState<PackageType>("hotel");
   const [inclOpen, setInclOpen] = useState(false);
   const [exclOpen, setExclOpen] = useState(false);
 
@@ -897,24 +930,25 @@ export default function TripDetail() {
         />
         <div className="tdp2-hero-gradient" aria-hidden />
 
-        {/* Thumbnail strip — top right (Figma 4544:31836) */}
-        <div className="tdp2-hero-thumb-strip">
-          {[
-            "/figma/trip-hero/thumb-1.png",
-            "/figma/trip-hero/thumb-2.png",
-            "/figma/trip-hero/thumb-3.png",
-            "/figma/trip-hero/thumb-4.png",
-          ].map((src, i) => (
-            <div key={i} className="tdp2-hero-thumb" onClick={() => openGallery(HERO_GALLERY, i + 1)} style={{ cursor: "pointer" }}>
-              <img src={src} alt="" className="tdp2-hero-thumb-img" loading="lazy" />
-            </div>
+        {/* Fanned gallery stack, above the action bar (Figma 7423:17721) */}
+        <button
+          className="tdp2-hero-thumb-stack"
+          type="button"
+          aria-label="Open gallery"
+          onClick={() => openGallery(HERO_GALLERY, 1)}
+        >
+          {["thumb-1", "thumb-2", "thumb-3"].map((name, i) => (
+            <span key={name} className={`tdp2-hero-thumb tdp2-hero-thumb--${i + 1}`}>
+              <img src={`/figma/trip-hero/${name}.png`} alt="" className="tdp2-hero-thumb-img" loading="lazy" />
+              {i === 2 && (
+                <>
+                  <span className="tdp2-hero-thumb-overlay" aria-hidden />
+                  <span className="tdp2-hero-thumb-count">(10+)</span>
+                </>
+              )}
+            </span>
           ))}
-          <div className="tdp2-hero-thumb tdp2-hero-thumb--more" onClick={() => openGallery(HERO_GALLERY, 4)} style={{ cursor: "pointer" }}>
-            <img src="/figma/trip-hero/thumb-5.png" alt="" className="tdp2-hero-thumb-img" loading="lazy" />
-            <div className="tdp2-hero-thumb-overlay" aria-hidden />
-            <span className="tdp2-hero-thumb-count">(10+)</span>
-          </div>
-        </div>
+        </button>
 
         {/* Bottom action bar (Figma 4518:31828) */}
         <div className="tdp2-hero-bar">
@@ -933,7 +967,7 @@ export default function TripDetail() {
                 />
               </svg>
             ) : (
-              <img src="/figma/trip-hero/icon-heart.svg" alt="" aria-hidden loading="lazy" />
+              <img src="/figma/trip-hero/icon-favorite.svg" alt="" aria-hidden loading="lazy" />
             )}
           </button>
           <button
@@ -974,43 +1008,70 @@ export default function TripDetail() {
             ))}
           </div>
           <h1 className="tdp2-ti-title">{data.title}</h1>
-          <div className="tdp2-ti-chips">
-            <span className="tdp2-ti-chip">{data.duration}</span>
-            <span className="tdp2-ti-chip">{data.totalBatches}</span>
-            <span className="tdp2-ti-chip">Group Size: {data.groupSize}</span>
-          </div>
-
-          {/* Pick Up / Drop */}
-          <div className="tdp2-ti-pd">
-            <div className="tdp2-ti-pd-header">
-              <div className="tdp2-ti-pd-label">
-                <img src={`${TI}location-icon.svg`} alt="" className="tdp2-ti-loc" aria-hidden loading="lazy" />
-                <span>Pick Up</span>
-              </div>
-              <img src={`${TI}dashed-line.svg`} alt="" className="tdp2-ti-dashed" aria-hidden loading="lazy" />
-              <div className="tdp2-ti-pd-label">
-                <img src={`${TI}location-icon.svg`} alt="" className="tdp2-ti-loc" aria-hidden loading="lazy" />
-                <span>Drop</span>
-              </div>
-            </div>
-            <div className="tdp2-ti-pd-cities">
-              <p className="tdp2-ti-pd-city">{data.pickUp}</p>
-              <p className="tdp2-ti-pd-city tdp2-ti-pd-city--right">{data.drop}</p>
-            </div>
-          </div>
         </div>
 
-        {/* City skeleton */}
-        {data.cityStrip.length > 0 && (
-          <div className="tdp2-ti-skeleton">
-            {data.cityStrip.map((city, i) => (
-              <React.Fragment key={i}>
-                {i > 0 && <img src={`${TI}arrow.svg`} alt="" className="tdp2-ti-sk-arrow" aria-hidden loading="lazy" />}
-                <span className="tdp2-ti-sk-city">{city}</span>
-              </React.Fragment>
+        {/* Trip start/end card (Figma 7743:1620) — opens the itinerary customiser */}
+        {data.motherItinerary.length > 0 && (() => {
+          const routeName = data.breadcrumbs[data.breadcrumbs.length - 1];
+          return (<>
+
+          {/* Skeleton itinerary (Figma 7743:1652) — the selected route, arrow-separated */}
+          <div
+            className="tdp2-sk-route"
+            role="button"
+            tabIndex={0}
+            onClick={() => setCustomiserOpen(true)}
+            onKeyDown={e => { if (e.key === "Enter" || e.key === " ") setCustomiserOpen(true); }}
+          >
+            {trip.cities.map((city, i) => (
+              <span key={city} className="tdp2-sk-item">
+                {i > 0 && (
+                  <img src="/figma/train/route-arrow.svg" alt="" aria-hidden className="tdp2-sk-arrow" loading="lazy" />
+                )}
+                <span className="tdp2-sk-city">{city}</span>
+              </span>
             ))}
           </div>
-        )}
+
+          <div className="tdp2-se-wrap">
+            <div className="tdp2-se-tag">
+              This route cover {trip.stops} of {data.motherItinerary.length} stops on our {routeName} Route
+            </div>
+            <div
+              className="tdp2-se-card"
+              role="button"
+              tabIndex={0}
+              onClick={() => setCustomiserOpen(true)}
+              onKeyDown={e => { if (e.key === "Enter" || e.key === " ") setCustomiserOpen(true); }}
+            >
+              <div className="tdp2-se-rail" aria-hidden>
+                <img src="/figma/train/card-rail.png" alt="" className="tdp2-se-rail-img" loading="lazy" />
+                <img src="/figma/train/card-train.png" alt="" className="tdp2-se-train-img" loading="lazy" />
+              </div>
+              <div className="tdp2-se-body">
+                <div className="tdp2-se-points">
+                  <div className="tdp2-se-point">
+                    <span className="tdp2-se-label">Trip Start</span>
+                    <span className="tdp2-se-value">{data.motherItinerary[trip.start]}</span>
+                  </div>
+                  <span className="tdp2-se-connector" aria-hidden />
+                  <div className="tdp2-se-point">
+                    <span className="tdp2-se-label">Trip End</span>
+                    <span className="tdp2-se-value">{data.motherItinerary[trip.end]}</span>
+                  </div>
+                </div>
+                <div className="tdp2-se-cta-col">
+                  <span className="tdp2-se-cta">
+                    <span className="tdp2-se-cta-tag">{trip.nights}N - {trip.days}D</span>
+                    <img src="/figma/train/tap-finger.svg" alt="" className="tdp2-se-cta-icon" aria-hidden loading="lazy" />
+                    Explore More Options
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          </>);
+        })()}
 
         {/* Women tag */}
         <div className="tdp2-ti-women">
@@ -1030,27 +1091,41 @@ export default function TripDetail() {
 
       {/* ── Itinerary highlights (Figma 4077:8358) ─────────────────── */}
       <div className="tdp2-separator"/>
-      <div className="tdp2-services-strip">
-        <div className="tdp2-inc-chip">
-          <img src="/figma/itin-highlights/icon-accommodation.svg" alt="" className="tdp2-inc-chip-icon" aria-hidden loading="lazy" />
-          <span className="tdp2-inc-chip-text">9N Accommodation</span>
+      <section className="tdp2-package-type" aria-labelledby="tdp2-package-type-title">
+        <h2 id="tdp2-package-type-title" className="tdp2-package-type-title">Package Type</h2>
+        <div className="tdp2-package-type-options">
+          {(["hotel", "hostel"] as PackageType[]).map(type => {
+            const selected = packageType === type;
+            return (
+              <button
+                key={type}
+                type="button"
+                className={`tdp2-package-type-btn${selected ? " active" : ""}`}
+                aria-pressed={selected}
+                onClick={() => setPackageType(type)}
+              >
+                {selected && (
+                  <img
+                    src="/figma/itin-highlights/package-type-check.svg"
+                    alt=""
+                    className="tdp2-package-type-check"
+                    aria-hidden
+                  />
+                )}
+                {type === "hotel" ? "Hotel" : "Hostel"}
+              </button>
+            );
+          })}
         </div>
-        <div className="tdp2-inc-chip">
-          <img src="/figma/itin-highlights/icon-meals.svg" alt="" className="tdp2-inc-chip-icon" aria-hidden loading="lazy" />
-          <span className="tdp2-inc-chip-text">12 Meals</span>
-        </div>
-        <div className="tdp2-inc-chip">
-          <img src="/figma/itin-highlights/icon-transfers.svg" alt="" className="tdp2-inc-chip-icon" aria-hidden loading="lazy" />
-          <span className="tdp2-inc-chip-text">10 Shared Transfers</span>
-        </div>
-        <div className="tdp2-inc-chip">
-          <img src="/figma/itin-highlights/icon-activities.svg" alt="" className="tdp2-inc-chip-icon" aria-hidden loading="lazy" />
-          <span className="tdp2-inc-chip-text">12 Activities</span>
-        </div>
-        <div className="tdp2-inc-chip">
-          <img src="/figma/itin-highlights/icon-guides.svg" alt="" className="tdp2-inc-chip-icon" aria-hidden loading="lazy" />
-          <span className="tdp2-inc-chip-text">Trip Captains, Local Guides</span>
-        </div>
+      </section>
+      <div className="tdp2-separator"/>
+      <div className="tdp2-services-strip" aria-live="polite">
+        {packageServices(packageType, trip).map(service => (
+          <div className="tdp2-inc-chip" key={service.label}>
+            <img src={service.icon} alt="" className="tdp2-inc-chip-icon" aria-hidden loading="lazy" />
+            <span className="tdp2-inc-chip-text">{service.label}</span>
+          </div>
+        ))}
       </div>
 
       {/* ── Tab Bar + Day Chips (Figma 4049:22964) ─────────────────── */}
@@ -1087,82 +1162,39 @@ export default function TripDetail() {
       {/* ── Itinerary placeholder anchor ─────────────────────────────── */}
       <div className="tdp2-separator"/>
       <section id="section-itin" className="tdp2-itin-section">
-        {/* ── Route map (Figma 4049:23182) ─────────────────────────── */}
-        <div className="tdp2-itin-map-wrap">
-          <img
-            src="/figma/itin-section/route-map.png"
-            alt="Trip route map"
-            className="tdp2-itin-map"
-          loading="lazy" />
-        </div>
-
-        {/* ── City cards + Shared Transfers (Figma 3014:13852 / 4554:6067) ── */}
-        {/* First transfer: pickup → first city */}
-        {data.cityStrip.length > 0 && (
-          <SharedTransfer
-            from={data.pickUp || "Airport"}
-            to={`${parseCityStrip(data.cityStrip[0]).city} Hotel`}
-          />
+        <ItineraryMapToggle
+          checked={showItineraryMap}
+          onChange={() => setShowItineraryMap(show => !show)}
+        />
+        {showItineraryMap && (
+          <div className="tdp2-itin-map-wrap">
+            <img
+              src={data.mapImage}
+              alt="Trip route map"
+              className="tdp2-itin-map"
+              loading="lazy"
+            />
+          </div>
         )}
-        {(() => {
-          const nodes: React.ReactNode[] = [];
-          const lastDayIdx = data.itinerary.length - 1;
-          let dayOffset = 0;
-          data.cityStrip.forEach((entry, i) => {
-            const nightCount = parseInt(entry.match(/^(\d+)N/i)?.[1] ?? "1");
-            const startDay = dayOffset;
-            dayOffset += nightCount;
-            const cityDays = data.itinerary.slice(startDay, startDay + nightCount);
-            nodes.push(
-              <CityCard key={`city-${i}`} entry={entry} photo={data.heroImages[i + 1] ?? data.heroImages[0]} />
-            );
-            nodes.push(
-              <div key={i} className="tdp2-itin-city-group">
-                {cityDays.map((day, di) => {
-                  const gIdx = startDay + di;
-                  return (
-                    <React.Fragment key={gIdx}>
-                      <DayCard
-                        day={day}
-                        index={gIdx}
-                        isOpen={openDays.has(gIdx)}
-                        onToggle={() => setOpenDays(prev => {
-                          const s = new Set(prev);
-                          s.has(gIdx) ? s.delete(gIdx) : s.add(gIdx);
-                          return s;
-                        })}
-                      />
-                      {gIdx !== lastDayIdx && <div className="tdp2-itin-day-divider"/>}
-                    </React.Fragment>
-                  );
-                })}
-              </div>
-            );
-          });
-          // Remaining days that exceed the city night counts (e.g. departure day)
-          data.itinerary.slice(dayOffset).forEach((day, di) => {
-            const gIdx = dayOffset + di;
-            nodes.push(
+        <div className="tdp2-itin-days">
+          {data.itinerary.map((day, index) => (
+            <React.Fragment key={index}>
               <DayCard
-                key={`tail-${gIdx}`}
                 day={day}
-                index={gIdx}
-                isOpen={openDays.has(gIdx)}
+                index={index}
+                transfer={transfers[index]}
+                isOpen={openDays.has(index)}
                 onToggle={() => setOpenDays(prev => {
-                  const s = new Set(prev);
-                  s.has(gIdx) ? s.delete(gIdx) : s.add(gIdx);
-                  return s;
+                  const next = new Set(prev);
+                  next.has(index) ? next.delete(index) : next.add(index);
+                  return next;
                 })}
               />
-            );
-            if (gIdx !== lastDayIdx) {
-              nodes.push(<div key={`tail-div-${gIdx}`} className="tdp2-itin-day-divider"/>);
-            }
-          });
-          return nodes;
-        })()}
+              {index < data.itinerary.length - 1 && <div className="tdp2-itin-day-divider" />}
+            </React.Fragment>
+          ))}
+        </div>
 
-        {/* ── End of the Journey (Figma 3097:2065) ───────────────── */}
         <p className="tdp2-end-journey">End of the Journey</p>
       </section>
 
@@ -1412,14 +1444,14 @@ export default function TripDetail() {
           <div className="tdp2-sticky-price-col">
             <div className="tdp2-sticky-top-row">
               <span className="tdp2-sticky-amount">
-                &#8377;{selectedBatch ? selectedBatch.price : data.displayPrice}
+                &#8377;{trip.priceLabel}
               </span>
               <div className="tdp2-sticky-discount">-10%</div>
             </div>
             <span className="tdp2-sticky-label">Starting price per person</span>
           </div>
           <button
-            className="tdp2-sticky-btn"
+            className="wo-cta tdp2-sticky-btn"
             type="button"
             onClick={selectedBatch ? handleContinueBook : () => setBatchesOpen(true)}
           >
@@ -1444,8 +1476,20 @@ export default function TripDetail() {
         onClose={() => setShareOpen(false)}
         title={data.title}
         image={data.heroImages[0]}
-        duration={data.duration}
-        price={data.displayPrice}
+        duration={trip.durationLabel}
+        price={trip.priceLabel}
+      />
+
+      <ItineraryCustomiser
+        isOpen={customiserOpen}
+        onClose={() => setCustomiserOpen(false)}
+        title={data.title}
+        thumb={data.heroImages[0]}
+        stations={data.motherItinerary}
+        nights={data.motherNights}
+        basePrice={basePrice}
+        initialSelection={tripSel}
+        onSelectionChange={(start, end) => setTripSel({ start, end })}
       />
 
       <BatchesSheet
@@ -1474,11 +1518,6 @@ export default function TripDetail() {
         }
       />
 
-      <LoginSheet
-        isOpen={loginOpen}
-        onClose={() => setLoginOpen(false)}
-        onSuccess={handleLoginSuccess}
-      />
     </div>
   );
 }

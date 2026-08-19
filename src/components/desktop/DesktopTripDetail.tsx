@@ -7,10 +7,9 @@ import {
   STATIC_DATA,
   TDP_FAQS,
   DayCard,
-  CityCard,
-  SharedTransfer,
+  itineraryTransfers,
+  ItineraryMapToggle,
   TiFitRow,
-  parseCityStrip,
 } from "../../pages/TripDetail";
 import "../../pages/TripDetail.css";
 import ShareSheet from "../ShareSheet/ShareSheet";
@@ -85,6 +84,7 @@ export default function DesktopTripDetail() {
   const [activeTab, setActiveTab] = useState(0);
   const [activeDay, setActiveDay] = useState(0);
   const [openDays, setOpenDays] = useState<Set<number>>(new Set([0]));
+  const [showItineraryMap, setShowItineraryMap] = useState(false);
   const [inclOpen, setInclOpen] = useState(false);
   const [exclOpen, setExclOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
@@ -207,42 +207,19 @@ export default function DesktopTripDetail() {
   );
   const moreHref = `/search?destination=${encodeURIComponent(productDest)}`;
 
-  // Itinerary body — city cards + day cards + shared transfers (mobile logic).
-  const itineraryNodes = (() => {
-    const nodes: React.ReactNode[] = [];
-    const lastDayIdx = data.itinerary.length - 1;
-    let dayOffset = 0;
-    data.cityStrip.forEach((entry, i) => {
-      const nightCount = parseInt(entry.match(/^(\d+)N/i)?.[1] ?? "1");
-      const startDay = dayOffset;
-      dayOffset += nightCount;
-      const cityDays = data.itinerary.slice(startDay, startDay + nightCount);
-      nodes.push(
-        <CityCard key={`city-${i}`} entry={entry} photo={data.heroImages[i + 1] ?? data.heroImages[0]} />
-      );
-      nodes.push(
-        <div key={`grp-${i}`} className="tdp2-itin-city-group">
-          {cityDays.map((day, di) => {
-            const gIdx = startDay + di;
-            return (
-              <React.Fragment key={gIdx}>
-                <DayCard day={day} index={gIdx} isOpen={openDays.has(gIdx)} onToggle={() => toggleDay(gIdx)} />
-                {gIdx !== lastDayIdx && <div className="tdp2-itin-day-divider" />}
-              </React.Fragment>
-            );
-          })}
-        </div>
-      );
-    });
-    data.itinerary.slice(dayOffset).forEach((day, di) => {
-      const gIdx = dayOffset + di;
-      nodes.push(
-        <DayCard key={`tail-${gIdx}`} day={day} index={gIdx} isOpen={openDays.has(gIdx)} onToggle={() => toggleDay(gIdx)} />
-      );
-      if (gIdx !== lastDayIdx) nodes.push(<div key={`tail-div-${gIdx}`} className="tdp2-itin-day-divider" />);
-    });
-    return nodes;
-  })();
+  const transfers = useMemo(() => itineraryTransfers(data), [data]);
+  const itineraryNodes = data.itinerary.map((day, index) => (
+    <React.Fragment key={index}>
+      <DayCard
+        day={day}
+        index={index}
+        transfer={transfers[index]}
+        isOpen={openDays.has(index)}
+        onToggle={() => toggleDay(index)}
+      />
+      {index < data.itinerary.length - 1 && <div className="tdp2-itin-day-divider" />}
+    </React.Fragment>
+  ));
 
   return (
     <div className="dtdp">
@@ -425,13 +402,16 @@ export default function DesktopTripDetail() {
             </aside>
 
             <div className="dtdp-itin-content">
-              <div className="tdp2-itin-map-wrap">
-                <img src="/figma/itin-section/route-map.png" alt="Trip route map" className="tdp2-itin-map" loading="lazy" />
-              </div>
-              {data.cityStrip.length > 0 && (
-                <SharedTransfer from={data.pickUp || "Airport"} to={`${parseCityStrip(data.cityStrip[0]).city} Hotel`} />
+              <ItineraryMapToggle
+                checked={showItineraryMap}
+                onChange={() => setShowItineraryMap(show => !show)}
+              />
+              {showItineraryMap && (
+                <div className="tdp2-itin-map-wrap">
+                  <img src={data.mapImage} alt="Trip route map" className="tdp2-itin-map" loading="lazy" />
+                </div>
               )}
-              {itineraryNodes}
+              <div className="tdp2-itin-days">{itineraryNodes}</div>
               <p className="tdp2-end-journey">End of the Journey</p>
             </div>
           </section>
@@ -518,7 +498,7 @@ export default function DesktopTripDetail() {
             </div>
 
             <div className="dtdp-book-cta-wrap">
-              <button className="dtdp-book-cta" type="button" onClick={() => setBatchesOpen(true)}>
+              <button className="wo-cta dtdp-book-cta" type="button" onClick={() => setBatchesOpen(true)}>
                 View Batches
               </button>
               <button

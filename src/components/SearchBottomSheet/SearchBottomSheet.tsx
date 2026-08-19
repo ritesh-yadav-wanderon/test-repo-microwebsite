@@ -575,7 +575,7 @@ export default function SearchBottomSheet({
           {/* Actions */}
           <div className="sbs-actions">
             <button className="sbs-clear" onClick={handleClear}>Clear all</button>
-            <button className="sbs-find"  onClick={handleFindTrip}>Find Trip</button>
+            <button className="wo-cta sbs-find"  onClick={handleFindTrip}>Find Trip</button>
           </div>
 
         </div>

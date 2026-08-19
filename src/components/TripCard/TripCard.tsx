@@ -221,7 +221,7 @@ export default function TripCard({ trip, onSeeAllDates, eager, showFeatures = tr
             </div>
             <span className="tc-price-sub">Onwards per person</span>
           </div>
-          <button className="tc-cta" type="button" onClick={goToTrip}>
+          <button className="wo-cta tc-cta" type="button" onClick={goToTrip}>
             View Trip
           </button>
         </div>

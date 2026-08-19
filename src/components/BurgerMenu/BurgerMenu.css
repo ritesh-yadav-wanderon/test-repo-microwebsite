@@ -121,18 +121,33 @@
   width: 100%;
   max-width: 358px;
   height: 44px;
-  background: #01AFD1;
-  border: none;
-  border-radius: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  cursor: pointer;
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: #ffffff;
+}
+.bm-cta--account {
+  justify-content: flex-start;
+  padding: 0 16px;
+}
+.bm-cta--account > img {
+  flex-shrink: 0;
+}
+.bm-cta-account-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  line-height: 16px;
+}
+.bm-cta-account-phone {
+  max-width: 100%;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 11px;
+  line-height: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 

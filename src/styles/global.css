@@ -27,6 +27,14 @@
   /* Type */
   --font: "Roboto", system-ui, -apple-system, Segoe UI, sans-serif;
 
+  /* Primary CTA (Figma 7600:41562) — see .wo-cta below */
+  --cta-bg: linear-gradient(26deg, #0093b0 16.5%, #667eff 83.5%);
+  --cta-text: #ffffff;
+  --cta-radius: 26px;
+  --cta-font: 500 16px/21px var(--font);
+  --cta-shadow: 0 0.57px 0.71px rgba(0, 0, 0, 0.25),
+    inset 0 0 1.71px rgba(0, 0, 0, 0.25);
+
   /* Layout */
   --app-width: 460px;
   --radius-sm: 8px;
@@ -176,6 +184,30 @@ ul {
   color: var(--text-secondary);
   background: #fff;
   white-space: nowrap;
+}
+
+/* ── Primary CTA (Figma 7600:41562) ──────────────────────────────────────────
+   The shared look for every filled brand call-to-action. Each CTA keeps its
+   own class for size and position; this only owns the paint. Components that
+   need a different tone (e.g. a disabled batch) override with their own
+   `:disabled` / state rule, which outranks this single-class selector. */
+.wo-cta {
+  border: none;
+  border-radius: var(--cta-radius);
+  background: var(--cta-bg);
+  color: var(--cta-text);
+  font: var(--cta-font);
+  box-shadow: var(--cta-shadow);
+  cursor: pointer;
+}
+
+.wo-cta:active {
+  filter: brightness(0.94);
+}
+
+.wo-cta:disabled {
+  cursor: default;
+  filter: none;
 }
 
 /* Kill the blue/grey tap-highlight flash on every interactive element

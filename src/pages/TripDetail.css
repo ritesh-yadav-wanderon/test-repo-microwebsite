@@ -78,43 +78,42 @@
   pointer-events: none;
 }
 
-/* Thumbnail strip — top right */
-.tdp2-hero-thumb-strip {
+/* Gallery stack (Figma 7423:17721) — three photos fanned above the action bar.
+   Cards share a centre line and step 6px to the right as they tilt further. */
+.tdp2-hero-thumb-stack {
   position: absolute;
-  top: 12px;
-  right: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 4px;
-  background: rgba(255,255,255,0.85);
-  backdrop-filter: blur(45px);
-  -webkit-backdrop-filter: blur(45px);
-  border: 1px solid rgba(200,200,200,0.4);
-  border-radius: 12px;
+  right: 16px;
+  bottom: 68px;
+  width: 71px;
+  height: 61px;
+  padding: 0;
+  border: none;
+  background: none;
   cursor: pointer;
 }
 .tdp2-hero-thumb {
-  position: relative;
+  position: absolute;
+  top: 50%;
   width: 55px;
   height: 55px;
+  box-sizing: border-box;
+  border: 2px solid #fff;
   border-radius: 8px;
   overflow: hidden;
-  flex-shrink: 0;
 }
+.tdp2-hero-thumb--1 { left: 28px; transform: translate(-50%, -50%) rotate(2deg); }
+.tdp2-hero-thumb--2 { left: 34px; transform: translate(-50%, -50%) rotate(4deg); }
+.tdp2-hero-thumb--3 { left: 40px; transform: translate(-50%, -50%) rotate(6deg); }
 .tdp2-hero-thumb-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  border-radius: 8px;
 }
-.tdp2-hero-thumb--more { position: relative; }
 .tdp2-hero-thumb-overlay {
   position: absolute;
   inset: 0;
   background: rgba(0,0,0,0.4);
-  border-radius: 8px;
 }
 .tdp2-hero-thumb-count {
   position: absolute;
@@ -122,8 +121,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Counter-rotates the top card's tilt so the count reads level. */
+  transform: rotate(-5.37deg);
   font-size: 14px;
   font-weight: 700;
+  line-height: 20px;
   color: #fff;
   letter-spacing: 0.014px;
 }
@@ -147,11 +149,9 @@
   gap: 6px;
   height: 40px;
   padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: none;
   border-radius: 30px;
+  background: rgba(0, 0, 0, 0.3);
   color: #fff;
   font-size: 12px;
   font-weight: 500;
@@ -171,16 +171,14 @@
   width: 40px;
   height: 40px;
   padding: 0;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: none;
   border-radius: 30px;
+  background: rgba(0, 0, 0, 0.3);
   cursor: pointer;
   flex-shrink: 0;
 }
-.tdp2-hero-btn-wish img,
-.tdp2-hero-btn-wish svg { display: block; width: 20px; height: 20px; flex-shrink: 0; }
+.tdp2-hero-btn-wish img { display: block; width: 14px; height: 12px; flex-shrink: 0; }
+.tdp2-hero-btn-wish svg { display: block; width: 16px; height: 16px; flex-shrink: 0; }
 
 
 
@@ -240,108 +238,199 @@
   margin: 0;
   width: 100%;
 }
-.tdp2-ti-chips {
+/* Skeleton itinerary (Figma 7743:1652) — the selected route, arrow-separated */
+.tdp2-sk-route {
   display: flex;
-  gap: 8px;
-  align-items: center;
   flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #f7f7f7;
+  border-radius: 8px;
+  box-sizing: border-box;
+  overflow: hidden;
+  cursor: pointer;
 }
-.tdp2-ti-chip {
+.tdp2-sk-item {
   display: inline-flex;
   align-items: center;
-  border: 1px solid #dedede;
-  border-radius: 4px;
-  padding: 4px 8px;
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 16px;
-  color: #757575;
+  gap: 4px;
+}
+.tdp2-sk-city {
+  font: 400 12px/16px "Roboto", sans-serif;
+  color: #3d3d3d;
   white-space: nowrap;
 }
+.tdp2-sk-arrow {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
 
-/* Pick Up / Drop */
-.tdp2-ti-pd {
+/* Trip start/end card (Figma 7743:1620) — opens the itinerary customiser */
+.tdp2-se-wrap {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   width: 100%;
-}
-.tdp2-ti-pd-header {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 4px;
-}
-.tdp2-ti-pd-label {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 16px;
-  color: #757575;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.tdp2-ti-loc {
-  width: 10px;
-  height: 12px;
-  display: block;
-  flex-shrink: 0;
-  object-fit: contain;
-}
-.tdp2-ti-dashed {
-  flex: 1;
-  height: 1px;
-  display: block;
-  object-fit: fill;
-  min-width: 0;
-}
-.tdp2-ti-pd-cities {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 100%;
-}
-.tdp2-ti-pd-city {
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 21px;
-  color: #121212;
-  margin: 0;
-  max-width: 48%;
-}
-.tdp2-ti-pd-city--right {
-  text-align: right;
 }
 
-/* City skeleton */
-.tdp2-ti-skeleton {
-  border: 1px solid #ababab;
-  border-radius: 12px;
-  padding: 12px 8px 12px 12px;
+/* Coverage strip tucked behind the card's top edge. */
+.tdp2-se-tag {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px 8px;
   align-items: center;
+  justify-content: center;
   width: 100%;
+  margin-bottom: -10px;
+  padding: 6px 8px 16px;
+  background: #fff8f2;
+  border-radius: 8px 8px 0 0;
+  font: 500 12px/16px "Roboto", sans-serif;
+  letter-spacing: 0.36px;
+  color: #864129;
+  text-align: center;
   box-sizing: border-box;
+  overflow: hidden;
 }
-.tdp2-ti-sk-city {
-  font-family: "Roboto", sans-serif;
-  font-size: 12px;
-  font-weight: 400;
-  color: #002a33;
-  line-height: 16px;
+
+.tdp2-se-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  height: 114px;
+  padding: 8px 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10.95px rgba(0, 0, 0, 0.11);
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+/* Both columns hang from a shared baseline, and the pair sits centred in
+   the card — clear of the rail on the left. */
+.tdp2-se-body {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* Vertical train riding the card's left edge. */
+.tdp2-se-rail {
+  position: absolute;
+  left: 16px;
+  top: 0;
+  bottom: 0;
+  width: 20px;
+  pointer-events: none;
+}
+/* Figma bleeds the rail 1px past the 20px slot and squeezes the source
+   bitmap to the slot, which is what gives the sleepers their tight pitch. */
+.tdp2-se-rail-img {
+  position: absolute;
+  top: 0;
+  left: -1px;
+  width: 22px;
+  max-width: none;
+  height: 100%;
+  object-fit: fill;
+}
+.tdp2-se-train-img {
+  position: absolute;
+  left: 3px;
+  top: 8px;
+  width: 15px;
+  height: 96px;
+  object-fit: cover;
+}
+
+.tdp2-se-points {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.tdp2-se-point {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tdp2-se-label {
+  font: 400 12px/12px "Roboto", sans-serif;
+  color: #8b8b8b;
+}
+.tdp2-se-value {
+  font: 400 12px/16px "Roboto", sans-serif;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tdp2-se-connector {
+  position: relative;
+  width: 0;
+  height: 12px;
+  border-left: 1px dashed #aad6d8;
+  margin-left: 12px;
+}
+.tdp2-se-connector::before {
+  content: "";
+  position: absolute;
+  left: -2px;
+  top: 0;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #aad6d8;
+}
+
+/* The pill is centred in its own column, so its width can follow the label. */
+.tdp2-se-cta-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 221px;
+  max-width: 100%;
+  padding: 8px 0;
+}
+
+.tdp2-se-cta {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 26px;
+  background: #dfebfb;
+  font: 500 14px/21px "Roboto", sans-serif;
+  color: #0048ac;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Duration tag hanging off the top of the CTA pill. */
+.tdp2-se-cta-tag {
+  position: absolute;
+  top: -29px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  border-radius: 8px 8px 0 0;
+  background: #edf4fd;
+  font: 500 14px/21px "Roboto", sans-serif;
+  color: #0048ac;
   white-space: nowrap;
 }
-.tdp2-ti-sk-arrow {
-  width: 32px;
-  height: 11px;
-  display: block;
+.tdp2-se-cta-icon {
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
 }
 
@@ -543,16 +632,16 @@
   font-weight: 500;
   line-height: 16px;
   cursor: pointer;
-  border: 1px solid #d6d6d6;
+  border: 1px solid #e6e6e6;
   background: #fff;
   color: #575757;
   white-space: nowrap;
 }
 .tdp2-day-chip-btn.active {
-  background: #015f74;
-  border-color: #015f74;
+  background: #dfebfb;
+  border-color: #dfebfb;
   border-radius: 26px;
-  color: #fff;
+  color: #0048ac;
 }
 
 
@@ -562,126 +651,51 @@
   background: #fff;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
   padding: 16px 0;
 }
+.tdp2-itin-map-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  min-height: 30px;
+  padding: 0 16px;
+  font: 400 14px/21px "Roboto", sans-serif;
+  color: #4d4d4d;
+}
+.tdp2-itin-switch {
+  display: flex;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.tdp2-itin-switch-img {
+  display: block;
+  height: 30px;
+  width: auto;
+  flex-shrink: 0;
+}
+.tdp2-itin-days {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
 .tdp2-itin-map-wrap {
-  margin: 0 16px;
-  border-radius: 12px;
+  width: 100%;
+  aspect-ratio: 390 / 200;
   overflow: hidden;
   background: #f5f5f5;
 }
 .tdp2-itin-map {
   width: 100%;
+  height: 100%;
   display: block;
   object-fit: cover;
 }
 
-/* ── Shared Transfer (Figma 4554:6067) ─────────────────────────────────── */
-.tdp2-st {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  padding: 0 16px;
-  box-sizing: border-box;
-}
-.tdp2-st-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-}
-.tdp2-st-title {
-  font-size: 14px;
-  font-weight: 500;
-  color: #015f74;
-  text-align: center;
-  letter-spacing: 0.07px;
-  margin: 0;
-  white-space: nowrap;
-}
-.tdp2-st-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  position: relative;
-  width: 100%;
-}
-.tdp2-st-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #f3f6f7;
-  border-radius: 30px;
-  padding: 8px 16px;
-  flex: 1;
-  min-width: 0;
-  max-width: 171px;
-}
-.tdp2-st-pill-icon {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  object-fit: contain;
-}
-.tdp2-st-pill-divider {
-  width: 1px;
-  height: 20px;
-  background: #d6d6d6;
-  flex-shrink: 0;
-}
-.tdp2-st-pill-info {
-  display: flex;
-  flex-direction: column;
-  gap: 1px;
-  min-width: 0;
-}
-.tdp2-st-pill-label {
-  font-size: 12px;
-  font-weight: 400;
-  color: #8b8b8b;
-  line-height: 14px;
-  white-space: nowrap;
-}
-.tdp2-st-pill-city {
-  font-size: 12px;
-  font-weight: 500;
-  color: #121212;
-  line-height: 16px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.tdp2-st-car {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background: #f5f5f5;
-  border: 3.4px solid #fff;
-  border-radius: 17px;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  z-index: 1;
-}
-.tdp2-st-car-icon {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
-}
-.tdp2-st-dots {
-  width: 8px;
-  height: 46px;
-  object-fit: contain;
-}
 .tdp2-itin-city-group {
   display: flex;
   flex-direction: column;
@@ -691,7 +705,7 @@
   height: 8px;
   background: #f5f5f5;
   flex-shrink: 0;
-  margin: 20px 0;
+  margin: 0;
 }
 
 /* ── City card (Figma 3014:13852) ───────────────────────────────────────── */
@@ -1578,6 +1592,63 @@
 
 
 /* ── Services strip / inclusions (Figma 4077:8288) ─────────────────── */
+.tdp2-package-type {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px;
+  background: #fff;
+}
+.tdp2-package-type-title {
+  margin: 0;
+  color: #333;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+}
+.tdp2-package-type-options {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+}
+.tdp2-package-type-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 8px 16px;
+  overflow: hidden;
+  border: 1px solid #d6d6d6;
+  border-radius: 8px;
+  background: #fff;
+  color: #575757;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.tdp2-package-type-btn.active {
+  border-color: #015f74;
+  color: #015f74;
+}
+.tdp2-package-type-check {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 16px;
+  height: 16px;
+  max-width: none;
+}
+.tdp2-package-type-btn:focus-visible {
+  outline: 2px solid #667eff;
+  outline-offset: 2px;
+}
 .tdp2-services-strip {
   display: flex;
   flex-wrap: wrap;
@@ -1911,7 +1982,7 @@
   cursor: pointer;
 }
 
-/* ── DayCard accordion (Figma 4334:5358 / 4334:5401) ──────────────────── */
+/* ── DayCard accordion (Figma 7423:18049) ─────────────────────────────── */
 .tdp2-day-card {
   width: 100%;
   background: #fff;
@@ -1923,41 +1994,43 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 16px;
+  height: 55px;
+  padding: 0;
   background: none;
-  border: none;
+  border: 1px solid #ebf3fe;
   cursor: pointer;
   width: 100%;
   text-align: left;
-  gap: 10px;
+  overflow: hidden;
+  box-sizing: border-box;
 }
-.tdp2-day-card-header--static {
-  cursor: default;
-  pointer-events: none;
-}
-
 .tdp2-day-card-header-left {
   display: flex;
   align-items: center;
   gap: 10px;
   flex: 1;
   min-width: 0;
+  height: 100%;
 }
 
 .tdp2-day-badge {
-  background: #015f74;
-  border-radius: 26px;
-  padding: 4px 16px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  background: #ebf3fe;
+  border-radius: 0;
+  padding: 4px 12px;
   font-size: 14px;
-  font-weight: 700;
-  color: #fff;
+  font-weight: 500;
+  color: #0048ac;
   white-space: nowrap;
   flex-shrink: 0;
   line-height: 21px;
+  box-sizing: border-box;
 }
 
 .tdp2-day-card-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: #333;
   line-height: 24px;
@@ -1967,16 +2040,11 @@
 }
 
 .tdp2-day-card-chevron {
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
+  margin: 0 16px;
   flex-shrink: 0;
   object-fit: contain;
-  background: #f5f5f5;
-  border-radius: 60px;
-  transition: transform 0.2s ease;
-}
-.tdp2-day-card-chevron.open {
-  transform: rotate(180deg);
 }
 
 /* Summary + chips — always visible */
@@ -2035,9 +2103,8 @@
 .tdp2-day-card-expanded {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 0 10px 16px;
-  padding-top: 16px;
+  gap: 20px;
+  padding: 20px 16px 16px;
 }
 
 /* Timeline */
@@ -2072,8 +2139,8 @@
   flex: 1;
   width: 1px;
   min-height: 12px;
-  background: #c8d7da;
-  margin: 2px 0;
+  background: #c2d8f7;
+  margin: 0;
 }
 
 .tdp2-day-tl-text {
@@ -2134,6 +2201,10 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  padding-bottom: 20px;
+}
+.tdp2-day-tl-content--act {
   gap: 16px;
   padding-bottom: 16px;
 }
@@ -2145,16 +2216,111 @@
   gap: 6px;
 }
 .tdp2-day-tl-sec-icon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
   object-fit: contain;
+}
+.tdp2-day-tl-sec-icon--act {
+  width: 18px;
+  height: 18px;
 }
 .tdp2-day-tl-sec-label {
   font-size: 14px;
   font-weight: 400;
-  color: #3d3d3d;
+  color: #8b8b8b;
   line-height: 21px;
+}
+
+/* Transfer leg: city — dashed line — car pill — dashed arrow — city */
+.tdp2-day-tr-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+/* Endpoints keep their words on one line; a long drop point (an airport name)
+   gives back space to the dashed lines before it clips. */
+.tdp2-day-tr-city {
+  flex: 0 1 auto;
+  min-width: 0;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #8b8b8b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Dashes are painted at a fixed pitch so they read the same on a 332px mobile
+   row and a wider desktop one; only the number of dashes changes. */
+.tdp2-day-tr-line {
+  flex: 1 1 0;
+  min-width: 20px;
+  height: 1px;
+  background-image: repeating-linear-gradient(
+    to right,
+    #ababab 0 4px,
+    transparent 4px 8px
+  );
+  background-repeat: repeat-x;
+  background-size: 8px 1px;
+  background-position: left center;
+}
+/* Closing leg: tighter dashes plus the arrow head, which the right padding
+   keeps clear of the dash track. */
+.tdp2-day-tr-line--arrow {
+  box-sizing: border-box;
+  height: 7.36px;
+  padding-right: 7px;
+  background-image:
+    url("/figma/itin-section/transfer-arrow-head.svg"),
+    repeating-linear-gradient(
+      to right,
+      #ababab 0 1.91px,
+      transparent 1.91px 5.72px
+    );
+  background-repeat: no-repeat, repeat-x;
+  background-size: 4.39px 7.36px, 5.72px 1px;
+  background-position: right center, left center;
+  background-origin: border-box, content-box;
+  background-clip: border-box, content-box;
+}
+.tdp2-day-tr-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4.115px;
+  flex-shrink: 0;
+  padding: 3.429px;
+  border: 3.429px solid #fff;
+  border-radius: 17.146px;
+  background: #f5f5f5;
+}
+/* The car art is the clipped inner group of a 16px icon frame, so it sits
+   inset inside its box rather than filling it. */
+.tdp2-day-tr-car {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.tdp2-day-tr-car img {
+  position: absolute;
+  top: 16.67%;
+  right: 8.33%;
+  bottom: 0.78%;
+  left: 8.33%;
+  width: auto;
+  max-width: none;
+}
+.tdp2-day-tr-dur {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 12px;
+  letter-spacing: 0.6px;
+  color: #b8b8b8;
+  white-space: nowrap;
 }
 
 /* Stay name */
@@ -2170,10 +2336,10 @@
 .tdp2-day-meals-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  background: #faffeb;
-  border-radius: 4px;
-  padding: 8px 12px;
+  justify-content: flex-start;
+  background: transparent;
+  border-radius: 0;
+  padding: 0;
   width: 100%;
   box-sizing: border-box;
 }
@@ -2203,7 +2369,7 @@
 .tdp2-day-meal-label {
   font-size: 12px;
   font-weight: 400;
-  color: #3d5200;
+  color: #8b8b8b;
   line-height: 16px;
   white-space: nowrap;
 }
@@ -2214,63 +2380,45 @@
   object-fit: contain;
 }
 
-/* Activity item */
+/* Activity item — copy on the left, one square thumbnail on the right */
 .tdp2-day-activity-item {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
 }
 .tdp2-day-act-divider {
   width: 100%;
   height: 1px;
-  background: #f0f0f0;
-  margin-bottom: 8px;
+  background: #f4f6f7;
 }
-.tdp2-day-act-title {
-  font-size: 14px;
-  font-weight: 500;
-  color: #4e4e4e;
-  line-height: 21px;
-  margin: 0;
-}
-
-/* Tickets Included badge */
-.tdp2-day-ticket-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: #36c76d;
-  border-radius: 4px;
-  padding: 4px 8px;
-  align-self: flex-start;
-}
-.tdp2-day-ticket-badge span {
-  font-size: 12px;
-  font-weight: 400;
-  color: #fff;
-  line-height: 16px;
-  white-space: nowrap;
-}
-.tdp2-day-ticket-done {
-  width: 16px;
-  height: 16px;
-  flex-shrink: 0;
-  object-fit: contain;
-}
-
-/* Activity photo row — 3 equal thumbnails */
-.tdp2-day-act-photos {
+.tdp2-day-act-row {
   display: flex;
-  gap: 4px;
+  align-items: flex-start;
+  gap: 16px;
   width: 100%;
 }
-.tdp2-day-act-photo {
+.tdp2-day-act-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
   flex: 1;
   min-width: 0;
-  aspect-ratio: 358/200;
+}
+.tdp2-day-act-thumb {
+  width: 74px;
+  height: 74px;
+  flex-shrink: 0;
   object-fit: cover;
   border-radius: 4px;
   display: block;
+}
+.tdp2-day-act-title {
+  font-size: 14px;
+  font-weight: 400;
+  color: #4e4e4e;
+  line-height: 21px;
+  margin: 0;
 }
 
 /* ── DayCard expanded — Day 1 Stay section (Figma 4870:14969) ─────────────── */
@@ -2325,23 +2473,61 @@
 
 /* Info note below check-in/out */
 .tdp2-day-stay-note {
+  position: relative;
   display: flex;
   align-items: flex-start;
-  gap: 4px;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: #fbeee2;
+  box-sizing: border-box;
 }
 .tdp2-day-stay-note-icon {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
   object-fit: contain;
   margin-top: 2px;
 }
 .tdp2-day-stay-note-text {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
-  color: #7d7d7d;
+  color: #e27917;
   line-height: 16px;
   flex: 1;
+}
+.tdp2-day-stay-note-tail {
+  position: absolute;
+  left: 30px;
+  bottom: -8px;
+  width: 14px;
+  height: 9px;
+}
+
+.tdp2-day-hotel-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+}
+.tdp2-day-hotel-option {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.tdp2-day-hotel-photo {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+.tdp2-day-hotel-name {
+  margin: 0;
+  font: 400 14px/21px "Roboto", sans-serif;
+  color: #3d3d3d;
 }
 
 /* Hotel photo gallery — 1 large + row of 3 */
@@ -2384,11 +2570,11 @@
 .tdp2-day-leisure-card {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background: #f8f5ff;
-  border: 1px solid #f1ebff;
+  border: 0;
   border-radius: 4px;
-  padding: 8px 12px;
+  padding: 8px;
   width: 100%;
   box-sizing: border-box;
 }
@@ -2427,24 +2613,16 @@
   display: block;
 }
 
-/* ── DayCard embedded transfer section (Figma 4869:6424) ─────────────────── */
-.tdp2-day-transfer-wrap {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-
 /* ── End of the Journey (Figma 3097:2065) ─────────────────────────────────── */
 .tdp2-end-journey {
   font-family: 'Playfair Display', serif;
   font-weight: 500;
   font-size: 24px;
   line-height: 36px;
-  color: #01afd1;
+  color: #818181;
   text-align: center;
   text-transform: capitalize;
-  padding: 24px 16px 8px;
+  padding: 20px 16px;
   margin: 0;
   background: #fff;
   width: 100%;
@@ -2763,17 +2941,8 @@
   height: 44px;
   padding: 10px 12px;
   box-sizing: border-box;
-  background: #01AFD1;
-  border: none;
-  border-radius: 56px;
-  cursor: pointer;
   flex-shrink: 0;
 }
 .tdp2-sticky-btn-label {
-  font-family: var(--font);
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 21px;
-  color: #fff;
   white-space: nowrap;
 }

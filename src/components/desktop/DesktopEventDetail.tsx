@@ -296,7 +296,7 @@ export default function DesktopEventDetail() {
                 <span className="depd__book-main">&#8377;{EVENT.price}/-</span>
                 <span className="depd__book-sub">Starting price per person</span>
               </div>
-              <button className="depd__book-cta" type="button" onClick={handleBook}>
+              <button className="wo-cta depd__book-cta" type="button" onClick={handleBook}>
                 Book Now
               </button>
               <div className="depd__book-women">

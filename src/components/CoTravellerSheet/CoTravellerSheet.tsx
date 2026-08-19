@@ -292,7 +292,7 @@ export default function CoTravellerSheet({
         {/* CTA */}
         <div className="cts-cta">
           <button className="cts-cta-cancel" type="button" onClick={onClose}>Cancel</button>
-          <button className="cts-cta-save" type="button" onClick={handleSave}>Save Details</button>
+          <button className="wo-cta cts-cta-save" type="button" onClick={handleSave}>Save Details</button>
         </div>
       </div>
     </>

@@ -341,7 +341,7 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
               </div>
             </div>
 
-            <button className="cfs-submit" type="submit">
+            <button className="wo-cta cfs-submit" type="submit">
               Request Callback
             </button>
           </form>

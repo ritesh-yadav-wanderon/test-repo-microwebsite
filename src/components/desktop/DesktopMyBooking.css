@@ -483,23 +483,15 @@
 .dmb-co-save {
   flex: 1;
   height: 44px;
-  border-radius: 8px;
-  font-family: var(--font);
-  font-size: 14px;
-  font-weight: 500;
   cursor: pointer;
 }
 
 .dmb-co-cancel {
   border: 1px solid #000;
+  border-radius: var(--cta-radius);
   background: #fff;
   color: #1f1f1f;
-}
-
-.dmb-co-save {
-  border: none;
-  background: #01afd1;
-  color: #fff;
+  font: var(--cta-font);
 }
 
 /* Add Co-Traveller button below the card */
@@ -761,14 +753,6 @@
   height: 44px;
   min-width: 170px;
   padding: 0 16px;
-  border: none;
-  border-radius: 25px;
-  background: #01afd1;
-  font-family: var(--font);
-  font-size: 14px;
-  font-weight: 500;
-  color: #fff;
-  cursor: pointer;
   flex-shrink: 0;
 }
 

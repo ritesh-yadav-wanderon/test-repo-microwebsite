@@ -38,6 +38,23 @@ function formatINR(n: number): string {
   return n.toLocaleString("en-IN");
 }
 
+/** Desktop viewport or any mouse-driven window — dragging a thumb with a cursor
+ *  is clumsy, so those pointers get a click-to-pay control instead. */
+const DESKTOP_QUERY = "(min-width: 1024px), (hover: hover) and (pointer: fine)";
+
+function useIsDesktopPointer(): boolean {
+  const [isDesktop, setIsDesktop] = useState(() => window.matchMedia(DESKTOP_QUERY).matches);
+
+  useEffect(() => {
+    const mql = window.matchMedia(DESKTOP_QUERY);
+    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mql.addEventListener("change", onChange);
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  return isDesktop;
+}
+
 export default function PaymentSheet({
   isOpen,
   onClose,
@@ -53,6 +70,7 @@ export default function PaymentSheet({
   onPaymentSuccess,
   onPay,
 }: PaymentSheetProps) {
+  const isDesktop = useIsDesktopPointer();
   const [hasOpened, setHasOpened] = useState(false);
   const [selected, setSelected] = useState<PayOption>("full");
   const [customAmount, setCustomAmount] = useState("");
@@ -160,18 +178,28 @@ export default function PaymentSheet({
   const [dragX, setDragX] = useState(0);
   const [dragging, setDragging] = useState(false);
   const [maxX, setMaxX] = useState(0);
+  /** The swipe has reached the end — the track now reads as a primary CTA. */
+  const [committed, setCommitted] = useState(false);
   const startXRef = useRef(0);
   const maxXRef = useRef(0);
   const confirmedRef = useRef(false);
+  const glideTimerRef = useRef<number | null>(null);
 
   const resetSwipe = () => {
+    if (glideTimerRef.current !== null) {
+      clearTimeout(glideTimerRef.current);
+      glideTimerRef.current = null;
+    }
     setDragging(false);
     setDragX(0);
+    setCommitted(false);
     confirmedRef.current = false;
   };
 
-  const THUMB_SIZE = 44;
-  const TRACK_PAD = 4;
+  const THUMB_SIZE = 40;
+  const TRACK_PAD = 2;
+  /** Matches the thumb's glide transition in the CSS. */
+  const GLIDE_MS = 320;
   const canSwipe = !(loading || status === "success" || invalidCustom || payNum <= 0);
   const progress = maxX > 0 ? Math.min(1, dragX / maxX) : 0;
 
@@ -181,9 +209,10 @@ export default function PaymentSheet({
     return Math.max(0, track.clientWidth - THUMB_SIZE - TRACK_PAD * 2);
   };
 
-  // Reset the thumb whenever the sheet reopens or a payment errors out.
+  // Reset the thumb whenever the sheet opens or closes (a close also cancels a
+  // pending glide) and whenever a payment errors out.
   useEffect(() => {
-    if (isOpen) resetSwipe();
+    resetSwipe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
   useEffect(() => {
@@ -224,6 +253,7 @@ export default function PaymentSheet({
       confirmedRef.current = true;
       setDragging(false);
       setDragX(max);
+      setCommitted(true);
       handleSwipe();
     }
   };
@@ -233,6 +263,29 @@ export default function PaymentSheet({
     setDragging(false);
     if (!confirmedRef.current) setDragX(0); // snap back if not far enough
   };
+
+  /** Pointer drag is awkward with a mouse, so on desktop (and for keyboard
+   *  users) a single activation glides the thumb across and then pays. */
+  const glideAndPay = () => {
+    if (!canSwipe || confirmedRef.current) return;
+    const max = measureMax();
+    maxXRef.current = max;
+    setMaxX(max);
+    confirmedRef.current = true;
+    setDragging(false);
+    setDragX(max);
+    setCommitted(true);
+    glideTimerRef.current = window.setTimeout(() => {
+      glideTimerRef.current = null;
+      handleSwipe();
+    }, GLIDE_MS);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (glideTimerRef.current !== null) clearTimeout(glideTimerRef.current);
+    };
+  }, []);
 
   if (!hasOpened) return null;
 
@@ -441,26 +494,31 @@ export default function PaymentSheet({
                 dragging ? " psh-swipe--dragging" : ""
               }${status === "success" ? " psh-swipe--done" : ""}${
                 canSwipe ? " psh-swipe--ready" : " psh-swipe--disabled"
+              }${isDesktop ? " psh-swipe--click" : ""}${
+                committed ? " psh-swipe--committed" : ""
               }`}
-              role="slider"
-              aria-label="Swipe to pay"
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuenow={Math.round(progress * 100)}
+              onClick={isDesktop ? glideAndPay : undefined}
+              role={isDesktop ? undefined : "slider"}
+              aria-label={isDesktop ? undefined : "Swipe to pay"}
+              aria-valuemin={isDesktop ? undefined : 0}
+              aria-valuemax={isDesktop ? undefined : 100}
+              aria-valuenow={isDesktop ? undefined : Math.round(progress * 100)}
             >
               <span
                 className="psh-swipe-fill"
-                style={{ width: `${TRACK_PAD + dragX + THUMB_SIZE}px` }}
+                style={{ width: `${dragX + THUMB_SIZE}px` }}
                 aria-hidden
               />
               <span
                 className="psh-swipe-label"
-                style={{ opacity: Math.max(0, 1 - progress * 1.6) }}
+                style={{ opacity: committed ? 1 : Math.max(0, 1 - progress * 1.6) }}
               >
                 {status === "success"
                   ? "Paid"
-                  : loading
-                  ? "Processing…"
+                  : committed
+                  ? "Continuing to Pay"
+                  : isDesktop
+                  ? "Continue to Pay"
                   : "Swipe to Pay"}
               </span>
               <button
@@ -472,12 +530,17 @@ export default function PaymentSheet({
                     ? "none"
                     : "transform 0.32s cubic-bezier(0.22, 1, 0.36, 1)",
                 }}
-                onPointerDown={onThumbPointerDown}
-                onPointerMove={onThumbPointerMove}
-                onPointerUp={onThumbPointerUp}
-                onPointerCancel={onThumbPointerUp}
+                onPointerDown={isDesktop ? undefined : onThumbPointerDown}
+                onPointerMove={isDesktop ? undefined : onThumbPointerMove}
+                onPointerUp={isDesktop ? undefined : onThumbPointerUp}
+                onPointerCancel={isDesktop ? undefined : onThumbPointerUp}
+                onKeyDown={(e) => {
+                  if (e.key !== "Enter" && e.key !== " ") return;
+                  e.preventDefault();
+                  glideAndPay();
+                }}
                 disabled={!canSwipe}
-                aria-label="Slide to pay"
+                aria-label={isDesktop ? "Continue to pay" : "Slide to pay"}
               >
                 {loading ? (
                   <span className="psh-swipe-spinner" aria-hidden />
