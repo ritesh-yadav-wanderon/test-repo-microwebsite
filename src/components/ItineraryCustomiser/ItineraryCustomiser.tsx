@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useIsDesktop } from "../../hooks/useIsDesktop";
 import { setAppScrollLocked } from "../../utils/scroll";
 import "./ItineraryCustomiser.css";
 
@@ -7,6 +8,13 @@ const T = "/figma/train/";
 /** Vertical train: rendered size and speed (ms per px). */
 const TRAIN_H = 96;
 const MS_PER_PX = 4;
+/** Horizontal train: rendered width and the quicker pace of its shorter legs. */
+const TRAIN_W = 96;
+const MS_PER_PX_H = 2;
+
+/** Desktop station chip footprint, used to work out how many fit per row. */
+const STATION_W = 100;
+const STATION_GAP = 14;
 
 interface Props {
   isOpen: boolean;
@@ -42,6 +50,7 @@ function formatINRShort(n: number): string {
 }
 
 export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, nights, basePrice, initialSelection, onSelectionChange }: Props) {
+  const isDesktop = useIsDesktop();
   // First tap picks the trip start, the second the trip end, and a further
   // tap begins a fresh selection.
   const [pickStart, setPickStart] = useState<number | null>(null);
@@ -80,6 +89,7 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
   }, [isOpen, stations.length]);
 
   const tapStation = (idx: number) => {
+    // A finished trip (or a freshly opened sheet) restarts the selection.
     if (pickStart === null || pickEnd !== null) {
       clearTimers();
       setPickStart(idx);
@@ -87,11 +97,14 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
       return;
     }
     if (idx === pickStart) return;
+    // The second tap closes the trip whichever way round it was made, so the
+    // pair is always ordered along the route.
+    animateNext.current = true;
     if (idx < pickStart) {
+      setPickEnd(pickStart);
       setPickStart(idx);
       return;
     }
-    animateNext.current = true;
     setPickEnd(idx);
   };
 
@@ -136,7 +149,22 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
   }, [pickStart, pickEnd]);
 
   const hasTrip = pickStart !== null && pickEnd !== null;
-  const [selStart, selEnd] = hasTrip ? [pickStart!, pickEnd!] : [0, stations.length - 1];
+
+  // Between the two taps of a selection there is no trip to describe, so the
+  // route card, coverage strip and price hold the last finished one instead of
+  // snapping back to the full itinerary.
+  const lastTrip = useRef<[number, number]>([
+    initialSelection?.start ?? 0,
+    initialSelection?.end ?? stations.length - 1,
+  ]);
+  useEffect(() => {
+    if (hasTrip) lastTrip.current = [pickStart!, pickEnd!];
+  }, [hasTrip, pickStart, pickEnd]);
+  const [selStart, selEnd] = hasTrip ? [pickStart!, pickEnd!] : lastTrip.current;
+
+  /** Stations a finished trip leaves out. A pending start greys nothing — the
+   *  next tap may land on either side of it. */
+  const isOutside = (i: number) => hasTrip && (i < pickStart! || i > pickEnd!);
 
   const fullSegments = stations.length - 1;
   const price = selectionPrice(basePrice, selEnd - selStart, fullSegments);
@@ -151,7 +179,211 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
     { start: Math.max(0, stations.length - 4), end: stations.length - 1 },
   ], [stations.length]);
 
+  // Desktop stations keep a fixed width, so the row holds as many as fit and
+  // the rest wrap onto further rows — each with its own stretch of rail.
+  const rowsRef = useRef<HTMLDivElement | null>(null);
+  const [perRow, setPerRow] = useState(6);
+  const [rowW, setRowW] = useState(0);
+
+  useLayoutEffect(() => {
+    if (!isOpen || !isDesktop) return;
+    const measure = () => {
+      const width = rowsRef.current?.clientWidth ?? 0;
+      if (!width) return;
+      const fit = Math.floor((width + STATION_GAP) / (STATION_W + STATION_GAP));
+      setPerRow(Math.max(1, fit));
+      setRowW(width);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [isOpen, isDesktop]);
+
+  // Where the desktop train sits: which row, how far along it, and how long it
+  // takes to get there. A trip inside one row is a single glide; a trip that
+  // spans rows glides off the end of the first row and back in on the next.
+  const [dTrain, setDTrain] = useState<{ row: number; left: number; dur: number } | null>(null);
+
+  useLayoutEffect(() => {
+    if (!isOpen || !isDesktop) return;
+    const stop = (i: number) => (i % perRow) * (STATION_W + STATION_GAP) + STATION_W / 2;
+    const rowOf = (i: number) => Math.floor(i / perRow);
+    const ms = (px: number) => Math.max(400, Math.abs(px) * MS_PER_PX_H);
+    const offRight = (rowW || stations.length * (STATION_W + STATION_GAP)) + TRAIN_W;
+    const offLeft = -TRAIN_W;
+
+    if (pickStart === null) {
+      setDTrain(null);
+      return;
+    }
+    if (pickEnd === null) {
+      setDTrain({ row: rowOf(pickStart), left: stop(pickStart), dur: 0 });
+      return;
+    }
+    const startRow = rowOf(pickStart);
+    const endRow = rowOf(pickEnd);
+    if (!animateNext.current) {
+      animateNext.current = false;
+      setDTrain({ row: endRow, left: stop(pickEnd), dur: 0 });
+      return;
+    }
+    animateNext.current = false;
+    setDTrain({ row: startRow, left: stop(pickStart), dur: 0 });
+    if (startRow === endRow) {
+      timers.current.push(window.setTimeout(() => {
+        setDTrain({ row: endRow, left: stop(pickEnd), dur: ms(stop(pickEnd) - stop(pickStart)) });
+      }, 40));
+      return;
+    }
+    const exit = ms(offRight - stop(pickStart));
+    timers.current.push(window.setTimeout(() => {
+      setDTrain({ row: startRow, left: offRight, dur: exit });
+    }, 40));
+    timers.current.push(window.setTimeout(() => {
+      setDTrain({ row: endRow, left: offLeft, dur: 0 });
+    }, exit + 60));
+    timers.current.push(window.setTimeout(() => {
+      setDTrain({ row: endRow, left: stop(pickEnd), dur: ms(stop(pickEnd) - offLeft) });
+    }, exit + 120));
+  }, [isOpen, isDesktop, pickStart, pickEnd, perRow, rowW, stations.length]);
+
   if (!isOpen) return null;
+
+  if (isDesktop) {
+    // Chunk the mother itinerary into rows of `perRow` station indices.
+    const rows: number[][] = [];
+    for (let i = 0; i < stations.length; i += perRow) {
+      rows.push(stations.slice(i, i + perRow).map((_, k) => i + k));
+    }
+    /** Centre of the nth chip in a row, in px from the row's left edge. */
+    const chipCentre = (n: number) => n * (STATION_W + STATION_GAP) + STATION_W / 2;
+    const closeAndApply = () => {
+      if (hasTrip) onSelectionChange?.(selStart, selEnd);
+      onClose();
+    };
+
+    return (
+      <div className="itc-overlay itc-overlay--desktop" onClick={closeAndApply}>
+        <div
+          className="itc-sheet itc-sheet--desktop"
+          onClick={e => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Customise itinerary"
+        >
+          <div className="itcd-coverage">
+            This route cover {selEnd - selStart + 1} of {stations.length} stops on our Europe Route
+          </div>
+
+          <div className="itcd-card">
+            <header className="itcd-header">
+              <img src={thumb} alt="" className="itcd-thumb" />
+              <div className="itcd-header-text">
+                <p className="itcd-sub">Europe · full route</p>
+                <p className="itcd-title">Where do you want to hop on &amp; off?</p>
+              </div>
+              <button className="itcd-close" type="button" onClick={closeAndApply} aria-label="Close and apply selection">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+                  <path d="M5 5l14 14M19 5L5 19" stroke="#121212" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              </button>
+            </header>
+
+            <section className="itcd-popular" aria-labelledby="itcd-popular-title">
+              <h2 id="itcd-popular-title" className="itcd-popular-title">Popular Choices</h2>
+              <div className="itcd-popular-list">
+                {popular.map(({ start, end }, pi) => (
+                  <button className="itcd-popular-card" type="button" key={pi} onClick={() => applyPreset(start, end)}>
+                    {stations.slice(start, end + 1).map((name, i) => (
+                      <span key={`${name}-${i}`} className="itcd-popular-item">
+                        {i > 0 && <img src={`${T}route-arrow.svg`} alt="" aria-hidden />}
+                        <span>{name}</span>
+                      </span>
+                    ))}
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            <div className="itcd-selector">
+              <div className="itcd-rows" ref={rowsRef}>
+                {rows.map((row, ri) => {
+                  const first = row[0];
+                  const last = row[row.length - 1];
+                  // Only a finished trip lays live rail, and each row shows
+                  // just the stretch that falls inside it.
+                  const covered = hasTrip && pickEnd! >= first && pickStart! <= last;
+                  const runsIn = covered && pickStart! < first;
+                  const runsOut = covered && pickEnd! > last;
+                  return (
+                    <div className="itcd-row" key={first}>
+                      <div
+                        className="itcd-stations"
+                        style={{ gridTemplateColumns: `repeat(${perRow}, ${STATION_W}px)` }}
+                      >
+                        {row.map(i => {
+                          const isStart = i === pickStart;
+                          const isEnd = i === pickEnd;
+                          const outside = isOutside(i);
+                          const selected = hasTrip
+                            ? i >= pickStart! && i <= pickEnd!
+                            : isStart;
+                          const n = nights?.[i] ?? 2;
+                          return (
+                            <button
+                              key={i}
+                              type="button"
+                              className={`itcd-station${outside ? " itcd-station--outside" : ""}${
+                                selected ? " itcd-station--selected" : ""
+                              }${isStart || isEnd ? " itcd-station--endpoint" : ""}`}
+                              onClick={() => tapStation(i)}
+                            >
+                              {(isStart || isEnd) && (
+                                <span className="itcd-endpoint-tag">{isStart ? "Start" : "End"}</span>
+                              )}
+                              <span>{stations[i]}</span>
+                              <span>{n}N</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      <div className="itcd-track" aria-hidden>
+                        {covered && (
+                          <span
+                            className="itcd-track-active"
+                            style={
+                              runsIn
+                                ? { left: 0, width: runsOut ? "100%" : chipCentre(pickEnd! - first) }
+                                : {
+                                    left: chipCentre(pickStart! - first),
+                                    right: runsOut ? 0 : undefined,
+                                    width: runsOut
+                                      ? undefined
+                                      : chipCentre(pickEnd! - first) - chipCentre(pickStart! - first),
+                                  }
+                            }
+                          />
+                        )}
+                        {dTrain?.row === ri && (
+                          <img
+                            src="/figma/train/card-train-horizontal.png"
+                            alt=""
+                            className="itcd-train"
+                            style={{ left: dTrain.left, transitionDuration: `${dTrain.dur}ms` }}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="itc-overlay" onClick={onClose}>
@@ -217,7 +449,7 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
             {stations.map((name, i) => {
               const isStart = i === pickStart;
               const isEnd = i === pickEnd;
-              const outside = hasTrip && (i < pickStart! || i > pickEnd!);
+              const outside = isOutside(i);
               const n = nights?.[i] ?? 2;
               const cls = isStart || isEnd
                 ? "itc3-row itc3-row--endpoint"
