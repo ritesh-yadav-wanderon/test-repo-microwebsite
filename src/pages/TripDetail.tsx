@@ -611,6 +611,7 @@ export function DayCard({ day, index, isOpen, onToggle, transfer }: {
   const title = day.summary?.[0] ?? day.city;
   const hasStay = Boolean(day.stayName);
   const hasActivities = Boolean(day.activities?.length);
+  const isSameAccommodation = day.stayName?.startsWith("Same Accommodation");
 
   return (
     <div id={`day-${index}`} className={`tdp2-day-card${isOpen ? " open" : ""}`} style={{ scrollMarginTop: "186px" }}>
@@ -636,7 +637,7 @@ export function DayCard({ day, index, isOpen, onToggle, transfer }: {
             <div className="tdp2-day-tl-item">
               <div className="tdp2-day-tl-left">
                 <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
-                {(hasStay || hasActivities) && <div className="tdp2-day-tl-line" />}
+                <div className="tdp2-day-tl-line" />
               </div>
               <div className="tdp2-day-tl-content">
                 <div className="tdp2-day-tl-section-hd">
@@ -652,7 +653,7 @@ export function DayCard({ day, index, isOpen, onToggle, transfer }: {
             <div className="tdp2-day-tl-item">
               <div className="tdp2-day-tl-left">
                 <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
-                {hasActivities && <div className="tdp2-day-tl-line" />}
+                <div className="tdp2-day-tl-line" />
               </div>
               <div className="tdp2-day-tl-content">
                 <div className="tdp2-day-tl-section-hd">
@@ -682,7 +683,21 @@ export function DayCard({ day, index, isOpen, onToggle, transfer }: {
                     ))}
                   </div>
                 )}
-                {!day.stayPhotos?.length && <p className="tdp2-day-stay-name">{day.stayName}</p>}
+                {!day.stayPhotos?.length && (
+                  isSameAccommodation ? (
+                    <div className="tdp2-day-same-stay">
+                      <img
+                        src="/figma/itin-section/same-accommodation-info.svg"
+                        alt=""
+                        className="tdp2-day-same-stay-icon"
+                        aria-hidden
+                      />
+                      <span>{day.stayName}</span>
+                    </div>
+                  ) : (
+                    <p className="tdp2-day-stay-name">{day.stayName}</p>
+                  )
+                )}
                 {day.stayMeals && day.stayMeals.length > 0 && (
                   <div className="tdp2-day-meals-bar">
                     <div className="tdp2-day-meals-list">
@@ -708,6 +723,7 @@ export function DayCard({ day, index, isOpen, onToggle, transfer }: {
             <div className="tdp2-day-tl-item">
               <div className="tdp2-day-tl-left">
                 <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
+                <div className="tdp2-day-tl-line" />
               </div>
               <div className="tdp2-day-tl-content tdp2-day-tl-content--act">
                 <div className="tdp2-day-tl-section-hd">
@@ -763,7 +779,7 @@ export function DayCard({ day, index, isOpen, onToggle, transfer }: {
                 <div key={ti} className="tdp2-day-tl-item">
                   <div className="tdp2-day-tl-left">
                     <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
-                    {ti < day.items.length - 1 && <div className="tdp2-day-tl-line" />}
+                    <div className="tdp2-day-tl-line" />
                   </div>
                   <p className="tdp2-day-tl-text">{item}</p>
                 </div>
