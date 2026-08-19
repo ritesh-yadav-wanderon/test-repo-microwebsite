@@ -87,6 +87,7 @@
 .itc-scroll {
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding-bottom: 32px;
 }
 
@@ -437,6 +438,7 @@
     min-height: 430px;
     max-height: calc(100vh - 96px);
     overflow-y: auto;
+    overscroll-behavior: contain;
     border-radius: 12px;
     background: #fff;
     box-shadow: 0 4px 10.95px rgba(0, 0, 0, 0.11);

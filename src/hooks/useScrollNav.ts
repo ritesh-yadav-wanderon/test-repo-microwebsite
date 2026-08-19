@@ -29,26 +29,56 @@ export function useScrollNav(isHome: boolean) {
 
     if (isHome) {
       // ── Homepage: swap once the hero search bar leaves the viewport ──
-      const attach = () => {
-        const el = document.querySelector("[data-hero-search]");
-        if (!el) return false;
-        const observer = new IntersectionObserver(
+      // Height to fall back on while the hero search bar is not mounted.
+      const HERO_FALLBACK = 240;
+      let observer: IntersectionObserver | null = null;
+      let observed: Element | null = null;
+      let ticking = false;
+
+      const observe = (el: Element) => {
+        observer?.disconnect();
+        observer = new IntersectionObserver(
           ([entry]) => { setCompact(!entry.isIntersecting); },
           { threshold: 0 }
         );
         observer.observe(el);
-        return () => observer.disconnect();
+        observed = el;
       };
 
-      let cleanup: (() => void) | undefined;
-      const raf = requestAnimationFrame(() => {
-        const result = attach();
-        if (typeof result === "function") cleanup = result;
-      });
+      /**
+       * Recompute straight from layout. The observer alone is not enough: the
+       * hero may mount after this effect runs, and switching breakpoints
+       * replaces it, leaving the observer watching a detached node — either
+       * way the header would stay stuck until the next reload.
+       */
+      const sync = () => {
+        const el = document.querySelector("[data-hero-search]");
+        if (!el) {
+          observer?.disconnect();
+          observer = null;
+          observed = null;
+          setCompact(getScrollTop() > HERO_FALLBACK);
+          return;
+        }
+        if (el !== observed) observe(el);
+        const rect = el.getBoundingClientRect();
+        setCompact(rect.bottom <= 0 || rect.top >= window.innerHeight);
+      };
+
+      const onScroll = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => { sync(); ticking = false; });
+      };
+
+      sync();
+      const offScroll = onAppScroll(onScroll);
+      window.addEventListener("resize", onScroll);
 
       return () => {
-        cancelAnimationFrame(raf);
-        if (cleanup) cleanup();
+        offScroll();
+        window.removeEventListener("resize", onScroll);
+        observer?.disconnect();
       };
     } else {
       // ── Non-home pages: scroll-direction aware ──

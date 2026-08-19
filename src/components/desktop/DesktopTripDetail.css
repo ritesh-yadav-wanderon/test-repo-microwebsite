@@ -86,12 +86,19 @@
   border: 0.789px solid rgba(117, 117, 117, 0.5);
   border-radius: 50%;
   background: #fff;
+  color: #757575;
   cursor: pointer;
   padding: 0;
 }
 .dtdp-icon-btn img,
 .dtdp-icon-btn svg { width: 13px; height: 13px; }
-.dtdp-icon-btn--saved { border-color: #f2545b; }
+/* Saved: the solid glyph in plain white, on a filled button so it reads
+   against the light title bar. */
+.dtdp-icon-btn--saved {
+  border: none;
+  background: var(--brand-green);
+  color: #fff;
+}
 /* The mobile hero icons are white (built for a dark image) — recolor to grey so
    they're visible on the light desktop title bar. */
 .dtdp-title-actions img { filter: brightness(0) saturate(100%) invert(48%); }
@@ -467,6 +474,7 @@
   height: 44px;
   padding: 0 6px;
   overflow-x: auto;
+  overflow-y: hidden;
 }
 .dtdp-tab {
   display: inline-flex;

@@ -1,10 +1,12 @@
-import { useMemo, useRef } from "react";
+import { memo, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Trip, TripGroup } from "../../types";
 import { useWishlist } from "../../context/WishlistContext";
+import DesktopBatchesSheet from "./DesktopBatchesSheet";
+import HeartIcon from "../HeartIcon/HeartIcon";
 import "./DesktopTrips.css";
 
-const BASE = "/figma/desktop";
+const T = "/figma/trips";
 
 function fmtDate(raw: string): string {
   const d = new Date(raw);
@@ -22,7 +24,7 @@ interface Props {
 }
 
 /** "Upcoming Group trips" card carousel (Figma 3394:11786). */
-export default function DesktopTrips({
+function DesktopTrips({
   trips,
   loading,
   title = "Upcoming Group trips",
@@ -30,6 +32,7 @@ export default function DesktopTrips({
 }: Props) {
   const navigate = useNavigate();
   const trackRef = useRef<HTMLDivElement>(null);
+  const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
 
   const flat: Trip[] = useMemo(
     () => trips.flatMap((g) => g.tripsArray).slice(0, 12),
@@ -58,7 +61,9 @@ export default function DesktopTrips({
                 <div className="sk sk-line" style={{ width: "70%" }} />
               </div>
             ))
-          : flat.map((trip) => <DesktopTripCard key={trip.slug} trip={trip} />)}
+          : flat.map((trip) => (
+              <DesktopTripCard key={trip.slug} trip={trip} onMoreDates={setBatchesTrip} />
+            ))}
 
         {!loading && (
           <button className="dtrips__more" onClick={() => navigate(seeAllHref)}>
@@ -87,11 +92,36 @@ export default function DesktopTrips({
           </svg>
         </button>
       </div>
+
+      <DesktopBatchesSheet
+        isOpen={!!batchesTrip}
+        onClose={() => setBatchesTrip(null)}
+        tripTitle={batchesTrip?.title}
+        nights={batchesTrip?.duration?.nights ?? 7}
+        ctaLabel="View Trip"
+        onSelectBatch={(batch, start, end) => {
+          const slug = batchesTrip?.slug;
+          setBatchesTrip(null);
+          if (!slug) return;
+          const fmt = (d: Date, withYear: boolean) =>
+            d.toLocaleDateString("en-GB", { day: "numeric", month: "short", ...(withYear ? { year: "numeric" } : {}) });
+          const price = Number(String(batch.price).replace(/,/g, "")).toLocaleString("en-IN");
+          navigate(`/trip/${slug}`, {
+            state: { from: "batches", selectedBatch: { dateRange: `${fmt(start, false)} - ${fmt(end, true)}`, price: `${price}/-` } },
+          });
+        }}
+      />
     </section>
   );
 }
 
-function DesktopTripCard({ trip }: { trip: Trip }) {
+const DesktopTripCard = memo(function DesktopTripCard({
+  trip,
+  onMoreDates,
+}: {
+  trip: Trip;
+  onMoreDates: (trip: Trip) => void;
+}) {
   const navigate = useNavigate();
   const { isWishlisted, toggle: toggleWishlist } = useWishlist();
   const wishlisted = isWishlisted(trip.slug);
@@ -103,12 +133,11 @@ function DesktopTripCard({ trip }: { trip: Trip }) {
     ? Number(String(trip.startingPrice).replace(/[₹,\s/-]/g, ""))
     : 0;
   const price = priceNum ? priceNum.toLocaleString("en-IN") : String(trip.startingPrice ?? "");
-  const strike = priceNum ? Math.round(priceNum * 1.15).toLocaleString("en-IN") : "";
 
   return (
     <article className="dtrips__card" onClick={() => navigate(`/trip/${trip.slug}`)}>
       <div className="dtrips__img">
-        <img src={trip.image || "/figma/trips/trip-1.jpg"} alt={trip.title} loading="lazy" />
+        <img src={trip.image || `${T}/trip-1.jpg`} alt={trip.title} loading="lazy" />
         <button
           className={`dtrips__wishlist${wishlisted ? " dtrips__wishlist--saved" : ""}`}
           aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
@@ -118,38 +147,49 @@ function DesktopTripCard({ trip }: { trip: Trip }) {
             toggleWishlist({
               slug: trip.slug,
               title: trip.title,
-              image: trip.image || "/figma/trips/trip-1.jpg",
+              image: trip.image || `${T}/trip-1.jpg`,
               price: String(trip.startingPrice ?? ""),
               duration: trip.duration ? `${trip.duration.nights}N/${trip.duration.days}D` : undefined,
               route: trip.pickDropPoint,
             });
           }}
         >
-          <img src={`${BASE}/wishlist-btn.svg`} alt="" />
+          <HeartIcon filled={wishlisted} />
         </button>
       </div>
       <h3 className="dtrips__card-title">{trip.title}</h3>
-      <p className="dtrips__route">
-        <img src={`${BASE}/icon-location.svg`} alt="" />
-        {trip.pickDropPoint || "New Delhi - New Delhi"}
-      </p>
       {trip.duration && (
         <p className="dtrips__duration">
-          <img src={`${BASE}/icon-calendar-clock.svg`} alt="" />
+          <img src={`${T}/icon-calendar-clock.svg`} alt="" />
           {trip.duration.nights}N/{trip.duration.days}D
         </p>
       )}
       {shown && (
         <p className="dtrips__dates">
-          {shown}
-          {extra > 0 && <strong>, +{extra} More...</strong>}
+          <span className="dtrips__dates-list">
+            {shown}
+            {extra > 0 && "..."}
+          </span>
+          {extra > 0 && (
+            <button
+              className="dtrips__dates-more"
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onMoreDates(trip);
+              }}
+            >
+              +{extra} More
+            </button>
+          )}
         </p>
       )}
       <div className="dtrips__price-row">
-        {strike && <span className="dtrips__price-old">₹{strike}/-</span>}
         <span className="dtrips__price-now">₹{price}/-</span>
       </div>
       <p className="dtrips__price-sub">Onwards per person</p>
     </article>
   );
-}
+});
+
+export default memo(DesktopTrips);

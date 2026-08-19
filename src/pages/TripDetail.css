@@ -174,11 +174,13 @@
   border: none;
   border-radius: 30px;
   background: rgba(0, 0, 0, 0.3);
+  color: #fff;
   cursor: pointer;
   flex-shrink: 0;
 }
-.tdp2-hero-btn-wish img { display: block; width: 14px; height: 12px; flex-shrink: 0; }
-.tdp2-hero-btn-wish svg { display: block; width: 16px; height: 16px; flex-shrink: 0; }
+.tdp2-hero-btn-wish svg { display: block; width: 14px; height: 12px; flex-shrink: 0; }
+/* Saved: the solid glyph in plain white, no outline. */
+.tdp2-hero-btn-wish--saved { background: rgba(0, 0, 0, 0.4); color: #fff; }
 
 
 
@@ -537,6 +539,7 @@
   display: flex;
   align-items: center;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   padding-bottom: 14px;
   gap: 2px;
@@ -582,6 +585,7 @@
 .tdp2-tabs {
   display: flex;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   padding: 0 6px;
   border-bottom: 1px solid rgba(117, 117, 117, 0.2);
@@ -619,6 +623,7 @@
   display: flex;
   gap: 10px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   padding: 0 16px;
 }
@@ -776,6 +781,7 @@
   display: flex;
   gap: 0;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   background: #fff;
   padding: 14px 16px;
@@ -951,6 +957,7 @@
   display: flex;
   gap: 8px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   margin-bottom: 16px;
   padding-bottom: 2px;
@@ -978,6 +985,7 @@
   display: flex;
   gap: 12px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   margin-bottom: 16px;
 }
@@ -1132,6 +1140,7 @@
   display: flex;
   gap: 12px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   padding: 0 16px 4px;
 }
@@ -1935,6 +1944,7 @@
   display: flex;
   gap: 20px;
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 0 16px;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;

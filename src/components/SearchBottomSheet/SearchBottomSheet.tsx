@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DEST_REGIONS } from "../../data/destinations";
-import { setAppScrollLocked } from "../../utils/scroll";
+import { useScrollLock } from "../../hooks/useScrollLock";
 import distanceIcon     from "../../assets/search-bottom-sheet/distance.svg";
 import calendarMonthIcon from "../../assets/search-bottom-sheet/calendar-month.svg";
 import calendarCheckIcon from "../../assets/search-bottom-sheet/calendar-check.svg";
@@ -276,11 +276,7 @@ export default function SearchBottomSheet({
   }, [isOpen]);
 
   /* Lock background page scroll while the overlay is open */
-  useEffect(() => {
-    if (!isOpen) return;
-    setAppScrollLocked(true);
-    return () => setAppScrollLocked(false);
-  }, [isOpen]);
+  useScrollLock(isOpen);
 
   if (!isOpen) return null;
 

@@ -6,6 +6,7 @@
   z-index: 200;
   background: #fff;
   overflow-y: auto;
+  overscroll-behavior: contain;
   font-family: "Roboto", system-ui, -apple-system, sans-serif;
   color: #3d3d3d;
 }

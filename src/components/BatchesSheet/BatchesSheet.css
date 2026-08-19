@@ -151,6 +151,7 @@
   gap: 10px;
   padding: 10px 14px;
   overflow-x: auto;
+  overflow-y: hidden;
   flex-shrink: 0;
   scrollbar-width: none;
   border-bottom: 1px solid #f1f1f1;
@@ -208,6 +209,7 @@
 .bsh-cards {
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
   gap: 20px;

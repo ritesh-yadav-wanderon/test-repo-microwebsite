@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { setAppScrollLocked } from "../../utils/scroll";
+import { useScrollLock } from "../../hooks/useScrollLock";
 import "./CoTravellerSheet.css";
 
 const A = "/figma/booking/";
@@ -82,10 +82,7 @@ export default function CoTravellerSheet({
     if (isOpen) setHasOpened(true);
   }, [isOpen]);
 
-  useEffect(() => {
-    setAppScrollLocked(isOpen);
-    return () => setAppScrollLocked(false);
-  }, [isOpen]);
+  useScrollLock(isOpen);
 
   // Reset the form each time the sheet is freshly opened.
   useEffect(() => {

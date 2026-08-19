@@ -1,0 +1,27 @@
+.ftog {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  height: 30px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: "Roboto", sans-serif;
+  cursor: pointer;
+}
+
+.ftog-label {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  color: #4d4d4d;
+}
+
+.ftog-switch {
+  display: block;
+  height: 30px;
+  width: auto;
+  max-width: none;
+  flex-shrink: 0;
+}

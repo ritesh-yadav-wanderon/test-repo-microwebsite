@@ -61,6 +61,7 @@
 .bm-content {
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
   padding-bottom: 20px;
@@ -115,7 +116,9 @@
   padding: 0 16px 20px;
   flex-shrink: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 .bm-cta {
   width: 100%;
@@ -132,22 +135,25 @@
 }
 .bm-cta--account > img {
   flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  max-width: none;
 }
-.bm-cta-account-copy {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-width: 0;
-  line-height: 16px;
-}
-.bm-cta-account-phone {
-  max-width: 100%;
-  overflow: hidden;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 11px;
-  line-height: 13px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+
+/* Same button as the one at the bottom of the account page. */
+.bm-logout {
+  width: 100%;
+  max-width: 358px;
+  height: 48px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, 0.04);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #3d3d3d;
+  cursor: pointer;
 }
 
 
@@ -257,6 +263,7 @@
 .bm-dest-content {
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
 }

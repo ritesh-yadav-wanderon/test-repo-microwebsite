@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import type { Trip } from "../../types";
-import { getListingTrips } from "../../api";
+import { getCachedListingTrips, getListingTrips } from "../../api";
 import TripCard from "../TripCard";
 import DesktopFilterSheet from "./DesktopFilterSheet";
 import DesktopBatchesSheet from "./DesktopBatchesSheet";
@@ -44,18 +44,19 @@ export default function DesktopSearchResults() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const [allTrips, setAllTrips] = useState<Trip[]>([]);
-  const [loading, setLoading] = useState(true);
+  const cachedTrips = getCachedListingTrips();
+  const [allTrips, setAllTrips] = useState<Trip[]>(() => cachedTrips ?? []);
+  const [loading, setLoading] = useState(() => !cachedTrips);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [filterTab, setFilterTab] = useState(0);
   const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
-  const [showFeatures, setShowFeatures] = useState(false);
+  const [showFeatures, setShowFeatures] = useState(true);
 
   useEffect(() => {
+    if (cachedTrips) return;
     let cancelled = false;
-    setLoading(true);
     getListingTrips().then((trips) => {
       if (!cancelled) {
         setAllTrips(trips);
@@ -65,7 +66,7 @@ export default function DesktopSearchResults() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [cachedTrips]);
 
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
@@ -241,7 +242,7 @@ export default function DesktopSearchResults() {
                     theme="teal"
                     eager={i < 3}
                     showFeatures={showFeatures}
-                    onSeeAllDates={() => setBatchesTrip(trip)}
+                    onSeeAllDates={setBatchesTrip}
                   />
                 </div>
               ))}

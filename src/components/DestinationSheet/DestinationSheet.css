@@ -71,6 +71,7 @@
 .dsh-content {
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
   padding-bottom: 20px;

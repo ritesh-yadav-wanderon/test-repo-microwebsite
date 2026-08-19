@@ -36,6 +36,7 @@
   max-height: 92vh;
   overflow-x: hidden;
   overflow-y: auto;
+  overscroll-behavior: contain;
   /* Off-screen when closed — hide it from paint so the fixed white panel can't
      flash over the bottom nav. */
   visibility: hidden;
@@ -188,6 +189,7 @@
   margin-top: 8px;
   max-height: 260px;
   overflow-y: auto;
+  overscroll-behavior: contain;
   overflow-x: hidden;
   border: 1px solid #ededed;
   border-radius: 8px;
@@ -263,6 +265,7 @@
 .cfs-dest-box {
   height: 300px;
   overflow-y: auto;
+  overscroll-behavior: contain;
   overflow-x: hidden;
   margin-top: 8px;
   border: 1px solid #ededed;
@@ -386,6 +389,7 @@
     width: 390px;
     padding: 20px;
     overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   .cfs-body-bar {

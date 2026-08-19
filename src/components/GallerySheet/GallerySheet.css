@@ -182,7 +182,9 @@
   gap: 10px;
   padding: 16px 0 0;
   overflow-x: auto;
-  overflow-y: visible;
+  /* `visible` isn't honoured next to a scrolling axis anyway — keep the row
+     locked to horizontal. */
+  overflow-y: hidden;
   scrollbar-width: none;
   flex-shrink: 0;
 }
@@ -222,6 +224,7 @@
   display: flex;
   gap: 16px;
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 24px 0 !important;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { setAppScrollLocked } from "../../utils/scroll";
+import { useScrollLock } from "../../hooks/useScrollLock";
 import "./BatchesSheet.css";
 
 const ASSETS = "/figma/batches/";
@@ -266,10 +266,7 @@ export default function BatchesSheet({
     if (isOpen) setHasOpened(true);
   }, [isOpen]);
 
-  useEffect(() => {
-    setAppScrollLocked(isOpen);
-    return () => setAppScrollLocked(false);
-  }, [isOpen]);
+  useScrollLock(isOpen);
 
   const months = useMemo(() => {
     const seen = new Set<string>();

@@ -70,9 +70,9 @@
   width: 14px;
   height: 12px;
 }
-.tc-wish--saved svg {
-  width: 16px;
-  height: 16px;
+/* Saved: the solid glyph in plain white, no outline. */
+.tc-wish--saved {
+  color: #fff;
 }
 
 .tc-compare {

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { DEST_REGIONS } from "../../data/destinations";
 import { COUNTRIES, type Country } from "../../data/countries";
-import { setAppScrollLocked } from "../../utils/scroll";
+import { useScrollLock } from "../../hooks/useScrollLock";
 import { useIsDesktop } from "../../hooks/useIsDesktop";
 import "./ContactFormSheet.css";
 
@@ -30,10 +30,7 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
 
   useEffect(() => { if (isOpen) setHasOpened(true); }, [isOpen]);
 
-  useEffect(() => {
-    setAppScrollLocked(isOpen);
-    return () => setAppScrollLocked(false);
-  }, [isOpen]);
+  useScrollLock(isOpen);
 
   // Pin the sheet to the visual viewport so it hugs the on-screen keyboard
   // (avoids the gap/overlap left by position:fixed when the keyboard opens).

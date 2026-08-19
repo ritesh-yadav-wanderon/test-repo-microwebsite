@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BottomNav from "../components/BottomNav/BottomNav";
-import { getLastMainPage } from "../utils/lastMainPage";
+import { exitToMainPage } from "../utils/lastMainPage";
 import "./Notifications.css";
 
 const N = "/figma/notifications/";
@@ -123,7 +123,7 @@ export default function Notifications() {
           className="ntf-close"
           type="button"
           aria-label="Back to website"
-          onClick={() => navigate(getLastMainPage())}
+          onClick={() => exitToMainPage(navigate)}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
             <path d="M6 6l12 12M18 6 6 18" stroke="#202020" strokeWidth="1.8" strokeLinecap="round" />

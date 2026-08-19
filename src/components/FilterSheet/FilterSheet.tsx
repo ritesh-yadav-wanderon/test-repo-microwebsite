@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useScrollLock } from "../../hooks/useScrollLock";
 import "./FilterSheet.css";
 
 /* ── Static data ── */
@@ -594,6 +595,7 @@ export default function FilterSheet({ isOpen, onClose, initialTab = 0 }: { isOpe
   const [searchParams] = useSearchParams();
 
   useEffect(() => { if (isOpen) setHasOpened(true); }, [isOpen]);
+  useScrollLock(isOpen);
   useEffect(() => {
     if (!isOpen) return;
     setActiveTab(initialTab);

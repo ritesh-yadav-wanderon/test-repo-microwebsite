@@ -109,6 +109,7 @@
   flex-direction: column;
   border-right: 1px solid #e0e8eb;
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 8px 0;
 }
 
@@ -172,6 +173,7 @@
 .fs-content {
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
   min-height: 0;
 }
 

@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DEFAULT_BATCHES, type BatchItem } from "../BatchesSheet/BatchesSheet";
-import { setAppScrollLocked } from "../../utils/scroll";
+import { useScrollLock } from "../../hooks/useScrollLock";
 import "./DesktopBatchesSheet.css";
 
 /**
@@ -181,10 +181,7 @@ export default function DesktopBatchesSheet({
   const navigate = useNavigate();
   const [selectedMonth, setSelectedMonth] = useState("");
 
-  useEffect(() => {
-    setAppScrollLocked(isOpen);
-    return () => setAppScrollLocked(false);
-  }, [isOpen]);
+  useScrollLock(isOpen);
 
   const months = useMemo(() => {
     const seen = new Set<string>();

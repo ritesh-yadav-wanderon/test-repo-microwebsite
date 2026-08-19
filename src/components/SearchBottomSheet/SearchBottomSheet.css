@@ -58,6 +58,7 @@
   align-items: flex-end;
   padding: 40px 0px 16px 0px;
   overflow-x: scroll;
+  overflow-y: hidden;
   scrollbar-width: none;
   flex-shrink: 0;
   gap: 8px;
@@ -134,6 +135,7 @@
   gap: 16px;
   padding: 16px 16px 16px;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 /* ── Base card ── */
@@ -314,6 +316,7 @@
   flex-direction: column;
   gap: 4px;
   overflow-y: auto;
+  overscroll-behavior: contain;
   flex: 1;
 }
 .sbs-month-item {
@@ -341,6 +344,7 @@
 .sbs-cal-wrap {
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
   min-height: 0;
   display: flex;
   flex-direction: column;

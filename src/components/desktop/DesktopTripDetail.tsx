@@ -16,6 +16,7 @@ import {
 import "../../pages/TripDetail.css";
 import ItineraryCustomiser from "../ItineraryCustomiser/ItineraryCustomiser";
 import ShareSheet from "../ShareSheet/ShareSheet";
+import HeartIcon from "../HeartIcon/HeartIcon";
 import DesktopNav from "./DesktopNav";
 import DesktopBatchesSheet from "./DesktopBatchesSheet";
 import DesktopWhyChooseUs from "./DesktopWhyChooseUs";
@@ -279,16 +280,7 @@ export default function DesktopTripDetail() {
               aria-pressed={wishlisted}
               onClick={() => setWishlisted((w) => !w)}
             >
-              {wishlisted ? (
-                <svg viewBox="0 0 24 24" width={16} height={16} fill="none" aria-hidden>
-                  <path
-                    d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                    fill="#f2545b"
-                  />
-                </svg>
-              ) : (
-                <img src="/figma/trip-hero/icon-heart.svg" alt="" width={15} height={15} aria-hidden />
-              )}
+              <HeartIcon filled={wishlisted} />
             </button>
             <button className="dtdp-icon-btn" type="button" aria-label="Share" onClick={() => setShareOpen(true)}>
               <img src="/figma/trip-hero/icon-share.svg" alt="" width={13} height={13} aria-hidden />

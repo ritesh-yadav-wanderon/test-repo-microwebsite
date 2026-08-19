@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { setAppScrollLocked } from "../../utils/scroll";
+import { useScrollLock } from "../../hooks/useScrollLock";
 import "./ReviewGallery.css";
 
 const R = "/figma/reviews/";
@@ -40,9 +40,9 @@ export default function ReviewGallery({
       setIndex(initialIndex);
       setActiveCat(0);
     }
-    setAppScrollLocked(isOpen);
-    return () => setAppScrollLocked(false);
   }, [isOpen, initialIndex]);
+
+  useScrollLock(isOpen);
 
   const onScroll = () => {
     const el = trackRef.current;
