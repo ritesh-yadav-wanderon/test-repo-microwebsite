@@ -175,7 +175,7 @@ export default function LoginSheet({ isOpen, onClose, onSuccess }: LoginSheetPro
                   initialCountryCode={countryCode}
                   onCountryChange={handleCountryChange}
                 />
-                <button className="ls-action-btn" type="button" onClick={handleRequestOtp}>
+                <button className="wo-cta ls-action-btn" type="button" onClick={handleRequestOtp}>
                   Request OTP
                 </button>
               </div>
@@ -235,7 +235,7 @@ export default function LoginSheet({ isOpen, onClose, onSuccess }: LoginSheetPro
               </div>
 
               <div className="ls-step2-actions">
-                <button className="ls-action-btn" type="button" onClick={handleAuthenticate}>
+                <button className="wo-cta ls-action-btn" type="button" onClick={handleAuthenticate}>
                   Authenticate
                 </button>
                 <div className="ls-timer-row">

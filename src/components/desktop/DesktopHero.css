@@ -18,7 +18,7 @@
 
 .dhero__rating {
   position: absolute;
-  top: 395px;
+  bottom: 150px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 2;
@@ -54,7 +54,7 @@
 /* Interactive search bar (DesktopSearch) anchored where the old static bar sat. */
 .dhero__search-slot {
   position: absolute;
-  top: 431px;
+  bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;

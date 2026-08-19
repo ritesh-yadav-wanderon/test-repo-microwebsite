@@ -679,7 +679,7 @@ export default function FilterSheet({ isOpen, onClose, initialTab = 0 }: { isOpe
         </div>
         <div className="fs-footer">
           <button className="fs-btn-clear" type="button" onClick={clearTab}>Clear selection</button>
-          <button className="fs-btn-show" type="button" onClick={handleShowResults}>Show Results</button>
+          <button className="wo-cta fs-btn-show" type="button" onClick={handleShowResults}>Show Results</button>
         </div>
       </div>
     </div>

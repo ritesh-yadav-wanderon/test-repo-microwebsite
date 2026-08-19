@@ -57,8 +57,30 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: 8px;
   width: 186px;
   height: 100%;
+}
+
+.site-header__account {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.site-header__account img {
+  display: block;
+  width: 32px;
+  height: 32px;
+  max-width: none;
 }
 
 /* Hamburger — 48px tap target, icon 32×16px */

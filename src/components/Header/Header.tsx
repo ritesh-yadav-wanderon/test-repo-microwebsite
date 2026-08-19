@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getScrollTop, onAppScroll } from "../../utils/scroll";
+import { useAuth } from "../../context/AuthContext";
 import "./Header.css";
 
 export interface HeaderProps {
@@ -10,6 +12,8 @@ export interface HeaderProps {
 
 export default function Header({ visible, onMenu }: HeaderProps) {
   const tab = visible ? 0 : -1;
+  const navigate = useNavigate();
+  const { isLoggedIn } = useAuth();
   // Add a blurred backdrop to the header once the user starts scrolling.
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -35,6 +39,17 @@ export default function Header({ visible, onMenu }: HeaderProps) {
       </a>
 
       <div className="site-header__actions">
+        {isLoggedIn && (
+          <button
+            className="site-header__account"
+            type="button"
+            aria-label="Open my account"
+            tabIndex={tab}
+            onClick={() => navigate("/profile")}
+          >
+            <img src="/figma/page-header/icon-account.svg" alt="" aria-hidden />
+          </button>
+        )}
         <button
           className="site-header__menu"
           type="button"

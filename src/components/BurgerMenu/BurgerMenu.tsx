@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { DEST_REGIONS } from "../../data/destinations";
+import { useAuth } from "../../context/AuthContext";
 import "./BurgerMenu.css";
 
 interface BurgerMenuProps {
@@ -62,6 +63,7 @@ type SubView = "bike-trips" | "about" | "categories" | "destinations" | null;
 
 export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
   const navigate = useNavigate();
+  const { isLoggedIn, user } = useAuth();
   const [hasOpened, setHasOpened] = useState(false);
   const [subView, setSubView] = useState<SubView>(null);
   const [expandedRegion, setExpandedRegion] = useState<string>("india");
@@ -150,10 +152,22 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
 
         {/* CTA */}
         <div className="bm-cta-wrap">
-          <button className="bm-cta" type="button" onClick={() => { onClose(); window.dispatchEvent(new Event("wanderon:open-login")); }}>
-            <img src={`${M}person.svg`} width={11} height={11} alt="" aria-hidden />
-            <span>Log In or Sign Up</span>
-          </button>
+          {isLoggedIn ? (
+            <button className="wo-cta bm-cta bm-cta--account" type="button" onClick={() => go("/profile")}>
+              <img src="/figma/page-header/icon-account.svg" width={20} height={20} alt="" aria-hidden />
+              <span className="bm-cta-account-copy">
+                <span>My Account</span>
+                {user?.phone && (
+                  <span className="bm-cta-account-phone">{user.countryCode} {user.phone}</span>
+                )}
+              </span>
+            </button>
+          ) : (
+            <button className="wo-cta bm-cta" type="button" onClick={() => { onClose(); window.dispatchEvent(new Event("wanderon:open-login")); }}>
+              <img src={`${M}person.svg`} width={11} height={11} alt="" aria-hidden />
+              <span>Log In or Sign Up</span>
+            </button>
+          )}
         </div>
 
         {/* ── Bike Trips sub-panel ── */}

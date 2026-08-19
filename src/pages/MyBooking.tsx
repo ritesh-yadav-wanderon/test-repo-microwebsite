@@ -760,7 +760,7 @@ export default function MyBooking() {
             <span className="mb-due-amount">&#8377;{data.dueBalance}/-</span>
           </div>
           <button
-            className="mb-due-btn"
+            className="wo-cta mb-due-btn"
             type="button"
             onClick={() => setPayOpen(true)}
           >

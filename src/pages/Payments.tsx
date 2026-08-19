@@ -141,12 +141,12 @@ export default function Payments() {
                     <span>Due Date</span>
                   </div>
                 </div>
-                <button className="pay-cta" type="button">
+                <button className="wo-cta pay-cta" type="button">
                   Pay Due
                 </button>
               </>
             ) : (
-              <button className="pay-cta" type="button">
+              <button className="wo-cta pay-cta" type="button">
                 Invoice
                 <img src={`${PAY}icon-invoice.svg`} width={20} height={20} alt="" aria-hidden />
               </button>

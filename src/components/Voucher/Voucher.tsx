@@ -10,6 +10,7 @@ export interface AppliedVoucher {
 
 interface VoucherProps {
   className?: string;
+  initialVoucher?: AppliedVoucher | null;
   /** Discount granted when a coupon is applied (used in the "Congrats!" message). */
   discountAmount?: number;
   /** Fired when a coupon is successfully applied. */
@@ -20,13 +21,14 @@ interface VoucherProps {
 
 export default function Voucher({
   className,
+  initialVoucher = null,
   discountAmount = 1500,
   onApply,
   onRemove,
 }: VoucherProps) {
   const [open, setOpen] = useState(false);
   const [code, setCode] = useState("");
-  const [applied, setApplied] = useState<AppliedVoucher | null>(null);
+  const [applied, setApplied] = useState<AppliedVoucher | null>(initialVoucher);
 
   const handleApply = () => {
     const trimmed = code.trim();

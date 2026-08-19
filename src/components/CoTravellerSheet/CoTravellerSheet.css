@@ -259,16 +259,11 @@
 .cts-cta-save {
   flex: 1;
   height: 44px;
-  border-radius: 60px;
-  font-size: 14px;
-  font-weight: 500;
 }
 .cts-cta-cancel {
   border: 1px solid #000;
+  border-radius: var(--cta-radius);
   color: #1f1f1f;
   background: #fff;
-}
-.cts-cta-save {
-  background: #01AFD1;
-  color: #FFFFFF;
+  font: var(--cta-font);
 }

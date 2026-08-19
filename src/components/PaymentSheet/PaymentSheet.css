@@ -368,9 +368,9 @@
 /* Teal reveal that trails the knob — makes the swipe feel like a real fill. */
 .psh-swipe-fill {
   position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
+  top: 2px;
+  bottom: 2px;
+  left: 2px;
   border-radius: 56px;
   background: #01AFD1;
   pointer-events: none;
@@ -387,7 +387,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-left: 44px;
+  padding-left: 40px;
   padding-right: 16px;
   font-size: 16px;
   font-weight: 600;
@@ -400,12 +400,12 @@
 .psh-swipe-thumb {
   position: absolute;
   top: 2px;
-  left: 4px;
+  left: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   padding: 0;
   border: none;
   border-radius: 60px;
@@ -417,6 +417,14 @@
 }
 .psh-swipe-thumb:active {
   cursor: grabbing;
+}
+/* Desktop pays on a single click, so the whole track reads as a button. */
+.psh-swipe--click.psh-swipe--ready,
+.psh-swipe--click.psh-swipe--ready .psh-swipe-thumb {
+  cursor: pointer;
+}
+.psh-swipe--click.psh-swipe--ready:hover {
+  background: #d8eff5;
 }
 /* Inviting nudge on the arrow while idle, so it reads as "drag me". */
 .psh-swipe--ready:not(.psh-swipe--dragging):not(.psh-swipe--loading) .psh-swipe-arrow {
@@ -435,6 +443,21 @@
 }
 .psh-swipe--done .psh-swipe-label {
   color: #ffffff;
+}
+/* Once the swipe lands, the filled track takes the primary-CTA paint (see
+   .wo-cta in global.css); the knob stays black and rides on top. */
+.psh-swipe--committed {
+  border-color: transparent;
+  box-shadow: var(--cta-shadow);
+}
+.psh-swipe--committed .psh-swipe-fill {
+  background: var(--cta-bg);
+}
+.psh-swipe--committed .psh-swipe-label {
+  padding-left: 16px;
+  padding-right: 40px;
+  font: var(--cta-font);
+  color: var(--cta-text);
 }
 .psh-swipe--disabled {
   opacity: 0.55;

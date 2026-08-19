@@ -331,19 +331,9 @@
 .cfs-submit {
   width: 100%;
   height: 44px;
-  border-radius: 60px;
-  background: #01AFD1;
-  color: #FFFFFF;
-  font-size: 14px;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-family: inherit;
   letter-spacing: 0.01em;
-  transition: background 0.15s;
+  transition: filter 0.15s;
 }
-.cfs-submit:active { background: #019ab8; }
 
 /* Disclaimer */
 .cfs-disclaimer {
