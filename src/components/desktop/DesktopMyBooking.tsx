@@ -469,7 +469,7 @@ export default function DesktopMyBooking({
                       <button className="dmb-co-cancel" type="button" onClick={cancelCoForm}>
                         Cancel
                       </button>
-                      <button className="dmb-co-save" type="button" onClick={saveCoTraveller}>
+                      <button className="wo-cta dmb-co-save" type="button" onClick={saveCoTraveller}>
                         Save Details
                       </button>
                     </div>
@@ -573,7 +573,7 @@ export default function DesktopMyBooking({
                     </button>
                   </div>
                   <button
-                    className="dmb-bill-pay"
+                    className="wo-cta dmb-bill-pay"
                     type="button"
                     disabled={payLoading}
                     onClick={payDueBalance}

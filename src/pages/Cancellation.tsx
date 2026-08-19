@@ -239,7 +239,7 @@ export default function Cancellation() {
 
       {/* Bottom CTA */}
       <div className="cx-cta-bar">
-        <button className="cx-cta" type="button" onClick={handleWithdraw}>
+        <button className="wo-cta cx-cta" type="button" onClick={handleWithdraw}>
           Withdraw Cancellation Request
         </button>
       </div>

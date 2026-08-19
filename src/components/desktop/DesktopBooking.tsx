@@ -16,8 +16,10 @@ interface DesktopBookingProps {
 /** Desktop booking details page — Figma 4380:8004. */
 export default function DesktopBooking({ form }: DesktopBookingProps) {
   const {
-    navigate,
     data,
+    isPersonalDetails,
+    goToPersonalDetails,
+    goBack,
     travelers,
     setTravelers,
     mixedGender,
@@ -81,11 +83,13 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
           className="dbk-header-back"
           type="button"
           aria-label="Back"
-          onClick={() => navigate(-1)}
+          onClick={goBack}
         >
           <img src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
         </button>
-        <span className="dbk-header-title">Booking Details</span>
+        <span className="dbk-header-title">
+          {isPersonalDetails ? "Personal Details" : "Select Services"}
+        </span>
       </header>
 
       <div className="dbk-body">
@@ -137,6 +141,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
               </div>
             </div>
 
+            {isPersonalDetails && (<>
             <div className="dbk-panel">
               <div className="dbk-subhead">
                 <span className="dbk-section-icon">
@@ -336,9 +341,11 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                 </label>
               </div>
             </div>
+            </>)}
           </section>
 
           {/* Card: accommodation + add-ons */}
+          {!isPersonalDetails && (
           <section className="dbk-card dbk-card--accommodation">
             <div className="dbk-subhead">
               <span className="dbk-section-icon">
@@ -543,6 +550,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
               </span>
             </button>
           </section>
+          )}
         </div>
 
         {/* ── Right rail (sticky) ──────────────────────────── */}
@@ -616,11 +624,12 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
               </div>
 
               <Voucher
+                initialVoucher={appliedVoucher}
                 onApply={(v) => setAppliedVoucher(v)}
                 onRemove={() => setAppliedVoucher(null)}
               />
 
-              <div className="dbk-agree">
+              {isPersonalDetails && <div className="dbk-agree">
                 <input
                   type="checkbox"
                   className="dbk-checkbox"
@@ -633,7 +642,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                   <Link to="/legal">Terms &amp; Conditions</Link>, and{" "}
                   <Link to="/legal">Privacy Policy</Link>.
                 </p>
-              </div>
+              </div>}
             </div>
 
             <div className="dbk-rail-bottom">
@@ -662,12 +671,12 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                   </button>
                 </div>
                 <button
-                  className="dbk-rail-btn"
+                  className="wo-cta dbk-rail-btn"
                   type="button"
-                  disabled={!agreed}
-                  onClick={() => setReviewOpen(true)}
+                  disabled={isPersonalDetails && !agreed}
+                  onClick={() => isPersonalDetails ? setReviewOpen(true) : goToPersonalDetails()}
                 >
-                  Book Now
+                  {isPersonalDetails ? "Proceed to Payment" : "Book Now"}
                 </button>
               </div>
             </div>

@@ -1,5 +1,10 @@
-import type { ApiSource, TripGroup } from "../../types";
-import { TripCardItem, TripCardShimmer, ViewMoreCard } from "./TripCardItem";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import type { ApiSource, Trip, TripGroup } from "../../types";
+import TripCard from "../TripCard";
+import TripCardShimmer from "../TripCard/TripCardShimmer";
+import BatchesSheet from "../BatchesSheet/BatchesSheet";
+import { ViewMoreCard } from "./TripCardItem";
 import "./UpcomingTrips.css";
 
 export interface UpcomingTripsProps {
@@ -12,6 +17,9 @@ export interface UpcomingTripsProps {
 const CATEGORY_NAMES = ["All Trips","Adventure","Luxury","Culture","Festival","Wellness","Weekend"];
 
 export default function UpcomingTrips({ trips, loading, source: _source, activeCategory }: UpcomingTripsProps) {
+  const navigate = useNavigate();
+  const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
+
   const seen = new Set<string>();
   const allFlat = trips
     .flatMap(g => g.tripsArray || [])
@@ -49,7 +57,15 @@ export default function UpcomingTrips({ trips, loading, source: _source, activeC
           ? Array.from({ length: 3 }, (_, i) => <TripCardShimmer key={i} />)
           : flat.length > 0
             ? [
-                ...flat.map(t => <TripCardItem key={t.slug} trip={t} />),
+                ...flat.map((t, i) => (
+                  <TripCard
+                    key={t.slug}
+                    trip={t}
+                    eager={i === 0}
+                    showFeatures={false}
+                    onSeeAllDates={() => setBatchesTrip(t)}
+                  />
+                )),
                 <ViewMoreCard
                   key="view-more"
                   a={flat[0]?.image || "/figma/trips/trip-1.jpg"}
@@ -60,6 +76,25 @@ export default function UpcomingTrips({ trips, loading, source: _source, activeC
         }
       </div>
 
+      {/* Departure dates, as on the listing page. */}
+      <BatchesSheet
+        isOpen={!!batchesTrip}
+        onClose={() => setBatchesTrip(null)}
+        tripTitle={batchesTrip?.title}
+        nights={batchesTrip?.duration?.nights ?? 7}
+        ctaLabel="View Trip"
+        onSelectBatch={(batch, start, end) => {
+          const slug = batchesTrip?.slug;
+          setBatchesTrip(null);
+          if (!slug) return;
+          const fmt = (d: Date, withYear: boolean) =>
+            d.toLocaleDateString("en-GB", { day: "numeric", month: "short", ...(withYear ? { year: "numeric" } : {}) });
+          const price = Number(String(batch.price).replace(/,/g, "")).toLocaleString("en-IN");
+          navigate(`/trip/${slug}`, {
+            state: { from: "batches", selectedBatch: { dateRange: `${fmt(start, false)} - ${fmt(end, true)}`, price: `${price}/-` } },
+          });
+        }}
+      />
     </section>
   );
 }

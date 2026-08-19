@@ -496,17 +496,10 @@
 .depd__book-cta {
   height: 44px;
   margin: 20px 12px 16px;
-  border: none;
-  border-radius: 60px;
-  background: #00b0ca;
-  color: #fff;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
 }
 
 .depd__book-cta:hover {
-  background: #0093b0;
+  filter: brightness(0.96);
 }
 
 .depd__book-women {

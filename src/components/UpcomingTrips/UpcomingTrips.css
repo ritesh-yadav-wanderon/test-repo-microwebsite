@@ -69,13 +69,22 @@
 /* Cards row */
 .up-cards {
   display: flex;
+  align-items: flex-start;
   gap: 20px;
   overflow-x: auto;
   padding: 4px 16px 4px;
+  scroll-snap-type: x proximity;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
 .up-cards::-webkit-scrollbar { display: none; }
+
+/* The listing card is built for full width, so each one takes a snapped
+   slide that leaves the next card peeking in. */
+.up-cards > .tc {
+  flex: 0 0 330px;
+  scroll-snap-align: start;
+}
 
 /* Card — 160px wide */
 .up-card {

@@ -69,6 +69,7 @@ export default function App() {
         <Route path="/wishlist" element={withSkeleton(<Wishlist />, "list")} />
         <Route path="/legal" element={withSkeleton(<Legal />, "generic")} />
         <Route path="/booking" element={withSkeleton(<Booking />, "form")} />
+        <Route path="/booking/personal-details" element={withSkeleton(<Booking />, "form")} />
         <Route path="/bookings" element={withSkeleton(<MyBookings />, "list")} />
         <Route path="/bookings/:ref" element={withSkeleton(<MyBooking />, "bookingDetail")} />
         <Route path="/bookings/:ref/success" element={withSkeleton(<PaymentSuccess />, "generic")} />

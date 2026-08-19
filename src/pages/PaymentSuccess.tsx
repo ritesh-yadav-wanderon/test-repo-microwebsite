@@ -121,7 +121,7 @@ export default function PaymentSuccess() {
 
       {showCta && (
         <div className="ps-cta-bar">
-          <button className="ps-cta" type="button" onClick={handleContinue}>
+          <button className="wo-cta ps-cta" type="button" onClick={handleContinue}>
             Complete KYC
           </button>
         </div>

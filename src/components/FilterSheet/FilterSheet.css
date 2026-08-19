@@ -551,22 +551,14 @@
 .fs-btn-show {
   flex: 1;
   height: 44px;
-  border-radius: 8px;
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
   cursor: pointer;
 }
 .fs-btn-clear {
   background: #fff;
   border: 1px solid #757575;
+  border-radius: var(--cta-radius);
   color: #757575;
-  font-weight: 400;
-}
-.fs-btn-show {
-  background: #01AFD1;
-  border: none;
-  color: #FFFFFF;
-  font-weight: 500;
+  font: 400 16px/21px var(--font);
 }
 
 /* ── Destination panel rows ── */

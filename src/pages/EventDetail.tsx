@@ -242,7 +242,7 @@ export default function EventDetail() {
           </div>
           <span className="epd-price-sub">Starting price per person</span>
         </div>
-        <button className="epd-book" type="button" onClick={handleBook}>
+        <button className="wo-cta epd-book" type="button" onClick={handleBook}>
           Book Now
         </button>
       </div>

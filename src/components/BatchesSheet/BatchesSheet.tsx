@@ -1,7 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import LoginSheet from "../LoginSheet/LoginSheet";
 import { setAppScrollLocked } from "../../utils/scroll";
 import "./BatchesSheet.css";
 
@@ -210,7 +208,7 @@ function BatchCard({
         </div>
         <button
           type="button"
-          className={`bsh-card-cta${isSoldOut ? " bsh-card-cta--sold" : ""}`}
+          className={`wo-cta bsh-card-cta${isSoldOut ? " bsh-card-cta--sold" : ""}`}
           disabled={isSoldOut}
           onClick={() => onBook(batch, startDate, endDate)}
         >
@@ -231,11 +229,8 @@ export default function BatchesSheet({
   onSelectBatch,
 }: BatchesSheetProps) {
   const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
   const [hasOpened, setHasOpened] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [pendingBooking, setPendingBooking] = useState<Record<string, unknown> | null>(null);
 
   const goToBooking = (state: Record<string, unknown>) => {
     navigate("/booking", { state });
@@ -263,25 +258,8 @@ export default function BatchesSheet({
       travelers: 2,
     };
 
-    if (isLoggedIn) {
-      onClose();
-      goToBooking(bookingState);
-      return;
-    }
-
-    // Not logged in: stash the booking, close this sheet, open login first.
-    setPendingBooking(bookingState);
     onClose();
-    setLoginOpen(true);
-  };
-
-  const handleLoginSuccess = () => {
-    setLoginOpen(false);
-    if (pendingBooking) {
-      const state = pendingBooking;
-      setPendingBooking(null);
-      goToBooking(state);
-    }
+    goToBooking(bookingState);
   };
 
   useEffect(() => {
@@ -418,11 +396,6 @@ export default function BatchesSheet({
       </div>
     </div>
 
-    <LoginSheet
-      isOpen={loginOpen}
-      onClose={() => setLoginOpen(false)}
-      onSuccess={handleLoginSuccess}
-    />
     </>
   );
 }

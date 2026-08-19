@@ -20,7 +20,7 @@ export default function QueryBanner() {
             <p className="qb-sub">We are here for You!</p>
           </div>
           <button
-            className="qb-btn"
+            className="wo-cta qb-btn"
             type="button"
             onClick={() =>
               window.dispatchEvent(new Event("wanderon:open-enquire"))

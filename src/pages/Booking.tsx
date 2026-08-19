@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import PaymentSheet from "../components/PaymentSheet/PaymentSheet";
+import LoginSheet from "../components/LoginSheet/LoginSheet";
 import Voucher from "../components/Voucher/Voucher";
 import { useIsDesktop } from "../hooks/useIsDesktop";
 import DesktopBooking from "../components/desktop/DesktopBooking";
@@ -15,6 +16,12 @@ export default function Booking() {
   const {
     navigate,
     data,
+    isPersonalDetails,
+    loginOpen,
+    goToPersonalDetails,
+    goBack,
+    handleLoginSuccess,
+    handleLoginClose,
     accommodationOpen,
     setAccommodationOpen,
     travelers,
@@ -68,7 +75,18 @@ export default function Booking() {
     handlePaymentSuccess,
   } = form;
 
-  if (isDesktop) return <DesktopBooking form={form} />;
+  if (isDesktop) {
+    return (
+      <>
+        <DesktopBooking form={form} />
+        <LoginSheet
+          isOpen={loginOpen}
+          onClose={handleLoginClose}
+          onSuccess={handleLoginSuccess}
+        />
+      </>
+    );
+  }
 
   return (
     <div className="bkg-page">
@@ -79,11 +97,13 @@ export default function Booking() {
             className="bkg-header-back"
             type="button"
             aria-label="Back"
-            onClick={() => navigate(-1)}
+            onClick={goBack}
           >
             <img src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
-          <span className="bkg-header-title">Booking Details</span>
+          <span className="bkg-header-title">
+            {isPersonalDetails ? "Personal Details" : "Select Services"}
+          </span>
         </div>
         <button
           className="bkg-header-close"
@@ -146,6 +166,7 @@ export default function Booking() {
           </div>
         </section>
 
+        {isPersonalDetails && (<>
         <div className="bkg-strip" />
 
         {/* ── Personal Details ──────────────────────────────── */}
@@ -350,7 +371,9 @@ export default function Booking() {
         </section>
 
         <div className="bkg-strip" />
+        </>)}
 
+        {!isPersonalDetails && (<>
         {/* ── Select Accommodation Type ─────────────────────── */}
         <section className="bkg-section bkg-section--pad0">
           <button
@@ -585,10 +608,12 @@ export default function Booking() {
         </section>
 
         <div className="bkg-strip" />
+        </>)}
 
         {/* ── Coupon + Bill Summary ─────────────────────────── */}
         <section className="bkg-section bkg-section--gap">
           <Voucher
+            initialVoucher={appliedVoucher}
             onApply={(v) => setAppliedVoucher(v)}
             onRemove={() => setAppliedVoucher(null)}
           />
@@ -663,6 +688,7 @@ export default function Booking() {
           </div>
         </section>
 
+        {isPersonalDetails && (<>
         <div className="bkg-strip" />
 
         {/* ── Notes ─────────────────────────────────────────── */}
@@ -693,6 +719,7 @@ export default function Booking() {
             General <Link to="/legal">Terms &amp; Conditions</Link>, and <Link to="/legal">Privacy Policy</Link>.
           </p>
         </section>
+        </>)}
       </div>
 
       {/* Fixed bottom CTA */}
@@ -721,12 +748,12 @@ export default function Booking() {
             </button>
           </div>
           <button
-            className="bkg-cta-btn"
+            className="wo-cta bkg-cta-btn"
             type="button"
-            disabled={!agreed}
-            onClick={() => setPaymentOpen(true)}
+            disabled={isPersonalDetails && !agreed}
+            onClick={() => isPersonalDetails ? setPaymentOpen(true) : goToPersonalDetails()}
           >
-            <span>Book Now</span>
+            <span>{isPersonalDetails ? "Proceed to Payment" : "Book Now"}</span>
           </button>
         </div>
       </div>
@@ -744,6 +771,11 @@ export default function Booking() {
           contact: phone,
         }}
         onPaymentSuccess={handlePaymentSuccess}
+      />
+      <LoginSheet
+        isOpen={loginOpen}
+        onClose={handleLoginClose}
+        onSuccess={handleLoginSuccess}
       />
     </div>
   );

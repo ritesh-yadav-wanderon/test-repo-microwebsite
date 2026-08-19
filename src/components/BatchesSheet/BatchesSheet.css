@@ -485,21 +485,13 @@
   width: 160px;
   height: 44px;
   padding: 10px;
-  background: #01AFD1;
-  border-radius: 60px;
-  font-family: "Roboto", sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 21px;
-  color: #fff;
-  cursor: pointer;
-  border: none;
   flex-shrink: 0;
 }
 
 .bsh-card-cta--sold {
   background: #eaeaea;
   color: #121212;
+  box-shadow: none;
   cursor: default;
   pointer-events: none;
 }

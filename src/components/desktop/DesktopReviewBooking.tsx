@@ -392,7 +392,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
                   </button>
                 </div>
                 <button
-                  className="drb-book"
+                  className="wo-cta drb-book"
                   type="button"
                   disabled={loading || status === "processing"}
                   onClick={handleBook}
