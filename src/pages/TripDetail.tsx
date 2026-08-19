@@ -530,7 +530,8 @@ export function CityCard({ entry, photo }: { entry: string; photo: string }) {
 }
 
 
-function FaqItem({ index, question, answer, isOpen, onToggle }: {
+/** FAQ accordion row, shared with the desktop product page. */
+export function FaqItem({ index, question, answer, isOpen, onToggle }: {
   index: number; question: string; answer: string; isOpen: boolean; onToggle: () => void;
 }) {
   return (

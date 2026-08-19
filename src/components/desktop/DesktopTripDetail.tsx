@@ -7,6 +7,7 @@ import {
   STATIC_DATA,
   TDP_FAQS,
   DayCard,
+  FaqItem,
   itineraryTransfers,
   ItineraryMapToggle,
   selectedTrip,
@@ -590,27 +591,17 @@ export default function DesktopTripDetail() {
           <h2 className="dtdp-faq-title">Frequently Asked Questions</h2>
           <p className="dtdp-faq-sub">Your Questions, Answered!</p>
         </div>
-        <div className="dtdp-faq-list">
-          {TDP_FAQS.map((f, i) => {
-            const open = openFaq === i;
-            return (
-              <div key={f.q} className={`dtdp-faq-row${open ? " open" : ""}`}>
-                <button
-                  type="button"
-                  className="dtdp-faq-btn"
-                  aria-expanded={open}
-                  onClick={() => setOpenFaq(open ? -1 : i)}
-                >
-                  <span className="dtdp-faq-num">{String(i + 1).padStart(2, "0")}</span>
-                  <span className="dtdp-faq-q">{f.q}</span>
-                  <span className="dtdp-faq-toggle" aria-hidden>
-                    {open ? "\u2212" : "+"}
-                  </span>
-                </button>
-                {open && <p className="dtdp-faq-a">{f.a}</p>}
-              </div>
-            );
-          })}
+        <div className="tdp2-faq-list">
+          {TDP_FAQS.map((f, i) => (
+            <FaqItem
+              key={f.q}
+              index={i + 1}
+              question={f.q}
+              answer={f.a}
+              isOpen={openFaq === i}
+              onToggle={() => setOpenFaq(openFaq === i ? -1 : i)}
+            />
+          ))}
         </div>
       </section>
 
