@@ -386,9 +386,303 @@
   flex-shrink: 0;
 }
 
-/* Desktop guard: feature is mobile-only, cap the sheet like other sheets. */
-@media (min-width: 768px) {
-  .itc-sheet {
-    max-width: 430px;
+/* ── Desktop horizontal variation (Figma 7852:35015) ─────────────────── */
+@media (min-width: 1024px) {
+  .itc-overlay--desktop {
+    align-items: center;
+    padding: 24px;
+  }
+
+  .itc-sheet--desktop {
+    width: 742px;
+    max-width: calc(100vw - 48px);
+    height: auto;
+    overflow: visible;
+    border-radius: 12px;
+    background: transparent;
+    animation: itcd-enter 0.24s ease-out;
+  }
+
+  @keyframes itcd-enter {
+    from { transform: translateY(12px) scale(0.98); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+  }
+
+  .itcd-coverage {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    min-height: 38px;
+    margin-bottom: -10px;
+    padding: 6px 8px 16px;
+    overflow: hidden;
+    border-radius: 8px 8px 0 0;
+    background: #fff8f2;
+    color: #864129;
+    font: 500 12px/16px Roboto, sans-serif;
+    letter-spacing: 0.36px;
+    box-sizing: border-box;
+  }
+
+  .itcd-card {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    /* Grows past the Figma height when the stations need extra rows. */
+    min-height: 430px;
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 4px 10.95px rgba(0, 0, 0, 0.11);
+  }
+
+  .itcd-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 81px;
+    padding: 16px 20px;
+    border-bottom: 1px solid #dedede;
+    box-sizing: border-box;
+  }
+
+  .itcd-thumb {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  .itcd-header-text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+  }
+
+  .itcd-sub,
+  .itcd-title {
+    margin: 0;
+    color: #333;
+  }
+
+  .itcd-sub {
+    color: #4e4e4e;
+    font: 400 12px/20px Roboto, sans-serif;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .itcd-title {
+    font: 500 16px/24px Roboto, sans-serif;
+  }
+
+  .itcd-close {
+    display: grid;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    place-items: center;
+    cursor: pointer;
+  }
+
+  .itcd-close:focus-visible {
+    outline: 2px solid #0048ac;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  .itcd-popular {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px 20px 0;
+  }
+
+  .itcd-popular-title {
+    margin: 0;
+    color: #333;
+    font: 500 16px/24px Roboto, sans-serif;
+  }
+
+  .itcd-popular-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .itcd-popular-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    height: 40px;
+    padding: 0 16px;
+    overflow: hidden;
+    border: 1px solid #dedbd6;
+    border-radius: 8px;
+    background: #fffffa;
+    color: #3d3d3d;
+    font: 400 12px/16px Roboto, sans-serif;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .itcd-popular-card:hover {
+    border-color: #a4a3bd;
+    background: #fff;
+  }
+
+  .itcd-popular-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .itcd-popular-item img {
+    width: 12px;
+    height: 12px;
+  }
+
+  .itcd-selector {
+    width: 100%;
+    margin-top: auto;
+    padding: 34px 20px 20px;
+    box-sizing: border-box;
+  }
+
+  /* Rows stack when the itinerary outgrows one line; the gap leaves room for
+     the next row's Start/End tag to sit clear of the rail above it. */
+  .itcd-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+  }
+
+  .itcd-row {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .itcd-stations {
+    display: grid;
+    gap: 14px;
+  }
+
+  .itcd-station {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100px;
+    height: 46px;
+    padding: 7px 8px;
+    border: 1px solid #a4a3bd;
+    border-radius: 4px;
+    background: #fff;
+    color: #3d3d3d;
+    font: 400 14px/16px Roboto, sans-serif;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .itcd-station > span:not(.itcd-endpoint-tag) {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .itcd-station--outside {
+    border-color: #e8e8e8;
+    background: #e8e8e8;
+  }
+
+  .itcd-station--selected {
+    background: linear-gradient(270deg, rgba(194, 191, 248, 0.3), rgba(223, 235, 251, 0.3)), #fff;
+  }
+
+  .itcd-station--endpoint {
+    border-color: transparent;
+  }
+
+  .itcd-endpoint-tag {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 10px);
+    transform: translateX(-50%);
+    min-width: 34px;
+    padding: 2px 7px;
+    border-radius: 26px;
+    background: #f2f1f1;
+    color: #757575;
+    font: 400 10px/16px Roboto, sans-serif;
+    white-space: nowrap;
+  }
+
+  .itcd-endpoint-tag::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    height: 10px;
+    border-left: 1px solid #a4a3bd;
+  }
+
+  .itcd-track {
+    position: relative;
+    width: 100%;
+    height: 22px;
+    overflow: hidden;
+  }
+
+  .itcd-track::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url("/figma/train/card-rail-horizontal-tile.png") repeat-x left center;
+    background-size: 107px 22px;
+    filter: grayscale(1);
+    opacity: 0.75;
+  }
+
+  .itcd-track-active {
+    position: absolute;
+    top: 0;
+    height: 22px;
+    background: url("/figma/train/card-rail-horizontal-tile.png") repeat-x left center;
+    background-size: 107px 22px;
+    filter: grayscale(0);
+  }
+
+  /* Figma rides a 96x15 train on the rail. The source render is square with the
+     train across its middle, so crop to the band instead of squashing it.
+     The track clips it as it leaves one row for the next. */
+  .itcd-train {
+    position: absolute;
+    top: 3px;
+    width: 96px;
+    max-width: none;
+    height: 15px;
+    transform: translateX(-50%);
+    object-fit: cover;
+    transition: left 0.55s linear;
+    z-index: 2;
   }
 }

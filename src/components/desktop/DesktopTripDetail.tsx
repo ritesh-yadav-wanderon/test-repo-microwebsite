@@ -9,9 +9,11 @@ import {
   DayCard,
   itineraryTransfers,
   ItineraryMapToggle,
+  selectedTrip,
   TiFitRow,
 } from "../../pages/TripDetail";
 import "../../pages/TripDetail.css";
+import ItineraryCustomiser from "../ItineraryCustomiser/ItineraryCustomiser";
 import ShareSheet from "../ShareSheet/ShareSheet";
 import DesktopNav from "./DesktopNav";
 import DesktopBatchesSheet from "./DesktopBatchesSheet";
@@ -22,7 +24,6 @@ import DesktopFooterMsg from "./DesktopFooterMsg";
 import DesktopFooter from "./DesktopFooter";
 import "./DesktopTripDetail.css";
 
-const TI = "/figma/trip-info/";
 const HL = "/figma/itin-highlights/";
 const BOOK = "/figma/desktop-trip/";
 const MG = "/figma/itin-section/";
@@ -97,6 +98,8 @@ export default function DesktopTripDetail() {
   // Sheets
   const [batchesOpen, setBatchesOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [customiserOpen, setCustomiserOpen] = useState(false);
+  const [tripSel, setTripSel] = useState<{ start: number; end: number } | null>(null);
 
   const compareSlug = "current-trip";
   const { isInCompare, toggle: toggleCompareTrip } = useCompare();
@@ -111,6 +114,7 @@ export default function DesktopTripDetail() {
 
   // Booking card: derive the struck-through "original" price from the -10% off.
   const priceNum = Number(String(data.displayPrice).replace(/[^\d]/g, ""));
+  const trip = useMemo(() => selectedTrip(data, tripSel, priceNum), [data, tripSel, priceNum]);
   const strikePrice = priceNum
     ? `₹${Math.round(priceNum / 0.9).toLocaleString("en-IN")}/-`
     : "";
@@ -334,23 +338,40 @@ export default function DesktopTripDetail() {
             </div>
           )}
 
-          {/* Pick Up / Drop */}
-          <div className="dtdp-pd">
-            <div className="dtdp-pd-col">
-              <div className="dtdp-pd-label">
-                <img src={`${TI}location-icon.svg`} alt="" aria-hidden />
-                <span>Pick Up</span>
-              </div>
-              <p className="dtdp-pd-city">{data.pickUp}</p>
+          {/* Route selection (Figma 7852:34451) */}
+          <div className="dtdp-route-wrap">
+            <div className="dtdp-route-coverage">
+              This route cover {trip.stops} of {data.motherItinerary.length} stops on our{" "}
+              {data.breadcrumbs[data.breadcrumbs.length - 1]} Route
             </div>
-            <div className="dtdp-pd-line" aria-hidden />
-            <div className="dtdp-pd-col dtdp-pd-col--right">
-              <div className="dtdp-pd-label">
-                <img src={`${TI}location-icon.svg`} alt="" aria-hidden />
-                <span>Drop</span>
-              </div>
-              <p className="dtdp-pd-city">{data.drop}</p>
-            </div>
+            <button
+              className="dtdp-route-card"
+              type="button"
+              onClick={() => setCustomiserOpen(true)}
+              aria-label={`Customise route from ${trip.cities[0]} to ${trip.cities[trip.cities.length - 1]}`}
+            >
+              <span className="dtdp-route-content">
+                <span className="dtdp-route-points">
+                  <span className="dtdp-route-point">
+                    <span className="dtdp-route-label">Trip Start</span>
+                    <span className="dtdp-route-city">{trip.cities[0]}</span>
+                  </span>
+                  <span className="dtdp-route-connector" aria-hidden />
+                  <span className="dtdp-route-point">
+                    <span className="dtdp-route-label">Trip End</span>
+                    <span className="dtdp-route-city">{trip.cities[trip.cities.length - 1]}</span>
+                  </span>
+                </span>
+                <span className="dtdp-route-cta">Explore More Options</span>
+              </span>
+              <span className="dtdp-route-rail" aria-hidden>
+                <img
+                  src="/figma/train/card-train-horizontal.png"
+                  alt=""
+                  className="dtdp-route-train-img"
+                />
+              </span>
+            </button>
           </div>
 
           {/* Vibes — "Is this trip for me?" footprints */}
@@ -614,6 +635,17 @@ export default function DesktopTripDetail() {
         tripTitle={data.title}
         duration={data.duration}
         nights={7}
+      />
+      <ItineraryCustomiser
+        isOpen={customiserOpen}
+        onClose={() => setCustomiserOpen(false)}
+        title={data.title}
+        thumb={data.heroImages[0]}
+        stations={data.motherItinerary}
+        nights={data.motherNights}
+        basePrice={priceNum}
+        initialSelection={tripSel}
+        onSelectionChange={(start, end) => setTripSel({ start, end })}
       />
     </div>
   );

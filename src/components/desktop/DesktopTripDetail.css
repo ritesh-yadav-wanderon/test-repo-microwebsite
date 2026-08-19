@@ -277,41 +277,152 @@
 .dtdp-nights-label { font-size: 12px; line-height: 12px; color: #757575; }
 .dtdp-nights-city { font-size: 14px; line-height: 14px; color: #121212; }
 
-/* Pick Up / Drop */
-.dtdp-pd {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.dtdp-pd-col {
-  flex: 1 1 0;
-  min-width: 0;
+/* Route selection card (Figma 7852:34451) */
+.dtdp-route-wrap {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  width: 100%;
 }
-.dtdp-pd-col--right { align-items: flex-end; text-align: right; }
-.dtdp-pd-label {
+.dtdp-route-coverage {
   display: flex;
   align-items: center;
-  gap: 4px;
+  justify-content: center;
+  min-height: 38px;
+  margin-bottom: -10px;
+  padding: 6px 8px 16px;
+  border-radius: 8px 8px 0 0;
+  background: #fff8f2;
+  color: #864129;
   font-size: 12px;
-  color: #757575;
+  font-weight: 500;
+  line-height: 16px;
+  letter-spacing: 0.36px;
+  text-align: center;
+  box-sizing: border-box;
 }
-.dtdp-pd-label img { width: 10px; height: 12px; }
-.dtdp-pd-city {
-  margin: 0;
+.dtdp-route-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  height: 111px;
+  padding: 20px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 4px 10.95px rgba(0, 0, 0, 0.11);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.dtdp-route-card:focus-visible {
+  outline: 2px solid #0048ac;
+  outline-offset: 2px;
+}
+.dtdp-route-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+}
+.dtdp-route-points {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 40px;
+}
+.dtdp-route-point {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  justify-content: center;
+  width: 58px;
+  gap: 1px;
+  background: #fff;
+  font-weight: 400;
+}
+.dtdp-route-label {
+  color: #8b8b8b;
+  font-size: 12px;
+  line-height: 12px;
+}
+.dtdp-route-city {
+  overflow: hidden;
+  color: #333;
+  font-size: 12px;
+  line-height: 16px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.dtdp-route-connector {
+  position: absolute;
+  left: 112px;
+  right: 78px;
+  top: 20px;
+  height: 1px;
+  background: repeating-linear-gradient(
+    90deg,
+    #aad6d8 0 2px,
+    transparent 2px 4px
+  );
+}
+.dtdp-route-connector::before,
+.dtdp-route-connector::after {
+  content: "";
+  position: absolute;
+  top: -1px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #aad6d8;
+}
+.dtdp-route-connector::before { left: 0; }
+.dtdp-route-connector::after { right: 0; }
+.dtdp-route-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 26px;
+  background: #dfebfb;
+  color: #0048ac;
   font-size: 14px;
   font-weight: 500;
   line-height: 21px;
-  color: #121212;
+  white-space: nowrap;
 }
-.dtdp-pd-line {
-  flex: 0 0 auto;
-  width: 380px;
-  max-width: 42%;
-  border-top: 1px dashed #c9c9c9;
-  align-self: center;
+/* Figma lays the 22x114 rail segment end to end down the card; tiling it keeps
+   the sleeper pitch fixed instead of stretching one copy across the width. */
+.dtdp-route-rail {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  height: 22px;
+  background: url("/figma/train/card-rail-horizontal-tile.png") repeat-x left center;
+  background-size: 107px 22px;
+  pointer-events: none;
+}
+.dtdp-route-train-img {
+  position: absolute;
+  left: 4px;
+  top: 3px;
+  width: 96px;
+  max-width: none;
+  height: 15px;
+  object-fit: cover;
 }
 
 /* Vibes reuse mobile TiFitRow (.tdp2-ti-fit-row) */
