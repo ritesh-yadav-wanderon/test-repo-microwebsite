@@ -1,7 +1,9 @@
+import { memo } from "react";
 import { useNavigate } from "react-router-dom";
 import type { Trip } from "../../types";
 import { useCompare } from "../../context/CompareContext";
 import { useWishlist } from "../../context/WishlistContext";
+import HeartIcon from "../HeartIcon/HeartIcon";
 import "./TripCard.css";
 
 function fmtDate(d: string): string {
@@ -27,27 +29,6 @@ const STATIC_DURATION = "7N/8D";
 const STATIC_DATES = "09 May, 12 May, 18 May...";
 
 /* ── Inline icons (currentColor so they inherit the surrounding color) ── */
-function HeartIcon({ filled }: { filled?: boolean }) {
-  if (filled) {
-    return (
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-        <path
-          d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-          fill="currentColor"
-        />
-      </svg>
-    );
-  }
-  return (
-    <svg viewBox="0 0 14 12" fill="none" aria-hidden>
-      <path
-        d="M6.50125 11.9151C6.33208 11.8586 6.18333 11.768 6.055 11.6436L4.8475 10.5743C3.61083 9.47666 2.49375 8.38755 1.49625 7.30693C0.49875 6.22631 0 5.03536 0 3.73409C0 2.67044 0.3675 1.78218 1.1025 1.06931C1.8375 0.356436 2.75333 0 3.85 0C4.46833 0 5.05167 0.127298 5.6 0.381895C6.14833 0.636492 6.615 0.984441 7 1.42574C7.385 0.984441 7.85167 0.636492 8.4 0.381895C8.94833 0.127298 9.53167 0 10.15 0C11.2467 0 12.1625 0.356436 12.8975 1.06931C13.6325 1.78218 14 2.67044 14 3.73409C14 5.03536 13.5042 6.22914 12.5125 7.31542C11.5208 8.4017 10.395 9.49364 9.135 10.5912L7.945 11.6436C7.81667 11.768 7.66792 11.8586 7.49875 11.9151C7.32958 11.9717 7.16333 12 7 12C6.83667 12 6.67042 11.9717 6.50125 11.9151ZM6.335 2.78359C5.99667 2.31966 5.635 1.96605 5.25 1.72277C4.865 1.47949 4.39833 1.35785 3.85 1.35785C3.15 1.35785 2.56667 1.58416 2.1 2.03678C1.63333 2.48939 1.4 3.05516 1.4 3.73409C1.4 4.32249 1.61583 4.94767 2.0475 5.60962C2.47917 6.27157 2.99542 6.91372 3.59625 7.53607C4.19708 8.15842 4.81542 8.74116 5.45125 9.2843C6.08708 9.82744 6.60333 10.2744 7 10.6252C7.39667 10.2744 7.91292 9.82744 8.54875 9.2843C9.18458 8.74116 9.80292 8.15842 10.4037 7.53607C11.0046 6.91372 11.5208 6.27157 11.9525 5.60962C12.3842 4.94767 12.6 4.32249 12.6 3.73409C12.6 3.05516 12.3667 2.48939 11.9 2.03678C11.4333 1.58416 10.85 1.35785 10.15 1.35785C9.60167 1.35785 9.135 1.47949 8.75 1.72277C8.365 1.96605 8.00333 2.31966 7.665 2.78359C7.58333 2.89675 7.48417 2.98161 7.3675 3.03819C7.25083 3.09477 7.12833 3.12306 7 3.12306C6.87167 3.12306 6.74917 3.09477 6.6325 3.03819C6.51583 2.98161 6.41667 2.89675 6.335 2.78359Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
-
 function CalendarIcon() {
   return (
     <svg viewBox="0 0 12 12" fill="none" aria-hidden>
@@ -65,13 +46,13 @@ export interface TripCardProps {
   fullWidth?: boolean;
   accentColor?: string;
   cardPillBg?: string;
-  onSeeAllDates?: () => void;
+  onSeeAllDates?: (trip: Trip) => void;
   eager?: boolean;
   /** Show the highlight features list. Defaults to true. */
   showFeatures?: boolean;
 }
 
-export default function TripCard({ trip, onSeeAllDates, eager, showFeatures = true }: TripCardProps) {
+function TripCard({ trip, onSeeAllDates, eager, showFeatures = true }: TripCardProps) {
   const navigate = useNavigate();
   const { isInCompare, toggle } = useCompare();
   const { isWishlisted, toggle: toggleWishlist } = useWishlist();
@@ -189,11 +170,11 @@ export default function TripCard({ trip, onSeeAllDates, eager, showFeatures = tr
               </span>
               <span className="tc-meta-dur">{durationLabel}</span>
               <span className="tc-meta-dot" aria-hidden />
-              <button className="tc-meta-dates" type="button" onClick={onSeeAllDates}>
+              <button className="tc-meta-dates" type="button" onClick={() => onSeeAllDates?.(trip)}>
                 {datesLine}
               </button>
             </div>
-            <button className="tc-see-all" type="button" onClick={onSeeAllDates}>
+            <button className="tc-see-all" type="button" onClick={() => onSeeAllDates?.(trip)}>
               See All Departures
             </button>
           </div>
@@ -229,3 +210,5 @@ export default function TripCard({ trip, onSeeAllDates, eager, showFeatures = tr
     </article>
   );
 }
+
+export default memo(TripCard);

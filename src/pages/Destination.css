@@ -140,6 +140,7 @@
   align-items: center;
   height: 26px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   gap: 0;
 }
@@ -350,6 +351,7 @@
   display: flex;
   gap: 8px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
 }
 .dp-exp-tabs::-webkit-scrollbar { display: none; }
@@ -491,6 +493,7 @@
   display: flex;
   gap: 12px;
   overflow-x: auto;
+  overflow-y: hidden;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   padding-bottom: 4px;
@@ -774,6 +777,23 @@
 .dp-trip-strip .up-cards {
   padding-left: 0;
   padding-right: 0;
+  scroll-padding-left: 0;
+}
+
+/* "Show Features" switch — sits between the strip header and its cards, pulled
+   tight against both so it reads as part of the header block. */
+.dp-features-row {
+  display: flex;
+  justify-content: flex-end;
+  margin: -10px 0 -6px;
+}
+
+/* Listing cards need a fixed slide width in this horizontal strip. */
+.dp-trip-strip .up-cards > .tc,
+.dp-trip-strip .up-cards > .tc-shimmer {
+  flex: 0 0 330px;
+  width: 330px;
+  scroll-snap-align: start;
 }
 
 /* ── Section divider (Figma 4544:31916) ── */

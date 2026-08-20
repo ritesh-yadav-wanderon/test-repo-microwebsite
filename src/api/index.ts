@@ -26,6 +26,37 @@ interface ApiResult<T> {
   source: ApiSource;
 }
 
+/* Route components unmount when users leave a page. Keep successful GET
+ * results and in-flight requests at module scope so revisiting a route does
+ * not refetch the same data or briefly replace cards with shimmers. */
+const responseCache = new Map<string, unknown>();
+const requestCache = new Map<string, Promise<unknown>>();
+
+function cachedRequest<T>(key: string, load: () => Promise<T>): Promise<T> {
+  if (responseCache.has(key)) {
+    return Promise.resolve(responseCache.get(key) as T);
+  }
+  const pending = requestCache.get(key) as Promise<T> | undefined;
+  if (pending) return pending;
+
+  const request = load()
+    .then((result) => {
+      responseCache.set(key, result);
+      requestCache.delete(key);
+      return result;
+    })
+    .catch((error) => {
+      requestCache.delete(key);
+      throw error;
+    });
+  requestCache.set(key, request);
+  return request;
+}
+
+function peekCache<T>(key: string): T | undefined {
+  return responseCache.get(key) as T | undefined;
+}
+
 async function getJSON(url: string, { timeout = 9000 }: FetchOptions = {}): Promise<unknown> {
   const ctrl = new AbortController();
   const t = setTimeout(() => ctrl.abort(), timeout);
@@ -90,7 +121,7 @@ function normalizeTripGroups(groups: unknown[]): TripGroup[] {
   });
 }
 
-export async function getUpcomingTrips(): Promise<ApiResult<TripGroup[]>> {
+async function loadUpcomingTrips(): Promise<ApiResult<TripGroup[]>> {
   try {
     const data = await getJSON(ENDPOINTS.upcomingTrips);
     const groups = Array.isArray(data) ? data : isRecord(data) && Array.isArray(data.data) ? data.data : [];
@@ -103,11 +134,19 @@ export async function getUpcomingTrips(): Promise<ApiResult<TripGroup[]>> {
   }
 }
 
+export function getUpcomingTrips(): Promise<ApiResult<TripGroup[]>> {
+  return cachedRequest("upcoming-trips", loadUpcomingTrips);
+}
+
+export function getCachedUpcomingTrips(): ApiResult<TripGroup[]> | undefined {
+  return peekCache("upcoming-trips");
+}
+
 /**
  * Destinations list from the LF api (misc/destinations).
  * Real shape: { data: [{ name }, ...] }
  */
-export async function getDestinations(): Promise<ApiResult<Destination[]>> {
+async function loadDestinations(): Promise<ApiResult<Destination[]>> {
   try {
     const result = await getJSON(ENDPOINTS.destinations);
     const list =
@@ -133,6 +172,14 @@ export async function getDestinations(): Promise<ApiResult<Destination[]>> {
   }
 }
 
+export function getDestinations(): Promise<ApiResult<Destination[]>> {
+  return cachedRequest("destinations", loadDestinations);
+}
+
+export function getCachedDestinations(): ApiResult<Destination[]> | undefined {
+  return peekCache("destinations");
+}
+
 export function getSampleDomestic(): Destination[] {
   return SAMPLE_DOMESTIC_DESTINATIONS;
 }
@@ -143,7 +190,7 @@ export function getSampleInternational(): Destination[] {
 
 /** Single trip by slug (for the future Product page). Read-only GET. */
 export async function getTripBySlug(slug: string): Promise<unknown> {
-  return getJSON(ENDPOINTS.tripBySlug(slug));
+  return cachedRequest(`trip:${slug}`, () => getJSON(ENDPOINTS.tripBySlug(slug)));
 }
 
 /** Format a YYYY-MM-DD batch date as "09 May" style label. */
@@ -158,7 +205,7 @@ function fmtBatchDate(iso: string): string {
  * Fetches upcomingTrips, deduplicates by slug, normalises to Trip[].
  * Falls back to sample data if the API is unreachable.
  */
-export async function getListingTrips(): Promise<Trip[]> {
+async function loadListingTrips(): Promise<Trip[]> {
   try {
     const data = await getJSON(ENDPOINTS.upcomingTrips);
     const groups = Array.isArray(data) ? data
@@ -249,4 +296,12 @@ export async function getListingTrips(): Promise<Trip[]> {
       return true;
     });
   }
+}
+
+export function getListingTrips(): Promise<Trip[]> {
+  return cachedRequest("listing-trips", loadListingTrips);
+}
+
+export function getCachedListingTrips(): Trip[] | undefined {
+  return peekCache("listing-trips");
 }

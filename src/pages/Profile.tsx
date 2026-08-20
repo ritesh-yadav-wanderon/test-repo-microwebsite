@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import PageSkeleton from "../components/Skeleton/PageSkeleton";
 import { useIsDesktop } from "../hooks/useIsDesktop";
 import DesktopProfile from "../components/desktop/DesktopProfile";
-import { getLastMainPage } from "../utils/lastMainPage";
+import { exitToMainPage } from "../utils/lastMainPage";
 import "./Profile.css";
 
 const P = "/figma/profile/";
@@ -86,7 +86,7 @@ export default function Profile() {
           <button
             className="prf-header-back"
             type="button"
-            onClick={() => navigate(getLastMainPage())}
+            onClick={() => exitToMainPage(navigate)}
             aria-label="Go back"
           >
             <img src={`${P}v2-icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
@@ -101,7 +101,7 @@ export default function Profile() {
             className="prf-header-close"
             type="button"
             aria-label="Back to website"
-            onClick={() => navigate(getLastMainPage())}
+            onClick={() => exitToMainPage(navigate)}
           >
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
               <path d="M6 6l12 12M18 6 6 18" stroke="#202020" strokeWidth="1.8" strokeLinecap="round" />

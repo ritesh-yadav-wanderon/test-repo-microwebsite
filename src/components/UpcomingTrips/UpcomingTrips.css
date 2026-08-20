@@ -72,17 +72,19 @@
   align-items: flex-start;
   gap: 20px;
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 4px 16px 4px;
+  /* Snapping measures from the padding box, so without this the first card
+     snaps flush to the viewport edge and eats the 16px page margin. */
+  scroll-padding-left: 16px;
   scroll-snap-type: x proximity;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
 .up-cards::-webkit-scrollbar { display: none; }
 
-/* The listing card is built for full width, so each one takes a snapped
-   slide that leaves the next card peeking in. */
-.up-cards > .tc {
-  flex: 0 0 330px;
+.up-cards > .tdp2-more-card-v2,
+.up-cards > .tdp2-more-vm-card {
   scroll-snap-align: start;
 }
 

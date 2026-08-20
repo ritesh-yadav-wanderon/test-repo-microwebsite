@@ -52,6 +52,7 @@
   margin-top: 30px;
   padding: 0 80px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
 }
 

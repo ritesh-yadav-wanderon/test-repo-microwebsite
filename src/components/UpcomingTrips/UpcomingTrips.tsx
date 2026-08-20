@@ -1,10 +1,8 @@
-import { useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { ApiSource, Trip, TripGroup } from "../../types";
-import TripCard from "../TripCard";
-import TripCardShimmer from "../TripCard/TripCardShimmer";
 import BatchesSheet from "../BatchesSheet/BatchesSheet";
-import { ViewMoreCard } from "./TripCardItem";
+import { TripCardItem, TripCardShimmer, ViewMoreCard } from "./TripCardItem";
 import "./UpcomingTrips.css";
 
 export interface UpcomingTripsProps {
@@ -16,20 +14,21 @@ export interface UpcomingTripsProps {
 
 const CATEGORY_NAMES = ["All Trips","Adventure","Luxury","Culture","Festival","Wellness","Weekend"];
 
-export default function UpcomingTrips({ trips, loading, source: _source, activeCategory }: UpcomingTripsProps) {
+function UpcomingTrips({ trips, loading, source: _source, activeCategory }: UpcomingTripsProps) {
   const navigate = useNavigate();
   const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
 
-  const seen = new Set<string>();
-  const allFlat = trips
-    .flatMap(g => g.tripsArray || [])
-    .filter(t => seen.has(t.slug) ? false : (seen.add(t.slug), true));
-
   const categoryName = CATEGORY_NAMES[activeCategory] ?? "All Trips";
-  const flat = (activeCategory === 0
-    ? allFlat
-    : allFlat.filter(t => t.categories?.includes(categoryName))
-  ).slice(0, 8);
+  const flat = useMemo(() => {
+    const seen = new Set<string>();
+    const allFlat = trips
+      .flatMap(g => g.tripsArray || [])
+      .filter(t => seen.has(t.slug) ? false : (seen.add(t.slug), true));
+    return (activeCategory === 0
+      ? allFlat
+      : allFlat.filter(t => t.categories?.includes(categoryName))
+    ).slice(0, 8);
+  }, [activeCategory, categoryName, trips]);
 
   return (
     <section className="up">
@@ -57,13 +56,11 @@ export default function UpcomingTrips({ trips, loading, source: _source, activeC
           ? Array.from({ length: 3 }, (_, i) => <TripCardShimmer key={i} />)
           : flat.length > 0
             ? [
-                ...flat.map((t, i) => (
-                  <TripCard
+                ...flat.map(t => (
+                  <TripCardItem
                     key={t.slug}
                     trip={t}
-                    eager={i === 0}
-                    showFeatures={false}
-                    onSeeAllDates={() => setBatchesTrip(t)}
+                    onMoreDates={setBatchesTrip}
                   />
                 )),
                 <ViewMoreCard
@@ -98,3 +95,5 @@ export default function UpcomingTrips({ trips, loading, source: _source, activeC
     </section>
   );
 }
+
+export default memo(UpcomingTrips);

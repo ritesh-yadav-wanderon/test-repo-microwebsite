@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useIsDesktop } from "../../hooks/useIsDesktop";
-import { setAppScrollLocked } from "../../utils/scroll";
+import { useScrollLock } from "../../hooks/useScrollLock";
 import "./ItineraryCustomiser.css";
 
 const T = "/figma/train/";
@@ -80,13 +80,11 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
       setPickStart(initialSelection?.start ?? 0);
       setPickEnd(initialSelection?.end ?? (stations.length > 0 ? stations.length - 1 : null));
     }
-    setAppScrollLocked(isOpen);
-    return () => {
-      clearTimers();
-      setAppScrollLocked(false);
-    };
+    return clearTimers;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, stations.length]);
+
+  useScrollLock(isOpen);
 
   const tapStation = (idx: number) => {
     // A finished trip (or a freshly opened sheet) restarts the selection.

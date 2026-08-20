@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import ProfileWatermark from "./ProfileWatermark";
-import { getLastMainPage } from "../../utils/lastMainPage";
+import { exitToMainPage } from "../../utils/lastMainPage";
 import "./DesktopProfile.css";
 
 const DP = "/figma/desktop-profile/";
@@ -40,7 +40,7 @@ export function ProfileHeader() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const exit = () => navigate(getLastMainPage());
+  const exit = () => exitToMainPage(navigate);
   const back = () => (pathname === "/profile" ? exit() : navigate("/profile"));
 
   return (

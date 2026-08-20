@@ -15,6 +15,7 @@ import { TripCardItem, ViewMoreCard } from "../components/UpcomingTrips/TripCard
 import { useIsDesktop } from "../hooks/useIsDesktop";
 import DesktopTripDetail from "../components/desktop/DesktopTripDetail";
 import ItineraryCustomiser, { selectionPrice } from "../components/ItineraryCustomiser/ItineraryCustomiser";
+import HeartIcon from "../components/HeartIcon/HeartIcon";
 import { getScrollTop, onAppScroll } from "../utils/scroll";
 
 // ── Figma-downloaded assets ──────────────────────────────────────────────────
@@ -530,7 +531,8 @@ export function CityCard({ entry, photo }: { entry: string; photo: string }) {
 }
 
 
-function FaqItem({ index, question, answer, isOpen, onToggle }: {
+/** FAQ accordion row, shared with the desktop product page. */
+export function FaqItem({ index, question, answer, isOpen, onToggle }: {
   index: number; question: string; answer: string; isOpen: boolean; onToggle: () => void;
 }) {
   return (
@@ -610,6 +612,7 @@ export function DayCard({ day, index, isOpen, onToggle, transfer }: {
   const title = day.summary?.[0] ?? day.city;
   const hasStay = Boolean(day.stayName);
   const hasActivities = Boolean(day.activities?.length);
+  const isSameAccommodation = day.stayName?.startsWith("Same Accommodation");
 
   return (
     <div id={`day-${index}`} className={`tdp2-day-card${isOpen ? " open" : ""}`} style={{ scrollMarginTop: "186px" }}>
@@ -635,7 +638,7 @@ export function DayCard({ day, index, isOpen, onToggle, transfer }: {
             <div className="tdp2-day-tl-item">
               <div className="tdp2-day-tl-left">
                 <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
-                {(hasStay || hasActivities) && <div className="tdp2-day-tl-line" />}
+                <div className="tdp2-day-tl-line" />
               </div>
               <div className="tdp2-day-tl-content">
                 <div className="tdp2-day-tl-section-hd">
@@ -651,7 +654,7 @@ export function DayCard({ day, index, isOpen, onToggle, transfer }: {
             <div className="tdp2-day-tl-item">
               <div className="tdp2-day-tl-left">
                 <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
-                {hasActivities && <div className="tdp2-day-tl-line" />}
+                <div className="tdp2-day-tl-line" />
               </div>
               <div className="tdp2-day-tl-content">
                 <div className="tdp2-day-tl-section-hd">
@@ -681,7 +684,21 @@ export function DayCard({ day, index, isOpen, onToggle, transfer }: {
                     ))}
                   </div>
                 )}
-                {!day.stayPhotos?.length && <p className="tdp2-day-stay-name">{day.stayName}</p>}
+                {!day.stayPhotos?.length && (
+                  isSameAccommodation ? (
+                    <div className="tdp2-day-same-stay">
+                      <img
+                        src="/figma/itin-section/same-accommodation-info.svg"
+                        alt=""
+                        className="tdp2-day-same-stay-icon"
+                        aria-hidden
+                      />
+                      <span>{day.stayName}</span>
+                    </div>
+                  ) : (
+                    <p className="tdp2-day-stay-name">{day.stayName}</p>
+                  )
+                )}
                 {day.stayMeals && day.stayMeals.length > 0 && (
                   <div className="tdp2-day-meals-bar">
                     <div className="tdp2-day-meals-list">
@@ -707,6 +724,7 @@ export function DayCard({ day, index, isOpen, onToggle, transfer }: {
             <div className="tdp2-day-tl-item">
               <div className="tdp2-day-tl-left">
                 <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
+                <div className="tdp2-day-tl-line" />
               </div>
               <div className="tdp2-day-tl-content tdp2-day-tl-content--act">
                 <div className="tdp2-day-tl-section-hd">
@@ -762,7 +780,7 @@ export function DayCard({ day, index, isOpen, onToggle, transfer }: {
                 <div key={ti} className="tdp2-day-tl-item">
                   <div className="tdp2-day-tl-left">
                     <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
-                    {ti < day.items.length - 1 && <div className="tdp2-day-tl-line" />}
+                    <div className="tdp2-day-tl-line" />
                   </div>
                   <p className="tdp2-day-tl-text">{item}</p>
                 </div>
@@ -959,16 +977,7 @@ export default function TripDetail() {
             aria-pressed={wishlisted}
             onClick={() => setWishlisted((w) => !w)}
           >
-            {wishlisted ? (
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden>
-                <path
-                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                  fill="#FFFFFF"
-                />
-              </svg>
-            ) : (
-              <img src="/figma/trip-hero/icon-favorite.svg" alt="" aria-hidden loading="lazy" />
-            )}
+            <HeartIcon filled={wishlisted} />
           </button>
           <button
             className="tdp2-hero-btn-pill"

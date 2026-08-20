@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import PhoneInput from "../PhoneInput/PhoneInput";
 import { useAuth } from "../../context/AuthContext";
+import { useScrollLock } from "../../hooks/useScrollLock";
 import "./LoginSheet.css";
 
 const LS = "/figma/login-sheet/";
@@ -27,6 +28,8 @@ export default function LoginSheet({ isOpen, onClose, onSuccess }: LoginSheetPro
   const [canResend, setCanResend] = useState(false);
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useScrollLock(isOpen);
 
   // Reset after close animation
   useEffect(() => {

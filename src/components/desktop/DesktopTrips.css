@@ -31,6 +31,7 @@
   display: flex;
   gap: 30px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   scroll-snap-type: x mandatory;
 }
@@ -66,28 +67,38 @@
   object-fit: cover;
 }
 
+/* Frosted pill wishlist — Figma 7844:9982 */
 .dtrips__wishlist {
   position: absolute;
   top: 11.76px;
   right: 11.76px;
-  width: 37.13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 37px;
   height: 34.65px;
   padding: 0;
+  border: none;
+  border-radius: 30px;
+  background: rgba(0, 0, 0, 0.12);
+  color: #fff;
+  cursor: pointer;
 }
 
-.dtrips__wishlist img {
-  width: 100%;
-  height: 100%;
-  transition: filter 0.2s ease;
+.dtrips__wishlist svg {
+  display: block;
+  width: 17px;
+  height: 15px;
 }
 
-/* Saved: tint the white heart glyph red-ish so the state is visible. */
-.dtrips__wishlist--saved img {
-  filter: invert(48%) sepia(60%) saturate(2500%) hue-rotate(325deg);
+/* Saved: the solid glyph in plain white, no outline. */
+.dtrips__wishlist--saved {
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
 }
 
 .dtrips__card-title {
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
   line-height: 26px;
   color: #202020;
@@ -95,74 +106,76 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 44px;
-}
-
-.dtrips__route {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  font-size: 12px;
-  line-height: 15.6px;
-  color: rgba(117, 117, 117, 0.7);
-}
-
-.dtrips__route img {
-  width: 16px;
-  height: 16px;
+  min-height: 52px;
 }
 
 .dtrips__duration {
   display: flex;
   align-items: center;
-  gap: 4.95px;
-  margin-top: 8px;
-  font-size: 16px;
-  font-weight: 500;
+  gap: 5px;
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 400;
   line-height: 17.3px;
   color: #575757;
 }
 
 .dtrips__duration img {
-  width: 17.33px;
-  height: 17.33px;
+  width: 15px;
+  height: 15px;
 }
 
 .dtrips__dates {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
   margin-top: 5px;
   font-size: 14px;
   line-height: 17.3px;
   color: #575757;
 }
 
-.dtrips__dates strong {
+.dtrips__dates-list {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.dtrips__dates-more {
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
   font-weight: 500;
+  color: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.dtrips__dates-more:hover {
+  text-decoration: underline;
 }
 
 .dtrips__price-row {
   display: flex;
   align-items: center;
-  gap: 7px;
   margin-top: 8px;
   line-height: 29.7px;
 }
 
-.dtrips__price-old {
-  font-size: 14px;
-  color: #757575;
-  text-decoration: line-through;
-}
-
 .dtrips__price-now {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  color: #015f74;
+  color: #3d3d3d;
 }
 
 .dtrips__price-sub {
   font-size: 14px;
-  line-height: 14.85px;
-  color: #9ab3b6;
+  line-height: 16px;
+  color: #757575;
 }
 
 .dtrips__more {

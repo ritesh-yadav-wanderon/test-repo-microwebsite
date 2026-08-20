@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import type { Trip } from "../types";
-import { getListingTrips } from "../api";
+import { getCachedListingTrips, getListingTrips } from "../api";
 import TripCard from "../components/TripCard";
 import Footer from "../components/Footer";
 import FooterMessage from "../components/FooterMessage/FooterMessage";
@@ -11,6 +11,7 @@ import FilterSheet from "../components/FilterSheet/FilterSheet";
 import BurgerMenu from "../components/BurgerMenu/BurgerMenu";
 import BatchesSheet from "../components/BatchesSheet/BatchesSheet";
 import SiteHeader2 from "../components/SiteHeader2";
+import { useScrollLock } from "../hooks/useScrollLock";
 import { useIsDesktop } from "../hooks/useIsDesktop";
 import DesktopSearchResults from "../components/desktop/DesktopSearchResults";
 import {
@@ -47,8 +48,9 @@ export default function SearchResults() {
   const [searchParams] = useSearchParams();
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  const [allTrips, setAllTrips] = useState<Trip[]>([]);
-  const [loading, setLoading] = useState(true);
+  const cachedTrips = getCachedListingTrips();
+  const [allTrips, setAllTrips] = useState<Trip[]>(() => cachedTrips ?? []);
+  const [loading, setLoading] = useState(() => !cachedTrips);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const [searchOpen, setSearchOpen] = useState(false);
@@ -58,20 +60,25 @@ export default function SearchResults() {
   const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
   const [sortOpen, setSortOpen] = useState(false);
   const [sortBy, setSortBy] = useState<SortKey | null>(null);
-  const [showFeatures, setShowFeatures] = useState(false);
+  const [showFeatures, setShowFeatures] = useState(true);
 
   // Fetch trips once on mount
   useEffect(() => {
+    // DesktopSearchResults owns the desktop data state. Avoid running this
+    // hidden mobile page's effect as well.
+    if (isDesktop || cachedTrips) return;
     let cancelled = false;
-    setLoading(true);
     getListingTrips().then(trips => {
       if (!cancelled) { setAllTrips(trips); setLoading(false); }
     });
     return () => { cancelled = true; };
-  }, []);
+  }, [cachedTrips, isDesktop]);
 
   // Reset pagination when filters or sort change
   useEffect(() => { setVisibleCount(PAGE_SIZE); }, [searchParams, sortBy]);
+
+  // The sort sheet covers the page, so the list behind it must not scroll.
+  useScrollLock(sortOpen);
 
   const filteredTrips = useMemo(
     () => sortTrips(filterTrips(allTrips, searchParams), sortBy),
@@ -376,7 +383,7 @@ export default function SearchResults() {
                     fullWidth
                     eager={i === 0}
                     showFeatures={showFeatures}
-                    onSeeAllDates={() => setBatchesTrip(trip)}
+                    onSeeAllDates={setBatchesTrip}
                   />
                 ))
             }
