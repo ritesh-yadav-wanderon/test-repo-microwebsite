@@ -208,7 +208,7 @@ function BatchCard({
         </div>
         <button
           type="button"
-          className={`wo-cta bsh-card-cta${isSoldOut ? " bsh-card-cta--sold" : ""}`}
+          className="wo-cta bsh-card-cta"
           disabled={isSoldOut}
           onClick={() => onBook(batch, startDate, endDate)}
         >

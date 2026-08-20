@@ -30,7 +30,6 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
   const {
     data,
     travelers,
-    privateRoom,
     flexibleCancel,
     firstName,
     middleName,
@@ -228,12 +227,6 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
                   <span>Hotel - (Double Sharing)</span>
                   <span>&#8377;{formatINR(pricing.perPersonNum)}/- x {travelers}</span>
                 </div>
-                {privateRoom && (
-                  <div className="dbk-bill-row">
-                    <span>Private Room</span>
-                    <span>+&#8377;0/-</span>
-                  </div>
-                )}
                 {flexibleCancel && (
                   <div className="dbk-bill-row">
                     <span>Flexible Cancellation</span>

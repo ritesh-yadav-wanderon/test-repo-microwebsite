@@ -27,8 +27,6 @@ export interface BookingState {
 
 export interface BookingDraft {
   travelers: number;
-  mixedGender: boolean;
-  privateRoom: boolean;
   flexibleCancel: boolean;
   appliedVoucher: AppliedVoucher | null;
   bookingReferenceId: string;
@@ -66,8 +64,6 @@ export function useBookingForm() {
 
   const [accommodationOpen, setAccommodationOpen] = useState(true);
   const [travelers, setTravelers] = useState(draft?.travelers ?? state.travelers ?? 1);
-  const [mixedGender, setMixedGender] = useState(draft?.mixedGender ?? false);
-  const [privateRoom, setPrivateRoom] = useState(draft?.privateRoom ?? true);
   const [flexibleCancel, setFlexibleCancel] = useState(draft?.flexibleCancel ?? false);
   const [notesOpen, setNotesOpen] = useState(false);
   const [agreed, setAgreed] = useState(false);
@@ -113,8 +109,6 @@ export function useBookingForm() {
     travelers,
     draft: {
       travelers,
-      mixedGender,
-      privateRoom,
       flexibleCancel,
       appliedVoucher,
       bookingReferenceId,
@@ -263,10 +257,6 @@ export function useBookingForm() {
     setAccommodationOpen,
     travelers,
     setTravelers,
-    mixedGender,
-    setMixedGender,
-    privateRoom,
-    setPrivateRoom,
     flexibleCancel,
     setFlexibleCancel,
     notesOpen,

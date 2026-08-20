@@ -157,7 +157,7 @@ function DBatchCard({
         </div>
         <button
           type="button"
-          className={`wo-cta dbat-cta${isSoldOut ? " dbat-cta--sold" : ""}`}
+          className="wo-cta dbat-cta"
           disabled={isSoldOut}
           onClick={() => onBook(batch, startDate, endDate)}
         >

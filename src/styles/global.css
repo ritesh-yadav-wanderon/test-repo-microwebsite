@@ -34,6 +34,8 @@
   --cta-font: 500 16px/21px var(--font);
   --cta-shadow: 0 0.57px 0.71px rgba(0, 0, 0, 0.25),
     inset 0 0 1.71px rgba(0, 0, 0, 0.25);
+  --cta-bg-disabled: #e0e0e0;
+  --cta-text-disabled: #757575;
 
   /* Layout */
   --app-width: 460px;
@@ -206,7 +208,13 @@ ul {
   filter: brightness(0.94);
 }
 
+/* Disabled CTAs (sold-out batches, incomplete forms) must not keep the brand
+   gradient. This lives with `.wo-cta` so it wins wherever component styles are
+   injected in the bundle. */
 .wo-cta:disabled {
+  background: var(--cta-bg-disabled);
+  color: var(--cta-text-disabled);
+  box-shadow: none;
   cursor: default;
   filter: none;
 }

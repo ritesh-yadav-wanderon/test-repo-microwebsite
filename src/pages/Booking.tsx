@@ -26,10 +26,6 @@ export default function Booking() {
     setAccommodationOpen,
     travelers,
     setTravelers,
-    mixedGender,
-    setMixedGender,
-    privateRoom,
-    setPrivateRoom,
     flexibleCancel,
     setFlexibleCancel,
     notesOpen,
@@ -502,70 +498,10 @@ export default function Booking() {
                     </div>
                   </div>
                 </div>
-
-                <div className="bkg-note">
-                  <img src={`${A}icon-info-grey.svg`} width={13} height={13} alt="" aria-hidden />
-                  <span>If you book for 2, the private room is free of charge upto 2 people.</span>
-                </div>
               </div>
             </section>
           </>
         )}
-
-        <div className="bkg-strip" />
-
-        {/* ── Mixed gender room ─────────────────────────────── */}
-        <section className="bkg-section">
-          <label className="bkg-option">
-            <span className="bkg-option-icon">
-              <img src={`${A}icon-hotel.svg`} width={16} height={16} alt="" aria-hidden />
-            </span>
-            <span className="bkg-option-label">I&#39;m OK with a mixed gender room</span>
-            <input
-              type="checkbox"
-              className="bkg-checkbox"
-              checked={mixedGender}
-              onChange={(e) => setMixedGender(e.target.checked)}
-            />
-          </label>
-          <p className="bkg-option-desc">
-            In a mixed gender room, you might be sharing with other travellers of different
-            genders, but don&#39;t worry: you each get your own single bed. The &quot;mixed&quot;
-            part just means fellow Wanderers from your group, not random strangers!
-          </p>
-        </section>
-
-        <div className="bkg-strip" />
-
-        {/* ── Private Room ──────────────────────────────────── */}
-        <section className="bkg-section">
-          <label className="bkg-option">
-            <span className="bkg-option-icon">
-              <img src={`${A}icon-door.svg`} width={16} height={16} alt="" aria-hidden />
-            </span>
-            <span className="bkg-option-label bkg-option-label--between">
-              <span>Private Room</span>
-              <span className="bkg-option-price">+ &#8377;0/-</span>
-            </span>
-            <input
-              type="checkbox"
-              className="bkg-checkbox"
-              checked={privateRoom}
-              onChange={(e) => setPrivateRoom(e.target.checked)}
-            />
-          </label>
-          <p className="bkg-option-desc">
-            You are eligible for a private room. Select if you want a private room just for you and
-            the person you are travelling with.
-          </p>
-          <div className="bkg-note">
-            <img src={`${A}icon-info-grey.svg`} width={13} height={13} alt="" aria-hidden />
-            <span>
-              Private Room option is not available if you agree to be assigned to a mixed gender
-              room.
-            </span>
-          </div>
-        </section>
 
         <div className="bkg-strip" />
 
@@ -629,12 +565,6 @@ export default function Booking() {
                 <span>Hotel - (Double Sharing)</span>
                 <span>&#8377;{formatINR(pricing.perPersonNum)}/- x {travelers}</span>
               </div>
-              {privateRoom && (
-                <div className="bkg-bill-row">
-                  <span>Private Room</span>
-                  <span>+&#8377;0/-</span>
-                </div>
-              )}
               {flexibleCancel && (
                 <div className="bkg-bill-row">
                   <span>Flexible Cancellation</span>

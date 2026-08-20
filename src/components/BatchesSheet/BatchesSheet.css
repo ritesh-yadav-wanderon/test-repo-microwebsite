@@ -490,10 +490,6 @@
   flex-shrink: 0;
 }
 
-.bsh-card-cta--sold {
-  background: #eaeaea;
-  color: #121212;
-  box-shadow: none;
-  cursor: default;
+.bsh-card-cta:disabled {
   pointer-events: none;
 }

@@ -366,13 +366,6 @@
   filter: brightness(0.96);
 }
 
-.dbat-cta--sold {
-  background: #e0e0e0;
-  box-shadow: none;
-  color: #757575;
-  cursor: not-allowed;
-}
-
-.dbat-cta--sold:hover {
+.dbat-cta:disabled:hover {
   filter: none;
 }
