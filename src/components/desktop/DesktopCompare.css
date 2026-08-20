@@ -192,6 +192,7 @@
   align-items: flex-start;
   /* Columns are fixed at 300px — scroll horizontally if they don't all fit. */
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .dcmp-col-wrap {

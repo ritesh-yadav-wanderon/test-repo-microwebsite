@@ -1,7 +1,9 @@
-import { useMemo, useState } from "react";
-import type { Trip, TripGroup } from "../../types";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import type { Trip } from "../../types";
 import DesktopNav from "./DesktopNav";
-import DesktopTrips from "./DesktopTrips";
+import DesktopListingStrip from "./DesktopListingStrip";
+import DesktopBatchesSheet from "./DesktopBatchesSheet";
 import DesktopWhyChooseUs from "./DesktopWhyChooseUs";
 import DesktopQuery from "./DesktopQuery";
 import DesktopFooterMsg from "./DesktopFooterMsg";
@@ -67,12 +69,11 @@ export default function DesktopDestination({
   loading,
 }: Props) {
   const [openFaq, setOpenFaq] = useState(0);
+  const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
+  const [showFeatures, setShowFeatures] = useState(true);
+  const navigate = useNavigate();
 
-  // DesktopTrips flattens TripGroup[] → Trip[]; wrap the pre-filtered list.
-  const groups = useMemo<TripGroup[]>(
-    () => [{ title: "", year: "", month: "", tripsArray: trips }],
-    [trips]
-  );
+  const stripTrips = trips.slice(0, 6);
   const seeAllHref = `/search?destination=${encodeURIComponent(destination)}`;
 
   return (
@@ -110,18 +111,43 @@ export default function DesktopDestination({
         </div>
       </section>
 
-      {/* ── Trip carousels ── */}
-      <DesktopTrips
-        trips={groups}
-        loading={loading}
+      {/* ── Trip carousels — listing cards, as on the mobile page ── */}
+      <DesktopListingStrip
         title="Best Summer Deals"
-        seeAllHref={seeAllHref}
-      />
-      <DesktopTrips
-        trips={groups}
+        trips={stripTrips}
         loading={loading}
-        title="Upcoming Group trips"
         seeAllHref={seeAllHref}
+        onSeeAllDates={setBatchesTrip}
+        showFeatures={showFeatures}
+        onShowFeaturesChange={setShowFeatures}
+      />
+      <DesktopListingStrip
+        title="Upcoming Group trips"
+        trips={stripTrips}
+        loading={loading}
+        seeAllHref={seeAllHref}
+        onSeeAllDates={setBatchesTrip}
+        showFeatures={showFeatures}
+        onShowFeaturesChange={setShowFeatures}
+      />
+
+      <DesktopBatchesSheet
+        isOpen={!!batchesTrip}
+        onClose={() => setBatchesTrip(null)}
+        tripTitle={batchesTrip?.title}
+        nights={batchesTrip?.duration?.nights ?? 7}
+        ctaLabel="View Trip"
+        onSelectBatch={(batch, start, end) => {
+          const slug = batchesTrip?.slug;
+          setBatchesTrip(null);
+          if (!slug) return;
+          const fmt = (d: Date, withYear: boolean) =>
+            d.toLocaleDateString("en-GB", { day: "numeric", month: "short", ...(withYear ? { year: "numeric" } : {}) });
+          const price = Number(String(batch.price).replace(/,/g, "")).toLocaleString("en-IN");
+          navigate(`/trip/${slug}`, {
+            state: { from: "batches", selectedBatch: { dateRange: `${fmt(start, false)} - ${fmt(end, true)}`, price: `${price}/-` } },
+          });
+        }}
       />
 
       {/* ── Why Choose Us (shared with homepage) ── */}

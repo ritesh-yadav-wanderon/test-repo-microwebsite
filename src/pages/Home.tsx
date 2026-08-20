@@ -11,19 +11,21 @@ import QueryBanner from "../components/QueryBanner";
 import FooterMessage from "../components/FooterMessage/FooterMessage";
 import Footer from "../components/Footer";
 import BottomNav from "../components/BottomNav";
-import { getUpcomingTrips } from "../api";
+import { getCachedUpcomingTrips, getUpcomingTrips } from "../api";
 import DesktopHome from "../components/desktop/DesktopHome";
 import { useIsDesktop } from "../hooks/useIsDesktop";
 import "./Home.css";
 
 export default function Home() {
-  const [trips, setTrips] = useState<TripGroup[]>([]);
-  const [source, setSource] = useState<ApiSource | null>(null);
-  const [loading, setLoading] = useState(true);
+  const cachedTrips = getCachedUpcomingTrips();
+  const [trips, setTrips] = useState<TripGroup[]>(() => cachedTrips?.data ?? []);
+  const [source, setSource] = useState<ApiSource | null>(() => cachedTrips?.source ?? null);
+  const [loading, setLoading] = useState(() => !cachedTrips);
   const [activeCategory, setActiveCategory] = useState(0);
   const isDesktop = useIsDesktop();
 
   useEffect(() => {
+    if (cachedTrips) return;
     let alive = true;
     getUpcomingTrips().then(({ data, source }) => {
       if (!alive) return;
@@ -32,7 +34,7 @@ export default function Home() {
       setLoading(false);
     });
     return () => { alive = false; };
-  }, []);
+  }, [cachedTrips]);
 
   if (isDesktop) {
     return <DesktopHome trips={trips} loading={loading} source={source} />;

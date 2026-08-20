@@ -23,6 +23,7 @@
   padding: 10px 16px 0;
   box-sizing: border-box;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   border-bottom: 1px solid #ccc;
   position: relative;
@@ -166,6 +167,7 @@
   gap: 12px;
   align-items: flex-start;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
 }
 .dest-grid::-webkit-scrollbar { display: none; }

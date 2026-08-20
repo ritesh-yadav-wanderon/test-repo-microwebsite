@@ -1,8 +1,12 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getListingTrips } from "../api";
+import { getCachedListingTrips, getListingTrips } from "../api";
 import type { Trip } from "../types";
-import { TripCardItem, TripCardShimmer, ViewMoreCard } from "../components/UpcomingTrips/TripCardItem";
+import TripCard from "../components/TripCard";
+import TripCardShimmer from "../components/TripCard/TripCardShimmer";
+import { ViewMoreCard } from "../components/UpcomingTrips/TripCardItem";
+import BatchesSheet from "../components/BatchesSheet/BatchesSheet";
+import FeaturesToggle from "../components/FeaturesToggle/FeaturesToggle";
 import FooterMessage from "../components/FooterMessage/FooterMessage";
 import TribeStories from "../components/TribeStories";
 import QueryBanner from "../components/QueryBanner";
@@ -326,26 +330,34 @@ export default function Destination() {
 
   // Trips come from the same source as the listing page (real API, with a
   // built-in sample fallback) so destination pages and the listing agree.
-  const [allTrips, setAllTrips] = useState<Trip[]>([]);
-  const [loading, setLoading] = useState(true);
+  const cachedTrips = getCachedListingTrips();
+  const [allTrips, setAllTrips] = useState<Trip[]>(() => cachedTrips ?? []);
+  const [loading, setLoading] = useState(() => !cachedTrips);
+  const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
+  const [showFeatures, setShowFeatures] = useState(true);
   useEffect(() => {
+    if (cachedTrips) return;
     let cancelled = false;
-    setLoading(true);
     getListingTrips().then((trips) => {
       if (!cancelled) { setAllTrips(trips); setLoading(false); }
     });
     return () => { cancelled = true; };
-  }, []);
+  }, [cachedTrips]);
 
-  const destTrips = allTrips.filter((t) => tripMatchesDestination(t, slug));
+  const destTrips = useMemo(
+    () => allTrips.filter((t) => tripMatchesDestination(t, slug)),
+    [allTrips, slug]
+  );
   // Destinations with no scheduled trips only show the "Customise" section.
   const hasUpcoming = destTrips.length > 0;
   const stripTrips = destTrips.slice(0, 6);
   // Customise strip: real destination trips when available, otherwise
   // destination-branded synthetic cards (never other destinations' trips).
   const moreHref = `/search?destination=${encodeURIComponent(slug)}`;
-  const customiseTrips = hasUpcoming ? destTrips.slice(0, 6) : buildCustomiseTrips(slug, data);
-  const customiseHref = hasUpcoming ? undefined : moreHref;
+  const customiseTrips = useMemo(
+    () => hasUpcoming ? destTrips.slice(0, 6) : buildCustomiseTrips(slug, data),
+    [data, destTrips, hasUpcoming, slug]
+  );
   const vmSource = hasUpcoming ? stripTrips : customiseTrips;
   const vmImgA = vmSource[0]?.image ?? "/figma/trips/trip-1.jpg";
   const vmImgB = vmSource[1]?.image ?? "/figma/trips/trip-2.jpg";
@@ -444,10 +456,18 @@ export default function Destination() {
                 <img src="/figma/trips/arrow-right.svg" width={16} height={16} alt="" aria-hidden loading="lazy" />
               </button>
             </div>
+            <div className="dp-features-row">
+              <FeaturesToggle checked={showFeatures} onChange={setShowFeatures} />
+            </div>
             <div className="up-cards">
               {stripTrips.map((trip) => (
-                <TripCardItem key={trip.slug} trip={trip} />
-              ))}
+                  <TripCard
+                    key={trip.slug}
+                    trip={trip}
+                    showFeatures={showFeatures}
+                    onSeeAllDates={setBatchesTrip}
+                  />
+                ))}
               <ViewMoreCard a={vmImgA} b={vmImgB} to={moreHref} />
             </div>
           </section>
@@ -461,10 +481,18 @@ export default function Destination() {
                 <img src="/figma/trips/arrow-right.svg" width={16} height={16} alt="" aria-hidden loading="lazy" />
               </button>
             </div>
+            <div className="dp-features-row">
+              <FeaturesToggle checked={showFeatures} onChange={setShowFeatures} />
+            </div>
             <div className="up-cards">
               {stripTrips.map((trip) => (
-                <TripCardItem key={trip.slug + "-upcoming"} trip={trip} />
-              ))}
+                  <TripCard
+                    key={trip.slug + "-upcoming"}
+                    trip={trip}
+                    showFeatures={showFeatures}
+                    onSeeAllDates={setBatchesTrip}
+                  />
+                ))}
               <ViewMoreCard a={vmImgA} b={vmImgB} to={moreHref} />
             </div>
           </section>
@@ -480,9 +508,17 @@ export default function Destination() {
             <img src="/figma/trips/arrow-right.svg" width={16} height={16} alt="" aria-hidden loading="lazy" />
           </button>
         </div>
+        <div className="dp-features-row">
+          <FeaturesToggle checked={showFeatures} onChange={setShowFeatures} />
+        </div>
         <div className="up-cards">
           {customiseTrips.map((trip, i) => (
-            <TripCardItem key={trip.slug + "-custom-" + i} trip={trip} batchesText="Date of your choice" href={customiseHref} />
+            <TripCard
+              key={trip.slug + "-custom-" + i}
+              trip={trip}
+              showFeatures={showFeatures}
+              onSeeAllDates={setBatchesTrip}
+            />
           ))}
           <ViewMoreCard a={vmImgA} b={vmImgB} to={moreHref} />
         </div>
@@ -561,6 +597,24 @@ export default function Destination() {
 
       <FooterMessage />
       <Footer />
+      <BatchesSheet
+        isOpen={!!batchesTrip}
+        onClose={() => setBatchesTrip(null)}
+        tripTitle={batchesTrip?.title}
+        nights={batchesTrip?.duration?.nights ?? 7}
+        ctaLabel="View Trip"
+        onSelectBatch={(batch, start, end) => {
+          const tripSlug = batchesTrip?.slug;
+          setBatchesTrip(null);
+          if (!tripSlug) return;
+          const fmt = (d: Date, withYear: boolean) =>
+            d.toLocaleDateString("en-GB", { day: "numeric", month: "short", ...(withYear ? { year: "numeric" } : {}) });
+          const price = Number(String(batch.price).replace(/,/g, "")).toLocaleString("en-IN");
+          navigate(`/trip/${tripSlug}`, {
+            state: { from: "batches", selectedBatch: { dateRange: `${fmt(start, false)} - ${fmt(end, true)}`, price: `${price}/-` } },
+          });
+        }}
+      />
       <BottomNav />
     </div>
   );

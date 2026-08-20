@@ -113,6 +113,7 @@
 /* ── Scrollable cards area ── */
 .cpt-scroll-area {
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 10px 16px;
   -webkit-overflow-scrolling: touch;
 }

@@ -1,5 +1,3 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
 import "./OnScrollTopNav.css";
 
 export interface OnScrollTopNavProps {
@@ -12,8 +10,6 @@ export interface OnScrollTopNavProps {
 
 export default function OnScrollTopNav({ visible, isHome, onBack, onSearch, onBurger }: OnScrollTopNavProps) {
   const tab = visible ? 0 : -1;
-  const navigate = useNavigate();
-  const { isLoggedIn } = useAuth();
 
   return (
     <header
@@ -61,18 +57,6 @@ export default function OnScrollTopNav({ visible, isHome, onBack, onSearch, onBu
           <img src="/figma/ostn/icon-search.svg" width={50} height={40} alt="" />
         </div>
       </button>
-
-      {isLoggedIn && (
-        <button
-          className="ostn-account"
-          type="button"
-          aria-label="Open my account"
-          tabIndex={tab}
-          onClick={() => navigate("/profile")}
-        >
-          <img src="/figma/page-header/icon-account.svg" width={32} height={32} alt="" aria-hidden />
-        </button>
-      )}
 
       {/* Burger */}
       <button

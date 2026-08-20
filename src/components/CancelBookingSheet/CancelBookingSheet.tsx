@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { setAppScrollLocked } from "../../utils/scroll";
+import { useScrollLock } from "../../hooks/useScrollLock";
 import "./CancelBookingSheet.css";
 
 const C = "/figma/cancel/";
@@ -29,10 +29,7 @@ export default function CancelBookingSheet({
     }
   }, [isOpen]);
 
-  useEffect(() => {
-    setAppScrollLocked(isOpen);
-    return () => setAppScrollLocked(false);
-  }, [isOpen]);
+  useScrollLock(isOpen);
 
   if (!hasOpened) return null;
 

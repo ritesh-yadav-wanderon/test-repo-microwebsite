@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { DEST_REGIONS } from "../../data/destinations";
-import { setAppScrollLocked } from "../../utils/scroll";
+import { useScrollLock } from "../../hooks/useScrollLock";
 import "./DesktopReviewsModal.css";
 
 const R = "/figma/reviews/";
@@ -64,9 +64,9 @@ export default function DesktopReviewsModal({ isOpen, onClose }: Props) {
       setActiveTab(0);
       setDestOpen(false);
     }
-    setAppScrollLocked(isOpen);
-    return () => setAppScrollLocked(false);
   }, [isOpen]);
+
+  useScrollLock(isOpen);
 
   useEffect(() => {
     if (!isOpen) return;

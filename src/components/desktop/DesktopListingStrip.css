@@ -1,0 +1,78 @@
+/* Listing-card strip — matches the .dtrips carousel chrome. */
+.dls {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 60px 80px 0;
+}
+
+.dls__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 10px 30px;
+}
+
+.dls__title {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: #3d3d3d;
+}
+
+.dls__head-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.dls__seeall {
+  padding: 0;
+  font-size: 14px;
+  line-height: 17.3px;
+  color: #575757;
+  text-decoration: underline;
+}
+
+.dls__track {
+  display: flex;
+  gap: 23px;
+  align-items: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+
+.dls__track::-webkit-scrollbar {
+  display: none;
+}
+
+.dls__cell {
+  flex: 0 0 358px;
+  width: 358px;
+  display: flex;
+  scroll-snap-align: start;
+}
+
+.dls__cell > * {
+  width: 100%;
+}
+
+.dls__pager {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin: 30px 10px 0;
+}
+
+.dls__pager-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #d9d9d9;
+  background: #fff;
+}

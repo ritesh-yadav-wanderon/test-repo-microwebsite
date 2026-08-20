@@ -35,12 +35,30 @@ export function scrollAppToTop(behavior: ScrollBehavior = "auto"): void {
 }
 
 /**
- * Lock/unlock background scrolling while a full-screen sheet/modal is open.
- * The body no longer scrolls, so the lock has to target `.app-shell` (with a
- * `<body>` fallback for safety).
+ * Lock background scrolling while a full-screen sheet/modal is open, and return
+ * the release function. The body no longer scrolls, so the lock has to target
+ * `.app-shell` (with a `<body>` fallback for safety).
+ *
+ * Locks are counted so that overlays can stack — a login sheet opened on top of
+ * a batches sheet must not unlock the page behind both when it closes.
  */
-export function setAppScrollLocked(locked: boolean): void {
+let lockCount = 0;
+
+function applyLock(): void {
+  const locked = lockCount > 0;
   const el = getScrollEl();
   if (el) el.style.overflow = locked ? "hidden" : "";
   else document.body.style.overflow = locked ? "hidden" : "";
+}
+
+export function lockAppScroll(): () => void {
+  lockCount++;
+  applyLock();
+  let released = false;
+  return () => {
+    if (released) return;
+    released = true;
+    lockCount--;
+    applyLock();
+  };
 }

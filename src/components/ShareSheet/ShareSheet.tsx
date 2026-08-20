@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { setAppScrollLocked } from "../../utils/scroll";
+import { useScrollLock } from "../../hooks/useScrollLock";
 import "./ShareSheet.css";
 
 interface ShareSheetProps {
@@ -19,10 +19,7 @@ export default function ShareSheet({ isOpen, onClose, title, image, duration, pr
 
   useEffect(() => { if (isOpen) setHasOpened(true); }, [isOpen]);
 
-  useEffect(() => {
-    setAppScrollLocked(isOpen);
-    return () => setAppScrollLocked(false);
-  }, [isOpen]);
+  useScrollLock(isOpen);
 
   useEffect(() => { if (!isOpen) setCopied(false); }, [isOpen]);
 

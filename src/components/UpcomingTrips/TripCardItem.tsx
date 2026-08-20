@@ -1,10 +1,13 @@
+import { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { Trip } from "../../types";
 import { useWishlist } from "../../context/WishlistContext";
+import HeartIcon from "../HeartIcon/HeartIcon";
 import "./UpcomingTrips.css";
 import "./TripCardItem.css";
 
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const T = "/figma/trips/";
 
 export function formatDate(iso: string): string {
   const p = iso.split("-");
@@ -15,10 +18,17 @@ export function formatDate(iso: string): string {
 }
 
 export function formatBatches(batches?: string[]): string {
-  if (!batches?.length) return "";
+  const { dates, more } = formatBatchesParts(batches);
+  return more ? `${dates} ${more}` : dates;
+}
+
+function formatBatchesParts(batches?: string[]): { dates: string; more?: string } {
+  if (!batches?.length) return { dates: "" };
   const shown = batches.slice(0, 2).map(formatDate);
   const rest = batches.length - 2;
-  return rest > 0 ? `${shown.join(", ")}, +${rest} More` : shown.join(", ");
+  return rest > 0
+    ? { dates: `${shown.join(", ")}...`, more: `+${rest} More` }
+    : { dates: shown.join(", ") };
 }
 
 function formatPrice(price?: string): string {
@@ -26,39 +36,28 @@ function formatPrice(price?: string): string {
   return Number.isFinite(n) && n > 0 ? n.toLocaleString("en-IN") : String(price ?? "");
 }
 
-function CalendarIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#287686" strokeWidth="2" strokeLinecap="round" aria-hidden>
-      <rect x="3" y="4" width="18" height="16" rx="2" /><line x1="3" y1="9" x2="21" y2="9" />
-      <line x1="8" y1="2" x2="8" y2="6" /><line x1="16" y1="2" x2="16" y2="6" />
-    </svg>
-  );
-}
-
-function HeartIcon({ filled }: { filled?: boolean }) {
-  return (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill={filled ? "#fff" : "none"} stroke="#fff" strokeWidth="2" strokeLinecap="round" aria-hidden>
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-    </svg>
-  );
-}
-
-/** Shared trip card — the "tdp2-more-card-v2" design used across all pages. */
-export function TripCardItem({ trip, batchesText, href }: { trip: Trip; batchesText?: string; href?: string }) {
+export const TripCardItem = memo(function TripCardItem({ trip, batchesText, href, onMoreDates }: {
+  trip: Trip;
+  batchesText?: string;
+  href?: string;
+  onMoreDates?: (trip: Trip) => void;
+}) {
   const { isWishlisted, toggle: toggleWishlist } = useWishlist();
   const wishlisted = isWishlisted(trip.slug);
   const dur = trip.duration ? `${trip.duration.nights}N/${trip.duration.days}D` : "";
-  const batches = batchesText ?? formatBatches(trip.batches);
+  const parts = batchesText
+    ? { dates: batchesText, more: undefined as string | undefined }
+    : formatBatchesParts(trip.batches);
 
   return (
     <Link className="tdp2-more-card-v2" to={href ?? `/trip/${trip.slug}`}>
       <div className="tdp2-more-cv2-img-wrap">
         {trip.image
           ? <img src={trip.image} alt={trip.title} className="tdp2-more-cv2-img" loading="lazy" />
-          : <div className="tdp2-more-cv2-img" style={{ background: "#efefef" }} />
+          : <div className="tdp2-more-cv2-img" style={{ background: "#d6d6d6" }} />
         }
         <button
-          className="tdp2-more-cv2-wish"
+          className={`tdp2-more-cv2-wish${wishlisted ? " tdp2-more-cv2-wish--on" : ""}`}
           type="button"
           aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
           onClick={e => {
@@ -66,7 +65,7 @@ export function TripCardItem({ trip, batchesText, href }: { trip: Trip; batchesT
             toggleWishlist({
               slug: trip.slug,
               title: trip.title,
-              image: trip.image || "/figma/trips/trip-1.jpg",
+              image: trip.image || `${T}trip-1.jpg`,
               price: String(trip.startingPrice ?? ""),
               duration: dur || undefined,
               route: trip.pickDropPoint,
@@ -79,29 +78,58 @@ export function TripCardItem({ trip, batchesText, href }: { trip: Trip; batchesT
       <div className="tdp2-more-cv2-info">
         <p className="tdp2-more-cv2-title">{trip.title}</p>
         {dur && (
-          <div className="tdp2-more-cv2-dur"><CalendarIcon /><span>{dur}</span></div>
+          <div className="tdp2-more-cv2-dur">
+            <img src={`${T}icon-calendar-clock.svg`} width={12} height={12} alt="" aria-hidden />
+            <span>{dur}</span>
+          </div>
         )}
-        {batches && <p className="tdp2-more-cv2-batches">{batches}</p>}
-        <p className="tdp2-more-cv2-price">&#8377;{formatPrice(trip.startingPrice)}/-</p>
-        <p className="tdp2-more-cv2-per">Onwards per person</p>
+        {parts.dates && (
+          <div className="tdp2-more-cv2-batches">
+            <span className="tdp2-more-cv2-dates">{parts.dates}</span>
+            {parts.more && (
+              onMoreDates ? (
+                <button
+                  className="tdp2-more-cv2-more"
+                  type="button"
+                  onClick={e => {
+                    e.preventDefault();
+                    onMoreDates(trip);
+                  }}
+                >
+                  {parts.more}
+                </button>
+              ) : (
+                <span className="tdp2-more-cv2-more">{parts.more}</span>
+              )
+            )}
+          </div>
+        )}
+        <div className="tdp2-more-cv2-price-wrap">
+          <p className="tdp2-more-cv2-price">&#8377;{formatPrice(trip.startingPrice)}/-</p>
+          <p className="tdp2-more-cv2-per">Onwards per person</p>
+        </div>
       </div>
     </Link>
   );
-}
+});
 
-export function TripCardShimmer() {
+export const TripCardShimmer = memo(function TripCardShimmer() {
   return (
-    <div className="tdp2-more-card-v2">
-      <div className="tdp2-more-cv2-img-wrap up-shimmer-block" />
+    <div className="tdp2-more-card-v2" aria-hidden>
+      {/* The shimmer sits inside the media frame — the frame's own background
+          would otherwise paint over it. */}
+      <div className="tdp2-more-cv2-img-wrap">
+        <div className="tdp2-more-cv2-sk-img up-shimmer-block" />
+      </div>
       <div className="tdp2-more-cv2-info">
-        <div className="up-shimmer-line" style={{ width: "90%", height: 13 }} />
-        <div className="up-shimmer-line" style={{ width: "60%" }} />
-        <div className="up-shimmer-line" style={{ width: "75%" }} />
-        <div className="up-shimmer-line" style={{ width: "50%", height: 16, marginTop: 2 }} />
+        <div className="up-shimmer-line" style={{ width: "90%", height: 21 }} />
+        <div className="up-shimmer-line" style={{ width: "40%", height: 14 }} />
+        <div className="up-shimmer-line" style={{ width: "100%", height: 14 }} />
+        <div className="up-shimmer-line" style={{ width: "55%", height: 24 }} />
       </div>
     </div>
   );
-}
+});
 
 export interface ViewMoreCardProps {
   a: string;
@@ -110,19 +138,19 @@ export interface ViewMoreCardProps {
   to?: string;
 }
 
-export function ViewMoreCard({ a, b, to = "/search" }: ViewMoreCardProps) {
+export const ViewMoreCard = memo(function ViewMoreCard({ a, b, to = "/search" }: ViewMoreCardProps) {
   const navigate = useNavigate();
   return (
     <button className="tdp2-more-vm-card" type="button" onClick={() => navigate(to)}>
       <div className="tdp2-more-vm-imgs">
         <span className="tdp2-more-vm-img tdp2-more-vm-back">
-          <img src={b || "/figma/trips/trip-2.jpg"} alt="" aria-hidden loading="lazy" />
+          <img src={b || `${T}trip-2.jpg`} alt="" aria-hidden loading="lazy" />
         </span>
         <span className="tdp2-more-vm-img tdp2-more-vm-front">
-          <img src={a || "/figma/trips/trip-1.jpg"} alt="" aria-hidden loading="lazy" />
+          <img src={a || `${T}trip-1.jpg`} alt="" aria-hidden loading="lazy" />
         </span>
       </div>
       <p className="tdp2-more-vm-label">View More Trips</p>
     </button>
   );
-}
+});

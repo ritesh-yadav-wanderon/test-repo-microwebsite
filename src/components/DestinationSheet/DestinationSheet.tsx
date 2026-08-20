@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { DEST_REGIONS } from "../../data/destinations";
-import { setAppScrollLocked } from "../../utils/scroll";
+import { useScrollLock } from "../../hooks/useScrollLock";
 import "./DestinationSheet.css";
 
 const M = "/figma/menu/";
@@ -34,10 +34,7 @@ export default function DestinationSheet({
     setExpandedRegion(initialRegion);
   }, [isOpen, initialRegion]);
 
-  useEffect(() => {
-    setAppScrollLocked(isOpen);
-    return () => setAppScrollLocked(false);
-  }, [isOpen]);
+  useScrollLock(isOpen);
 
   if (!hasOpened) return null;
 

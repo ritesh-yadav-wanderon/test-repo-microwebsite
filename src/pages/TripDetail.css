@@ -174,11 +174,13 @@
   border: none;
   border-radius: 30px;
   background: rgba(0, 0, 0, 0.3);
+  color: #fff;
   cursor: pointer;
   flex-shrink: 0;
 }
-.tdp2-hero-btn-wish img { display: block; width: 14px; height: 12px; flex-shrink: 0; }
-.tdp2-hero-btn-wish svg { display: block; width: 16px; height: 16px; flex-shrink: 0; }
+.tdp2-hero-btn-wish svg { display: block; width: 14px; height: 12px; flex-shrink: 0; }
+/* Saved: the solid glyph in plain white, no outline. */
+.tdp2-hero-btn-wish--saved { background: rgba(0, 0, 0, 0.4); color: #fff; }
 
 
 
@@ -537,6 +539,7 @@
   display: flex;
   align-items: center;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   padding-bottom: 14px;
   gap: 2px;
@@ -582,6 +585,7 @@
 .tdp2-tabs {
   display: flex;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   padding: 0 6px;
   border-bottom: 1px solid rgba(117, 117, 117, 0.2);
@@ -619,6 +623,7 @@
   display: flex;
   gap: 10px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   padding: 0 16px;
 }
@@ -776,6 +781,7 @@
   display: flex;
   gap: 0;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   background: #fff;
   padding: 14px 16px;
@@ -951,6 +957,7 @@
   display: flex;
   gap: 8px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   margin-bottom: 16px;
   padding-bottom: 2px;
@@ -978,6 +985,7 @@
   display: flex;
   gap: 12px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   margin-bottom: 16px;
 }
@@ -1132,6 +1140,7 @@
   display: flex;
   gap: 12px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   padding: 0 16px 4px;
 }
@@ -1935,6 +1944,7 @@
   display: flex;
   gap: 20px;
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 0 16px;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
@@ -2114,10 +2124,12 @@
   padding-left: 6px;
 }
 
+/* Stretch, so the pin column is as tall as the section beside it and the rail
+   below the pin can fill what is left of it. */
 .tdp2-day-tl-item {
   display: flex;
   gap: 10px;
-  align-items: flex-start;
+  align-items: stretch;
 }
 
 .tdp2-day-tl-left {
@@ -2135,12 +2147,26 @@
   flex-shrink: 0;
 }
 
+/* The pin art is a 12px dot inside a 16x20 box, so the rail is pulled 4px past
+   each end of its column to meet the dots above and below it. */
 .tdp2-day-tl-line {
   flex: 1;
   width: 1px;
   min-height: 12px;
   background: #c2d8f7;
-  margin: 0;
+  margin: -4px 0;
+}
+
+/* Expanded sections sit 20px apart, which the rail also has to span, and the
+   last one carries on through the card's 16px bottom padding. */
+.tdp2-day-card-expanded > .tdp2-day-tl-item .tdp2-day-tl-line {
+  margin-bottom: -24px;
+}
+.tdp2-day-card-expanded > .tdp2-day-tl-item:last-child .tdp2-day-tl-line {
+  margin-bottom: -16px;
+}
+.tdp2-day-timeline > .tdp2-day-tl-item:last-child .tdp2-day-tl-line {
+  margin-bottom: 0;
 }
 
 .tdp2-day-tl-text {
@@ -2330,6 +2356,31 @@
   color: #3d3d3d;
   line-height: 21px;
   margin: 0;
+}
+
+/* Reused stay callout — Figma 7165:7217 */
+.tdp2-day-same-stay {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+  padding: 6px 8px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background: #fff9e7;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #a27e17;
+}
+
+.tdp2-day-same-stay-icon {
+  width: 16px;
+  height: 16px;
+  max-width: none;
+  flex-shrink: 0;
+  object-fit: contain;
 }
 
 /* Meals included bar */
