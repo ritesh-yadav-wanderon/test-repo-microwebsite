@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Trip } from "../../types";
-import { useCompare } from "../../context/CompareContext";
-import { SAMPLE_UPCOMING_TRIPS } from "../../api/sampleData";
+import type { Trip } from "@/types";
+import { useCompare } from "@/context/CompareContext";
+import { getSampleTripPool } from "@/repositories";
 import DesktopFooter from "./DesktopFooter";
 import "./DesktopCompare.css";
 
@@ -157,14 +157,10 @@ export default function DesktopCompare() {
     showDiff && differing.has(field) ? " dcmp-diff" : "";
 
   /* Pool of addable trips: deduped by slug, minus what's already in the tray. */
-  const pool = useMemo<Trip[]>(() => {
-    const seen = new Set<string>();
-    return SAMPLE_UPCOMING_TRIPS.flatMap((g) => g.tripsArray).filter((t) => {
-      if (seen.has(t.slug) || isInCompare(t.slug)) return false;
-      seen.add(t.slug);
-      return true;
-    });
-  }, [isInCompare]);
+  const pool = useMemo<Trip[]>(
+    () => getSampleTripPool().filter((t) => !isInCompare(t.slug)),
+    [isInCompare]
+  );
 
   /* Empty query → one suggested trip; otherwise filter the pool in place. */
   const trimmed = query.trim().toLowerCase();

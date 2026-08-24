@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { STATIC_DATA } from "../../pages/TripDetail";
+import { STATIC_DATA } from "@/repositories";
 import "./DesktopGallery.css";
 
 const TABS = ["Destination", "Activities", "Accommodation", "Transfer"];

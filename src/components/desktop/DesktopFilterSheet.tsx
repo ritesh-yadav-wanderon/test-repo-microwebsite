@@ -13,7 +13,7 @@ import {
   BucketListPanel,
   buildSearchParams,
   seedFromParams,
-} from "../FilterSheet/FilterSheet";
+} from "@/components/FilterSheet";
 import "../FilterSheet/FilterSheet.css";
 import "./DesktopFilterSheet.css";
 

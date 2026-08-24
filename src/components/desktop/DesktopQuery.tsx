@@ -1,4 +1,5 @@
 import "./DesktopQuery.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 interface Props {
   title?: string;
@@ -16,12 +17,12 @@ export default function DesktopQuery({
         <div className="dquery__copy">
           <h2 className="dquery__title">{title}</h2>
           <p className="dquery__sub">{sub}</p>
-          <button
-            className="wo-cta dquery__cta"
+          <CtaButton
+            className="dquery__cta"
             onClick={() => window.dispatchEvent(new CustomEvent("wanderon:open-enquire"))}
           >
             Enquire Now
-          </button>
+          </CtaButton>
         </div>
         <video
           className="dquery__travellers"

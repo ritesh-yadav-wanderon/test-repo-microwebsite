@@ -1,30 +1,24 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import type { Trip, TripGroup } from "../../types";
-import { useCompare } from "../../context/CompareContext";
-import { SAMPLE_UPCOMING_TRIPS } from "../../api/sampleData";
-import {
-  STATIC_DATA,
-  TDP_FAQS,
-  DayCard,
-  FaqItem,
-  itineraryTransfers,
-  ItineraryMapToggle,
-  selectedTrip,
-  TiFitRow,
-} from "../../pages/TripDetail";
+import type { Trip, TripGroup } from "@/types";
+import { useCompare } from "@/context/CompareContext";
+import { getRelatedTrips, STATIC_DATA, TDP_FAQS } from "@/repositories";
+import { DayCard, FaqItem, TiFitRow } from "@/components/TripItinerary";
+import { itineraryTransfers, selectedTrip } from "@/utils/tripItinerary";
 import "../../pages/TripDetail.css";
-import ItineraryCustomiser from "../ItineraryCustomiser/ItineraryCustomiser";
-import ShareSheet from "../ShareSheet/ShareSheet";
-import HeartIcon from "../HeartIcon/HeartIcon";
+import ItineraryCustomiser from "@/components/ItineraryCustomiser";
+import ShareSheet from "@/components/ShareSheet";
+import HeartIcon from "@/components/ui/HeartIcon";
+import ToggleSwitch from "@/components/ui/ToggleSwitch";
 import DesktopNav from "./DesktopNav";
 import DesktopBatchesSheet from "./DesktopBatchesSheet";
 import DesktopWhyChooseUs from "./DesktopWhyChooseUs";
 import DesktopTrips from "./DesktopTrips";
 import DesktopQuery from "./DesktopQuery";
-import DesktopFooterMsg from "./DesktopFooterMsg";
+import EndMark from "@/components/ui/EndMark";
 import DesktopFooter from "./DesktopFooter";
 import "./DesktopTripDetail.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const HL = "/figma/itin-highlights/";
 const BOOK = "/figma/desktop-trip/";
@@ -193,20 +187,10 @@ export default function DesktopTripDetail() {
 
   // ── Related "More Europe Trips" (same filter as mobile) ──────────────────
   const productDest = data.breadcrumbs[data.breadcrumbs.length - 1] ?? "";
-  const relatedTrips = useMemo<Trip[]>(() => {
-    const d = productDest.trim().toLowerCase();
-    const pool = SAMPLE_UPCOMING_TRIPS.flatMap((g) => g.tripsArray);
-    const matched = pool.filter(
-      (t) =>
-        t.slug.toLowerCase().includes(d) ||
-        t.title.toLowerCase().includes(d) ||
-        (t.skeletonItinerary ?? []).some((c) => c.toLowerCase().includes(d)) ||
-        (t.destinations ?? []).some(
-          (x) => x.title.toLowerCase().includes(d) || x.slug.toLowerCase().includes(d)
-        )
-    );
-    return (matched.length ? matched : pool).slice(0, 8);
-  }, [productDest]);
+  const relatedTrips = useMemo<Trip[]>(
+    () => getRelatedTrips(productDest).slice(0, 8),
+    [productDest]
+  );
   const relatedGroups = useMemo<TripGroup[]>(
     () => [{ title: "", year: "", month: "", tripsArray: relatedTrips }],
     [relatedTrips]
@@ -416,9 +400,15 @@ export default function DesktopTripDetail() {
             </aside>
 
             <div className="dtdp-itin-content">
-              <ItineraryMapToggle
+              <ToggleSwitch
                 checked={showItineraryMap}
-                onChange={() => setShowItineraryMap(show => !show)}
+                onChange={setShowItineraryMap}
+                label="Show Map"
+                labelOutside
+                className="tdp2-itin-map-toggle"
+                buttonClassName="tdp2-itin-switch"
+                imgClassName="tdp2-itin-switch-img"
+                ariaLabel={showItineraryMap ? "Hide trip map" : "Show trip map"}
               />
               {showItineraryMap && (
                 <div className="tdp2-itin-map-wrap">
@@ -512,9 +502,9 @@ export default function DesktopTripDetail() {
             </div>
 
             <div className="dtdp-book-cta-wrap">
-              <button className="wo-cta dtdp-book-cta" type="button" onClick={() => setBatchesOpen(true)}>
+              <CtaButton className="dtdp-book-cta" onClick={() => setBatchesOpen(true)}>
                 View Batches
-              </button>
+              </CtaButton>
               <button
                 className="dtdp-book-departures"
                 type="button"
@@ -600,7 +590,7 @@ export default function DesktopTripDetail() {
       {/* ── Enquire CTA (Figma 5874:18789) ──────────────────────────────── */}
       <DesktopQuery title="Your next group is forming." sub="Tell us where. We'll find your people." />
 
-      <DesktopFooterMsg />
+      <EndMark variant="desktop" />
       <DesktopFooter />
 
       {/* ── Sheets ──────────────────────────────────────────────────────── */}

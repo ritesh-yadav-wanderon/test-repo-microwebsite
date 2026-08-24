@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DesktopNav from "./DesktopNav";
-import EventItinerary, { ITINERARY } from "../EventItinerary/EventItinerary";
+import EventItinerary, { ITINERARY } from "@/components/EventItinerary";
 import "./DesktopEventDetail.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const A = "/figma/event/";
 const EV = "/figma/events/";
@@ -296,9 +297,9 @@ export default function DesktopEventDetail() {
                 <span className="depd__book-main">&#8377;{EVENT.price}/-</span>
                 <span className="depd__book-sub">Starting price per person</span>
               </div>
-              <button className="wo-cta depd__book-cta" type="button" onClick={handleBook}>
+              <CtaButton className="depd__book-cta" onClick={handleBook}>
                 Book Now
-              </button>
+              </CtaButton>
               <div className="depd__book-women">
                 <img src="/figma/desktop-trip/bc-women.svg" alt="" aria-hidden />
                 <span>60% Women travellers have joined!</span>

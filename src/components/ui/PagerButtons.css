@@ -1,0 +1,43 @@
+/* PagerButtons pill variant — Figma 4947:16628 */
+
+.pgr-wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.pgr-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #e6e6e6;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pgr-icon {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.pgr-btn:first-child {
+  padding-left: 4px;
+}
+
+.pgr-btn:last-child {
+  padding-right: 4px;
+}
+
+.pgr-btn:last-child .pgr-icon {
+  transform: scaleX(-1);
+}
+
+.pgr-btn:disabled {
+  cursor: default;
+  opacity: 0.5;
+}

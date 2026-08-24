@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DEST_REGIONS } from "../../data/destinations";
+import { addRecentDestination, DEST_REGIONS } from "@/repositories";
 import calendarMonthIcon from "../../assets/search-bottom-sheet/calendar-month.svg";
 import calendarCheckIcon from "../../assets/search-bottom-sheet/calendar-check.svg";
 import "./DesktopSearch.css";
 
 const BASE = "/figma/desktop";
-const RECENTS_KEY = "wanderon:recent-destinations";
 const DAY_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
 
 /* Trending tiles (Figma 6589:31700) — monument art shared with DestinationStrip. */
@@ -251,17 +250,7 @@ export default function DesktopSearch({
     const params = new URLSearchParams();
     if (destination) {
       params.set("destination", destination);
-      try {
-        const raw = localStorage.getItem(RECENTS_KEY);
-        const prev: string[] = raw ? JSON.parse(raw) : [];
-        const next = [
-          destination,
-          ...prev.filter((d) => d.toLowerCase() !== destination.toLowerCase()),
-        ].slice(0, 4);
-        localStorage.setItem(RECENTS_KEY, JSON.stringify(next));
-      } catch {
-        /* ignore storage errors */
-      }
+      addRecentDestination(destination);
     }
     if (whenMode === "months" && selMonths.length) {
       params.set("months", [...selMonths].sort().join(","));

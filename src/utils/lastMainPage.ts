@@ -2,8 +2,7 @@
  *  trip details) so account pages can exit back to the site. */
 
 import type { NavigateFunction } from "react-router-dom";
-
-const KEY = "wanderon_last_main_page";
+import { readJSON, STORAGE_KEYS, writeJSON } from "@/repositories";
 
 const MAIN_ROUTES = [
   /^\/$/,
@@ -31,21 +30,11 @@ function historyIndex(): number | null {
 export function trackMainPage(pathname: string, search = ""): void {
   if (!MAIN_ROUTES.some((r) => r.test(pathname))) return;
   const page: MainPage = { url: pathname + search, idx: historyIndex() };
-  try {
-    sessionStorage.setItem(KEY, JSON.stringify(page));
-  } catch {
-    /* storage unavailable — exit falls back to home */
-  }
+  writeJSON(STORAGE_KEYS.lastMainPage, page, "session");
 }
 
 function readMainPage(): MainPage {
-  try {
-    const raw = sessionStorage.getItem(KEY);
-    if (raw) return JSON.parse(raw) as MainPage;
-  } catch {
-    /* fall through to the default below */
-  }
-  return { url: "/", idx: null };
+  return readJSON<MainPage>(STORAGE_KEYS.lastMainPage, { url: "/", idx: null }, "session");
 }
 
 /** Last visited main-site page, defaulting to the homepage. */

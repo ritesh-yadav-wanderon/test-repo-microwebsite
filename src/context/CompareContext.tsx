@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { readJSON, STORAGE_KEYS, writeJSON } from "@/repositories";
 
 /** Minimal trip data needed to represent an entry in the compare tray. */
 export interface CompareTrip {
@@ -18,17 +19,6 @@ interface CompareCtx {
   clear: () => void;
 }
 
-const STORAGE_KEY = "wanderon_compare";
-
-function readStore(): CompareTrip[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as CompareTrip[]) : [];
-  } catch {
-    return [];
-  }
-}
-
 const CompareContext = createContext<CompareCtx>({
   items: [],
   count: 0,
@@ -39,14 +29,12 @@ const CompareContext = createContext<CompareCtx>({
 });
 
 export function CompareProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<CompareTrip[]>(() => readStore());
+  const [items, setItems] = useState<CompareTrip[]>(() =>
+    readJSON<CompareTrip[]>(STORAGE_KEYS.compare, [])
+  );
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    } catch {
-      /* ignore quota / private-mode errors */
-    }
+    writeJSON(STORAGE_KEYS.compare, items);
   }, [items]);
 
   const isInCompare = useCallback(

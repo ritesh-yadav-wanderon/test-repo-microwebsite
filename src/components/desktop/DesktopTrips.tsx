@@ -1,17 +1,15 @@
 import { memo, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Trip, TripGroup } from "../../types";
-import { useWishlist } from "../../context/WishlistContext";
+import type { Trip, TripGroup } from "@/types";
+import { IMAGE_WIDTHS, sizedImageUrl } from "@/repositories";
 import DesktopBatchesSheet from "./DesktopBatchesSheet";
-import HeartIcon from "../HeartIcon/HeartIcon";
+import DesktopTripCard from "@/components/TripCard/DesktopTripCard";
+import PagerButtons from "@/components/ui/PagerButtons";
 import "./DesktopTrips.css";
 
-const T = "/figma/trips";
-
-function fmtDate(raw: string): string {
-  const d = new Date(raw);
-  if (Number.isNaN(d.getTime())) return raw;
-  return d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" });
+/** Decorative 40px thumbnails behind the "View More Trips" button. */
+function miniThumb(image?: string): string {
+  return image ? sizedImageUrl(image, IMAGE_WIDTHS.mini) : "/figma/trips/trip-1.jpg";
 }
 
 interface Props {
@@ -69,10 +67,10 @@ function DesktopTrips({
           <button className="dtrips__more" onClick={() => navigate(seeAllHref)}>
             <span className="dtrips__more-stack">
               <span className="dtrips__more-mini dtrips__more-mini--left">
-                <img src={flat[0]?.image || "/figma/trips/trip-1.jpg"} alt="" />
+                <img src={miniThumb(flat[0]?.image)} alt="" />
               </span>
               <span className="dtrips__more-mini dtrips__more-mini--right">
-                <img src={flat[1]?.image || "/figma/trips/trip-1.jpg"} alt="" />
+                <img src={miniThumb(flat[1]?.image)} alt="" />
               </span>
             </span>
             View More Trips
@@ -80,18 +78,14 @@ function DesktopTrips({
         )}
       </div>
 
-      <div className="dtrips__pager">
-        <button className="dtrips__pager-btn" aria-label="Previous trips" onClick={() => scrollBy(-1)}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <path d="M15 4 7 12l8 8" stroke="#3d3d3d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-        <button className="dtrips__pager-btn" aria-label="Next trips" onClick={() => scrollBy(1)}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <path d="m9 4 8 8-8 8" stroke="#3d3d3d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-      </div>
+      <PagerButtons
+        onPrev={() => scrollBy(-1)}
+        onNext={() => scrollBy(1)}
+        className="dtrips__pager"
+        buttonClassName="dtrips__pager-btn"
+        prevLabel="Previous trips"
+        nextLabel="Next trips"
+      />
 
       <DesktopBatchesSheet
         isOpen={!!batchesTrip}
@@ -114,82 +108,5 @@ function DesktopTrips({
     </section>
   );
 }
-
-const DesktopTripCard = memo(function DesktopTripCard({
-  trip,
-  onMoreDates,
-}: {
-  trip: Trip;
-  onMoreDates: (trip: Trip) => void;
-}) {
-  const navigate = useNavigate();
-  const { isWishlisted, toggle: toggleWishlist } = useWishlist();
-  const wishlisted = isWishlisted(trip.slug);
-  const batches = trip.batches ?? [];
-  const shown = batches.slice(0, 2).map(fmtDate).join(", ");
-  const extra = Math.max(batches.length - 2, 0);
-
-  const priceNum = trip.startingPrice
-    ? Number(String(trip.startingPrice).replace(/[₹,\s/-]/g, ""))
-    : 0;
-  const price = priceNum ? priceNum.toLocaleString("en-IN") : String(trip.startingPrice ?? "");
-
-  return (
-    <article className="dtrips__card" onClick={() => navigate(`/trip/${trip.slug}`)}>
-      <div className="dtrips__img">
-        <img src={trip.image || `${T}/trip-1.jpg`} alt={trip.title} loading="lazy" />
-        <button
-          className={`dtrips__wishlist${wishlisted ? " dtrips__wishlist--saved" : ""}`}
-          aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
-          aria-pressed={wishlisted}
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleWishlist({
-              slug: trip.slug,
-              title: trip.title,
-              image: trip.image || `${T}/trip-1.jpg`,
-              price: String(trip.startingPrice ?? ""),
-              duration: trip.duration ? `${trip.duration.nights}N/${trip.duration.days}D` : undefined,
-              route: trip.pickDropPoint,
-            });
-          }}
-        >
-          <HeartIcon filled={wishlisted} />
-        </button>
-      </div>
-      <h3 className="dtrips__card-title">{trip.title}</h3>
-      {trip.duration && (
-        <p className="dtrips__duration">
-          <img src={`${T}/icon-calendar-clock.svg`} alt="" />
-          {trip.duration.nights}N/{trip.duration.days}D
-        </p>
-      )}
-      {shown && (
-        <p className="dtrips__dates">
-          <span className="dtrips__dates-list">
-            {shown}
-            {extra > 0 && "..."}
-          </span>
-          {extra > 0 && (
-            <button
-              className="dtrips__dates-more"
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onMoreDates(trip);
-              }}
-            >
-              +{extra} More
-            </button>
-          )}
-        </p>
-      )}
-      <div className="dtrips__price-row">
-        <span className="dtrips__price-now">₹{price}/-</span>
-      </div>
-      <p className="dtrips__price-sub">Onwards per person</p>
-    </article>
-  );
-});
 
 export default memo(DesktopTrips);

@@ -1,8 +1,9 @@
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { useBooking } from "../context/BookingContext";
-import { BILL_ITEMS, TOTAL_TRIP_COST } from "../data/bookingBill";
-import type { CoTravellerData } from "../components/CoTravellerSheet/CoTravellerSheet";
+import { useBooking } from "@/context/BookingContext";
+import { BILL_ITEMS, TOTAL_TRIP_COST } from "@/repositories";
+import type { CoTravellerData } from "@/components/CoTravellerSheet";
 import "./Cancellation.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const A = "/figma/booking/";
 const PAY = "/figma/payments/";
@@ -239,9 +240,9 @@ export default function Cancellation() {
 
       {/* Bottom CTA */}
       <div className="cx-cta-bar">
-        <button className="wo-cta cx-cta" type="button" onClick={handleWithdraw}>
+        <CtaButton className="cx-cta" onClick={handleWithdraw}>
           Withdraw Cancellation Request
-        </button>
+        </CtaButton>
       </div>
     </div>
   );

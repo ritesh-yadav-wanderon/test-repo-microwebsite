@@ -1,9 +1,10 @@
 import { memo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Trip } from "../../types";
-import TripCard from "../TripCard";
-import TripCardShimmer from "../TripCard/TripCardShimmer";
-import FeaturesToggle from "../FeaturesToggle/FeaturesToggle";
+import type { Trip } from "@/types";
+import TripCard from "@/components/TripCard";
+import TripCardShimmer from "@/components/ui/TripCardShimmer";
+import FeaturesToggle from "@/components/FeaturesToggle";
+import PagerButtons from "@/components/ui/PagerButtons";
 import "./DesktopListingStrip.css";
 
 interface Props {
@@ -56,7 +57,9 @@ function DesktopListingStrip({
               </div>
             ))
           : trips.map((trip, i) => (
-              <div className="dls__cell" key={trip.slug}>
+              // Index-suffixed: the synthetic "Customise your X Trip" cards all
+              // carry the destination slug, so the slug alone isn't unique.
+              <div className="dls__cell" key={`${trip.slug}-${i}`}>
                 <TripCard
                   trip={trip}
                   theme="teal"
@@ -68,18 +71,14 @@ function DesktopListingStrip({
             ))}
       </div>
 
-      <div className="dls__pager">
-        <button className="dls__pager-btn" type="button" aria-label="Previous trips" onClick={() => scrollBy(-1)}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <path d="M15 4 7 12l8 8" stroke="#3d3d3d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-        <button className="dls__pager-btn" type="button" aria-label="Next trips" onClick={() => scrollBy(1)}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
-            <path d="m9 4 8 8-8 8" stroke="#3d3d3d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-      </div>
+      <PagerButtons
+        onPrev={() => scrollBy(-1)}
+        onNext={() => scrollBy(1)}
+        className="dls__pager"
+        buttonClassName="dls__pager-btn"
+        prevLabel="Previous trips"
+        nextLabel="Next trips"
+      />
     </section>
   );
 }

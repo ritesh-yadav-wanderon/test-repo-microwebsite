@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import PhoneInput from "../PhoneInput/PhoneInput";
-import { useAuth } from "../../context/AuthContext";
-import { useScrollLock } from "../../hooks/useScrollLock";
+import PhoneInput from "@/components/PhoneInput";
+import { useAuth } from "@/context/AuthContext";
+import Sheet from "@/components/ui/Sheet";
 import "./LoginSheet.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const LS = "/figma/login-sheet/";
 const TIMER_START = 25;
@@ -29,7 +30,6 @@ export default function LoginSheet({ isOpen, onClose, onSuccess }: LoginSheetPro
   const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  useScrollLock(isOpen);
 
   // Reset after close animation
   useEffect(() => {
@@ -127,143 +127,138 @@ export default function LoginSheet({ isOpen, onClose, onSuccess }: LoginSheetPro
   const timerLabel = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
 
   return (
-    <>
-      <div
-        className={`ls-backdrop${isOpen ? " ls-backdrop--open" : ""}`}
-        aria-hidden
-        onClick={onClose}
-      />
-      <div
-        className={`ls-sheet${isOpen ? " ls-sheet--open" : ""}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Log in or sign up"
-        aria-hidden={!isOpen}
-      >
-        <div className="ls-stripe"><div className="ls-stripe-pattern" /></div>
+    <Sheet
+      isOpen={isOpen}
+      onClose={onClose}
+      overlayClassName="ls-backdrop"
+      overlayAsSibling
+      panelClassName="ls-sheet"
+      ariaLabel="Log in or sign up"
+      mountClosed
+    >
+      <div className="ls-stripe"><div className="ls-stripe-pattern" /></div>
 
-        <div className="ls-header">
-          <div className="ls-hbg" aria-hidden>
-            <div className="ls-hbg-col">
-              <div className="ls-blob ls-blob--sq-bl" />
-              <div className="ls-hbg-row">
-                <div className="ls-blob ls-blob--sq-tr" />
-                <div className="ls-blob ls-blob--sq-tl" />
-              </div>
+      <div className="ls-header">
+        <div className="ls-hbg" aria-hidden>
+          <div className="ls-hbg-col">
+            <div className="ls-blob ls-blob--sq-bl" />
+            <div className="ls-hbg-row">
+              <div className="ls-blob ls-blob--sq-tr" />
+              <div className="ls-blob ls-blob--sq-tl" />
             </div>
           </div>
-          <div className="ls-logo">
-            <img src="/figma/nav2/logo.png" width={60} height={60} className="ls-logo-img" alt="WanderOn" />
-          </div>
-          <button className="ls-close" type="button" onClick={onClose} aria-label="Close">
-            <img src={`${LS}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
-          </button>
         </div>
-
-        <div className="ls-body">
-          <div className="ls-text-block">
-            <h2 className="ls-title">Log in or sign up</h2>
-            <p className="ls-desc">Unlock exclusive deals and get personalised recommendations!</p>
-          </div>
-
-          {step === 1 && (
-            <div className="ls-step1">
-              <p className="ls-phone-label">Enter your mobile number.</p>
-              <div className="ls-step1-inputs">
-                <PhoneInput
-                  label="Mobile Number"
-                  value={phone}
-                  onChange={v => { setPhone(v); setPhoneError(undefined); }}
-                  error={phoneError}
-                  initialCountryCode={countryCode}
-                  onCountryChange={handleCountryChange}
-                />
-                <button className="wo-cta ls-action-btn" type="button" onClick={handleRequestOtp}>
-                  Request OTP
-                </button>
-              </div>
-            </div>
-          )}
-
-          {step === 2 && (
-            <div className="ls-step2">
-              <button
-                className="ls-back"
-                type="button"
-                onClick={() => setStep(1)}
-                aria-label="Edit mobile number"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path
-                    d="M15 18l-6-6 6-6"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                <span>Change number</span>
-              </button>
-
-              <PhoneInput
-                label="Contact Number"
-                value={phone}
-                onChange={() => {}}
-                disabled
-                initialCountryCode={countryCode}
-              />
-
-              <div className="ls-otp-section">
-                <p className="ls-otp-hint">Enter 4 digit OTP sent to your mobile number.</p>
-                <div className="ls-otp-boxes">
-                  {otp.map((digit, i) => (
-                    <input
-                      key={i}
-                      ref={el => { otpRefs.current[i] = el; }}
-                      className={`ls-otp-box${otpError ? " ls-otp-box--error" : ""}`}
-                      type="text"
-                      inputMode="numeric"
-                      maxLength={1}
-                      value={digit}
-                      onChange={e => handleOtpChange(i, e.target.value)}
-                      onKeyDown={e => handleOtpKeyDown(i, e)}
-                      aria-label={`OTP digit ${i + 1}`}
-                    />
-                  ))}
-                </div>
-                {otpError && <p className="ls-otp-error">{otpError}</p>}
-                <p className="ls-otp-dev-hint">
-                  Use OTP <strong>{DUMMY_OTP}</strong> to verify
-                </p>
-              </div>
-
-              <div className="ls-step2-actions">
-                <button className="wo-cta ls-action-btn" type="button" onClick={handleAuthenticate}>
-                  Authenticate
-                </button>
-                <div className="ls-timer-row">
-                  <span className="ls-timer">{timerLabel}</span>
-                  <button
-                    className={`ls-resend${canResend ? "" : " ls-resend--disabled"}`}
-                    type="button"
-                    onClick={handleResend}
-                    disabled={!canResend}
-                  >
-                    Resend OTP
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <p className="ls-legal">
-            By signing up or logging in, you acknowledge and agree to{" "}
-            <a href="/legal/terms" className="ls-legal-link">WanderOn Terms of Use</a>
-            {" "}and{" "}
-            <a href="/legal/privacy" className="ls-legal-link">Privacy Policy</a>.
-          </p>
+        <div className="ls-logo">
+          <img src="/figma/nav2/logo.png" width={60} height={60} className="ls-logo-img" alt="WanderOn" />
         </div>
+        <button className="ls-close" type="button" onClick={onClose} aria-label="Close">
+          <img src={`${LS}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+        </button>
       </div>
-    </>
+
+      <div className="ls-body">
+        <div className="ls-text-block">
+          <h2 className="ls-title">Log in or sign up</h2>
+          <p className="ls-desc">Unlock exclusive deals and get personalised recommendations!</p>
+        </div>
+
+        {step === 1 && (
+          <div className="ls-step1">
+            <p className="ls-phone-label">Enter your mobile number.</p>
+            <div className="ls-step1-inputs">
+              <PhoneInput
+                label="Mobile Number"
+                value={phone}
+                onChange={v => { setPhone(v); setPhoneError(undefined); }}
+                error={phoneError}
+                initialCountryCode={countryCode}
+                onCountryChange={handleCountryChange}
+              />
+              <CtaButton className="ls-action-btn" onClick={handleRequestOtp}>
+                Request OTP
+              </CtaButton>
+            </div>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="ls-step2">
+            <button
+              className="ls-back"
+              type="button"
+              onClick={() => setStep(1)}
+              aria-label="Edit mobile number"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path
+                  d="M15 18l-6-6 6-6"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              <span>Change number</span>
+            </button>
+
+            <PhoneInput
+              label="Contact Number"
+              value={phone}
+              onChange={() => {}}
+              disabled
+              initialCountryCode={countryCode}
+            />
+
+            <div className="ls-otp-section">
+              <p className="ls-otp-hint">Enter 4 digit OTP sent to your mobile number.</p>
+              <div className="ls-otp-boxes">
+                {otp.map((digit, i) => (
+                  <input
+                    key={i}
+                    ref={el => { otpRefs.current[i] = el; }}
+                    className={`ls-otp-box${otpError ? " ls-otp-box--error" : ""}`}
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={1}
+                    value={digit}
+                    onChange={e => handleOtpChange(i, e.target.value)}
+                    onKeyDown={e => handleOtpKeyDown(i, e)}
+                    aria-label={`OTP digit ${i + 1}`}
+                  />
+                ))}
+              </div>
+              {otpError && <p className="ls-otp-error">{otpError}</p>}
+              <p className="ls-otp-dev-hint">
+                Use OTP <strong>{DUMMY_OTP}</strong> to verify
+              </p>
+            </div>
+
+            <div className="ls-step2-actions">
+              <CtaButton className="ls-action-btn" onClick={handleAuthenticate}>
+                Authenticate
+              </CtaButton>
+              <div className="ls-timer-row">
+                <span className="ls-timer">{timerLabel}</span>
+                <button
+                  className={`ls-resend${canResend ? "" : " ls-resend--disabled"}`}
+                  type="button"
+                  onClick={handleResend}
+                  disabled={!canResend}
+                >
+                  Resend OTP
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <p className="ls-legal">
+          By signing up or logging in, you acknowledge and agree to{" "}
+          <a href="/legal/terms" className="ls-legal-link">WanderOn Terms of Use</a>
+          {" "}and{" "}
+          <a href="/legal/privacy" className="ls-legal-link">Privacy Policy</a>.
+        </p>
+      </div>
+    </Sheet>
   );
 }

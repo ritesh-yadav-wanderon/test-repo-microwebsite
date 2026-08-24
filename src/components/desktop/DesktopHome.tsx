@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ApiSource, TripGroup } from "../../types";
+import type { ApiSource, TripGroup } from "@/types";
 import DesktopNav from "./DesktopNav";
 import DesktopHero from "./DesktopHero";
 import DesktopCategoryTabs from "./DesktopCategoryTabs";
@@ -10,7 +10,7 @@ import DesktopPlot from "./DesktopPlot";
 import DesktopWhyTravellers from "./DesktopWhyTravellers";
 import DesktopOriginals from "./DesktopOriginals";
 import DesktopQuery from "./DesktopQuery";
-import DesktopFooterMsg from "./DesktopFooterMsg";
+import EndMark from "@/components/ui/EndMark";
 import DesktopFooter from "./DesktopFooter";
 import "./DesktopHome.css";
 
@@ -37,7 +37,7 @@ export default function DesktopHome({ trips, loading }: Props) {
       <DesktopPlot />
       <DesktopWhyTravellers />
       <DesktopQuery />
-      <DesktopFooterMsg />
+      <EndMark variant="desktop" />
       <DesktopFooter />
     </div>
   );

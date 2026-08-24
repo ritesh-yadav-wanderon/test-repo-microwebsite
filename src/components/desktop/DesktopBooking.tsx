@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import Voucher from "../Voucher/Voucher";
+import Voucher from "@/components/Voucher";
 import DesktopReviewBooking from "./DesktopReviewBooking";
-import { formatINR, type BookingForm } from "../../pages/useBookingForm";
+import { formatINR, type BookingForm } from "@/hooks/useBookingForm";
+import Checkbox from "@/components/ui/Checkbox";
+import OptionRow from "@/components/ui/OptionRow";
+import Stepper from "@/components/ui/Stepper";
 import "./DesktopBooking.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const A = "/figma/booking/";
 const TRIP_THUMB = "/figma/trip-hero/hero-bg.png";
@@ -368,25 +372,14 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                     <span className="dbk-room-per">per person</span>
                   </div>
                 </div>
-                <div className="dbk-stepper">
-                  <button
-                    className="dbk-step-btn"
-                    type="button"
-                    aria-label="Decrease travelers"
-                    onClick={() => setTravelers((v) => Math.max(1, v - 1))}
-                  >
-                    <img src={`${A}icon-minus.svg`} width={16} height={16} alt="" aria-hidden />
-                  </button>
-                  <span className="dbk-step-count">{travelers}</span>
-                  <button
-                    className="dbk-step-btn"
-                    type="button"
-                    aria-label="Increase travelers"
-                    onClick={() => setTravelers((v) => v + 1)}
-                  >
-                    <img src={`${A}icon-plus.svg`} width={12} height={12} alt="" aria-hidden />
-                  </button>
-                </div>
+                <Stepper
+                  value={travelers}
+                  onChange={setTravelers}
+                  classPrefix="dbk"
+                  iconSize={{ minus: 16, plus: 12 }}
+                  decreaseLabel="Decrease travelers"
+                  increaseLabel="Increase travelers"
+                />
               </div>
             </div>
 
@@ -402,73 +395,48 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                 <div className="dbk-bf-row">
                   <div className="dbk-bf-col">
                     <span className="dbk-bf-label">Female</span>
-                    <div className="dbk-stepper">
-                      <button
-                        className="dbk-step-btn"
-                        type="button"
-                        aria-label="Decrease female travelers"
-                        disabled={effectiveFemale <= femaleMin}
-                        onClick={() => setFemaleCount(Math.max(femaleMin, effectiveFemale - 1))}
-                      >
-                        <img src={`${A}icon-minus.svg`} width={16} height={16} alt="" aria-hidden />
-                      </button>
-                      <span className="dbk-step-count">{effectiveFemale}</span>
-                      <button
-                        className="dbk-step-btn"
-                        type="button"
-                        aria-label="Increase female travelers"
-                        onClick={() => setFemaleCount(effectiveFemale + 1)}
-                      >
-                        <img src={`${A}icon-plus.svg`} width={12} height={12} alt="" aria-hidden />
-                      </button>
-                    </div>
+                    <Stepper
+                      value={effectiveFemale}
+                      onChange={setFemaleCount}
+                      min={femaleMin}
+                      classPrefix="dbk"
+                      iconSize={{ minus: 16, plus: 12 }}
+                      disableAtBounds
+                      decreaseLabel="Decrease female travelers"
+                      increaseLabel="Increase female travelers"
+                    />
                   </div>
 
                   <div className="dbk-bf-divider" aria-hidden />
 
                   <div className="dbk-bf-col">
                     <span className="dbk-bf-label">Male</span>
-                    <div className="dbk-stepper">
-                      <button
-                        className="dbk-step-btn"
-                        type="button"
-                        aria-label="Decrease male travelers"
-                        disabled={effectiveMale <= maleMin}
-                        onClick={() => setMaleCount(Math.max(maleMin, effectiveMale - 1))}
-                      >
-                        <img src={`${A}icon-minus.svg`} width={16} height={16} alt="" aria-hidden />
-                      </button>
-                      <span className="dbk-step-count">{effectiveMale}</span>
-                      <button
-                        className="dbk-step-btn"
-                        type="button"
-                        aria-label="Increase male travelers"
-                        onClick={() => setMaleCount(effectiveMale + 1)}
-                      >
-                        <img src={`${A}icon-plus.svg`} width={12} height={12} alt="" aria-hidden />
-                      </button>
-                    </div>
+                    <Stepper
+                      value={effectiveMale}
+                      onChange={setMaleCount}
+                      min={maleMin}
+                      classPrefix="dbk"
+                      iconSize={{ minus: 16, plus: 12 }}
+                      disableAtBounds
+                      decreaseLabel="Decrease male travelers"
+                      increaseLabel="Increase male travelers"
+                    />
                   </div>
                 </div>
               </div>
             )}
 
             <div className="dbk-block">
-              <label className="dbk-option">
-                <span className="dbk-section-icon">
-                  <img src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />
-                </span>
-                <span className="dbk-option-label dbk-option-label--between">
-                  <span>Flexible Cancellation</span>
-                  <span className="dbk-option-price dbk-option-price--dark">+ &#8377;5,999/-</span>
-                </span>
-                <input
-                  type="checkbox"
-                  className="dbk-checkbox"
-                  checked={flexibleCancel}
-                  onChange={(e) => setFlexibleCancel(e.target.checked)}
-                />
-              </label>
+              <OptionRow
+                checked={flexibleCancel}
+                onChange={setFlexibleCancel}
+                classPrefix="dbk-option"
+                iconClassName="dbk-section-icon"
+                checkboxClassName="dbk-checkbox"
+                icon={<img src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />}
+                label="Flexible Cancellation"
+                price={<>+ &#8377;5,999/-</>}
+              />
               <p className="dbk-option-desc">
                 Want more flexibility with your booking? Purchase our Flexible Cancellation to
                 cover your trip up to 1 day before departure.
@@ -571,12 +539,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
               />
 
               {isPersonalDetails && <div className="dbk-agree">
-                <input
-                  type="checkbox"
-                  className="dbk-checkbox"
-                  checked={agreed}
-                  onChange={(e) => setAgreed(e.target.checked)}
-                />
+                <Checkbox checked={agreed} onChange={setAgreed} className="dbk-checkbox" />
                 <p className="dbk-agree-text">
                   I agree to the <Link to="/legal">Payment Terms</Link>,{" "}
                   <Link to="/legal">Cancellation Policy</Link>, General{" "}
@@ -611,14 +574,13 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                     <span>Convenience fee</span>
                   </button>
                 </div>
-                <button
-                  className="wo-cta dbk-rail-btn"
-                  type="button"
+                <CtaButton
+                  className="dbk-rail-btn"
                   disabled={isPersonalDetails && !agreed}
                   onClick={() => isPersonalDetails ? setReviewOpen(true) : goToPersonalDetails()}
                 >
                   {isPersonalDetails ? "Proceed to Payment" : "Book Now"}
-                </button>
+                </CtaButton>
               </div>
             </div>
           </div>

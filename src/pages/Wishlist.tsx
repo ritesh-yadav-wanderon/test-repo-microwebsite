@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useWishlist, type WishlistTrip } from "../context/WishlistContext";
-import { useCompare } from "../context/CompareContext";
-import { useIsDesktop } from "../hooks/useIsDesktop";
-import DesktopWishlist from "../components/desktop/DesktopWishlist";
+import { useWishlist, type WishlistTrip } from "@/context/WishlistContext";
+import { useCompare } from "@/context/CompareContext";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import DesktopWishlist from "@/components/desktop/DesktopWishlist";
 import "./Wishlist.css";
 
 const W = "/figma/wishlist/";

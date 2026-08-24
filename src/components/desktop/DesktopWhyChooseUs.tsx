@@ -1,27 +1,12 @@
 import { useState } from "react";
 import "./DesktopWhyChooseUs.css";
 import DesktopReviewsModal from "./DesktopReviewsModal";
+import { getReviews } from "@/repositories";
 
 const BASE = "/figma/desktop";
 
 /* Same review collection as the mobile TribeStories section. */
-const REVIEWS = [
-  {
-    name: "Shrutika Parab",
-    date: "May, 2026",
-    text: "Thank you Team Wanderon for the amazing Ladakh Experience. Thank you Team Wanderon for the amazing Ladakh Experience. Right from the point of making the...",
-  },
-  {
-    name: "Priya Sharma",
-    date: "Apr, 2026",
-    text: "An absolutely incredible trip to Spiti Valley! The team was professional and the experience was beyond expectations. Highly recommend WanderOn to everyone...",
-  },
-  {
-    name: "Rahul Mehta",
-    date: "Mar, 2026",
-    text: "WanderOn made our Europe trip seamless and memorable. From Paris to Budapest, every detail was taken care of. The community vibe was amazing...",
-  },
-];
+const REVIEWS = getReviews(3);
 
 /* review-phone-2/3 are the same images as the mobile Plot section, so the
  * shared /figma/plot copies are reused instead of duplicating them here. */

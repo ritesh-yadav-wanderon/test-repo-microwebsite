@@ -1,6 +1,6 @@
 import { useState } from "react";
-import SearchBottomSheet from "../SearchBottomSheet/SearchBottomSheet";
-import BurgerMenu from "../BurgerMenu/BurgerMenu";
+import SearchBottomSheet from "@/components/SearchBottomSheet";
+import BurgerMenu from "@/components/BurgerMenu";
 import "./SiteHeader2.css";
 
 interface SiteHeader2Props {

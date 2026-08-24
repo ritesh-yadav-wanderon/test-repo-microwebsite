@@ -1,42 +1,10 @@
 import { useState } from "react";
 import "./TribeStories.css";
-import ReviewsSheet from "../ReviewsSheet/ReviewsSheet";
+import ReviewsSheet from "@/components/ReviewsSheet";
+import { getReviews, REVIEW_TABS } from "@/repositories";
 
-interface Review {
-  name: string;
-  date: string;
-  text: string;
-}
-
-const REVIEWS: Review[] = [
-  {
-    name: "Shrutika Parab",
-    date: "May, 2026",
-    text: "Thank you Team Wanderon for the amazing Ladakh Experience. Thank you Team Wanderon for the amazing Ladakh Experience. Right from the point of making the...",
-  },
-  {
-    name: "Priya Sharma",
-    date: "Apr, 2026",
-    text: "An absolutely incredible trip to Spiti Valley! The team was professional and the experience was beyond expectations. Highly recommend WanderOn to everyone...",
-  },
-  {
-    name: "Rahul Mehta",
-    date: "Mar, 2026",
-    text: "WanderOn made our Europe trip seamless and memorable. From Paris to Budapest, every detail was taken care of. The community vibe was amazing...",
-  },
-];
-
-const TABS = [
-  "All",
-  "Solo Travellers (8)",
-  "Women Travellers (12)",
-  "Adventure",
-  "Wellness",
-  "Festival",
-  "Luxury",
-  "Romantic",
-  "Cultural",
-];
+const REVIEWS = getReviews(3);
+const TABS = REVIEW_TABS;
 
 export default function TribeStories() {
   const [activeTab, setActiveTab] = useState(0);

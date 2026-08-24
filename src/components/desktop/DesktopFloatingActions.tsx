@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { WHATSAPP_URL } from "../BottomNav/BottomNav";
-import { useIsDesktop } from "../../hooks/useIsDesktop";
-import { getScrollTop, onAppScroll, scrollAppToTop } from "../../utils/scroll";
+import { WHATSAPP_URL } from "@/components/BottomNav";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import { getScrollTop, onAppScroll, scrollAppToTop } from "@/utils/scroll";
 import "./DesktopFloatingActions.css";
 
 /** Floating WhatsApp chat + scroll-to-top buttons pinned 40px from the

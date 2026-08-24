@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import ProfileWatermark from "./ProfileWatermark";
-import { exitToMainPage } from "../../utils/lastMainPage";
+import { useAuth } from "@/context/AuthContext";
+import EndMark from "@/components/ui/EndMark";
+import { exitToMainPage } from "@/utils/lastMainPage";
 import "./DesktopProfile.css";
 
 const DP = "/figma/desktop-profile/";
@@ -382,7 +382,7 @@ export default function DesktopProfile() {
       </div>
 
       {/* Grey sign-off — page level, aligned with the content gutter */}
-      <ProfileWatermark />
+      <EndMark variant="watermark" />
 
       {/* Same minimal footer as the desktop booking page */}
       <footer className="dpr-footer">

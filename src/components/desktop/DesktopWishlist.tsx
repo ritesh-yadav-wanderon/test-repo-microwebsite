@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useWishlist, type WishlistTrip } from "../../context/WishlistContext";
-import { useCompare } from "../../context/CompareContext";
+import { useWishlist, type WishlistTrip } from "@/context/WishlistContext";
+import { useCompare } from "@/context/CompareContext";
 import DesktopFooter from "./DesktopFooter";
 import "./DesktopWishlist.css";
 

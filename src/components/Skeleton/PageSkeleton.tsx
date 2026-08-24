@@ -1,5 +1,5 @@
 import "./PageSkeleton.css";
-import { useIsDesktop } from "../../hooks/useIsDesktop";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 
 export type SkeletonVariant =
   | "list"

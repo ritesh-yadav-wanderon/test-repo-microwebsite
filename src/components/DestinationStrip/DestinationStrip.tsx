@@ -1,12 +1,17 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import DestinationSheet from "../DestinationSheet/DestinationSheet";
+import DestinationSheet from "@/components/DestinationSheet";
+import {
+  DESTINATION_CATEGORIES,
+  getMonuments,
+  type MonumentDestination,
+} from "@/repositories";
 import "./DestinationStrip.css";
 
 const CAT_SEP = "/figma/dest/cat-sep.png";
 
 // Index 0 = All Trips (home icon); 1–6 = text tabs
-const CATEGORIES = ["Adventure", "Luxury", "Culture", "Festival", "Wellness", "Weekend"];
+const CATEGORIES = DESTINATION_CATEGORIES;
 
 function HomeIcon() {
   return (
@@ -16,33 +21,10 @@ function HomeIcon() {
   );
 }
 
-interface Destination {
-  name: string;
-  img: string;
-  ellipse: "color" | "gray";
-  flip?: boolean;
-}
+const DOMESTIC = getMonuments("domestic");
+const INTERNATIONAL = getMonuments("international");
 
-const DOMESTIC: Destination[] = [
-  { name: "Kerala",     img: "/figma/dest/kerala.png",    ellipse: "color" },
-  { name: "Rajasthan",  img: "/figma/dest/rajasthan.png", ellipse: "gray", flip: true },
-  { name: "Spiti",      img: "/figma/dest/spiti.png",     ellipse: "gray" },
-  { name: "Meghalaya",  img: "/figma/dest/meghalaya.png", ellipse: "gray" },
-  { name: "Kashmir",    img: "/figma/dest/kashmir.png",   ellipse: "gray" },
-  { name: "Ladakh",     img: "/figma/dest/ladakh.png",    ellipse: "gray", flip: true },
-];
-
-const INTERNATIONAL: Destination[] = [
-  { name: "Egypt",    img: "/figma/dest/egypt.png",    ellipse: "color" },
-  { name: "Bali",     img: "/figma/dest/bali.png",     ellipse: "color" },
-  { name: "Japan",    img: "/figma/dest/japan.png",    ellipse: "color" },
-  { name: "Thailand", img: "/figma/dest/thailand.png", ellipse: "color" },
-  { name: "Europe",   img: "/figma/dest/meghalaya.png",ellipse: "color" },
-  { name: "Dubai",    img: "/figma/dest/dubai.png",    ellipse: "color" },
-  { name: "Vietnam",  img: "/figma/dest/vietnam.png",  ellipse: "color" },
-];
-
-function DestItem({ dest }: { dest: Destination }) {
+function DestItem({ dest }: { dest: MonumentDestination }) {
   return (
     <Link className="dest-item" to={`/destination/${dest.name}`} aria-label={dest.name}>
       <div className="dest-item-img-wrap">

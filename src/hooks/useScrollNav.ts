@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getScrollTop, onAppScroll } from "../utils/scroll";
+import { getScrollTop, onAppScroll } from "@/utils/scroll";
 
 /**
  * Homepage: driven by the hero search bar's visibility.

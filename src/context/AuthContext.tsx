@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { readJSON, removeKey, STORAGE_KEYS, writeJSON } from "@/repositories";
 
 interface User {
   name?: string;
@@ -15,15 +16,8 @@ interface AuthCtx {
   logout: () => void;
 }
 
-const STORAGE_KEY = "wanderon_user";
-
 function readStoredUser(): User | null {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as User) : null;
-  } catch {
-    return null;
-  }
+  return readJSON<User | null>(STORAGE_KEYS.user, null);
 }
 
 const AuthContext = createContext<AuthCtx>({
@@ -47,12 +41,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   function login(phone: string, countryCode: string) {
     const u: User = { phone, countryCode };
     setUser(u);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(u));
+    writeJSON(STORAGE_KEYS.user, u);
   }
 
   function logout() {
     setUser(null);
-    localStorage.removeItem(STORAGE_KEY);
+    removeKey(STORAGE_KEYS.user);
   }
 
   return (

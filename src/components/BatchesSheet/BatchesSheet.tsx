@@ -1,19 +1,13 @@
-import { useState, useEffect, useMemo } from "react";
+import { useMemo, useState } from "react";
+import Sheet from "@/components/ui/Sheet";
 import { useNavigate } from "react-router-dom";
-import { useScrollLock } from "../../hooks/useScrollLock";
+import { DEFAULT_BATCHES, getBatchStatus, type BatchItem } from "@/repositories";
 import "./BatchesSheet.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const ASSETS = "/figma/batches/";
 
-export interface BatchItem {
-  startDate: string; // ISO YYYY-MM-DD
-  endDate?: string;
-  groupSize?: number;
-  seatsLeft?: number | null; // null = sold out
-  fillingFast?: boolean;
-  interested?: number;
-  price: string;
-}
+export type { BatchItem };
 
 interface BatchesSheetProps {
   isOpen: boolean;
@@ -39,22 +33,6 @@ const WEEK_DAYS = [
   "Thursday",
   "Friday",
   "Saturday",
-];
-
-/** Sample batches matching Figma 3044:23808 */
-export const DEFAULT_BATCHES: BatchItem[] = [
-  { startDate: "2026-07-09", groupSize: 50, seatsLeft: 4, interested: 12, price: "169990" },
-  { startDate: "2026-07-12", groupSize: 50, seatsLeft: null, interested: 12, price: "169990" },
-  { startDate: "2026-07-18", groupSize: 50, seatsLeft: 4, fillingFast: true, interested: 12, price: "169990" },
-  { startDate: "2026-07-22", groupSize: 50, seatsLeft: 8, interested: 9, price: "169990" },
-  { startDate: "2026-08-06", groupSize: 50, seatsLeft: 4, interested: 15, price: "174990" },
-  { startDate: "2026-08-12", groupSize: 50, seatsLeft: null, interested: 20, price: "174990" },
-  { startDate: "2026-08-18", groupSize: 50, seatsLeft: 2, fillingFast: true, interested: 18, price: "174990" },
-  { startDate: "2026-09-06", groupSize: 50, seatsLeft: 12, interested: 7, price: "164990" },
-  { startDate: "2026-09-12", groupSize: 50, seatsLeft: 6, interested: 11, price: "164990" },
-  { startDate: "2026-10-06", groupSize: 50, seatsLeft: 10, interested: 5, price: "159990" },
-  { startDate: "2026-11-09", groupSize: 50, seatsLeft: 14, interested: 4, price: "154990" },
-  { startDate: "2026-12-12", groupSize: 50, seatsLeft: 8, interested: 8, price: "159990" },
 ];
 
 function addDays(iso: string, days: number): Date {
@@ -91,14 +69,6 @@ function formatPrice(price: string) {
   return n.toLocaleString("en-IN");
 }
 
-type BatchStatus = "available" | "sold-out" | "filling";
-
-function getStatus(batch: BatchItem): BatchStatus {
-  if (batch.seatsLeft === null || batch.seatsLeft === 0) return "sold-out";
-  if (batch.fillingFast) return "filling";
-  return "available";
-}
-
 function BatchCard({
   batch,
   nights,
@@ -114,7 +84,7 @@ function BatchCard({
   const endDate = batch.endDate
     ? new Date(batch.endDate + "T00:00:00")
     : addDays(batch.startDate, nights);
-  const status = getStatus(batch);
+  const status = getBatchStatus(batch);
   const isSoldOut = status === "sold-out";
   const groupSize = batch.groupSize ?? 50;
   const interested = batch.interested ?? 12;
@@ -206,14 +176,13 @@ function BatchCard({
             &#8377; {formatPrice(batch.price)}/-
           </span>
         </div>
-        <button
-          type="button"
-          className="wo-cta bsh-card-cta"
+        <CtaButton
+          className="bsh-card-cta"
           disabled={isSoldOut}
           onClick={() => onBook(batch, startDate, endDate)}
         >
           {isSoldOut ? "Sold Out" : ctaLabel}
-        </button>
+        </CtaButton>
       </div>
     </div>
   );
@@ -229,7 +198,6 @@ export default function BatchesSheet({
   onSelectBatch,
 }: BatchesSheetProps) {
   const navigate = useNavigate();
-  const [hasOpened, setHasOpened] = useState(false);
   const [selectedMonth, setSelectedMonth] = useState("");
 
   const goToBooking = (state: Record<string, unknown>) => {
@@ -262,12 +230,6 @@ export default function BatchesSheet({
     goToBooking(bookingState);
   };
 
-  useEffect(() => {
-    if (isOpen) setHasOpened(true);
-  }, [isOpen]);
-
-  useScrollLock(isOpen);
-
   const months = useMemo(() => {
     const seen = new Set<string>();
     const result: string[] = [];
@@ -288,111 +250,99 @@ export default function BatchesSheet({
     [batches, activeMonth]
   );
 
-  if (!hasOpened) return null;
-
   return (
-    <>
-    <div
-      className={`bsh-overlay${isOpen ? " bsh-overlay--open" : ""}`}
-      aria-hidden={!isOpen}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
+    <Sheet
+      isOpen={isOpen}
+      onClose={onClose}
+      overlayClassName="bsh-overlay"
+      panelClassName="bsh-sheet"
+      ariaLabel="Batches"
     >
-      <div
-        className={`bsh-sheet${isOpen ? " bsh-sheet--open" : ""}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Batches"
-      >
-        <div className="bsh-header">
-          <div className="bsh-header-left">
-            <button
-              className="bsh-back"
-              type="button"
-              aria-label="Back"
-              onClick={onClose}
-            >
-              <img
-                src={`${ASSETS}icon-arrow-back.svg`}
-                width={24}
-                height={24}
-                alt=""
-                aria-hidden
-              />
-            </button>
-            <span className="bsh-title">Batches</span>
-          </div>
+      <div className="bsh-header">
+        <div className="bsh-header-left">
           <button
-            className="bsh-close"
+            className="bsh-back"
             type="button"
-            aria-label="Close"
+            aria-label="Back"
             onClick={onClose}
           >
             <img
-              src={`${ASSETS}icon-close.svg`}
-              width={30}
-              height={30}
+              src={`${ASSETS}icon-arrow-back.svg`}
+              width={24}
+              height={24}
               alt=""
               aria-hidden
             />
           </button>
+          <span className="bsh-title">Batches</span>
         </div>
-
-        <div className="bsh-tag-bar">
-          <div className="bsh-tag-icon" aria-hidden>
-            <img
-              src={`${ASSETS}icon-your-trips.svg`}
-              width={14}
-              height={14}
-              alt=""
-            />
-          </div>
-          <span className="bsh-tag-label">{tripTitle}</span>
-        </div>
-
-        {months.length > 0 && (
-          <div className="bsh-months">
-            {months.map((m) => {
-              const isActive = m === activeMonth;
-              return (
-                <button
-                  key={m}
-                  className={`bsh-month-tab${isActive ? " bsh-month-tab--active" : ""}`}
-                  type="button"
-                  onClick={() => setSelectedMonth(m)}
-                >
-                  <span>{monthLabel(m)}</span>
-                  {isActive && (
-                    <span className="bsh-month-clear" aria-hidden>
-                      <img
-                        src={`${ASSETS}icon-close-chip.svg`}
-                        width={16}
-                        height={16}
-                        alt=""
-                      />
-                    </span>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        )}
-
-        <div className="bsh-cards">
-          {filteredBatches.map((batch) => (
-            <BatchCard
-              key={batch.startDate}
-              batch={batch}
-              nights={nights}
-              onBook={handleBook}
-              ctaLabel={ctaLabel}
-            />
-          ))}
-        </div>
+        <button
+          className="bsh-close"
+          type="button"
+          aria-label="Close"
+          onClick={onClose}
+        >
+          <img
+            src={`${ASSETS}icon-close.svg`}
+            width={30}
+            height={30}
+            alt=""
+            aria-hidden
+          />
+        </button>
       </div>
-    </div>
 
-    </>
+      <div className="bsh-tag-bar">
+        <div className="bsh-tag-icon" aria-hidden>
+          <img
+            src={`${ASSETS}icon-your-trips.svg`}
+            width={14}
+            height={14}
+            alt=""
+          />
+        </div>
+        <span className="bsh-tag-label">{tripTitle}</span>
+      </div>
+
+      {months.length > 0 && (
+        <div className="bsh-months">
+          {months.map((m) => {
+            const isActive = m === activeMonth;
+            return (
+              <button
+                key={m}
+                className={`bsh-month-tab${isActive ? " bsh-month-tab--active" : ""}`}
+                type="button"
+                onClick={() => setSelectedMonth(m)}
+              >
+                <span>{monthLabel(m)}</span>
+                {isActive && (
+                  <span className="bsh-month-clear" aria-hidden>
+                    <img
+                      src={`${ASSETS}icon-close-chip.svg`}
+                      width={16}
+                      height={16}
+                      alt=""
+                    />
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      <div className="bsh-cards">
+        {filteredBatches.map((batch) => (
+          <BatchCard
+            key={batch.startDate}
+            batch={batch}
+            nights={nights}
+            onBook={handleBook}
+            ctaLabel={ctaLabel}
+          />
+        ))}
+      </div>
+    </Sheet>
   );
 }

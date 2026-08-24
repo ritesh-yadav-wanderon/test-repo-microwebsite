@@ -1,15 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Header from "../Header";
-import OnScrollTopNav from "../OnScrollTopNav";
-import SearchBottomSheet from "../SearchBottomSheet/SearchBottomSheet";
-import BurgerMenu from "../BurgerMenu/BurgerMenu";
-import FilterSheet from "../FilterSheet/FilterSheet";
-import LoginSheet from "../LoginSheet/LoginSheet";
-import ContactFormSheet from "../ContactFormSheet/ContactFormSheet";
-import DesktopCompareFab from "../desktop/DesktopCompareFab";
-import DesktopFloatingActions from "../desktop/DesktopFloatingActions";
-import { useScrollNav } from "../../hooks/useScrollNav";
+import Header from "@/components/Header";
+import OnScrollTopNav from "@/components/OnScrollTopNav";
+import SearchBottomSheet from "@/components/SearchBottomSheet";
+import BurgerMenu from "@/components/BurgerMenu";
+import FilterSheet from "@/components/FilterSheet";
+import LoginSheet from "@/components/LoginSheet";
+import ContactFormSheet from "@/components/ContactFormSheet";
+import DesktopCompareFab from "@/components/desktop/DesktopCompareFab";
+import DesktopFloatingActions from "@/components/desktop/DesktopFloatingActions";
+import { useScrollNav } from "@/hooks/useScrollNav";
 
 export default function SiteChrome() {
   const location = useLocation();

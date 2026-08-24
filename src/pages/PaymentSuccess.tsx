@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import PaymentConfirmation from "../components/PaymentConfirmation/PaymentConfirmation";
-import { useIsDesktop } from "../hooks/useIsDesktop";
+import PaymentConfirmation from "@/components/PaymentConfirmation";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 import "./PaymentSuccess.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const M = "/figma/my-booking/";
 const A = "/figma/booking/";
@@ -121,9 +122,9 @@ export default function PaymentSuccess() {
 
       {showCta && (
         <div className="ps-cta-bar">
-          <button className="wo-cta ps-cta" type="button" onClick={handleContinue}>
+          <CtaButton className="ps-cta" onClick={handleContinue}>
             Complete KYC
-          </button>
+          </CtaButton>
         </div>
       )}
     </div>

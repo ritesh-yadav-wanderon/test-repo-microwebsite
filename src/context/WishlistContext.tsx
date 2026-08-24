@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { readJSON, STORAGE_KEYS, writeJSON } from "@/repositories";
 
 /** Minimal trip data stored for a wishlisted trip. */
 export interface WishlistTrip {
@@ -21,17 +22,6 @@ interface WishlistCtx {
   clear: () => void;
 }
 
-const STORAGE_KEY = "wanderon_wishlist";
-
-function readStore(): WishlistTrip[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as WishlistTrip[]) : [];
-  } catch {
-    return [];
-  }
-}
-
 const WishlistContext = createContext<WishlistCtx>({
   items: [],
   count: 0,
@@ -42,14 +32,12 @@ const WishlistContext = createContext<WishlistCtx>({
 });
 
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<WishlistTrip[]>(() => readStore());
+  const [items, setItems] = useState<WishlistTrip[]>(() =>
+    readJSON<WishlistTrip[]>(STORAGE_KEYS.wishlist, [])
+  );
 
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    } catch {
-      /* ignore quota / private-mode errors */
-    }
+    writeJSON(STORAGE_KEYS.wishlist, items);
   }, [items]);
 
   const isWishlisted = useCallback(

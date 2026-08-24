@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import FooterMessage from "../components/FooterMessage/FooterMessage";
+import EndMark from "@/components/ui/EndMark";
 import "./Legal.css";
 
 const L = "/figma/legal/";
@@ -42,7 +42,7 @@ export default function Legal() {
           ))}
         </div>
       </div>
-      <FooterMessage />
+      <EndMark variant="mobile" />
     </div>
   );
 }

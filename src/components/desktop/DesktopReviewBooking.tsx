@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { startTripPayment, TEST_CARD } from "../../api/payment";
-import { PAYMENT_MODE } from "../../api/config";
-import { formatINR, type BookingForm } from "../../pages/useBookingForm";
+import { startTripPayment, TEST_CARD } from "@/repositories";
+import { PAYMENT_MODE } from "@/repositories";
+import { formatINR, type BookingForm } from "@/hooks/useBookingForm";
 import "./DesktopReviewBooking.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const A = "/figma/booking/";
 const P = "/figma/payment/";
@@ -384,14 +385,13 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
                     <span>Convenience fee</span>
                   </button>
                 </div>
-                <button
-                  className="wo-cta drb-book"
-                  type="button"
+                <CtaButton
+                  className="drb-book"
                   disabled={loading || status === "processing"}
                   onClick={handleBook}
                 >
                   {loading ? "Processing…" : "Book Now"}
-                </button>
+                </CtaButton>
               </div>
             </div>
           </div>

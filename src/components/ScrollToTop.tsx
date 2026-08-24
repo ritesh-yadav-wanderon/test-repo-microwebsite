@@ -1,6 +1,6 @@
 import { useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { scrollAppToTop } from "../utils/scroll";
+import { scrollAppToTop } from "@/utils/scroll";
 
 /**
  * Resets the scroll position to the top on every route (path) change, so

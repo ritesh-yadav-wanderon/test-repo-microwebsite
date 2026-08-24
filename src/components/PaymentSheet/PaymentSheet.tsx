@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import { startTripPayment, TEST_CARD, type RazorpayPrefill } from "../../api/payment";
-import { PAYMENT_MODE } from "../../api/config";
-import { useScrollLock } from "../../hooks/useScrollLock";
+import { startTripPayment, TEST_CARD, type RazorpayPrefill } from "@/repositories";
+import { PAYMENT_MODE } from "@/repositories";
+import Sheet from "@/components/ui/Sheet";
 import "./PaymentSheet.css";
 
 const P = "/figma/payment/";
@@ -71,7 +71,6 @@ export default function PaymentSheet({
   onPay,
 }: PaymentSheetProps) {
   const isDesktop = useIsDesktopPointer();
-  const [hasOpened, setHasOpened] = useState(false);
   const [selected, setSelected] = useState<PayOption>("full");
   const [customAmount, setCustomAmount] = useState("");
   const [loading, setLoading] = useState(false);
@@ -106,7 +105,6 @@ export default function PaymentSheet({
 
   useEffect(() => {
     if (isOpen) {
-      setHasOpened(true);
       // Fresh state each time the sheet is opened.
       setStatus("idle");
       setErrorMsg(null);
@@ -167,8 +165,6 @@ export default function PaymentSheet({
       },
     });
   };
-
-  useScrollLock(isOpen);
 
   // ── Swipe-to-pay drag interaction ──────────────────────────────────────────
   const trackRef = useRef<HTMLDivElement>(null);
@@ -284,280 +280,271 @@ export default function PaymentSheet({
     };
   }, []);
 
-  if (!hasOpened) return null;
-
   return (
-    <div
-      className={`psh-overlay${isOpen ? " psh-overlay--open" : ""}`}
-      aria-hidden={!isOpen}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
+    <Sheet
+      isOpen={isOpen}
+      onClose={onClose}
+      overlayClassName="psh-overlay"
+      panelClassName="psh-sheet"
+      ariaLabel="Payment options"
     >
-      <div
-        className={`psh-sheet${isOpen ? " psh-sheet--open" : ""}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Payment options"
-      >
-        <div className="psh-body">
-          {PAYMENT_MODE === "frontend-test" && (
-            <button
-              type="button"
-              className="psh-testcard"
-              onClick={copyTestCard}
-              title="Copy test card number"
-            >
-              <span className="psh-testcard-tag">TEST</span>
-              <span className="psh-testcard-num">{TEST_CARD.number}</span>
-              <span className="psh-testcard-meta">
-                {TEST_CARD.expiry} · CVV {TEST_CARD.cvv}
-              </span>
-              <span className="psh-testcard-copy">{copied ? "Copied" : "Copy"}</span>
-            </button>
-          )}
+      <div className="psh-body">
+        {PAYMENT_MODE === "frontend-test" && (
+          <button
+            type="button"
+            className="psh-testcard"
+            onClick={copyTestCard}
+            title="Copy test card number"
+          >
+            <span className="psh-testcard-tag">TEST</span>
+            <span className="psh-testcard-num">{TEST_CARD.number}</span>
+            <span className="psh-testcard-meta">
+              {TEST_CARD.expiry} · CVV {TEST_CARD.cvv}
+            </span>
+            <span className="psh-testcard-copy">{copied ? "Copied" : "Copy"}</span>
+          </button>
+        )}
 
-          {mode === "due" ? (
-            <>
-              {/* ── Option: Pay full due amount ── */}
+        {mode === "due" ? (
+          <>
+            {/* ── Option: Pay full due amount ── */}
+            <button
+              className={`psh-full${selected === "full" ? " psh-full--active" : ""}`}
+              type="button"
+              onClick={() => setSelected("full")}
+            >
+              <img
+                src={selected === "full" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
+                width={16}
+                height={16}
+                alt=""
+                aria-hidden
+              />
+              <div className="psh-full-text">
+                <span className="psh-full-title">Pay full due amount</span>
+                <span className="psh-full-sub">Clear your remaining balance</span>
+              </div>
+              <span className="psh-full-amount">&#8377; {dueAmount}/-</span>
+            </button>
+
+            {/* ── Option: Pay a custom amount ── */}
+            <div
+              className={`psh-full psh-custom${selected === "custom" ? " psh-full--active" : ""}`}
+            >
               <button
-                className={`psh-full${selected === "full" ? " psh-full--active" : ""}`}
+                className="psh-custom-head"
                 type="button"
-                onClick={() => setSelected("full")}
+                onClick={() => setSelected("custom")}
               >
                 <img
-                  src={selected === "full" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
+                  src={selected === "custom" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
                   width={16}
                   height={16}
                   alt=""
                   aria-hidden
                 />
                 <div className="psh-full-text">
-                  <span className="psh-full-title">Pay full due amount</span>
-                  <span className="psh-full-sub">Clear your remaining balance</span>
+                  <span className="psh-full-title">Pay a custom amount</span>
+                  <span className="psh-full-sub">Enter how much you'd like to pay now</span>
                 </div>
-                <span className="psh-full-amount">&#8377; {dueAmount}/-</span>
               </button>
 
-              {/* ── Option: Pay a custom amount ── */}
-              <div
-                className={`psh-full psh-custom${selected === "custom" ? " psh-full--active" : ""}`}
-              >
-                <button
-                  className="psh-custom-head"
-                  type="button"
-                  onClick={() => setSelected("custom")}
-                >
-                  <img
-                    src={selected === "custom" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
-                    width={16}
-                    height={16}
-                    alt=""
-                    aria-hidden
-                  />
-                  <div className="psh-full-text">
-                    <span className="psh-full-title">Pay a custom amount</span>
-                    <span className="psh-full-sub">Enter how much you'd like to pay now</span>
+              {selected === "custom" && (
+                <div className="psh-custom-field">
+                  <div className="psh-custom-input">
+                    <span className="psh-custom-rupee">&#8377;</span>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      autoFocus
+                      placeholder="Enter amount"
+                      value={customAmount}
+                      onChange={(e) =>
+                        setCustomAmount(e.target.value.replace(/[^\d]/g, ""))
+                      }
+                    />
                   </div>
-                </button>
-
-                {selected === "custom" && (
-                  <div className="psh-custom-field">
-                    <div className="psh-custom-input">
-                      <span className="psh-custom-rupee">&#8377;</span>
-                      <input
-                        type="text"
-                        inputMode="numeric"
-                        autoFocus
-                        placeholder="Enter amount"
-                        value={customAmount}
-                        onChange={(e) =>
-                          setCustomAmount(e.target.value.replace(/[^\d]/g, ""))
-                        }
-                      />
-                    </div>
-                    {invalidCustom && (
-                      <p className="psh-custom-error">
-                        Enter an amount between &#8377;1 and &#8377;{dueAmount}.
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
-            </>
-          ) : (
-          <>
-          {/* ── Option: Book now & pay later ── */}
-          <div
-            className={`psh-later${selected === "later" ? " psh-later--active" : ""}`}
+                  {invalidCustom && (
+                    <p className="psh-custom-error">
+                      Enter an amount between &#8377;1 and &#8377;{dueAmount}.
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+          </>
+        ) : (
+        <>
+        {/* ── Option: Book now & pay later ── */}
+        <div
+          className={`psh-later${selected === "later" ? " psh-later--active" : ""}`}
+        >
+          <button
+            className="psh-later-card"
+            type="button"
+            onClick={() => setSelected("later")}
           >
-            <button
-              className="psh-later-card"
-              type="button"
-              onClick={() => setSelected("later")}
+            <div className="psh-later-head">
+              <img
+                src={selected === "later" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
+                width={16}
+                height={16}
+                alt=""
+                aria-hidden
+              />
+              <span className="psh-later-title">
+                Book now &amp; pay remaining amount later
+              </span>
+            </div>
+
+            <div className="psh-timeline">
+              <div className="psh-timeline-rail" aria-hidden>
+                <span className="psh-rail-node">&#8377;</span>
+                <span className="psh-rail-line" />
+                <span className="psh-rail-node">&#8377;</span>
+              </div>
+              <div className="psh-timeline-rows">
+                <div className="psh-timeline-row">
+                  <span>Pay to Book</span>
+                  <span>&#8377; {payNowAmount}/-</span>
+                </div>
+                <div className="psh-timeline-row">
+                  <span>Pay due amount before {dueDate}</span>
+                  <span>&#8377; {dueAmount}/-</span>
+                </div>
+              </div>
+            </div>
+          </button>
+
+          <div className="psh-later-foot">
+            <span>No hidden charges</span>
+            <span className="psh-foot-dot" aria-hidden />
+            <span>No card required</span>
+          </div>
+        </div>
+
+        {/* ── Option: Pay full amount now ── */}
+        <button
+          className={`psh-full${selected === "full" ? " psh-full--active" : ""}`}
+          type="button"
+          onClick={() => setSelected("full")}
+        >
+          <img
+            src={selected === "full" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
+            width={16}
+            height={16}
+            alt=""
+            aria-hidden
+          />
+          <div className="psh-full-text">
+            <span className="psh-full-title">Pay full amount now</span>
+            <span className="psh-full-sub">One time payment</span>
+          </div>
+          <span className="psh-full-amount">&#8377; {totalAmount}/-</span>
+        </button>
+        </>
+        )}
+      </div>
+
+      {/* ── CTA ── */}
+      <div className="psh-cta">
+        {status === "error" && errorMsg && (
+          <p className="psh-status psh-status--error" role="alert">
+            {errorMsg}
+          </p>
+        )}
+        {status === "success" ? (
+          <p className="psh-status psh-status--success" role="status">
+            Payment successful — your booking is confirmed.
+          </p>
+        ) : mode === "due" ? null : (
+          <div className="psh-cta-tags">
+            <img src={`${A}icon-person.svg`} width={24} height={24} alt="" aria-hidden />
+            <span className="psh-cta-saved-amt">&#8377;{savedAmount}/-</span>
+            <span className="psh-cta-saved-text">saved on this trip.</span>
+          </div>
+        )}
+        <div className="psh-cta-bar">
+          <div className="psh-cta-price-col">
+            <span className="psh-cta-price">&#8377; {payDisplay}/-</span>
+            <button className="psh-cta-fee" type="button">
+              <span>+</span>
+              <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
+              <span>Convenience fee</span>
+            </button>
+          </div>
+          <div
+            ref={trackRef}
+            className={`psh-swipe${loading ? " psh-swipe--loading" : ""}${
+              dragging ? " psh-swipe--dragging" : ""
+            }${status === "success" ? " psh-swipe--done" : ""}${
+              canSwipe ? " psh-swipe--ready" : " psh-swipe--disabled"
+            }${isDesktop ? " psh-swipe--click" : ""}${
+              committed ? " psh-swipe--committed" : ""
+            }`}
+            onClick={isDesktop ? glideAndPay : undefined}
+            role={isDesktop ? undefined : "slider"}
+            aria-label={isDesktop ? undefined : "Swipe to pay"}
+            aria-valuemin={isDesktop ? undefined : 0}
+            aria-valuemax={isDesktop ? undefined : 100}
+            aria-valuenow={isDesktop ? undefined : Math.round(progress * 100)}
+          >
+            <span
+              className="psh-swipe-fill"
+              style={{ width: `${dragX + THUMB_SIZE}px` }}
+              aria-hidden
+            />
+            <span
+              className="psh-swipe-label"
+              style={{ opacity: committed ? 1 : Math.max(0, 1 - progress * 1.6) }}
             >
-              <div className="psh-later-head">
+              {status === "success"
+                ? "Paid"
+                : committed
+                ? "Continuing to Pay"
+                : isDesktop
+                ? "Continue to Pay"
+                : "Swipe to Pay"}
+            </span>
+            <button
+              type="button"
+              className="psh-swipe-thumb"
+              style={{
+                transform: `translateX(${dragX}px)`,
+                transition: dragging
+                  ? "none"
+                  : "transform 0.32s cubic-bezier(0.22, 1, 0.36, 1)",
+              }}
+              onPointerDown={isDesktop ? undefined : onThumbPointerDown}
+              onPointerMove={isDesktop ? undefined : onThumbPointerMove}
+              onPointerUp={isDesktop ? undefined : onThumbPointerUp}
+              onPointerCancel={isDesktop ? undefined : onThumbPointerUp}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter" && e.key !== " ") return;
+                e.preventDefault();
+                glideAndPay();
+              }}
+              disabled={!canSwipe}
+              aria-label={isDesktop ? "Continue to pay" : "Slide to pay"}
+            >
+              {loading ? (
+                <span className="psh-swipe-spinner" aria-hidden />
+              ) : status === "success" ? (
+                <span className="psh-swipe-check" aria-hidden>&#10003;</span>
+              ) : (
                 <img
-                  src={selected === "later" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
-                  width={16}
-                  height={16}
+                  className="psh-swipe-arrow"
+                  src={`${A}icon-arrow-right.svg`}
+                  width={22}
+                  height={22}
                   alt=""
                   aria-hidden
                 />
-                <span className="psh-later-title">
-                  Book now &amp; pay remaining amount later
-                </span>
-              </div>
-
-              <div className="psh-timeline">
-                <div className="psh-timeline-rail" aria-hidden>
-                  <span className="psh-rail-node">&#8377;</span>
-                  <span className="psh-rail-line" />
-                  <span className="psh-rail-node">&#8377;</span>
-                </div>
-                <div className="psh-timeline-rows">
-                  <div className="psh-timeline-row">
-                    <span>Pay to Book</span>
-                    <span>&#8377; {payNowAmount}/-</span>
-                  </div>
-                  <div className="psh-timeline-row">
-                    <span>Pay due amount before {dueDate}</span>
-                    <span>&#8377; {dueAmount}/-</span>
-                  </div>
-                </div>
-              </div>
+              )}
             </button>
-
-            <div className="psh-later-foot">
-              <span>No hidden charges</span>
-              <span className="psh-foot-dot" aria-hidden />
-              <span>No card required</span>
-            </div>
-          </div>
-
-          {/* ── Option: Pay full amount now ── */}
-          <button
-            className={`psh-full${selected === "full" ? " psh-full--active" : ""}`}
-            type="button"
-            onClick={() => setSelected("full")}
-          >
-            <img
-              src={selected === "full" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
-              width={16}
-              height={16}
-              alt=""
-              aria-hidden
-            />
-            <div className="psh-full-text">
-              <span className="psh-full-title">Pay full amount now</span>
-              <span className="psh-full-sub">One time payment</span>
-            </div>
-            <span className="psh-full-amount">&#8377; {totalAmount}/-</span>
-          </button>
-          </>
-          )}
-        </div>
-
-        {/* ── CTA ── */}
-        <div className="psh-cta">
-          {status === "error" && errorMsg && (
-            <p className="psh-status psh-status--error" role="alert">
-              {errorMsg}
-            </p>
-          )}
-          {status === "success" ? (
-            <p className="psh-status psh-status--success" role="status">
-              Payment successful — your booking is confirmed.
-            </p>
-          ) : mode === "due" ? null : (
-            <div className="psh-cta-tags">
-              <img src={`${A}icon-person.svg`} width={24} height={24} alt="" aria-hidden />
-              <span className="psh-cta-saved-amt">&#8377;{savedAmount}/-</span>
-              <span className="psh-cta-saved-text">saved on this trip.</span>
-            </div>
-          )}
-          <div className="psh-cta-bar">
-            <div className="psh-cta-price-col">
-              <span className="psh-cta-price">&#8377; {payDisplay}/-</span>
-              <button className="psh-cta-fee" type="button">
-                <span>+</span>
-                <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
-                <span>Convenience fee</span>
-              </button>
-            </div>
-            <div
-              ref={trackRef}
-              className={`psh-swipe${loading ? " psh-swipe--loading" : ""}${
-                dragging ? " psh-swipe--dragging" : ""
-              }${status === "success" ? " psh-swipe--done" : ""}${
-                canSwipe ? " psh-swipe--ready" : " psh-swipe--disabled"
-              }${isDesktop ? " psh-swipe--click" : ""}${
-                committed ? " psh-swipe--committed" : ""
-              }`}
-              onClick={isDesktop ? glideAndPay : undefined}
-              role={isDesktop ? undefined : "slider"}
-              aria-label={isDesktop ? undefined : "Swipe to pay"}
-              aria-valuemin={isDesktop ? undefined : 0}
-              aria-valuemax={isDesktop ? undefined : 100}
-              aria-valuenow={isDesktop ? undefined : Math.round(progress * 100)}
-            >
-              <span
-                className="psh-swipe-fill"
-                style={{ width: `${dragX + THUMB_SIZE}px` }}
-                aria-hidden
-              />
-              <span
-                className="psh-swipe-label"
-                style={{ opacity: committed ? 1 : Math.max(0, 1 - progress * 1.6) }}
-              >
-                {status === "success"
-                  ? "Paid"
-                  : committed
-                  ? "Continuing to Pay"
-                  : isDesktop
-                  ? "Continue to Pay"
-                  : "Swipe to Pay"}
-              </span>
-              <button
-                type="button"
-                className="psh-swipe-thumb"
-                style={{
-                  transform: `translateX(${dragX}px)`,
-                  transition: dragging
-                    ? "none"
-                    : "transform 0.32s cubic-bezier(0.22, 1, 0.36, 1)",
-                }}
-                onPointerDown={isDesktop ? undefined : onThumbPointerDown}
-                onPointerMove={isDesktop ? undefined : onThumbPointerMove}
-                onPointerUp={isDesktop ? undefined : onThumbPointerUp}
-                onPointerCancel={isDesktop ? undefined : onThumbPointerUp}
-                onKeyDown={(e) => {
-                  if (e.key !== "Enter" && e.key !== " ") return;
-                  e.preventDefault();
-                  glideAndPay();
-                }}
-                disabled={!canSwipe}
-                aria-label={isDesktop ? "Continue to pay" : "Slide to pay"}
-              >
-                {loading ? (
-                  <span className="psh-swipe-spinner" aria-hidden />
-                ) : status === "success" ? (
-                  <span className="psh-swipe-check" aria-hidden>&#10003;</span>
-                ) : (
-                  <img
-                    className="psh-swipe-arrow"
-                    src={`${A}icon-arrow-right.svg`}
-                    width={22}
-                    height={22}
-                    alt=""
-                    aria-hidden
-                  />
-                )}
-              </button>
-            </div>
           </div>
         </div>
       </div>
-    </div>
+    </Sheet>
   );
 }

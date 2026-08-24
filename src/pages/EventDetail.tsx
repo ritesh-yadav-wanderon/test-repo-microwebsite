@@ -1,47 +1,20 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BurgerMenu from "../components/BurgerMenu/BurgerMenu";
-import DesktopEventDetail from "../components/desktop/DesktopEventDetail";
-import EventItinerary from "../components/EventItinerary/EventItinerary";
-import { useIsDesktop } from "../hooks/useIsDesktop";
+import BurgerMenu from "@/components/BurgerMenu";
+import DesktopEventDetail from "@/components/desktop/DesktopEventDetail";
+import EventItinerary from "@/components/EventItinerary";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import {
+  EVENT_DETAIL,
+  EVENT_GALLERY,
+  EVENT_HERO_VIDEO,
+  EVENT_SPOTLIGHT,
+} from "@/repositories";
 import "./EventDetail.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const A = "/figma/event/";
 const EV = "/figma/events/";
-
-const HERO_VIDEO =
-  "https://wanderon-images.gumlet.io/events-and-festivals/events-and-festivals/tomorrowland-thailand/tomorrowland.mp4";
-
-const EVENT = {
-  title: "Tomorrowland Belgium | ORBYZ",
-  dates: "Jul 18, 2026 - Jul 25, 2026 | 7N/8D",
-  pickup: "Paris Charles de Gaulle Airport",
-  drop: "Budapest Ferenc Liszt International Airport",
-  price: "98,990",
-  discount: "-10%",
-  about:
-    "Get ready for the ultimate Euro experience that fuses iconic cities, party vibes, and the legendary Tomorrowland Festival!",
-  thingsToKnow: [
-    { icon: `${A}tk-included.svg`, label: "Inlcuded", value: "Travel + Stay + Concert Ticket" },
-    { icon: `${A}tk-venue.svg`, label: "Venue", value: "De Schorre Recreation Ground, Boom 2850, Belgium" },
-    { icon: `${A}tk-crowd.svg`, label: "Crowd", value: "400,000 Fans Expected" },
-    { icon: `${A}tk-genre.svg`, label: "Genre", value: "EDM, techno, hardstyle, drum & bass" },
-  ],
-};
-
-const GALLERY = [
-  { src: `${A}gallery-1.jpg`, h: 205 },
-  { src: `${A}gallery-2.jpg`, h: 132 },
-  { src: `${A}gallery-3.jpg`, h: 205 },
-  { src: `${A}gallery-4.jpg`, h: 166 },
-  { src: `${A}gallery-5.jpg`, h: 205 },
-  { src: `${A}gallery-6.jpg`, h: 142 },
-  { src: `${A}gallery-7.jpg`, h: 179 },
-  { src: `${A}gallery-8.jpg`, h: 205 },
-  { src: `${A}gallery-9.jpg`, h: 134 },
-];
-
-const SPOTLIGHT = [`${A}gallery-1.jpg`, `${A}gallery-5.jpg`, `${A}gallery-7.jpg`];
 
 type Tab = "about" | "itinerary" | "gallery";
 
@@ -86,17 +59,17 @@ export default function EventDetail() {
 
   const handleShare = () => {
     if (navigator.share) {
-      navigator.share({ title: EVENT.title, url: window.location.href }).catch(() => {});
+      navigator.share({ title: EVENT_DETAIL.title, url: window.location.href }).catch(() => {});
     }
   };
 
   const handleBook = () => {
     navigate("/booking", {
       state: {
-        tripTitle: EVENT.title,
-        tripName: EVENT.title,
-        dateRange: EVENT.dates,
-        perPerson: EVENT.price,
+        tripTitle: EVENT_DETAIL.title,
+        tripName: EVENT_DETAIL.title,
+        dateRange: EVENT_DETAIL.dates,
+        perPerson: EVENT_DETAIL.price,
         travelers: 1,
       },
     });
@@ -114,7 +87,7 @@ export default function EventDetail() {
         <video
           ref={videoRef}
           className="epd-hero-video"
-          src={HERO_VIDEO}
+          src={EVENT_HERO_VIDEO}
           poster={`${EV}hero-bg.jpg`}
           autoPlay
           loop
@@ -171,8 +144,8 @@ export default function EventDetail() {
         <span className="epd-handle" aria-hidden />
 
         <div className="epd-head">
-          <h1 className="epd-title">{EVENT.title}</h1>
-          <p className="epd-dates">{EVENT.dates}</p>
+          <h1 className="epd-title">{EVENT_DETAIL.title}</h1>
+          <p className="epd-dates">{EVENT_DETAIL.dates}</p>
         </div>
 
         <div className="epd-route">
@@ -186,8 +159,8 @@ export default function EventDetail() {
             </span>
           </div>
           <div className="epd-route-places">
-            <span className="epd-route-place">{EVENT.pickup}</span>
-            <span className="epd-route-place epd-route-place--end">{EVENT.drop}</span>
+            <span className="epd-route-place">{EVENT_DETAIL.pickup}</span>
+            <span className="epd-route-place epd-route-place--end">{EVENT_DETAIL.drop}</span>
           </div>
         </div>
 
@@ -237,14 +210,14 @@ export default function EventDetail() {
       <div className="epd-bottombar">
         <div className="epd-price-col">
           <div className="epd-price-row">
-            <span className="epd-price">&#8377;{EVENT.price}/-</span>
-            <span className="epd-discount">{EVENT.discount}</span>
+            <span className="epd-price">&#8377;{EVENT_DETAIL.price}/-</span>
+            <span className="epd-discount">{EVENT_DETAIL.discount}</span>
           </div>
           <span className="epd-price-sub">Starting price per person</span>
         </div>
-        <button className="wo-cta epd-book" type="button" onClick={handleBook}>
+        <CtaButton className="epd-book" onClick={handleBook}>
           Book Now
-        </button>
+        </CtaButton>
       </div>
 
       <BurgerMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />
@@ -257,7 +230,7 @@ function AboutBody() {
   return (
     <>
       <div className="epd-about">
-        <p className="epd-about-text">{EVENT.about}</p>
+        <p className="epd-about-text">{EVENT_DETAIL.about}</p>
         <button className="epd-readmore" type="button" onClick={() => setExpanded((e) => !e)}>
           {expanded ? "Read less" : "Read more >"}
         </button>
@@ -265,7 +238,7 @@ function AboutBody() {
 
       <div className="epd-tk">
         <h2 className="epd-section-title">Things to Know</h2>
-        {EVENT.thingsToKnow.map((item) => (
+        {EVENT_DETAIL.thingsToKnow.map((item) => (
           <div className="epd-tk-item" key={item.label}>
             <img src={item.icon} width={36} height={36} alt="" className="epd-tk-ico" aria-hidden />
             <div className="epd-tk-text">
@@ -433,7 +406,7 @@ function GalleryBody() {
     <div className="epd-gallery-body">
       <h2 className="epd-section-title epd-gallery-title">Gallery</h2>
       <div className="epd-gallery-scroll">
-        {GALLERY.map((g, i) => (
+        {EVENT_GALLERY.map((g, i) => (
           <div className="epd-gallery-item" key={i} style={{ height: g.h }}>
             <img src={g.src} alt="" loading="lazy" />
           </div>
@@ -448,7 +421,7 @@ function GalleryBody() {
           const el = e.currentTarget;
           setSpot(Math.round(el.scrollLeft / 216));
         }}>
-          {SPOTLIGHT.map((src, i) => (
+          {EVENT_SPOTLIGHT.map((src, i) => (
             <button className="epd-spot-card" key={i} type="button">
               <img src={src} alt="" loading="lazy" />
               <span className="epd-spot-play">
@@ -458,7 +431,7 @@ function GalleryBody() {
           ))}
         </div>
         <div className="epd-dots" aria-hidden>
-          {SPOTLIGHT.map((_, i) => (
+          {EVENT_SPOTLIGHT.map((_, i) => (
             <span key={i} className={`epd-dot${i === spot ? " epd-dot--active" : ""}`} />
           ))}
         </div>

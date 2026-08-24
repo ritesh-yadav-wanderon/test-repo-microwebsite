@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useScrollLock } from "../../hooks/useScrollLock";
+import Sheet from "@/components/ui/Sheet";
 import "./GallerySheet.css";
-import ScrollButtons from "../ScrollButtons/ScrollButtons";
+import PagerButtons from "@/components/ui/PagerButtons";
 
 const TABS = ["Destination", "Activities", "Accommodation", "Transfer"];
 
@@ -52,12 +52,9 @@ export default function GallerySheet({
   reviewerName,
   reviewerRating,
 }: GallerySheetProps) {
-  const [hasOpened, setHasOpened] = useState(false);
   const [activeIdx, setActiveIdx] = useState(startIndex);
   const [activeTab, setActiveTab] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => { if (isOpen) setHasOpened(true); }, [isOpen]);
 
   useEffect(() => {
     if (isOpen) {
@@ -67,8 +64,6 @@ export default function GallerySheet({
       }
     }
   }, [isOpen, startIndex]);
-
-  useScrollLock(isOpen);
 
   const handleScroll = useCallback(() => {
     if (!scrollRef.current) return;
@@ -88,10 +83,8 @@ export default function GallerySheet({
     scrollRef.current.scrollTo({ left: newIdx * (300 + 16), behavior: "smooth" });
   }, [activeIdx, images.length]);
 
-  if (!hasOpened) return null;
-
   return (
-    <div className={`gsh${isOpen ? " gsh--open" : ""}`} role="dialog" aria-modal="true" aria-label="Gallery">
+    <Sheet isOpen={isOpen} panelClassName="gsh" ariaLabel="Gallery">
 
       {/* Header */}
       <div className="gsh-header">
@@ -159,11 +152,11 @@ export default function GallerySheet({
       <p className="gsh-counter">{activeIdx + 1}/{images.length}</p>
 
         <div className="gsh-scroll-btns">
-          <ScrollButtons onPrev={scrollPrev} onNext={scrollNext} prevActive={activeIdx > 0} />
+          <PagerButtons variant="pill" onPrev={scrollPrev} onNext={scrollNext} prevActive={activeIdx > 0} />
         </div>
 
       </div>{/* /gsh-body */}
 
-    </div>
+    </Sheet>
   );
 }

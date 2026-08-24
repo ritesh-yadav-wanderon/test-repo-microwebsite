@@ -1,46 +1,34 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import type { Trip } from "../types";
-import { getCachedListingTrips, getListingTrips } from "../api";
-import TripCard from "../components/TripCard";
-import Footer from "../components/Footer";
-import FooterMessage from "../components/FooterMessage/FooterMessage";
-import BottomNav from "../components/BottomNav";
-import SearchBottomSheet from "../components/SearchBottomSheet/SearchBottomSheet";
-import FilterSheet from "../components/FilterSheet/FilterSheet";
-import BurgerMenu from "../components/BurgerMenu/BurgerMenu";
-import BatchesSheet from "../components/BatchesSheet/BatchesSheet";
-import SiteHeader2 from "../components/SiteHeader2";
-import { useScrollLock } from "../hooks/useScrollLock";
-import { useIsDesktop } from "../hooks/useIsDesktop";
-import DesktopSearchResults from "../components/desktop/DesktopSearchResults";
+import type { Trip } from "@/types";
+import { getCachedListingTrips, getListingTrips } from "@/repositories";
+import TripCard from "@/components/TripCard";
+import Footer from "@/components/Footer";
+import EndMark from "@/components/ui/EndMark";
+import BottomNav from "@/components/BottomNav";
+import SearchBottomSheet from "@/components/SearchBottomSheet";
+import FilterSheet from "@/components/FilterSheet";
+import BurgerMenu from "@/components/BurgerMenu";
+import BatchesSheet from "@/components/BatchesSheet";
+import SiteHeader2 from "@/components/SiteHeader2";
+import Sheet from "@/components/ui/Sheet";
+import TripCardShimmer from "@/components/ui/TripCardShimmer";
+import ToggleSwitch from "@/components/ui/ToggleSwitch";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import DesktopSearchResults from "@/components/desktop/DesktopSearchResults";
 import {
-  playTapSound,
   fmtDate,
   fmtMonthLabel,
   sortTrips,
   filterTrips,
   SORT_OPTIONS,
   type SortKey,
-} from "./searchResults.helpers";
+} from "@/utils/searchResults";
 import "./SearchResults.css";
 
 const PAGE_SIZE = 10;
 const PRESET_CHIPS = ["Trips under 50K", "With Flights", "From Delhi", "From Mumbai"];
 
-function TripCardShimmer() {
-  return (
-    <div className="sr-shimmer-card">
-      <div className="sr-shimmer-img" />
-      <div className="sr-shimmer-body">
-        <div className="sr-shimmer-line" style={{ width: "85%", height: 14 }} />
-        <div className="sr-shimmer-line" style={{ width: "60%" }} />
-        <div className="sr-shimmer-line" style={{ width: "70%" }} />
-        <div className="sr-shimmer-line" style={{ width: "45%", height: 18, marginTop: 8 }} />
-      </div>
-    </div>
-  );
-}
 
 export default function SearchResults() {
   const isDesktop = useIsDesktop();
@@ -78,7 +66,6 @@ export default function SearchResults() {
   useEffect(() => { setVisibleCount(PAGE_SIZE); }, [searchParams, sortBy]);
 
   // The sort sheet covers the page, so the list behind it must not scroll.
-  useScrollLock(sortOpen);
 
   const filteredTrips = useMemo(
     () => sortTrips(filterTrips(allTrips, searchParams), sortBy),
@@ -180,38 +167,45 @@ export default function SearchResults() {
       />
 
       {/* Sort By sheet */}
-      <div className={`sr-sort${sortOpen ? " sr-sort--open" : ""}`} aria-hidden={!sortOpen}>
-        <div className="sr-sort-overlay" onClick={() => setSortOpen(false)} />
-        <div className="sr-sort-panel" role="dialog" aria-modal="true" aria-label="Sort trips">
-          <div className="sr-sort-head">
-            <p className="sr-sort-title">Sort By</p>
-            <button className="sr-sort-close" type="button" onClick={() => setSortOpen(false)} aria-label="Close">
-              <img src="/figma/listing/close-icon.svg" alt="" width={20} height={20} />
-            </button>
-          </div>
-          <div className="sr-sort-list">
+      <Sheet
+        isOpen={sortOpen}
+        onClose={() => setSortOpen(false)}
+        wrapperClassName="sr-sort"
+        overlayClassName="sr-sort-overlay"
+        overlayAsSibling
+        panelClassName="sr-sort-panel"
+        openModifier=""
+        ariaLabel="Sort trips"
+        mountClosed
+      >
+        <div className="sr-sort-head">
+          <p className="sr-sort-title">Sort By</p>
+          <button className="sr-sort-close" type="button" onClick={() => setSortOpen(false)} aria-label="Close">
+            <img src="/figma/listing/close-icon.svg" alt="" width={20} height={20} />
+          </button>
+        </div>
+        <div className="sr-sort-list">
+          <button
+            type="button"
+            className={`sr-sort-opt${sortBy === null ? " sr-sort-opt--sel" : ""}`}
+            onClick={() => { setSortBy(null); setSortOpen(false); }}
+          >
+            <span>Recommended</span>
+            <span className="sr-sort-radio" aria-hidden />
+          </button>
+          {SORT_OPTIONS.map(opt => (
             <button
+              key={opt.key}
               type="button"
-              className={`sr-sort-opt${sortBy === null ? " sr-sort-opt--sel" : ""}`}
-              onClick={() => { setSortBy(null); setSortOpen(false); }}
+              className={`sr-sort-opt${sortBy === opt.key ? " sr-sort-opt--sel" : ""}`}
+              onClick={() => { setSortBy(opt.key); setSortOpen(false); }}
             >
-              <span>Recommended</span>
+              <span>{opt.label}</span>
               <span className="sr-sort-radio" aria-hidden />
             </button>
-            {SORT_OPTIONS.map(opt => (
-              <button
-                key={opt.key}
-                type="button"
-                className={`sr-sort-opt${sortBy === opt.key ? " sr-sort-opt--sel" : ""}`}
-                onClick={() => { setSortBy(opt.key); setSortOpen(false); }}
-              >
-                <span>{opt.label}</span>
-                <span className="sr-sort-radio" aria-hidden />
-              </button>
-            ))}
-          </div>
+          ))}
         </div>
-      </div>
+      </Sheet>
 
       <SiteHeader2 destination={destinationLabel} date={dateLabel} showBack onBack={() => navigate(-1)} />
 
@@ -354,27 +348,21 @@ export default function SearchResults() {
               <p className="sr-count">
                 {filteredTrips.length} Trip{filteredTrips.length !== 1 ? "s" : ""} Found
               </p>
-              <button
-                type="button"
+              <ToggleSwitch
+                checked={showFeatures}
+                onChange={setShowFeatures}
+                label="Show Features"
                 className="sr-features-toggle"
-                role="switch"
-                aria-checked={showFeatures}
-                onClick={() => { playTapSound(); setShowFeatures((v) => !v); }}
-              >
-                <span className="sr-features-toggle-label">Show Features</span>
-                <img
-                  className="sr-features-toggle-switch"
-                  src={`/figma/listing/toggle/toggle-${showFeatures ? "on" : "off"}.svg`}
-                  alt=""
-                  aria-hidden
-                />
-              </button>
+                labelClassName="sr-features-toggle-label"
+                imgClassName="sr-features-toggle-switch"
+                tapSound
+              />
             </div>
           )}
 
           <div className="sr-cards">
             {loading
-              ? Array.from({ length: PAGE_SIZE }, (_, i) => <TripCardShimmer key={i} />)
+              ? Array.from({ length: PAGE_SIZE }, (_, i) => <TripCardShimmer key={i} variant="search" />)
               : visibleTrips.map((trip, i) => (
                   <TripCard
                     key={trip.slug}
@@ -398,7 +386,7 @@ export default function SearchResults() {
           )}
         </div>
 
-        <FooterMessage />
+        <EndMark variant="mobile" />
         <Footer />
       </main>
 

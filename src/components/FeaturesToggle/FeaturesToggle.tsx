@@ -1,4 +1,4 @@
-import { playTapSound } from "../../pages/searchResults.helpers";
+import ToggleSwitch from "@/components/ui/ToggleSwitch";
 import "./FeaturesToggle.css";
 
 interface Props {
@@ -11,23 +11,14 @@ interface Props {
  *  cards appear so the feature rows can be hidden the same way everywhere. */
 export default function FeaturesToggle({ checked, onChange, className }: Props) {
   return (
-    <button
-      type="button"
+    <ToggleSwitch
+      checked={checked}
+      onChange={onChange}
+      label="Show Features"
       className={`ftog${className ? ` ${className}` : ""}`}
-      role="switch"
-      aria-checked={checked}
-      onClick={() => {
-        playTapSound();
-        onChange(!checked);
-      }}
-    >
-      <span className="ftog-label">Show Features</span>
-      <img
-        className="ftog-switch"
-        src={`/figma/listing/toggle/toggle-${checked ? "on" : "off"}.svg`}
-        alt=""
-        aria-hidden
-      />
-    </button>
+      labelClassName="ftog-label"
+      imgClassName="ftog-switch"
+      tapSound
+    />
   );
 }

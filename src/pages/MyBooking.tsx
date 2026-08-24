@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import FooterMessage from "../components/FooterMessage/FooterMessage";
+import EndMark from "@/components/ui/EndMark";
 import CoTravellerSheet, {
   type CoTravellerData,
-} from "../components/CoTravellerSheet/CoTravellerSheet";
-import CancelBookingSheet from "../components/CancelBookingSheet/CancelBookingSheet";
-import PaymentSheet from "../components/PaymentSheet/PaymentSheet";
-import DesktopMyBooking from "../components/desktop/DesktopMyBooking";
-import { useIsDesktop } from "../hooks/useIsDesktop";
-import { useBooking } from "../context/BookingContext";
-import { BILL_ITEMS, TOTAL_TRIP_COST } from "../data/bookingBill";
-import { scrollAppToTop } from "../utils/scroll";
+} from "@/components/CoTravellerSheet";
+import CancelBookingSheet from "@/components/CancelBookingSheet";
+import PaymentSheet from "@/components/PaymentSheet";
+import DesktopMyBooking from "@/components/desktop/DesktopMyBooking";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import { useBooking } from "@/context/BookingContext";
+import { BILL_ITEMS, TOTAL_TRIP_COST } from "@/repositories";
+import { scrollAppToTop } from "@/utils/scroll";
 import "./MyBooking.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const A = "/figma/booking/";
 const M = "/figma/my-booking/";
@@ -724,7 +725,7 @@ export default function MyBooking() {
           </div>
         )}
 
-        <FooterMessage />
+        <EndMark variant="mobile" />
       </div>
 
       {/* ── Add Co-Traveller bottom sheet ── */}
@@ -759,13 +760,12 @@ export default function MyBooking() {
             <span className="mb-due-label">Due Balance</span>
             <span className="mb-due-amount">&#8377;{data.dueBalance}/-</span>
           </div>
-          <button
-            className="wo-cta mb-due-btn"
-            type="button"
+          <CtaButton
+            className="mb-due-btn"
             onClick={() => setPayOpen(true)}
           >
             Pay Due Balance
-          </button>
+          </CtaButton>
         </div>
       )}
 

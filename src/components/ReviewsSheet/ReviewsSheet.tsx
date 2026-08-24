@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useScrollLock } from "../../hooks/useScrollLock";
+import React, { useState } from "react";
+import Sheet from "@/components/ui/Sheet";
 import "./ReviewsSheet.css";
-import DestinationSheet, { type DestinationSelection } from "../DestinationSheet/DestinationSheet";
-import ReviewGallery from "../ReviewGallery/ReviewGallery";
+import DestinationSheet, { type DestinationSelection } from "@/components/DestinationSheet";
+import ReviewGallery from "@/components/ReviewGallery";
+import { getReviews, REVIEW_TABS } from "@/repositories";
 
 const R = "/figma/reviews/";
 
-const TABS = ["All","Solo Travellers (8)","Women Travellers (12)","Adventure","Wellness","Festival","Luxury","Romantic","Cultural"];
+const TABS = REVIEW_TABS;
 
 const RATING_BARS = [
   { label: 5, fill: 60 },
@@ -40,12 +41,7 @@ const REVIEW_PHOTOS = [
 // Full-size portrait images for the standalone gallery carousel (Figma 5146:5832)
 const GALLERY_PHOTOS = [`${R}gallery-1.jpg`, `${R}gallery-2.jpg`];
 
-const REVIEWS = [
-  { name: "Shrutika Parab", date: "May, 2026", rating: "5.0" },
-  { name: "Priya Sharma",   date: "Apr, 2026", rating: "5.0" },
-  { name: "Rahul Mehta",    date: "Mar, 2026", rating: "4.0" },
-  { name: "Anjali Verma",   date: "Feb, 2026", rating: "5.0" },
-];
+const REVIEWS = getReviews();
 
 function ReviewCard({
   name,
@@ -110,21 +106,12 @@ function ReviewCard({
 export default function ReviewsSheet({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [activeTab, setActiveTab] = useState(0);
   // Lazy-render: don't mount until first opened so it doesn't slow initial page load
-  const [hasOpened, setHasOpened] = useState(false);
   const [destOpen, setDestOpen] = useState(false);
   const [selectedDest, setSelectedDest] = useState<DestinationSelection | null>(null);
   const [galleryReview, setGalleryReview] = useState<{ name: string; rating: string } | null>(null);
 
-  useEffect(() => {
-    if (isOpen) setHasOpened(true);
-  }, [isOpen]);
-
-  useScrollLock(isOpen);
-
-  if (!hasOpened) return null;
-
   return (
-    <div className={`rsh${isOpen ? " rsh--open" : ""}`} role="dialog" aria-modal="true">
+    <Sheet isOpen={isOpen} panelClassName="rsh">
 
       <div className="rsh-header">
         <button className="rsh-back" onClick={onClose} aria-label="Close reviews">
@@ -245,7 +232,6 @@ export default function ReviewsSheet({ isOpen, onClose }: { isOpen: boolean; onC
         </div>
       </div>
 
-
       <DestinationSheet
         isOpen={destOpen}
         onClose={() => setDestOpen(false)}
@@ -261,6 +247,6 @@ export default function ReviewsSheet({ isOpen, onClose }: { isOpen: boolean; onC
         tags={DEST_TAGS}
         photos={GALLERY_PHOTOS}
       />
-    </div>
+    </Sheet>
   );
 }

@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useIsDesktop } from "../hooks/useIsDesktop";
-import { ProfileRail, ProfileHeader } from "../components/desktop/DesktopProfile";
-import { exitToMainPage } from "../utils/lastMainPage";
-import ProfileWatermark from "../components/desktop/ProfileWatermark";
-import FooterMessage from "../components/FooterMessage/FooterMessage";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import { ProfileRail, ProfileHeader } from "@/components/desktop/DesktopProfile";
+import { exitToMainPage } from "@/utils/lastMainPage";
+import { readJSON, STORAGE_KEYS, writeJSON } from "@/repositories";
+import EndMark from "@/components/ui/EndMark";
 import "../components/desktop/DesktopProfile.css";
 import "./Support.css";
 
@@ -27,14 +27,8 @@ interface Ticket {
   status: "open" | "resolved";
 }
 
-const STORAGE_KEY = "wanderon_tickets";
-
 function loadTickets(): Ticket[] {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  } catch {
-    return [];
-  }
+  return readJSON<Ticket[]>(STORAGE_KEYS.tickets, []);
 }
 
 function useTickets() {
@@ -61,7 +55,7 @@ function useTickets() {
       ...tickets,
     ];
     setTickets(next);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+    writeJSON(STORAGE_KEYS.tickets, next);
     setText("");
     setFileName(null);
     if (fileRef.current) fileRef.current.value = "";
@@ -181,7 +175,7 @@ function DesktopSupport() {
       </div>
 
       {/* Grey sign-off — page level, aligned with the content gutter */}
-      <ProfileWatermark />
+      <EndMark variant="watermark" />
 
       <footer className="dpr-footer">
         <p>&copy; WANDERON EXPERIENCES PVT LTD, All rights reserved.</p>
@@ -228,7 +222,7 @@ export default function Support() {
 
       <div className="sup-m-body">
         <TicketPanel state={state} />
-        <FooterMessage />
+        <EndMark variant="mobile" />
       </div>
     </div>
   );

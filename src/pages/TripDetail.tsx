@@ -1,36 +1,29 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { useCompare } from "../context/CompareContext";
+import { useCompare } from "@/context/CompareContext";
 import "./TripDetail.css";
-import SiteHeader2 from "../components/SiteHeader2";
-import TribeStories from "../components/TribeStories/TribeStories";
-import QueryBanner from "../components/QueryBanner";
-import GallerySheet from "../components/GallerySheet/GallerySheet";
-import ShareSheet from "../components/ShareSheet/ShareSheet";
-import BatchesSheet from "../components/BatchesSheet/BatchesSheet";
-import FooterMessage from "../components/FooterMessage/FooterMessage";
-import Footer from "../components/Footer";
-import { SAMPLE_UPCOMING_TRIPS } from "../api/sampleData";
-import { TripCardItem, ViewMoreCard } from "../components/UpcomingTrips/TripCardItem";
-import { useIsDesktop } from "../hooks/useIsDesktop";
-import DesktopTripDetail from "../components/desktop/DesktopTripDetail";
-import ItineraryCustomiser, { selectionPrice } from "../components/ItineraryCustomiser/ItineraryCustomiser";
-import HeartIcon from "../components/HeartIcon/HeartIcon";
-import { getScrollTop, onAppScroll } from "../utils/scroll";
+import SiteHeader2 from "@/components/SiteHeader2";
+import TribeStories from "@/components/TribeStories";
+import QueryBanner from "@/components/QueryBanner";
+import GallerySheet from "@/components/GallerySheet";
+import ShareSheet from "@/components/ShareSheet";
+import BatchesSheet from "@/components/BatchesSheet";
+import EndMark from "@/components/ui/EndMark";
+import Footer from "@/components/Footer";
+import { getRelatedTrips, STATIC_DATA, TDP_FAQS } from "@/repositories";
+import { DayCard, FaqItem, TiFitRow } from "@/components/TripItinerary";
+import { itineraryTransfers, selectedTrip, type SelectedTrip } from "@/utils/tripItinerary";
+import { TripCardItem, ViewMoreCard } from "@/components/UpcomingTrips/TripCardItem";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import DesktopTripDetail from "@/components/desktop/DesktopTripDetail";
+import ItineraryCustomiser from "@/components/ItineraryCustomiser";
+import HeartIcon from "@/components/ui/HeartIcon";
+import ToggleSwitch from "@/components/ui/ToggleSwitch";
+import { getScrollTop, onAppScroll } from "@/utils/scroll";
+import CtaButton from "@/components/ui/CtaButton";
 
 // ── Figma-downloaded assets ──────────────────────────────────────────────────
-const FIG = "/trip-detail/";
-/* hero-thumb-2/3, hero-main and itin-map were byte-identical copies of the
- * trip-hero / itin-section assets, so the shared files are reused instead. */
-const HERO_LARGE = "/figma/trip-hero/hero-bg.png";
-const HERO_T1    = `${FIG}hero-thumb-1.png`;
-const HERO_T2    = "/figma/trip-hero/hero-bg.png";
-const HERO_T3    = `${FIG}hero-thumb-1.png`;
-const HERO_MAIN  = "/figma/trip-hero/hero-bg.png";  // fallback / extra thumb
-const ITIN_MAP   = "/figma/itin-section/route-map.png";
 /* Same on/off switch art the listing page uses for its "Show Features" toggle. */
-const LISTING_TOGGLE = "/figma/listing/toggle/";
-const CAPTAIN_PHOTO = `${FIG}captain-photo.jpeg`;
 
 
 // moments gallery carousel
@@ -75,13 +68,6 @@ const CAP_ICO_WOMEN = `${MG}captain-icon-women.svg`;
 
 
 const TI = "/figma/trip-info/";
-const FOOT_FILLED = [`${TI}foot-1.svg`,`${TI}foot-2.svg`,`${TI}foot-3.svg`,`${TI}foot-4.svg`,`${TI}foot-5.svg`];
-const FOOT_EMPTY  = `${TI}foot-empty.svg`;
-const FIT_ICONS: Record<string, string> = {
-  "Party & Night Life":   `${TI}icon-party.svg`,
-  "Nature and Adventure": `${TI}icon-nature.svg`,
-  "City and Culture":     `${TI}icon-culture.svg`,
-};
 
 type PackageType = "hotel" | "hostel";
 
@@ -110,708 +96,6 @@ function packageServices(type: PackageType, trip: SelectedTrip) {
     { icon: `${HL_ICON}icon-guides.svg`, label: "Trip Captains, Local Guides" },
   ];
 }
-
-/** The trip the page is currently describing: the customiser's applied
- *  selection, or the whole mother itinerary before the traveller narrows it. */
-export interface SelectedTrip {
-  start: number;
-  end: number;
-  cities: string[];
-  /** Stops covered, and the transfer legs between them. */
-  stops: number;
-  legs: number;
-  nights: number;
-  days: number;
-  price: number;
-  /** Price formatted the way the page prints it, e.g. "14,000/-". */
-  priceLabel: string;
-  durationLabel: string;
-  isFullRoute: boolean;
-}
-
-export function selectedTrip(
-  data: ProductData,
-  selection: { start: number; end: number } | null,
-  basePrice: number
-): SelectedTrip {
-  const lastStation = data.motherItinerary.length - 1;
-  const start = selection?.start ?? 0;
-  const end = selection?.end ?? lastStation;
-  const nights = data.motherNights.slice(start, end + 1).reduce((a, b) => a + b, 0);
-  const price = selectionPrice(basePrice, end - start, lastStation);
-  return {
-    start,
-    end,
-    cities: data.motherItinerary.slice(start, end + 1),
-    stops: end - start + 1,
-    legs: Math.max(0, end - start),
-    nights,
-    days: nights + 1,
-    price,
-    priceLabel: `${price.toLocaleString("en-IN")}/-`,
-    durationLabel: `${nights}N · ${nights + 1}D`,
-    isFullRoute: start === 0 && end === lastStation,
-  };
-}
-
-// ── Type definitions ──────────────────────────────────────────────────────────
-export interface DayActivity {
-  title: string;
-  photos?: string[];
-  isLeisure?: boolean;
-  leisureDesc?: string;
-  leisureDescBold?: string;
-  leisurePhotos?: string[];
-}
-export interface DayItinerary {
-  days: string;
-  city: string;
-  photo: string;
-  summary?: string[];
-  chips?: string[];
-  items: string[];
-  description?: string;
-  stayName?: string;
-  stayNights?: number;
-  stayCheckIn?: string;
-  stayCheckOut?: string;
-  stayPhotos?: string[];
-  stayNote?: string;
-  stayMeals?: string[];
-  activities?: DayActivity[];
-  photos?: string[];
-}
-export interface ProductData {
-  title: string;
-  heroImages: string[];
-  displayPrice: string;
-  batchLabel: string;
-  breadcrumbs: string[];
-  batchCount: string;
-  totalBatches: string;
-  groupSize: string;
-  bestMonths: string;
-  inclusions: string[];
-  exclusions: string[];
-  effort: string;
-  tripTypeLabel: string;
-  itinerary: DayItinerary[];
-  gallery: string[];
-  pickUp: string;
-  drop: string;
-  duration: string;
-  cityStrip: string[];
-  /** Full mother-itinerary stations, in travel order, for the customiser. */
-  motherItinerary: string[];
-  /** Nights spent at each mother-itinerary station. */
-  motherNights: number[];
-  womenBadge: string;
-  fitTags: { label: string; rating: number }[];
-  mapImage: string;
-  captain: { name: string; photo: string; reviews: number; years: number; rating: number };
-}
-
-// ── Static page data (Figma) ─────────────────────────────────────────────────
-export const STATIC_DATA: ProductData = {
-  title: "15 Days Europe Group Trip 2026: Paris, Amsterdam & Switzerland",
-  heroImages: [HERO_LARGE, HERO_T1, HERO_T2, HERO_T3, HERO_MAIN],
-  displayPrice: "62,999/-",
-  batchLabel: "09 May Batch",
-  breadcrumbs: ["Wellness", "Europe"],
-  batchCount: "Upcoming Batches",
-  totalBatches: "12 Batches",
-  groupSize: "25",
-  bestMonths: "May – September",
-  pickUp: "Paris Charles de Gaulle Airport",
-  drop: "Budapest Ferenc Liszt International Airport",
-  duration: "7N · 8D",
-  cityStrip: ["3N Paris", "1N Amsterdam", "3N Switzerland"],
-  motherItinerary: [
-    "Paris", "Brussels", "Amsterdam", "Cologne", "Heidelberg",
-    "Rhine Falls", "Zurich", "Lucerne", "Vienna", "Budapest",
-  ],
-  motherNights: [3, 1, 2, 1, 1, 1, 2, 2, 2, 3],
-  womenBadge: "60% Women travellers have joined!",
-  fitTags: [
-    { label: "Party & Night Life",   rating: 3 },
-    { label: "Nature and Adventure", rating: 4 },
-    { label: "City and Culture",     rating: 5 },
-  ],
-  mapImage: ITIN_MAP,
-  inclusions: [
-    "9 Nights accommodation in 3-star hotels",
-    "Daily breakfast at hotel",
-    "All intercity coach transfers",
-    "Eiffel Tower (2nd floor) entry ticket",
-    "Palace of Versailles entry ticket",
-    "Seine River Cruise",
-    "Amsterdam city canal cruise",
-    "Jungfrau Top of Europe excursion",
-    "Lucerne city tour with Chapel Bridge visit",
-    "WanderOn Trip Captain throughout the journey",
-    "Travel insurance",
-  ],
-  exclusions: [
-    "Water sports or any activity not mentioned in the itinerary.",
-    "Any food or beverage not included in the package (alcoholic drinks, mineral water, meals on the highway).",
-    "Any cost arising due to natural calamities like landslides, roadblocks etc. (to be borne by the customer).",
-    "Anything not mentioned in the inclusions.",
-    "Cost arising due to change or delay in flight timings.",
-    "International flights and airport taxes (unless specified).",
-    "Visa fees and travel documentation charges.",
-    "GST (5%) applicable extra.",
-    "TCS (5%) applicable extra.",
-    "Any expenses of personal nature.",
-    "Any additional activities during the tours.",
-    "Travel insurance not listed under inclusions.",
-  ],
-  effort: "Moderate",
-  tripTypeLabel: "Europe Group Tour",
-  gallery: [HERO_LARGE, HERO_T1, HERO_T2, HERO_T3, HERO_MAIN],
-  captain: { name: "WanderOn Captain", photo: CAPTAIN_PHOTO, reviews: 48, years: 5, rating: 4.9 },
-  itinerary: [
-    {
-      days: "Day 1",
-      city: "Paris",
-      photo: HERO_T1,
-      summary: ["Arrival in Paris"],
-      chips: ["1N Hotel", "Breakfast"],
-      items: ["Day at Leisure"],
-      description: "Welcome to Paris! Upon your arrival at the airport, get driven to the hotel. After you check in, relax for some time. Later, you can explore the city on your own. You may visit Le Manoir De Paris, a haunted house where you can engage yourself in various Parisian legends & terrifying stories. Alternatively, you can visit Place des Vosges, one of Paris' oldest and most beautiful squares, which often hosts cultural events, among others. Later, return to the hotel on your own for an overnight stay.",
-      stayName: "Millennium Hotel Paris Charles De-Gaulle",
-      stayNights: 3,
-      stayCheckIn: "2:00 PM",
-      stayCheckOut: "11:00 AM",
-      stayPhotos: [
-        "/figma/itin-section/d1-hotel-1.jpg",
-        "/figma/itin-section/d1-hotel-2.jpg",
-        "/figma/itin-section/d1-hotel-3.jpg",
-        "/figma/itin-section/d1-hotel-4.jpg",
-      ],
-      stayNote: "Stays will be allocated based on availability or similar category.",
-      stayMeals: ["Breakfast", "Dinner"],
-      activities: [
-        {
-          title: "Enjoy your time at Leisure",
-          isLeisure: true,
-          leisureDesc: "If you're up for it, you can join an optional welcome dinner around the Canal de l'Ourcq / La Villette area, a more local, less touristy side of Paris, or go for a relaxed evening walk along the Seine to kick things off properly.",
-          leisureDescBold: "relaxed evening walk along the Seine",
-          leisurePhotos: ["/figma/itin-section/d1-leisure.jpg"],
-        },
-      ],
-    },
-    {
-      days: "Day 2",
-      city: "Paris",
-      photo: HERO_T2,
-      summary: ["Paris Sightseeing Tour"],
-      chips: ["1N Hotel", "Breakfast", "5 Activities"],
-      items: [
-        "Visit to Eiffel Tower & Palace of Versailles",
-        "Siene River Cruise",
-        "Paris Night Tour",
-      ],
-      description: "Experience the magic of Paris on this unforgettable tour. Begin by exploring iconic landmarks like Place Vendôme, Opéra Garnier, Champs-Élysées, Arc de Triomphe, & Les Invalides. Next, ascend to the Eiffel Tower\'s 3rd level for stunning city views, then visit the opulent Palace of Versailles, a 17th-century French art & architecture. Later, enjoy a cruise on the Seine River past Notre Dame, the Louvre, and Musée d\'Orsay, and end with a Paris Night Tour, where illuminated monuments truly sparkle.",
-      stayName: "Same Accommodation as of Day-1",
-      stayMeals: ["Breakfast"],
-      activities: [
-        {
-          title: "1- Paris City Sightseeing Tour - Paris City Tour On A Shared Basis",
-          photos: ["/figma/itin-section/d2-a1-1.jpg", "/figma/itin-section/d2-a1-2.jpg", "/figma/itin-section/d2-a1-3.jpg"],
-        },
-        {
-          title: "2- Eiffel Tower Guided Tour With Summit Access",
-          photos: ["/figma/itin-section/d2-a2-1.jpg", "/figma/itin-section/d2-a2-2.jpg", "/figma/itin-section/d2-a2-3.jpg"],
-        },
-        {
-          title: "3- Palace of Versailles",
-          photos: ["/figma/itin-section/d2-a3-1.jpg", "/figma/itin-section/d2-a3-2.jpg", "/figma/itin-section/d2-a3-3.jpg"],
-        },
-        {
-          title: "4- 1 Hour Seine River Cruise",
-          photos: ["/figma/itin-section/d2-a4-1.jpg", "/figma/itin-section/d2-a4-2.jpg", "/figma/itin-section/d2-a4-3.jpg"],
-        },
-        {
-          title: "5- Paris Night Tour On A Shared Basis",
-          photos: ["/figma/itin-section/d2-a5-1.jpg", "/figma/itin-section/d2-a5-2.jpg", "/figma/itin-section/d2-a5-3.jpg"],
-        },
-      ],
-    },
-    {
-      days: "Day 3",
-      city: "Paris",
-      photo: HERO_T3,
-      summary: ["Day Trip to Disneyland Paris"],
-      chips: ["1N Hotel", "Breakfast", "1 Activities"],
-      items: ["Disneyland Paris"],
-      description: "Embark on a magical day trip to Disneyland Paris, where fairy tales come to life. Board your transfer, and once you reach, enjoy thrilling rides, dazzling parades, and live shows across Disneyland Park and Walt Disney Studios Park. Also, meet beloved Disney characters, explore themed lands like Adventureland and Fantasyland, and experience iconic attractions like Pirates of the Caribbean and Space Mountain—making it the perfect escape for all ages. After an amazing time, get driven to the hotel.",
-      stayName: "Same Accommodation as of Day-1",
-      stayMeals: ["Breakfast"],
-      activities: [
-        {
-          title: "1- Disneyland Paris Visit",
-          photos: [
-            "/figma/itin-section/d3-a1-1.jpg",
-            "/figma/itin-section/d3-a1-2.jpg",
-            "/figma/itin-section/d3-a1-3.jpg",
-          ],
-        },
-      ],
-    },
-    {
-      days: "Day 4",
-      city: "Amsterdam",
-      photo: HERO_MAIN,
-      summary: ["Arrive in Amsterdam"],
-      chips: ["1N Hotel", "Dinner", "2 Activities"],
-      items: [
-        "Brussels Sightseeing Tour",
-        "Visit to Mini Europe",
-      ],
-      description: "Post check-out, get driven to Amsterdam with a stop in Brussels. Once there, enjoy a sightseeing tour to discover Grand Place, Europe's most ornate square, renowned for its stunning architecture, and see the stunning Manneken Pis statue. Then, explore Mini-Europe, a one-of-a-kind park featuring over 350 detailed miniature replicas of Europe's top landmarks. After the tour, continue your scenic journey to Amsterdam, and upon arrival, check in to your hotel for an overnight stay.",
-      stayName: "Van Der Valk, Amsterdam",
-      stayCheckIn: "2:00 PM",
-      stayCheckOut: "11:00 AM",
-      stayPhotos: [
-        "/figma/itin-section/d4-hotel-1.jpg",
-        "/figma/itin-section/d4-hotel-2.jpg",
-        "/figma/itin-section/d4-hotel-3.jpg",
-        "/figma/itin-section/d4-hotel-4.jpg",
-      ],
-      stayNote: "Stays will be allocated based on availability or similar category.",
-      stayMeals: ["Breakfast", "Dinner"],
-      activities: [
-        {
-          title: "1- Brussels City Tour On A Shared Basis",
-          photos: [
-            "/figma/itin-section/d4-a1-1.jpg",
-            "/figma/itin-section/d4-a1-2.jpg",
-            "/figma/itin-section/d4-a1-3.jpg",
-          ],
-        },
-        {
-          title: "2- Mini Europe Brussels Tour",
-          photos: [
-            "/figma/itin-section/d4-a2-1.jpg",
-            "/figma/itin-section/d4-a2-2.jpg",
-            "/figma/itin-section/d4-a2-3.jpg",
-          ],
-        },
-      ],
-    },
-    {
-      days: "Day 5",
-      city: "Frankfurt",
-      photo: HERO_T1,
-      summary: ["Arrive in Frankfurt"],
-      chips: ["1N Hotel", "Breakfast", "2 Activities"],
-      items: [
-        "Keukenhof Gardens",
-        "Amsterdam Canal Cruise",
-      ],
-      description: "After check-out, get driven to visit the famous Keukenhof Gardens, a world-famous floral paradise with vibrant tulips, daffodils, and stunning themed pavilions. Once there, stroll through expansive landscapes and capture picture-perfect blooms. Later, get driven to Amsterdam for a scenic canal cruise, gliding past historic houses and charming bridges—a quintessential Dutch experience. Later, continue your scenic journey to Frankfurt, & upon arrival, check in at your hotel for an overnight stay.",
-      stayName: "The Rilano Hotel Munchen",
-      stayCheckIn: "2:00 PM",
-      stayCheckOut: "11:00 AM",
-      stayPhotos: ["/figma/itin-section/d5-hotel-1.jpg", "/figma/itin-section/d5-hotel-2.jpg", "/figma/itin-section/d5-hotel-3.jpg", "/figma/itin-section/d5-hotel-4.jpg"],
-      stayNote: "Stays will be allocated based on availability or similar category.",
-      stayMeals: ["Breakfast", "Dinner"],
-      activities: [
-        { title: "1- Keukenhof Tour, Amsterdam On A Shared Basis", photos: ["/figma/itin-section/d5-a1-1.jpg", "/figma/itin-section/d5-a1-2.jpg", "/figma/itin-section/d5-a1-3.jpg"] },
-        { title: "2- Amsterdam Canal Cruise On A Shared Basis", photos: ["/figma/itin-section/d5-a2-1.jpg", "/figma/itin-section/d5-a2-2.jpg", "/figma/itin-section/d5-a2-3.jpg"] },
-      ],
-    },
-    {
-      days: "Day 6",
-      city: "Switzerland",
-      photo: HERO_T2,
-      summary: ["Arrive in Switzerland"],
-      chips: ["1N Hotel", "Breakfast", "2 Activities"],
-      items: [
-        "Rhine Falls Boat Tour",
-      ],
-      description: "After check-out, get driven to Central Switzerland with a stop in Heidelberg. Once in Heidelberg, explore its charming Old Town on a walking tour, visiting Market Square and the medieval Church of the Holy Spirit. Continue through the lush Black Forest to Schaffhausen for a thrilling boat tour of Rhine Falls, Europe's largest waterfall, and feel its powerful cascade up close. Later, continue your scenic journey to Switzerland and upon arrival, check in at your hotel for an overnight stay.",
-      stayName: "La Maison Suisse Dattingen",
-      stayCheckIn: "2:00 PM",
-      stayCheckOut: "11:00 AM",
-      stayPhotos: ["/figma/itin-section/d6-hotel-1.jpg", "/figma/itin-section/d6-hotel-2.jpg", "/figma/itin-section/d6-hotel-3.jpg", "/figma/itin-section/d6-hotel-4.jpg"],
-      stayNote: "Stays will be allocated based on availability or similar category.",
-      stayMeals: ["Breakfast", "Dinner"],
-      activities: [
-        { title: "1- Walking Tour In Heidelberg", photos: ["/figma/itin-section/d6-a1-1.jpg", "/figma/itin-section/d6-a1-2.jpg", "/figma/itin-section/d6-a1-3.jpg"] },
-        { title: "2- Rhine Falls Boat Tour, Switzerland On A Shared Basis", photos: ["/figma/itin-section/d6-a2-1.jpg", "/figma/itin-section/d6-a2-2.jpg", "/figma/itin-section/d6-a2-3.jpg"] },
-      ],
-    },
-    {
-      days: "Day 7",
-      city: "Switzerland",
-      photo: HERO_T3,
-      summary: ["Excursion to Jungfraujoch"],
-      chips: ["1N Hotel", "Breakfast", "1 Activities"],
-      items: [
-        "Day Trip to Jungfraujoch",
-      ],
-      description: "Get transferred to Grindelwald Terminal and board the Eiger Express, a state-of-the-art cableway offering stunning mountain views. Continue on a cogwheel train to Jungfraujoch, the highest railway station in Europe. At the top, explore the Ice Palace with its intricate ice sculptures and visit the Sphinx Observatory for breathtaking views of the Aletsch Glacier. After this unforgettable experience, get driven to your hotel in Switzerland for a comfortable overnight stay.",
-      stayName: "Same Accommodation as of Day-1",
-      stayMeals: ["Breakfast"],
-      activities: [
-        { title: "1- Day Trip To Jungfraujoch On A Shared Basis", photos: ["/figma/itin-section/d7-a1-1.jpg", "/figma/itin-section/d7-a1-2.jpg", "/figma/itin-section/d7-a1-3.jpg"] },
-      ],
-    },
-    {
-      days: "Day 8",
-      city: "Departure",
-      photo: HERO_MAIN,
-      summary: ["Departure Day"],
-      chips: ["Breakfast"],
-      items: [],
-      description: "In the morning, check out from your hotel and get transferred to Zurich airport for your flight back home. This marks the end of your trip.",
-      stayName: "Check Out from your hotel",
-    },
-  ],
-};
-
-
-// ── Small components ──────────────────────────────────────────────────────────
-
-export interface TransferLeg {
-  from: string;
-  to: string;
-  duration?: string;
-}
-
-/** Transfer leg shown at the top of an expanded day (Figma 7165:7171). */
-export function DayTransfer({ from: fromCity, to: toCity, duration }: TransferLeg) {
-  return (
-    <div className="tdp2-day-tr-row">
-      <span className="tdp2-day-tr-city">{fromCity}</span>
-      <span className="tdp2-day-tr-line" aria-hidden />
-      <div className="tdp2-day-tr-pill">
-        <span className="tdp2-day-tr-car">
-          <img src="/figma/itin-section/transfer-car.svg" alt="" aria-hidden loading="lazy" />
-        </span>
-        {duration && <span className="tdp2-day-tr-dur">{duration}</span>}
-      </div>
-      <span className="tdp2-day-tr-line tdp2-day-tr-line--arrow" aria-hidden />
-      <span className="tdp2-day-tr-city">{toCity}</span>
-    </div>
-  );
-}
-
-/** Transfer legs implied by the itinerary skeleton: a day whose city differs
- *  from the day before is a travel day. The closing day is the journey home
- *  rather than a city-to-city leg, so it carries no transfer. */
-export function itineraryTransfers(data: ProductData): (TransferLeg | undefined)[] {
-  const days = data.itinerary;
-  return days.map((day, i) =>
-    i === 0 || i === days.length - 1 || days[i - 1].city === day.city
-      ? undefined
-      : { from: days[i - 1].city, to: day.city }
-  );
-}
-
-export function parseCityStrip(entry: string): { nights: string; city: string } {
-  const m = entry.match(/^(\d+)N\s+(.+)$/i);
-  if (m) return { nights: `${m[1]} Night${Number(m[1]) > 1 ? "s" : ""}`, city: m[2] };
-  return { nights: "", city: entry };
-}
-
-export function CityCard({ entry, photo }: { entry: string; photo: string }) {
-  const { nights, city } = parseCityStrip(entry);
-  return (
-    <div className="tdp2-city-card">
-      <img src={photo} alt={city} className="tdp2-city-card-photo" loading="lazy" />
-      <div className="tdp2-city-card-gradient" aria-hidden />
-      <div className="tdp2-city-card-text">
-        {nights && <span className="tdp2-city-card-nights">{nights}</span>}
-        <span className="tdp2-city-card-name">{city}</span>
-      </div>
-    </div>
-  );
-}
-
-
-/** FAQ accordion row, shared with the desktop product page. */
-export function FaqItem({ index, question, answer, isOpen, onToggle }: {
-  index: number; question: string; answer: string; isOpen: boolean; onToggle: () => void;
-}) {
-  return (
-    <div className={`tdp2-faq-item${isOpen ? " open" : ""}`}>
-      <button className={`tdp2-faq-row${isOpen ? " open" : ""}`} onClick={onToggle}>
-        <span className="tdp2-faq-num">{String(index).padStart(2, "0")}</span>
-        <div className="tdp2-faq-content">
-          <span className="tdp2-faq-q">{question}</span>
-          {isOpen && answer && <p className="tdp2-faq-a">{answer}</p>}
-        </div>
-        <span className="tdp2-faq-icon" aria-hidden="true">
-          {isOpen
-            ? <svg width="14" height="2" viewBox="0 0 14 2" fill="none"><line x1="0" y1="1" x2="14" y2="1" stroke="#202020" strokeWidth="2"/></svg>
-            : <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 0v12M0 6h12" stroke="#202020" strokeWidth="1.5" strokeLinecap="round"/></svg>
-          }
-        </span>
-      </button>
-    </div>
-  );
-}
-
-
-export function TiFitRow({ label, rating }: { label: string; rating: number }) {
-  const icon = FIT_ICONS[label] ?? `${TI}icon-culture.svg`;
-  return (
-    <div className="tdp2-ti-fit-row">
-      <div className="tdp2-ti-fit-label">
-        <img src={icon} alt="" className="tdp2-ti-fit-icon" aria-hidden loading="lazy" />
-        <span className="tdp2-ti-fit-text">{label}</span>
-      </div>
-      <div className="tdp2-ti-fit-prints">
-        {[0,1,2,3,4].map(i => (
-          <div key={i} className="tdp2-ti-fit-wrap">
-            <div className="tdp2-ti-fit-inner">
-              <img src={i < rating ? FOOT_FILLED[i] : FOOT_EMPTY} alt="" className="tdp2-ti-fit-foot" aria-hidden loading="lazy" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export function ItineraryMapToggle({ checked, onChange }: {
-  checked: boolean;
-  onChange: () => void;
-}) {
-  return (
-    <div className="tdp2-itin-map-toggle">
-      <span>Show Map</span>
-      <button
-        type="button"
-        className="tdp2-itin-switch"
-        role="switch"
-        aria-checked={checked}
-        aria-label={checked ? "Hide trip map" : "Show trip map"}
-        onClick={onChange}
-      >
-        <img
-          className="tdp2-itin-switch-img"
-          src={`${LISTING_TOGGLE}toggle-${checked ? "on" : "off"}.svg`}
-          alt=""
-          aria-hidden
-        />
-      </button>
-    </div>
-  );
-}
-
-export function DayCard({ day, index, isOpen, onToggle, transfer }: {
-  day: DayItinerary;
-  index: number;
-  isOpen: boolean;
-  onToggle: () => void;
-  transfer?: TransferLeg;
-}) {
-  const title = day.summary?.[0] ?? day.city;
-  const hasStay = Boolean(day.stayName);
-  const hasActivities = Boolean(day.activities?.length);
-  const isSameAccommodation = day.stayName?.startsWith("Same Accommodation");
-
-  return (
-    <div id={`day-${index}`} className={`tdp2-day-card${isOpen ? " open" : ""}`} style={{ scrollMarginTop: "186px" }}>
-      <button className="tdp2-day-card-header" onClick={onToggle}>
-        <div className="tdp2-day-card-header-left">
-          <span className="tdp2-day-badge">{`Day ${index + 1}`}</span>
-          <span className="tdp2-day-card-title">{title}</span>
-        </div>
-        <img
-          src={isOpen
-            ? "/figma/itin-section/itinerary-arrow-up.svg"
-            : "/figma/itin-section/itinerary-arrow-down.svg"}
-          alt=""
-          className="tdp2-day-card-chevron"
-          aria-hidden
-          loading="lazy"
-        />
-      </button>
-
-      {isOpen && (
-        <div className="tdp2-day-card-expanded">
-          {transfer && (
-            <div className="tdp2-day-tl-item">
-              <div className="tdp2-day-tl-left">
-                <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
-                <div className="tdp2-day-tl-line" />
-              </div>
-              <div className="tdp2-day-tl-content">
-                <div className="tdp2-day-tl-section-hd">
-                  <img src="/figma/itin-section/transfer-taxi.svg" alt="" className="tdp2-day-tl-sec-icon" aria-hidden loading="lazy" />
-                  <span className="tdp2-day-tl-sec-label">Shared Transfer</span>
-                </div>
-                <DayTransfer {...transfer} />
-              </div>
-            </div>
-          )}
-
-          {hasStay && (
-            <div className="tdp2-day-tl-item">
-              <div className="tdp2-day-tl-left">
-                <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
-                <div className="tdp2-day-tl-line" />
-              </div>
-              <div className="tdp2-day-tl-content">
-                <div className="tdp2-day-tl-section-hd">
-                  <img src="/figma/itin-section/itinerary-stay.svg" alt="" className="tdp2-day-tl-sec-icon" aria-hidden loading="lazy" />
-                  <span className="tdp2-day-tl-sec-label">Stay</span>
-                  {day.stayNights && (
-                    <>
-                      <div className="tdp2-day-tl-sec-divider" />
-                      <span className="tdp2-day-tl-sec-label">{day.stayNights} Night{day.stayNights > 1 ? "s" : ""}</span>
-                    </>
-                  )}
-                </div>
-                {day.stayNote && (
-                  <div className="tdp2-day-stay-note">
-                    <img src="/figma/itin-section/itinerary-info.svg" alt="" className="tdp2-day-stay-note-icon" aria-hidden loading="lazy" />
-                    <span className="tdp2-day-stay-note-text">{day.stayNote}</span>
-                    <img src="/figma/itin-section/itinerary-note-tail.svg" alt="" className="tdp2-day-stay-note-tail" aria-hidden loading="lazy" />
-                  </div>
-                )}
-                {day.stayPhotos && day.stayPhotos.length > 0 && (
-                  <div className="tdp2-day-hotel-options">
-                    {day.stayPhotos.slice(0, 2).map(photo => (
-                      <div className="tdp2-day-hotel-option" key={photo}>
-                        <img src={photo} alt={day.stayName ?? ""} className="tdp2-day-hotel-photo" loading="lazy" />
-                        <p className="tdp2-day-hotel-name">{day.stayName}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {!day.stayPhotos?.length && (
-                  isSameAccommodation ? (
-                    <div className="tdp2-day-same-stay">
-                      <img
-                        src="/figma/itin-section/same-accommodation-info.svg"
-                        alt=""
-                        className="tdp2-day-same-stay-icon"
-                        aria-hidden
-                      />
-                      <span>{day.stayName}</span>
-                    </div>
-                  ) : (
-                    <p className="tdp2-day-stay-name">{day.stayName}</p>
-                  )
-                )}
-                {day.stayMeals && day.stayMeals.length > 0 && (
-                  <div className="tdp2-day-meals-bar">
-                    <div className="tdp2-day-meals-list">
-                      {day.stayMeals.map((meal, mi) => (
-                        <React.Fragment key={mi}>
-                          {mi > 0 && <div className="tdp2-day-meal-sep" />}
-                          <div className="tdp2-day-meal-item">
-                            <img src="/figma/itin-section/itinerary-meal.svg" alt="" className="tdp2-day-meal-icon" aria-hidden loading="lazy" />
-                            <span className="tdp2-day-meal-label">{meal}</span>
-                            <img src="/figma/itin-section/itinerary-done.svg" alt="" className="tdp2-day-meal-done" aria-hidden loading="lazy" />
-                          </div>
-                        </React.Fragment>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Activity timeline section */}
-          {hasActivities && (
-            <div className="tdp2-day-tl-item">
-              <div className="tdp2-day-tl-left">
-                <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
-                <div className="tdp2-day-tl-line" />
-              </div>
-              <div className="tdp2-day-tl-content tdp2-day-tl-content--act">
-                <div className="tdp2-day-tl-section-hd">
-                  <img src="/figma/itin-section/itinerary-activity.svg" alt="" className="tdp2-day-tl-sec-icon tdp2-day-tl-sec-icon--act" aria-hidden loading="lazy" />
-                  <span className="tdp2-day-tl-sec-label">Activity</span>
-                </div>
-                {day.activities!.map((act, ai) => (
-                  <div key={ai} className="tdp2-day-activity-item">
-                    {ai > 0 && <div className="tdp2-day-act-divider" />}
-                    {act.isLeisure ? (
-                      <div className="tdp2-day-leisure-card">
-                        <img src="/figma/itin-section/itinerary-leisure.svg" alt="" className="tdp2-day-leisure-icon" aria-hidden loading="lazy" />
-                        <span className="tdp2-day-leisure-label">{act.title}</span>
-                      </div>
-                    ) : (
-                      <div className="tdp2-day-act-row">
-                        <div className="tdp2-day-act-text">
-                          <p className="tdp2-day-act-title">{act.title}</p>
-                        </div>
-                        {act.photos?.[0] && (
-                          <img src={act.photos[0]} alt="" className="tdp2-day-act-thumb" loading="lazy" />
-                        )}
-                      </div>
-                    )}
-                    {act.leisureDesc && (
-                      <p className="tdp2-day-leisure-desc">
-                        {act.leisureDescBold ? (
-                          <>
-                            {act.leisureDesc.split(act.leisureDescBold)[0]}
-                            <strong>{act.leisureDescBold}</strong>
-                            {act.leisureDesc.split(act.leisureDescBold)[1]}
-                          </>
-                        ) : act.leisureDesc}
-                      </p>
-                    )}
-                    {act.leisurePhotos && act.leisurePhotos.length > 0 && (
-                      <div className="tdp2-day-leisure-photos">
-                        {act.leisurePhotos.map((ph, pi) => (
-                          <img key={pi} src={ph} alt="" className="tdp2-day-leisure-photo" loading="lazy" />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Fallback simple timeline for days without rich data */}
-          {!hasStay && !hasActivities && day.items.length > 0 && (
-            <div className="tdp2-day-timeline">
-              {day.items.map((item, ti) => (
-                <div key={ti} className="tdp2-day-tl-item">
-                  <div className="tdp2-day-tl-left">
-                    <img src="/figma/itin-section/itinerary-timeline.svg" alt="" className="tdp2-day-tl-pin" aria-hidden loading="lazy" />
-                    <div className="tdp2-day-tl-line" />
-                  </div>
-                  <p className="tdp2-day-tl-text">{item}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ── Shared FAQ copy (reused by the desktop product page) ──────────────────────
-export const TDP_FAQS = [
-  {
-    q: "How early should I book Europe trip packages from India?",
-    a: "Three to six months ahead is the right window. It gets you better flight prices, more hotel options, and enough time to sort the Schengen visa without any last-minute panic, especially if you're travelling in summer.",
-  },
-  {
-    q: "Are flights included in Europe trip packages from India?",
-    a: "Most WanderOn Europe packages do not include international flights, which keeps the base price transparent and lets you book from your preferred city. Our travel experts can help you find the best flight options to match your batch dates if needed.",
-  },
-  {
-    q: "Do Europe tour packages include Schengen visa assistance?",
-    a: "Yes, we provide complete Schengen visa assistance — from preparing your documentation checklist to advising on the right consulate to apply through. Visa approval is subject to the consulate's decision, but we make sure your application is as strong as possible.",
-  },
-  {
-    q: "What visa and travel documents are required for Europe tours from India?",
-    a: "You will need a valid Schengen visa, a passport with at least six months of validity beyond your return date, travel insurance with a minimum €30,000 medical coverage, confirmed hotel bookings, flight itineraries, and proof of sufficient funds. Our team will share a complete checklist once your booking is confirmed.",
-  },
-];
 
 // ── Main component ────────────────────────────────────────────────────────────
 export default function TripDetail() {
@@ -910,19 +194,7 @@ export default function TripDetail() {
 
   // Related trips filtered by this product's destination (last breadcrumb).
   const productDest = data.breadcrumbs[data.breadcrumbs.length - 1] ?? "";
-  const relatedTrips = (() => {
-    const d = productDest.trim().toLowerCase();
-    const pool = SAMPLE_UPCOMING_TRIPS.flatMap((g) => g.tripsArray).filter((t) => t.slug !== routeSlug);
-    const matched = pool.filter((t) =>
-      t.slug.toLowerCase().includes(d) ||
-      t.title.toLowerCase().includes(d) ||
-      (t.skeletonItinerary ?? []).some((c) => c.toLowerCase().includes(d)) ||
-      (t.destinations ?? []).some((x) =>
-        x.title.toLowerCase().includes(d) || x.slug.toLowerCase().includes(d)
-      )
-    );
-    return (matched.length ? matched : pool).slice(0, 6);
-  })();
+  const relatedTrips = getRelatedTrips(productDest, routeSlug).slice(0, 6);
   const moreVmA = relatedTrips[0]?.image ?? MORE_TRIP_A;
   const moreVmB = relatedTrips[1]?.image ?? MORE_TRIP_B;
   const moreHref = `/search?destination=${encodeURIComponent(productDest)}`;
@@ -1171,9 +443,15 @@ export default function TripDetail() {
       {/* ── Itinerary placeholder anchor ─────────────────────────────── */}
       <div className="tdp2-separator"/>
       <section id="section-itin" className="tdp2-itin-section">
-        <ItineraryMapToggle
+        <ToggleSwitch
           checked={showItineraryMap}
-          onChange={() => setShowItineraryMap(show => !show)}
+          onChange={setShowItineraryMap}
+          label="Show Map"
+          labelOutside
+          className="tdp2-itin-map-toggle"
+          buttonClassName="tdp2-itin-switch"
+          imgClassName="tdp2-itin-switch-img"
+          ariaLabel={showItineraryMap ? "Hide trip map" : "Show trip map"}
         />
         {showItineraryMap && (
           <div className="tdp2-itin-map-wrap">
@@ -1392,7 +670,7 @@ export default function TripDetail() {
       <div className="tdp2-separator"/>
       <QueryBanner />
 
-      <FooterMessage />
+      <EndMark variant="mobile" />
       <Footer />
 
       {/* ── Sticky Bottom Nav (Figma 4518:15125 / 5406:15308) ───────── */}
@@ -1459,15 +737,14 @@ export default function TripDetail() {
             </div>
             <span className="tdp2-sticky-label">Starting price per person</span>
           </div>
-          <button
-            className="wo-cta tdp2-sticky-btn"
-            type="button"
+          <CtaButton
+            className="tdp2-sticky-btn"
             onClick={selectedBatch ? handleContinueBook : () => setBatchesOpen(true)}
           >
             <span className="tdp2-sticky-btn-label">
               {selectedBatch ? "Continue to Book" : "View Batches"}
             </span>
-          </button>
+          </CtaButton>
         </div>
       </div>
 

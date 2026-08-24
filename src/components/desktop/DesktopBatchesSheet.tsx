@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DEFAULT_BATCHES, type BatchItem } from "../BatchesSheet/BatchesSheet";
-import { useScrollLock } from "../../hooks/useScrollLock";
+import { DEFAULT_BATCHES, getBatchStatus, type BatchItem } from "@/repositories";
+import Sheet from "@/components/ui/Sheet";
 import "./DesktopBatchesSheet.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 /**
  * Desktop "View Trip / all departures" page — Figma 4375:7360.
@@ -55,13 +56,6 @@ function formatPrice(price: string) {
   return n.toLocaleString("en-IN");
 }
 
-type BatchStatus = "available" | "sold-out" | "filling";
-function getStatus(batch: BatchItem): BatchStatus {
-  if (batch.seatsLeft === null || batch.seatsLeft === 0) return "sold-out";
-  if (batch.fillingFast) return "filling";
-  return "available";
-}
-
 function DBatchCard({
   batch,
   nights,
@@ -77,7 +71,7 @@ function DBatchCard({
   const endDate = batch.endDate
     ? new Date(batch.endDate + "T00:00:00")
     : addDays(batch.startDate, nights);
-  const status = getStatus(batch);
+  const status = getBatchStatus(batch);
   const isSoldOut = status === "sold-out";
   const groupSize = batch.groupSize ?? 50;
   const interested = batch.interested ?? 12;
@@ -155,14 +149,13 @@ function DBatchCard({
             <span className="dbat-price-sub">Starting price per person</span>
           </div>
         </div>
-        <button
-          type="button"
-          className="wo-cta dbat-cta"
+        <CtaButton
+          className="dbat-cta"
           disabled={isSoldOut}
           onClick={() => onBook(batch, startDate, endDate)}
         >
           {isSoldOut ? "Sold Out" : ctaLabel}
-        </button>
+        </CtaButton>
       </div>
     </div>
   );
@@ -181,7 +174,6 @@ export default function DesktopBatchesSheet({
   const navigate = useNavigate();
   const [selectedMonth, setSelectedMonth] = useState("");
 
-  useScrollLock(isOpen);
 
   const months = useMemo(() => {
     const seen = new Set<string>();
@@ -224,58 +216,59 @@ export default function DesktopBatchesSheet({
   };
 
   return (
-    <>
-      {isOpen && (
-        <div className="dbat" role="dialog" aria-modal="true" aria-label="All departures">
-          <header className="dbat-header">
-            <button className="dbat-back" type="button" aria-label="Back" onClick={onClose}>
-              <img src={`${ASSETS}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
-            </button>
-            <div className="dbat-head-info">
-              <h1 className="dbat-head-title">{tripTitle}</h1>
-              {duration && (
-                <div className="dbat-head-dur">
-                  <img src={`${ASSETS}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
-                  <span>{duration}</span>
-                </div>
-              )}
+    <Sheet
+      isOpen={isOpen}
+      panelClassName="dbat"
+      openModifier=""
+      ariaLabel="All departures"
+      unmountWhenClosed
+    >
+      <header className="dbat-header">
+        <button className="dbat-back" type="button" aria-label="Back" onClick={onClose}>
+          <img src={`${ASSETS}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+        </button>
+        <div className="dbat-head-info">
+          <h1 className="dbat-head-title">{tripTitle}</h1>
+          {duration && (
+            <div className="dbat-head-dur">
+              <img src={`${ASSETS}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
+              <span>{duration}</span>
             </div>
-          </header>
-
-          <div className="dbat-body">
-            {months.length > 0 && (
-              <div className="dbat-months">
-                {months.map((m) => {
-                  const active = m === activeMonth;
-                  return (
-                    <button
-                      key={m}
-                      type="button"
-                      className={`dbat-month${active ? " dbat-month--active" : ""}`}
-                      onClick={() => setSelectedMonth(m)}
-                    >
-                      {monthLabel(m)}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
-            <div className="dbat-cards">
-              {filteredBatches.map((batch) => (
-                <DBatchCard
-                  key={batch.startDate}
-                  batch={batch}
-                  nights={nights}
-                  onBook={handleBook}
-                  ctaLabel={ctaLabel}
-                />
-              ))}
-            </div>
-          </div>
+          )}
         </div>
-      )}
+      </header>
 
-    </>
+      <div className="dbat-body">
+        {months.length > 0 && (
+          <div className="dbat-months">
+            {months.map((m) => {
+              const active = m === activeMonth;
+              return (
+                <button
+                  key={m}
+                  type="button"
+                  className={`dbat-month${active ? " dbat-month--active" : ""}`}
+                  onClick={() => setSelectedMonth(m)}
+                >
+                  {monthLabel(m)}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        <div className="dbat-cards">
+          {filteredBatches.map((batch) => (
+            <DBatchCard
+              key={batch.startDate}
+              batch={batch}
+              nights={nights}
+              onBook={handleBook}
+              ctaLabel={ctaLabel}
+            />
+          ))}
+        </div>
+      </div>
+    </Sheet>
   );
 }

@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { DEST_REGIONS } from "../../data/destinations";
-import { COUNTRIES, type Country } from "../../data/countries";
-import { useScrollLock } from "../../hooks/useScrollLock";
-import { useIsDesktop } from "../../hooks/useIsDesktop";
+import { DEST_REGIONS } from "@/repositories";
+import { COUNTRIES, type Country } from "@/repositories";
+import Sheet from "@/components/ui/Sheet";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 import "./ContactFormSheet.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const M = "/figma/menu/";
 
@@ -14,7 +15,6 @@ interface ContactFormSheetProps {
 
 export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetProps) {
   const isDesktop = useIsDesktop();
-  const [hasOpened, setHasOpened] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [destination, setDestination] = useState("");
@@ -27,10 +27,6 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
   const sheetRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => { if (isOpen) setHasOpened(true); }, [isOpen]);
-
-  useScrollLock(isOpen);
 
   // Pin the sheet to the visual viewport so it hugs the on-screen keyboard
   // (avoids the gap/overlap left by position:fixed when the keyboard opens).
@@ -84,8 +80,6 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
     return () => document.removeEventListener("mousedown", onOutside);
   }, [countryOpen, destOpen]);
 
-  if (!hasOpened) return null;
-
   const selectDestination = (label: string) => {
     setDestination(label);
     setDestOpen(false);
@@ -102,252 +96,245 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
   };
 
   return (
-    <>
-      {/* Overlay */}
-      <div
-        className={`cfs-overlay${isOpen ? " cfs-overlay--visible" : ""}`}
-        onClick={onClose}
-        aria-hidden
-      />
+    <Sheet
+      isOpen={isOpen}
+      onClose={onClose}
+      overlayClassName="cfs-overlay"
+      overlayOpenModifier="--visible"
+      overlayAsSibling
+      panelClassName="cfs"
+      panelRef={sheetRef}
+      ariaLabel="Enquire Now"
+    >
+      {/* Hero image header */}
+      <div className="cfs-hero">
+        <img src="/figma/enquire/form-hero.jpg" alt="" className="cfs-hero-img" />
+        <div className="cfs-hero-overlay" aria-hidden />
+        <div className="cfs-hero-bar">
+          <img src="/figma/nav-logo.png" alt="WanderOn" className="cfs-logo" />
+          <button
+            className="cfs-close"
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
+              <path
+                d="M1 1L15 15M15 1L1 15"
+                stroke="white"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
 
-      {/* Sheet */}
-      <div
-        ref={sheetRef}
-        className={`cfs${isOpen ? " cfs--open" : ""}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Enquire Now"
-      >
-        {/* Hero image header */}
-        <div className="cfs-hero">
-          <img src="/figma/enquire/form-hero.jpg" alt="" className="cfs-hero-img" />
-          <div className="cfs-hero-overlay" aria-hidden />
-          <div className="cfs-hero-bar">
-            <img src="/figma/nav-logo.png" alt="WanderOn" className="cfs-logo" />
-            <button
-              className="cfs-close"
-              type="button"
-              onClick={onClose}
-              aria-label="Close"
-            >
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden>
-                <path
-                  d="M1 1L15 15M15 1L1 15"
-                  stroke="white"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
-          </div>
+      {/* Body */}
+      <div className="cfs-body">
+        {/* Desktop modal header — colored logo + grey close (Figma 5154:26476).
+            Hidden on mobile, where the hero bar carries these. */}
+        <div className="cfs-body-bar" aria-hidden={!isDesktop}>
+          <img src="/figma/desktop/nav-logo-color.png" alt="WanderOn" className="cfs-body-logo" />
+          <button
+            className="cfs-close cfs-close--grey"
+            type="button"
+            onClick={onClose}
+            aria-label="Close"
+            tabIndex={isDesktop ? 0 : -1}
+          >
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
+              <path d="M1 1L15 15M15 1L1 15" stroke="#3d3d3d" strokeWidth="2" strokeLinecap="round" />
+            </svg>
+          </button>
         </div>
 
-        {/* Body */}
-        <div className="cfs-body">
-          {/* Desktop modal header — colored logo + grey close (Figma 5154:26476).
-              Hidden on mobile, where the hero bar carries these. */}
-          <div className="cfs-body-bar" aria-hidden={!isDesktop}>
-            <img src="/figma/desktop/nav-logo-color.png" alt="WanderOn" className="cfs-body-logo" />
-            <button
-              className="cfs-close cfs-close--grey"
-              type="button"
-              onClick={onClose}
-              aria-label="Close"
-              tabIndex={isDesktop ? 0 : -1}
-            >
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
-                <path d="M1 1L15 15M15 1L1 15" stroke="#3d3d3d" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </button>
-          </div>
+        <h2 className="cfs-title">
+          Live the magic between Ocean waves and emerald Skies!
+        </h2>
 
-          <h2 className="cfs-title">
-            Live the magic between Ocean waves and emerald Skies!
-          </h2>
+        <form className="cfs-form" onSubmit={handleSubmit} noValidate>
+          <div className="cfs-fields">
+            {/* Name */}
+            <input
+              ref={nameRef}
+              className="cfs-input"
+              type="text"
+              placeholder="enter your name"
+              value={name}
+              onChange={e => setName(e.target.value)}
+              onFocus={() => { setCountryOpen(false); setDestOpen(false); }}
+              autoComplete="name"
+              onKeyDown={e => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  phoneRef.current?.focus();
+                }
+              }}
+            />
 
-          <form className="cfs-form" onSubmit={handleSubmit} noValidate>
-            <div className="cfs-fields">
-              {/* Name */}
-              <input
-                ref={nameRef}
-                className="cfs-input"
-                type="text"
-                placeholder="enter your name"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                onFocus={() => { setCountryOpen(false); setDestOpen(false); }}
-                autoComplete="name"
-                onKeyDown={e => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    phoneRef.current?.focus();
-                  }
-                }}
-              />
-
-              {/* Phone */}
-              <div className="cfs-phone-section" ref={countryRef}>
-                <div className="cfs-phone-row">
-                  <button
-                    type="button"
-                    className="cfs-country-code"
-                    onClick={() => { setCountryOpen(v => !v); setDestOpen(false); }}
-                    aria-haspopup="listbox"
-                    aria-expanded={countryOpen}
-                    aria-label={`Country code: ${country.name} ${country.code}`}
-                  >
-                    <span>{country.code}</span>
-                    <img
-                      src="/figma/enquire/arrow.svg"
-                      alt=""
-                      className={`cfs-cc-arrow${countryOpen ? " cfs-cc-arrow--open" : ""}`}
-                      aria-hidden
-                    />
-                  </button>
-                  <input
-                    ref={phoneRef}
-                    className="cfs-input cfs-phone"
-                    type="tel"
-                    inputMode="numeric"
-                    maxLength={country.digits[1]}
-                    placeholder="enter your phone number"
-                    value={phone}
-                    onChange={e => setPhone(e.target.value.replace(/\D/g, ""))}
-                    onFocus={() => { setCountryOpen(false); setDestOpen(false); }}
-                    autoComplete="tel"
-                    onKeyDown={e => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        // Next field (destination) is a dropdown, not a plain
-                        // input, so just dismiss the keyboard.
-                        phoneRef.current?.blur();
-                      }
-                    }}
-                  />
-                </div>
-
-                {countryOpen && (
-                  <div className="cfs-country-box" role="listbox" aria-label="Select country code">
-                    {COUNTRIES.map(c => (
-                      <button
-                        key={`${c.code}-${c.iso}`}
-                        type="button"
-                        className={`cfs-country-row${c.iso === country.iso && c.code === country.code ? " cfs-country-row--selected" : ""}`}
-                        role="option"
-                        aria-selected={c.iso === country.iso && c.code === country.code}
-                        onClick={() => selectCountry(c)}
-                      >
-                        <span className="cfs-country-code-text">{c.code} {c.iso}</span>
-                        <span className="cfs-country-name">{c.name}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Destination */}
-              <div className="cfs-dest" ref={destRef}>
+            {/* Phone */}
+            <div className="cfs-phone-section" ref={countryRef}>
+              <div className="cfs-phone-row">
                 <button
                   type="button"
-                  className={`cfs-dest-trigger${destination ? " cfs-dest-trigger--filled" : ""}`}
-                  onClick={() => { setDestOpen(v => !v); setCountryOpen(false); }}
+                  className="cfs-country-code"
+                  onClick={() => { setCountryOpen(v => !v); setDestOpen(false); }}
                   aria-haspopup="listbox"
-                  aria-expanded={destOpen}
+                  aria-expanded={countryOpen}
+                  aria-label={`Country code: ${country.name} ${country.code}`}
                 >
-                  <span>{destination || "select destination"}</span>
+                  <span>{country.code}</span>
                   <img
                     src="/figma/enquire/arrow.svg"
                     alt=""
-                    className={`cfs-dest-arrow${destOpen ? " cfs-dest-arrow--open" : ""}`}
+                    className={`cfs-cc-arrow${countryOpen ? " cfs-cc-arrow--open" : ""}`}
                     aria-hidden
                   />
                 </button>
+                <input
+                  ref={phoneRef}
+                  className="cfs-input cfs-phone"
+                  type="tel"
+                  inputMode="numeric"
+                  maxLength={country.digits[1]}
+                  placeholder="enter your phone number"
+                  value={phone}
+                  onChange={e => setPhone(e.target.value.replace(/\D/g, ""))}
+                  onFocus={() => { setCountryOpen(false); setDestOpen(false); }}
+                  autoComplete="tel"
+                  onKeyDown={e => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      // Next field (destination) is a dropdown, not a plain
+                      // input, so just dismiss the keyboard.
+                      phoneRef.current?.blur();
+                    }
+                  }}
+                />
+              </div>
 
-                {destOpen && (
-                  <div className="cfs-dest-box" role="listbox">
-                    {DEST_REGIONS.map((region, i) => (
-                      <div key={region.slug} className="cfs-dest-region">
-                        {expandedRegion === region.slug ? (
-                          <div className="cfs-dest-expanded">
-                            <div className="cfs-dest-region-header">
-                              <span className="cfs-dest-region-label">
-                                {region.label}
-                              </span>
-                            </div>
-                            {region.items.map(dest => (
-                              <button
-                                key={dest.slug}
-                                type="button"
-                                className="cfs-dest-item"
-                                role="option"
-                                aria-selected={destination === dest.label}
-                                onClick={() => selectDestination(dest.label)}
-                              >
-                                <span className="cfs-dest-item-label">
-                                  {dest.label}
-                                </span>
-                                {dest.trending && (
-                                  <span className="cfs-dest-trending">
-                                    <img
-                                      src={`${M}trending-sparkle-left.png`}
-                                      width={12}
-                                      height={8}
-                                      alt=""
-                                      aria-hidden
-                                    />
-                                    <span className="cfs-dest-trending-text">
-                                      Trending
-                                    </span>
-                                    <img
-                                      src={`${M}trending-sparkle-right.png`}
-                                      width={12}
-                                      height={8}
-                                      alt=""
-                                      aria-hidden
-                                    />
-                                  </span>
-                                )}
-                              </button>
-                            ))}
-                          </div>
-                        ) : (
-                          <button
-                            type="button"
-                            className="cfs-dest-region-collapsed"
-                            onClick={() => setExpandedRegion(region.slug)}
-                          >
+              {countryOpen && (
+                <div className="cfs-country-box" role="listbox" aria-label="Select country code">
+                  {COUNTRIES.map(c => (
+                    <button
+                      key={`${c.code}-${c.iso}`}
+                      type="button"
+                      className={`cfs-country-row${c.iso === country.iso && c.code === country.code ? " cfs-country-row--selected" : ""}`}
+                      role="option"
+                      aria-selected={c.iso === country.iso && c.code === country.code}
+                      onClick={() => selectCountry(c)}
+                    >
+                      <span className="cfs-country-code-text">{c.code} {c.iso}</span>
+                      <span className="cfs-country-name">{c.name}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Destination */}
+            <div className="cfs-dest" ref={destRef}>
+              <button
+                type="button"
+                className={`cfs-dest-trigger${destination ? " cfs-dest-trigger--filled" : ""}`}
+                onClick={() => { setDestOpen(v => !v); setCountryOpen(false); }}
+                aria-haspopup="listbox"
+                aria-expanded={destOpen}
+              >
+                <span>{destination || "select destination"}</span>
+                <img
+                  src="/figma/enquire/arrow.svg"
+                  alt=""
+                  className={`cfs-dest-arrow${destOpen ? " cfs-dest-arrow--open" : ""}`}
+                  aria-hidden
+                />
+              </button>
+
+              {destOpen && (
+                <div className="cfs-dest-box" role="listbox">
+                  {DEST_REGIONS.map((region, i) => (
+                    <div key={region.slug} className="cfs-dest-region">
+                      {expandedRegion === region.slug ? (
+                        <div className="cfs-dest-expanded">
+                          <div className="cfs-dest-region-header">
                             <span className="cfs-dest-region-label">
                               {region.label}
                             </span>
-                            <img
-                              src={`${M}icon-arrow-forward.svg`}
-                              width={16}
-                              height={16}
-                              alt=""
-                              aria-hidden
-                            />
-                          </button>
-                        )}
-                        {i < DEST_REGIONS.length - 1 && (
-                          <div className="cfs-dest-sep" />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                          </div>
+                          {region.items.map(dest => (
+                            <button
+                              key={dest.slug}
+                              type="button"
+                              className="cfs-dest-item"
+                              role="option"
+                              aria-selected={destination === dest.label}
+                              onClick={() => selectDestination(dest.label)}
+                            >
+                              <span className="cfs-dest-item-label">
+                                {dest.label}
+                              </span>
+                              {dest.trending && (
+                                <span className="cfs-dest-trending">
+                                  <img
+                                    src={`${M}trending-sparkle-left.png`}
+                                    width={12}
+                                    height={8}
+                                    alt=""
+                                    aria-hidden
+                                  />
+                                  <span className="cfs-dest-trending-text">
+                                    Trending
+                                  </span>
+                                  <img
+                                    src={`${M}trending-sparkle-right.png`}
+                                    width={12}
+                                    height={8}
+                                    alt=""
+                                    aria-hidden
+                                  />
+                                </span>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="cfs-dest-region-collapsed"
+                          onClick={() => setExpandedRegion(region.slug)}
+                        >
+                          <span className="cfs-dest-region-label">
+                            {region.label}
+                          </span>
+                          <img
+                            src={`${M}icon-arrow-forward.svg`}
+                            width={16}
+                            height={16}
+                            alt=""
+                            aria-hidden
+                          />
+                        </button>
+                      )}
+                      {i < DEST_REGIONS.length - 1 && (
+                        <div className="cfs-dest-sep" />
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
+          </div>
 
-            <button className="wo-cta cfs-submit" type="submit">
-              Request Callback
-            </button>
-          </form>
+          <CtaButton className="cfs-submit" type="submit">
+            Request Callback
+          </CtaButton>
+        </form>
 
-          <p className="cfs-disclaimer">
-            *No Spams, Our travel expert will reach out to you within 15 minutes.
-          </p>
-        </div>
+        <p className="cfs-disclaimer">
+          *No Spams, Our travel expert will reach out to you within 15 minutes.
+        </p>
       </div>
-    </>
+    </Sheet>
   );
 }

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useScrollLock } from "../../hooks/useScrollLock";
+import Sheet from "@/components/ui/Sheet";
 import "./FilterSheet.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 /* ── Static data ── */
 
@@ -500,7 +501,6 @@ export function buildSearchParams(selections: Record<string, Set<string>>): stri
   return p.toString();
 }
 
-
 /* ── BucketListPanel ── */
 export function BucketListPanel({ sel, onAdd, onRemove }: {
   sel: Set<string>;
@@ -586,7 +586,6 @@ export function seedFromParams(params: URLSearchParams): Record<string, Set<stri
 
 /* ── FilterSheet ── */
 export default function FilterSheet({ isOpen, onClose, initialTab = 0 }: { isOpen: boolean; onClose: () => void; initialTab?: number }) {
-  const [hasOpened, setHasOpened] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
   const [selections, setSelections] = useState<Record<string, Set<string>>>(() =>
     Object.fromEntries(TABS.map((t) => [t, new Set<string>()]))
@@ -594,16 +593,12 @@ export default function FilterSheet({ isOpen, onClose, initialTab = 0 }: { isOpe
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  useEffect(() => { if (isOpen) setHasOpened(true); }, [isOpen]);
-  useScrollLock(isOpen);
   useEffect(() => {
     if (!isOpen) return;
     setActiveTab(initialTab);
     setSelections(seedFromParams(searchParams));
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, initialTab]);
-
-  if (!hasOpened) return null;
 
   function toggle(tab: string, value: string) {
     setSelections((prev) => {
@@ -641,49 +636,43 @@ export default function FilterSheet({ isOpen, onClose, initialTab = 0 }: { isOpe
   }
 
   return (
-    <div
-      className={`fs-overlay${isOpen ? " fs-overlay--open" : ""}`}
-      onClick={onClose}
-      aria-hidden={!isOpen}
+    <Sheet
+      isOpen={isOpen}
+      onClose={onClose}
+      overlayClassName="fs-overlay"
+      panelClassName="fs-sheet"
+      ariaLabel="Filters"
     >
-      <div
-        className={`fs-sheet${isOpen ? " fs-sheet--open" : ""}`}
-        onClick={(e) => e.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Filters"
-      >
-        <button className="fs-close" type="button" aria-label="Close filters" onClick={onClose}>
-          <img src="/figma/filter/icon-close.svg" alt="" width={33} height={33} />
-        </button>
-        <div className="fs-header">
-          <span className="fs-title">Filters</span>
-        </div>
-        <div className="fs-card">
-          <nav className="fs-tabs" aria-label="Filter categories">
-            {TABS.map((tab, i) => {
-              const count = selections[tab]?.size ?? 0;
-              return (
-                <button
-                  key={tab}
-                  type="button"
-                  className={`fs-tab${activeTab === i ? " fs-tab--active" : ""}`}
-                  onClick={() => setActiveTab(i)}
-                  aria-selected={activeTab === i}
-                >
-                  <span className="fs-tab-label">{tab}</span>
-                  {count > 0 && <span className="fs-tab-count">{count}</span>}
-                </button>
-              );
-            })}
-          </nav>
-          <div className="fs-content">{renderPanel()}</div>
-        </div>
-        <div className="fs-footer">
-          <button className="fs-btn-clear" type="button" onClick={clearTab}>Clear selection</button>
-          <button className="wo-cta fs-btn-show" type="button" onClick={handleShowResults}>Show Results</button>
-        </div>
+      <button className="fs-close" type="button" aria-label="Close filters" onClick={onClose}>
+        <img src="/figma/filter/icon-close.svg" alt="" width={33} height={33} />
+      </button>
+      <div className="fs-header">
+        <span className="fs-title">Filters</span>
       </div>
-    </div>
+      <div className="fs-card">
+        <nav className="fs-tabs" aria-label="Filter categories">
+          {TABS.map((tab, i) => {
+            const count = selections[tab]?.size ?? 0;
+            return (
+              <button
+                key={tab}
+                type="button"
+                className={`fs-tab${activeTab === i ? " fs-tab--active" : ""}`}
+                onClick={() => setActiveTab(i)}
+                aria-selected={activeTab === i}
+              >
+                <span className="fs-tab-label">{tab}</span>
+                {count > 0 && <span className="fs-tab-count">{count}</span>}
+              </button>
+            );
+          })}
+        </nav>
+        <div className="fs-content">{renderPanel()}</div>
+      </div>
+      <div className="fs-footer">
+        <button className="fs-btn-clear" type="button" onClick={clearTab}>Clear selection</button>
+        <CtaButton className="fs-btn-show" onClick={handleShowResults}>Show Results</CtaButton>
+      </div>
+    </Sheet>
   );
 }

@@ -1,4 +1,5 @@
 import "./QueryBanner.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 export default function QueryBanner() {
   return (
@@ -19,15 +20,14 @@ export default function QueryBanner() {
             <p className="qb-title">Have a query?</p>
             <p className="qb-sub">We are here for You!</p>
           </div>
-          <button
-            className="wo-cta qb-btn"
-            type="button"
+          <CtaButton
+            className="qb-btn"
             onClick={() =>
               window.dispatchEvent(new Event("wanderon:open-enquire"))
             }
           >
             Enquire Now
-          </button>
+          </CtaButton>
         </div>
       </div>
     </section>

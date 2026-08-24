@@ -1,10 +1,11 @@
 import { memo } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Trip } from "../../types";
-import { useCompare } from "../../context/CompareContext";
-import { useWishlist } from "../../context/WishlistContext";
-import HeartIcon from "../HeartIcon/HeartIcon";
+import type { Trip } from "@/types";
+import { useCompare } from "@/context/CompareContext";
+import { useWishlist } from "@/context/WishlistContext";
+import HeartIcon from "@/components/ui/HeartIcon";
 import "./TripCard.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 function fmtDate(d: string): string {
   const dt = new Date(d);
@@ -202,9 +203,9 @@ function TripCard({ trip, onSeeAllDates, eager, showFeatures = true }: TripCardP
             </div>
             <span className="tc-price-sub">Onwards per person</span>
           </div>
-          <button className="wo-cta tc-cta" type="button" onClick={goToTrip}>
+          <CtaButton className="tc-cta" onClick={goToTrip}>
             View Trip
-          </button>
+          </CtaButton>
         </div>
       </div>
     </article>

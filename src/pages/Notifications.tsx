@@ -1,77 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BottomNav from "../components/BottomNav/BottomNav";
-import { exitToMainPage } from "../utils/lastMainPage";
+import BottomNav from "@/components/BottomNav";
+import { exitToMainPage } from "@/utils/lastMainPage";
+import {
+  getNotifications,
+  NOTIFICATION_FILTERS,
+  type Notification,
+  type NotificationFilterKey,
+} from "@/repositories";
 import "./Notifications.css";
 
 const N = "/figma/notifications/";
 const P = "/figma/profile/";
-
-type FilterKey = "all" | "alerts" | "offers" | "promotions";
-
-const FILTERS: { key: FilterKey; label: string }[] = [
-  { key: "all", label: "All" },
-  { key: "alerts", label: "Alerts" },
-  { key: "offers", label: "Offers" },
-  { key: "promotions", label: "Promotions" },
-];
-
-interface Notification {
-  id: string;
-  category: Exclude<FilterKey, "all">;
-  title: string;
-  body: string[];
-  unread?: boolean;
-  wave?: boolean;
-  thumb?: string;
-}
-
-const NOTIFICATIONS: Notification[] = [
-  {
-    id: "adventure",
-    category: "alerts",
-    wave: true,
-    unread: true,
-    title: "Get Ready for Your Adventure!",
-    body: [
-      "Your trip to Ladakh is just around the corner. Make sure to check your itinerary and finalize any last-minute preparations. Have a great journey!",
-    ],
-  },
-  {
-    id: "complete-booking",
-    category: "alerts",
-    title: "Complete Your Booking",
-    body: [
-      "Hi Ritesh, your spot awaiting in Ladakh Trip. Don\u2019t miss out on this opportunity! Complete your booking now and secure your spot.",
-    ],
-  },
-  {
-    id: "rediscover",
-    category: "promotions",
-    thumb: `${N}thumb-ladakh.png`,
-    title: "Rediscover Your Favorite Destinations",
-    body: [
-      "You\u2019ve recently viewed Leh Ladakh Trip Package. Ready to explore more? Don\u2019t miss out on the exciting experiences waiting for you!",
-    ],
-  },
-  {
-    id: "exclusive-offers",
-    category: "offers",
-    title: "Exclusive Offers Just for Your!",
-    body: [
-      "we have some amazing new deals and offers that we think you\u2019ll love. Check them out and make your next adventure unforgettable.",
-    ],
-  },
-  {
-    id: "top-choice",
-    category: "promotions",
-    title: "Your Top Choice Awaits",
-    body: [
-      "Turn your dream into reality. Book now and embark on an unforgettable journey!",
-      "Leh Ladakh Trip package...",
-    ],
-  },
-];
 
 /* Waving-hand emoji icon — layered vectors exported from Figma (5077:36825).
    Each layer keeps the exact inset it has inside the 24px icon frame. */
@@ -100,10 +40,11 @@ function WaveIcon() {
 /** Mobile Notifications screen — profile segment (Figma 3626:9518). */
 export default function Notifications() {
   const navigate = useNavigate();
-  const [filter, setFilter] = useState<FilterKey>("all");
+  const [filter, setFilter] = useState<NotificationFilterKey>("all");
 
+  const notifications: Notification[] = getNotifications();
   const visible =
-    filter === "all" ? NOTIFICATIONS : NOTIFICATIONS.filter((n) => n.category === filter);
+    filter === "all" ? notifications : notifications.filter((n) => n.category === filter);
 
   return (
     <div className="ntf-page">
@@ -133,7 +74,7 @@ export default function Notifications() {
 
       {/* Category filter chips */}
       <div className="ntf-filters" role="tablist" aria-label="Notification categories">
-        {FILTERS.map((f) => (
+        {NOTIFICATION_FILTERS.map((f) => (
           <button
             key={f.key}
             type="button"

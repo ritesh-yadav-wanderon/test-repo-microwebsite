@@ -1,9 +1,10 @@
 import { useState } from "react";
-import FooterMessage from "../components/FooterMessage/FooterMessage";
+import EndMark from "@/components/ui/EndMark";
 import { useNavigate } from "react-router-dom";
-import { useIsDesktop } from "../hooks/useIsDesktop";
-import DesktopProfile from "../components/desktop/DesktopProfile";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import DesktopProfile from "@/components/desktop/DesktopProfile";
 import "./MyProfile.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const MP = "/figma/my-profile/";
 const P  = "/figma/profile/";
@@ -242,9 +243,9 @@ export default function MyProfile() {
         </div>
 
         {/* Save button */}
-        <button className="wo-cta mprf-save-btn" type="button">Save Details</button>
+        <CtaButton className="mprf-save-btn">Save Details</CtaButton>
 
-      <FooterMessage />
+      <EndMark variant="mobile" />
       </div>
     </div>
     </>

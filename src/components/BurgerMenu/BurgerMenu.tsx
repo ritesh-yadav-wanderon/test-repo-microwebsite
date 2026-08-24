@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { DEST_REGIONS } from "../../data/destinations";
-import { useAuth } from "../../context/AuthContext";
-import { useScrollLock } from "../../hooks/useScrollLock";
+import { DEST_REGIONS } from "@/repositories";
+import { useAuth } from "@/context/AuthContext";
+import Sheet from "@/components/ui/Sheet";
 import "./BurgerMenu.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 interface BurgerMenuProps {
   isOpen: boolean;
@@ -65,21 +66,17 @@ type SubView = "bike-trips" | "about" | "categories" | "destinations" | null;
 export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
   const navigate = useNavigate();
   const { isLoggedIn, logout } = useAuth();
-  const [hasOpened, setHasOpened] = useState(false);
   const [subView, setSubView] = useState<SubView>(null);
   const [expandedRegion, setExpandedRegion] = useState<string>("india");
 
   useEffect(() => {
-    if (isOpen) setHasOpened(true);
     if (!isOpen) {
       setSubView(null);
       setExpandedRegion("india");
     }
   }, [isOpen]);
 
-  useScrollLock(isOpen);
 
-  if (!hasOpened) return null;
 
   function go(to: string) {
     onClose();
@@ -87,273 +84,269 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
   }
 
   return (
-    <div
-      className={`bm-overlay${isOpen ? " bm-overlay--open" : ""}`}
-      aria-hidden={!isOpen}
+    <Sheet
+      isOpen={isOpen}
+      overlayClassName="bm-overlay"
+      panelClassName="bm-panel"
+      ariaLabel="Navigation menu"
+      closeOnOverlayClick={false}
     >
+
+      {/* Header */}
+      <div className="bm-header">
+        <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
+          <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+        </button>
+      </div>
+
+      {/* Nav list */}
+      <div className="bm-content">
+        <div className="bm-nav-group">
+          {NAV_ITEMS.map((item) =>
+            item.subView ? (
+              <button
+                key={item.label}
+                type="button"
+                className="bm-item"
+                onClick={() => setSubView(item.subView as SubView)}
+              >
+                <span className="bm-item-left">
+                  <img src={item.icon} width={20} height={20} alt="" aria-hidden />
+                  <span className="bm-item-label">{item.label}</span>
+                </span>
+                <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
+              </button>
+            ) : (
+              <button
+                key={item.label}
+                type="button"
+                className="bm-item"
+                onClick={() => go(item.to!)}
+              >
+                <span className="bm-item-left">
+                  <img src={item.icon} width={20} height={20} alt="" aria-hidden />
+                  <span className="bm-item-label">{item.label}</span>
+                </span>
+                <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
+              </button>
+            )
+          )}
+        </div>
+
+        <div className="bm-sep" />
+
+        <button
+          type="button"
+          className="bm-item bm-item--about"
+          onClick={() => setSubView("about")}
+        >
+          <span className="bm-item-left">
+            <span className="bm-item-label">About WanderOn</span>
+          </span>
+          <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
+        </button>
+      </div>
+
+      {/* CTA */}
+      <div className="bm-cta-wrap">
+        {isLoggedIn ? (
+          <>
+            <CtaButton className="bm-cta bm-cta--account" onClick={() => go("/profile")}>
+              <img src="/figma/page-header/icon-account.svg" width={40} height={40} alt="" aria-hidden />
+              <span>My Account</span>
+            </CtaButton>
+            <button
+              className="bm-logout"
+              type="button"
+              onClick={() => {
+                logout();
+                go("/");
+              }}
+            >
+              Log out
+            </button>
+          </>
+        ) : (
+          <CtaButton className="bm-cta" onClick={() => { onClose(); window.dispatchEvent(new Event("wanderon:open-login")); }}>
+            <img src={`${M}person.svg`} width={11} height={11} alt="" aria-hidden />
+            <span>Log In or Sign Up</span>
+          </CtaButton>
+        )}
+      </div>
+
+      {/* ── Bike Trips sub-panel ── */}
       <div
-        className={`bm-panel${isOpen ? " bm-panel--open" : ""}`}
+        className={`bm-subpanel${subView === "bike-trips" ? " bm-subpanel--open" : ""}`}
         role="dialog"
         aria-modal="true"
-        aria-label="Navigation menu"
+        aria-label="Bike Trips"
       >
-
-        {/* Header */}
-        <div className="bm-header">
+        <div className="bm-subheader">
+          <div className="bm-subheader-left">
+            <button className="bm-back" type="button" aria-label="Back" onClick={() => setSubView(null)}>
+              <img src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
+            </button>
+            <span className="bm-subheader-title">Bike Trips</span>
+          </div>
           <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
             <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
           </button>
         </div>
+        <div className="bm-sub-content">
+          {BIKE_ITEMS.map((item) => (
+            <div key={item.label} className="bm-sub-item">
+              <span className="bm-sub-label">{item.label}</span>
+              {item.trending && (
+                <div className="bm-trending">
+                  <img src={`${M}trending-sparkle-left.png`} width={12} height={8} alt="" aria-hidden />
+                  <span className="bm-trending-text">Trending</span>
+                  <img src={`${M}trending-sparkle-right.png`} width={12} height={8} alt="" aria-hidden />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
 
-        {/* Nav list */}
-        <div className="bm-content">
-          <div className="bm-nav-group">
-            {NAV_ITEMS.map((item) =>
-              item.subView ? (
-                <button
-                  key={item.label}
-                  type="button"
-                  className="bm-item"
-                  onClick={() => setSubView(item.subView as SubView)}
-                >
-                  <span className="bm-item-left">
-                    <img src={item.icon} width={20} height={20} alt="" aria-hidden />
-                    <span className="bm-item-label">{item.label}</span>
-                  </span>
-                  <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
-                </button>
-              ) : (
-                <button
-                  key={item.label}
-                  type="button"
-                  className="bm-item"
-                  onClick={() => go(item.to!)}
-                >
-                  <span className="bm-item-left">
-                    <img src={item.icon} width={20} height={20} alt="" aria-hidden />
-                    <span className="bm-item-label">{item.label}</span>
-                  </span>
-                  <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
-                </button>
-              )
-            )}
+      {/* ── About WanderOn sub-panel ── */}
+      <div
+        className={`bm-subpanel${subView === "about" ? " bm-subpanel--open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="About WanderOn"
+      >
+        <div className="bm-subheader">
+          <div className="bm-subheader-left">
+            <button className="bm-back" type="button" aria-label="Back" onClick={() => setSubView(null)}>
+              <img src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
+            </button>
+            <span className="bm-subheader-title">About WanderOn</span>
           </div>
-
-          <div className="bm-sep" />
-
-          <button
-            type="button"
-            className="bm-item bm-item--about"
-            onClick={() => setSubView("about")}
-          >
-            <span className="bm-item-left">
-              <span className="bm-item-label">About WanderOn</span>
-            </span>
-            <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
+          <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
+            <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
           </button>
         </div>
-
-        {/* CTA */}
-        <div className="bm-cta-wrap">
-          {isLoggedIn ? (
-            <>
-              <button className="wo-cta bm-cta bm-cta--account" type="button" onClick={() => go("/profile")}>
-                <img src="/figma/page-header/icon-account.svg" width={40} height={40} alt="" aria-hidden />
-                <span>My Account</span>
-              </button>
-              <button
-                className="bm-logout"
-                type="button"
-                onClick={() => {
-                  logout();
-                  go("/");
-                }}
-              >
-                Log out
-              </button>
-            </>
-          ) : (
-            <button className="wo-cta bm-cta" type="button" onClick={() => { onClose(); window.dispatchEvent(new Event("wanderon:open-login")); }}>
-              <img src={`${M}person.svg`} width={11} height={11} alt="" aria-hidden />
-              <span>Log In or Sign Up</span>
+        <div className="bm-sub-content">
+          {ABOUT_GROUP1.map((item) => (
+            <button key={item.to} type="button" className="bm-sub-item" onClick={() => go(item.to)}>
+              <span className="bm-sub-label">{item.label}</span>
             </button>
-          )}
-        </div>
-
-        {/* ── Bike Trips sub-panel ── */}
-        <div
-          className={`bm-subpanel${subView === "bike-trips" ? " bm-subpanel--open" : ""}`}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Bike Trips"
-        >
-          <div className="bm-subheader">
-            <div className="bm-subheader-left">
-              <button className="bm-back" type="button" aria-label="Back" onClick={() => setSubView(null)}>
-                <img src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
-              </button>
-              <span className="bm-subheader-title">Bike Trips</span>
-            </div>
-            <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
-              <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+          ))}
+          <div className="bm-sep" />
+          {ABOUT_GROUP2.map((item) => (
+            <button key={item.to} type="button" className="bm-sub-item" onClick={() => go(item.to)}>
+              <span className="bm-sub-label">{item.label}</span>
             </button>
-          </div>
-          <div className="bm-sub-content">
-            {BIKE_ITEMS.map((item) => (
-              <div key={item.label} className="bm-sub-item">
-                <span className="bm-sub-label">{item.label}</span>
-                {item.trending && (
-                  <div className="bm-trending">
-                    <img src={`${M}trending-sparkle-left.png`} width={12} height={8} alt="" aria-hidden />
-                    <span className="bm-trending-text">Trending</span>
-                    <img src={`${M}trending-sparkle-right.png`} width={12} height={8} alt="" aria-hidden />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+          ))}
         </div>
-
-        {/* ── About WanderOn sub-panel ── */}
-        <div
-          className={`bm-subpanel${subView === "about" ? " bm-subpanel--open" : ""}`}
-          role="dialog"
-          aria-modal="true"
-          aria-label="About WanderOn"
-        >
-          <div className="bm-subheader">
-            <div className="bm-subheader-left">
-              <button className="bm-back" type="button" aria-label="Back" onClick={() => setSubView(null)}>
-                <img src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
-              </button>
-              <span className="bm-subheader-title">About WanderOn</span>
-            </div>
-            <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
-              <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
-            </button>
-          </div>
-          <div className="bm-sub-content">
-            {ABOUT_GROUP1.map((item) => (
-              <button key={item.to} type="button" className="bm-sub-item" onClick={() => go(item.to)}>
-                <span className="bm-sub-label">{item.label}</span>
-              </button>
-            ))}
-            <div className="bm-sep" />
-            {ABOUT_GROUP2.map((item) => (
-              <button key={item.to} type="button" className="bm-sub-item" onClick={() => go(item.to)}>
-                <span className="bm-sub-label">{item.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* ── All Categories sub-panel ── */}
-        <div
-          className={`bm-subpanel${subView === "categories" ? " bm-subpanel--open" : ""}`}
-          role="dialog"
-          aria-modal="true"
-          aria-label="All Categories"
-        >
-          <div className="bm-subheader">
-            <div className="bm-subheader-left">
-              <button className="bm-back" type="button" aria-label="Back" onClick={() => setSubView(null)}>
-                <img src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
-              </button>
-              <span className="bm-subheader-title">All Categories</span>
-            </div>
-            <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
-              <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
-            </button>
-          </div>
-          <div className="bm-sub-content">
-            {CATEGORY_GROUP1.map((item) => (
-              <button
-                key={item.slug}
-                type="button"
-                className="bm-sub-item"
-                onClick={() => go(`/search?category=${item.slug}`)}
-              >
-                <span className="bm-sub-label">{item.label}</span>
-              </button>
-            ))}
-            <div className="bm-sep" />
-            {CATEGORY_GROUP2.map((item) => (
-              <button
-                key={item.slug}
-                type="button"
-                className="bm-sub-item"
-                onClick={() => go(`/search?category=${item.slug}`)}
-              >
-                <span className="bm-sub-label">{item.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* ── Destinations sub-panel ── */}
-        <div
-          className={`bm-subpanel${subView === "destinations" ? " bm-subpanel--open" : ""}`}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Destinations"
-        >
-          <div className="bm-subheader">
-            <div className="bm-subheader-left">
-              <button className="bm-back" type="button" aria-label="Back" onClick={() => setSubView(null)}>
-                <img src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
-              </button>
-              <span className="bm-subheader-title">Destinations</span>
-            </div>
-            <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
-              <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
-            </button>
-          </div>
-          <div className="bm-dest-content">
-            {DEST_REGIONS.map((region, i) => (
-              <div key={region.slug} className="bm-dest-region">
-                {expandedRegion === region.slug ? (
-                  <div className="bm-dest-expanded">
-                    <div className="bm-dest-region-header--expanded">
-                      <span className="bm-dest-region-label">{region.label}</span>
-                    </div>
-                    <button className="bm-sub-item" type="button" onClick={() => go(`/search?destination=${region.slug}`)}>
-                      <span className="bm-sub-label">{region.allLabel}</span>
-                    </button>
-                    {region.items.map((dest) => (
-                      <button key={dest.slug} className="bm-sub-item" type="button" onClick={() => go(`/search?destination=${dest.slug}`)}>
-                        <span className="bm-sub-label">{dest.label}</span>
-                        {dest.trending && (
-                          <div className="bm-trending">
-                            <img src={`${M}trending-sparkle-left.png`} width={12} height={8} alt="" aria-hidden />
-                            <span className="bm-trending-text">Trending</span>
-                            <img src={`${M}trending-sparkle-right.png`} width={12} height={8} alt="" aria-hidden />
-                          </div>
-                        )}
-                      </button>
-                    ))}
-                    {region.seeMore && (
-                      <button className="bm-sub-item" type="button" onClick={() => go(`/search?destination=${region.slug}`)}>
-                        <span className="bm-dest-see-more">see more destinations</span>
-                      </button>
-                    )}
-                  </div>
-                ) : (
-                  <button
-                    className="bm-dest-region-collapsed"
-                    type="button"
-                    onClick={() => setExpandedRegion(region.slug)}
-                  >
-                    <span className="bm-dest-region-label">{region.label}</span>
-                    <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
-                  </button>
-                )}
-                {i < DEST_REGIONS.length - 1 && <div className="bm-dest-sep" />}
-              </div>
-            ))}
-          </div>
-        </div>
-
       </div>
-    </div>
+
+      {/* ── All Categories sub-panel ── */}
+      <div
+        className={`bm-subpanel${subView === "categories" ? " bm-subpanel--open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="All Categories"
+      >
+        <div className="bm-subheader">
+          <div className="bm-subheader-left">
+            <button className="bm-back" type="button" aria-label="Back" onClick={() => setSubView(null)}>
+              <img src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
+            </button>
+            <span className="bm-subheader-title">All Categories</span>
+          </div>
+          <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
+            <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+          </button>
+        </div>
+        <div className="bm-sub-content">
+          {CATEGORY_GROUP1.map((item) => (
+            <button
+              key={item.slug}
+              type="button"
+              className="bm-sub-item"
+              onClick={() => go(`/search?category=${item.slug}`)}
+            >
+              <span className="bm-sub-label">{item.label}</span>
+            </button>
+          ))}
+          <div className="bm-sep" />
+          {CATEGORY_GROUP2.map((item) => (
+            <button
+              key={item.slug}
+              type="button"
+              className="bm-sub-item"
+              onClick={() => go(`/search?category=${item.slug}`)}
+            >
+              <span className="bm-sub-label">{item.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Destinations sub-panel ── */}
+      <div
+        className={`bm-subpanel${subView === "destinations" ? " bm-subpanel--open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Destinations"
+      >
+        <div className="bm-subheader">
+          <div className="bm-subheader-left">
+            <button className="bm-back" type="button" aria-label="Back" onClick={() => setSubView(null)}>
+              <img src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
+            </button>
+            <span className="bm-subheader-title">Destinations</span>
+          </div>
+          <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
+            <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+          </button>
+        </div>
+        <div className="bm-dest-content">
+          {DEST_REGIONS.map((region, i) => (
+            <div key={region.slug} className="bm-dest-region">
+              {expandedRegion === region.slug ? (
+                <div className="bm-dest-expanded">
+                  <div className="bm-dest-region-header--expanded">
+                    <span className="bm-dest-region-label">{region.label}</span>
+                  </div>
+                  <button className="bm-sub-item" type="button" onClick={() => go(`/search?destination=${region.slug}`)}>
+                    <span className="bm-sub-label">{region.allLabel}</span>
+                  </button>
+                  {region.items.map((dest) => (
+                    <button key={dest.slug} className="bm-sub-item" type="button" onClick={() => go(`/search?destination=${dest.slug}`)}>
+                      <span className="bm-sub-label">{dest.label}</span>
+                      {dest.trending && (
+                        <div className="bm-trending">
+                          <img src={`${M}trending-sparkle-left.png`} width={12} height={8} alt="" aria-hidden />
+                          <span className="bm-trending-text">Trending</span>
+                          <img src={`${M}trending-sparkle-right.png`} width={12} height={8} alt="" aria-hidden />
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                  {region.seeMore && (
+                    <button className="bm-sub-item" type="button" onClick={() => go(`/search?destination=${region.slug}`)}>
+                      <span className="bm-dest-see-more">see more destinations</span>
+                    </button>
+                  )}
+                </div>
+              ) : (
+                <button
+                  className="bm-dest-region-collapsed"
+                  type="button"
+                  onClick={() => setExpandedRegion(region.slug)}
+                >
+                  <span className="bm-dest-region-label">{region.label}</span>
+                  <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
+                </button>
+              )}
+              {i < DEST_REGIONS.length - 1 && <div className="bm-dest-sep" />}
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </Sheet>
   );
 }

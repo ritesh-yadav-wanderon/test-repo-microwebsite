@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-import { useScrollLock } from "../../hooks/useScrollLock";
+import Sheet from "@/components/ui/Sheet";
 import "./ReviewGallery.css";
 
 const R = "/figma/reviews/";
@@ -29,20 +28,17 @@ export default function ReviewGallery({
   photos,
   initialIndex = 0,
 }: ReviewGalleryProps) {
-  const [hasOpened, setHasOpened] = useState(false);
   const [activeCat, setActiveCat] = useState(0);
   const [index, setIndex] = useState(initialIndex);
   const trackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (isOpen) {
-      setHasOpened(true);
       setIndex(initialIndex);
       setActiveCat(0);
     }
   }, [isOpen, initialIndex]);
 
-  useScrollLock(isOpen);
 
   const onScroll = () => {
     const el = trackRef.current;
@@ -53,14 +49,9 @@ export default function ReviewGallery({
     setIndex(Math.max(0, Math.min(photos.length - 1, i)));
   };
 
-  if (!hasOpened) return null;
 
-  return createPortal(
-    <div
-      className={`rgal${isOpen ? " rgal--open" : ""}`}
-      role="dialog"
-      aria-modal="true"
-    >
+  return (
+    <Sheet isOpen={isOpen} panelClassName="rgal" portal>
       <div className="rgal-panel">
         {/* Header */}
         <div className="rgal-header">
@@ -124,7 +115,6 @@ export default function ReviewGallery({
           {index + 1}/{photos.length}
         </div>
       </div>
-    </div>,
-    document.body
+    </Sheet>
   );
 }

@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
-import PageSkeleton from "../components/Skeleton/PageSkeleton";
-import { useIsDesktop } from "../hooks/useIsDesktop";
-import DesktopProfile from "../components/desktop/DesktopProfile";
-import { exitToMainPage } from "../utils/lastMainPage";
+import { useAuth } from "@/context/AuthContext";
+import PageSkeleton from "@/components/Skeleton";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import DesktopProfile from "@/components/desktop/DesktopProfile";
+import { exitToMainPage } from "@/utils/lastMainPage";
 import "./Profile.css";
 
 const P = "/figma/profile/";

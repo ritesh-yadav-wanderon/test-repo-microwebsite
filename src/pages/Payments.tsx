@@ -1,51 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import FooterMessage from "../components/FooterMessage/FooterMessage";
-import { exitToMainPage } from "../utils/lastMainPage";
+import EndMark from "@/components/ui/EndMark";
+import { exitToMainPage } from "@/utils/lastMainPage";
+import { getPaymentLedger } from "@/repositories";
 import "./Payments.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const PAY = "/figma/payments/";
 const P = "/figma/profile/";
 const TRIP_THUMB = "/figma/my-booking/trip-thumb.png";
 
-interface Transaction {
-  amount: string;
-  meta: string;
-}
-
-interface LedgerEntry {
-  id: string;
-  tripTitle: string;
-  tripDates: string;
-  transactions: Transaction[];
-  /** Present when a balance is still due — renders the Pay Due CTA. */
-  due?: { amount: string; date: string };
-}
-
-const LEDGER: LedgerEntry[] = [
-  {
-    id: "europe-due",
-    tripTitle: "15 Days Europe Group trip 2026: Paris, Amsterdam & Switzerland",
-    tripDates: "23 July 2026 - 3 Aug 2026",
-    transactions: [
-      { amount: "\u20B9100000", meta: "Date: 13 July 2026 | Paid via: UPI" },
-      { amount: "\u20B924550", meta: "Date: 13 July 2026 | Paid via: UPI" },
-    ],
-    due: { amount: "\u20B911000", date: "18 Jul 2026" },
-  },
-  {
-    id: "europe-paid",
-    tripTitle: "15 Days Europe Group trip 2026: Paris, Amsterdam & Switzerland",
-    tripDates: "23 July 2026 - 3 Aug 2026",
-    transactions: [
-      { amount: "\u20B9100000", meta: "Date: 13 July 2026 | Paid via: UPI" },
-      { amount: "\u20B924550", meta: "Date: 13 July 2026 | Paid via: UPI" },
-    ],
-  },
-];
-
 /** Mobile Payments ledger — profile segment (Figma 6750:15655). */
 export default function Payments() {
   const navigate = useNavigate();
+  const ledger = getPaymentLedger();
 
   return (
     <div className="pay-page">
@@ -97,7 +64,7 @@ export default function Payments() {
         </div>
 
         {/* ── Per-trip ledger cards (Figma 6763:16874) ── */}
-        {LEDGER.map((entry) => (
+        {ledger.map((entry) => (
           <section className="pay-card" key={entry.id}>
             <div className="pay-trip">
               <img className="pay-trip-thumb" src={TRIP_THUMB} alt="" loading="lazy" />
@@ -141,20 +108,20 @@ export default function Payments() {
                     <span>Due Date</span>
                   </div>
                 </div>
-                <button className="wo-cta pay-cta" type="button">
+                <CtaButton className="pay-cta">
                   Pay Due
-                </button>
+                </CtaButton>
               </>
             ) : (
-              <button className="wo-cta pay-cta" type="button">
+              <CtaButton className="pay-cta">
                 Invoice
                 <img src={`${PAY}icon-invoice.svg`} width={20} height={20} alt="" aria-hidden />
-              </button>
+              </CtaButton>
             )}
           </section>
         ))}
 
-        <FooterMessage />
+        <EndMark variant="mobile" />
       </div>
     </div>
   );

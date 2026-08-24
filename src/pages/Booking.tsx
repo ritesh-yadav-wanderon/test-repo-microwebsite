@@ -1,11 +1,15 @@
 import { Link } from "react-router-dom";
-import PaymentSheet from "../components/PaymentSheet/PaymentSheet";
-import LoginSheet from "../components/LoginSheet/LoginSheet";
-import Voucher from "../components/Voucher/Voucher";
-import { useIsDesktop } from "../hooks/useIsDesktop";
-import DesktopBooking from "../components/desktop/DesktopBooking";
-import { useBookingForm, formatINR } from "./useBookingForm";
+import PaymentSheet from "@/components/PaymentSheet";
+import LoginSheet from "@/components/LoginSheet";
+import Voucher from "@/components/Voucher";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import DesktopBooking from "@/components/desktop/DesktopBooking";
+import { useBookingForm, formatINR } from "@/hooks/useBookingForm";
+import Checkbox from "@/components/ui/Checkbox";
+import OptionRow from "@/components/ui/OptionRow";
+import Stepper from "@/components/ui/Stepper";
 import "./Booking.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const A = "/figma/booking/";
 const TRIP_THUMB = "/figma/trip-hero/hero-bg.png";
@@ -409,25 +413,13 @@ export default function Booking() {
                     <span className="bkg-room-per">per person</span>
                   </div>
                 </div>
-                <div className="bkg-stepper">
-                  <button
-                    className="bkg-step-btn"
-                    type="button"
-            aria-label="Decrease travelers"
-            onClick={() => setTravelers((v) => Math.max(1, v - 1))}
-                  >
-                    <img src={`${A}icon-minus.svg`} width={20} height={20} alt="" aria-hidden />
-                  </button>
-                  <span className="bkg-step-count">{travelers}</span>
-                  <button
-                    className="bkg-step-btn"
-                    type="button"
-                    aria-label="Increase travelers"
-                    onClick={() => setTravelers((v) => v + 1)}
-                  >
-                    <img src={`${A}icon-plus.svg`} width={20} height={20} alt="" aria-hidden />
-                  </button>
-                </div>
+                <Stepper
+                  value={travelers}
+                  onChange={setTravelers}
+                  classPrefix="bkg"
+                  decreaseLabel="Decrease travelers"
+                  increaseLabel="Increase travelers"
+                />
               </div>
             </div>
           )}
@@ -450,52 +442,30 @@ export default function Booking() {
                 <div className="bkg-bf-row">
                   <div className="bkg-bf-col">
                     <span className="bkg-bf-label">Female</span>
-                    <div className="bkg-stepper">
-                      <button
-                        className="bkg-step-btn"
-                        type="button"
-                        aria-label="Decrease female travelers"
-                        disabled={effectiveFemale <= femaleMin}
-                        onClick={() => setFemaleCount(Math.max(femaleMin, effectiveFemale - 1))}
-                      >
-                        <img src={`${A}icon-minus.svg`} width={20} height={20} alt="" aria-hidden />
-                      </button>
-                      <span className="bkg-step-count">{effectiveFemale}</span>
-                      <button
-                        className="bkg-step-btn"
-                        type="button"
-                        aria-label="Increase female travelers"
-                        onClick={() => setFemaleCount(effectiveFemale + 1)}
-                      >
-                        <img src={`${A}icon-plus.svg`} width={20} height={20} alt="" aria-hidden />
-                      </button>
-                    </div>
+                    <Stepper
+                      value={effectiveFemale}
+                      onChange={setFemaleCount}
+                      min={femaleMin}
+                      classPrefix="bkg"
+                      disableAtBounds
+                      decreaseLabel="Decrease female travelers"
+                      increaseLabel="Increase female travelers"
+                    />
                   </div>
 
                   <div className="bkg-bf-divider" aria-hidden />
 
                   <div className="bkg-bf-col">
                     <span className="bkg-bf-label">Male</span>
-                    <div className="bkg-stepper">
-                      <button
-                        className="bkg-step-btn"
-                        type="button"
-                        aria-label="Decrease male travelers"
-                        disabled={effectiveMale <= maleMin}
-                        onClick={() => setMaleCount(Math.max(maleMin, effectiveMale - 1))}
-                      >
-                        <img src={`${A}icon-minus.svg`} width={20} height={20} alt="" aria-hidden />
-                      </button>
-                      <span className="bkg-step-count">{effectiveMale}</span>
-                      <button
-                        className="bkg-step-btn"
-                        type="button"
-                        aria-label="Increase male travelers"
-                        onClick={() => setMaleCount(effectiveMale + 1)}
-                      >
-                        <img src={`${A}icon-plus.svg`} width={20} height={20} alt="" aria-hidden />
-                      </button>
-                    </div>
+                    <Stepper
+                      value={effectiveMale}
+                      onChange={setMaleCount}
+                      min={maleMin}
+                      classPrefix="bkg"
+                      disableAtBounds
+                      decreaseLabel="Decrease male travelers"
+                      increaseLabel="Increase male travelers"
+                    />
                   </div>
                 </div>
               </div>
@@ -507,21 +477,15 @@ export default function Booking() {
 
         {/* ── Flexible Cancellation ─────────────────────────── */}
         <section className="bkg-section">
-          <label className="bkg-option">
-            <span className="bkg-option-icon">
-              <img src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />
-            </span>
-            <span className="bkg-option-label bkg-option-label--between">
-              <span>Flexible Cancellation</span>
-              <span className="bkg-option-price bkg-option-price--dark">+ &#8377;5,999/-</span>
-            </span>
-            <input
-              type="checkbox"
-              className="bkg-checkbox"
-              checked={flexibleCancel}
-              onChange={(e) => setFlexibleCancel(e.target.checked)}
-            />
-          </label>
+          <OptionRow
+            checked={flexibleCancel}
+            onChange={setFlexibleCancel}
+            classPrefix="bkg-option"
+            checkboxClassName="bkg-checkbox"
+            icon={<img src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />}
+            label="Flexible Cancellation"
+            price={<>+ &#8377;5,999/-</>}
+          />
           <p className="bkg-option-desc">
             Want more flexibility with your booking? Purchase our Flexible Cancellation to cover
             your trip up to 1 day before departure.
@@ -638,11 +602,10 @@ export default function Booking() {
 
         {/* ── Agreement ─────────────────────────────────────── */}
         <section className="bkg-agree">
-          <input
-            type="checkbox"
-            className="bkg-checkbox bkg-checkbox--round"
+          <Checkbox
             checked={agreed}
-            onChange={(e) => setAgreed(e.target.checked)}
+            onChange={setAgreed}
+            className="bkg-checkbox bkg-checkbox--round"
           />
           <p className="bkg-agree-text">
             I agree to the <Link to="/legal">Payment Terms</Link>, <Link to="/legal">Cancellation Policy</Link>,
@@ -677,14 +640,13 @@ export default function Booking() {
               <span>Convenience fee</span>
             </button>
           </div>
-          <button
-            className="wo-cta bkg-cta-btn"
-            type="button"
+          <CtaButton
+            className="bkg-cta-btn"
             disabled={isPersonalDetails && !agreed}
             onClick={() => isPersonalDetails ? setPaymentOpen(true) : goToPersonalDetails()}
           >
             <span>{isPersonalDetails ? "Proceed to Payment" : "Book Now"}</span>
-          </button>
+          </CtaButton>
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DEST_REGIONS } from "../../data/destinations";
-import { useScrollLock } from "../../hooks/useScrollLock";
+import { addRecentDestination, DEST_REGIONS, getRecentDestinations } from "@/repositories";
+import Sheet from "@/components/ui/Sheet";
 import distanceIcon     from "../../assets/search-bottom-sheet/distance.svg";
 import calendarMonthIcon from "../../assets/search-bottom-sheet/calendar-month.svg";
 import calendarCheckIcon from "../../assets/search-bottom-sheet/calendar-check.svg";
@@ -12,6 +12,7 @@ import catFestivalImg    from "../../assets/search-bottom-sheet/cat-festival.png
 import catWellnessImg    from "../../assets/search-bottom-sheet/cat-wellness.png";
 import catWeekendImg     from "../../assets/search-bottom-sheet/cat-weekend.png";
 import "./SearchBottomSheet.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 /* ─── constants ─────────────────────────────────── */
 const CATEGORIES = [
@@ -26,8 +27,6 @@ const CATEGORIES = [
 
 const SUGGESTIONS = ["Bali", "Vietnam", "Europe", "Ladakh", "Meghalaya"];
 const DAY_LABELS  = ["S", "M", "T", "W", "T", "F", "S"];
-
-const RECENTS_KEY = "wanderon:recent-destinations";
 
 /* Flat, de-duplicated list of every destination in the burger-menu destination group
    (region names + their items) — used to match a typed query. */
@@ -237,14 +236,7 @@ export default function SearchBottomSheet({
   const [dateFrom, setDateFrom] = useState(initialFrom);
   const [dateTo,   setDateTo]   = useState(initialTo);
 
-  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
-    try {
-      const raw = localStorage.getItem(RECENTS_KEY);
-      return raw ? (JSON.parse(raw) as string[]).slice(0, 4) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [recentSearches, setRecentSearches] = useState<string[]>(getRecentDestinations);
 
   /* Horizontal scroll indicator for the category strip */
   const catsRef = useRef<HTMLDivElement>(null);
@@ -275,10 +267,7 @@ export default function SearchBottomSheet({
     };
   }, [isOpen]);
 
-  /* Lock background page scroll while the overlay is open */
-  useScrollLock(isOpen);
 
-  if (!isOpen) return null;
 
   const destination = query.trim();
 
@@ -324,16 +313,7 @@ export default function SearchBottomSheet({
     const params = new URLSearchParams();
     if (destination) {
       params.set("destination", destination);
-      const next = [
-        destination,
-        ...recentSearches.filter((d) => d.toLowerCase() !== destination.toLowerCase()),
-      ].slice(0, 4);
-      setRecentSearches(next);
-      try {
-        localStorage.setItem(RECENTS_KEY, JSON.stringify(next));
-      } catch {
-        /* ignore write errors (e.g. storage disabled) */
-      }
+      setRecentSearches(addRecentDestination(destination));
     }
     if (whenMode === "months" && selMonths.length) {
       params.set("months", selMonths.sort().join(","));
@@ -362,220 +342,226 @@ export default function SearchBottomSheet({
 
   /* ── render ── */
   return (
-    <div className="sbs-overlay" onClick={onClose} role="dialog" aria-modal>
-      <div className="sbs-sheet" onClick={(e) => e.stopPropagation()}>
+    <Sheet
+      isOpen={isOpen}
+      onClose={onClose}
+      overlayClassName="sbs-overlay"
+      panelClassName="sbs-sheet"
+      openModifier=""
+      dialogOn="overlay"
+      unmountWhenClosed
+    >
 
-        {/* Close */}
-        <button className="sbs-close" onClick={onClose} aria-label="Close search">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#333" strokeWidth="2.2" strokeLinecap="round">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
+      {/* Close */}
+      <button className="sbs-close" onClick={onClose} aria-label="Close search">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#333" strokeWidth="2.2" strokeLinecap="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
 
-        {/* Content area */}
-        <div className="sbs-content">
+      {/* Content area */}
+      <div className="sbs-content">
 
-          {/* Category strip */}
-          <div className="sbs-cats" ref={catsRef}>
-            {CATEGORIES.map((cat, i) => (
-              <button
-                key={i}
-                className={`sbs-cat${i === activeCat ? " sbs-cat--active" : ""}`}
-                onClick={() => setActiveCat(i)}
-              >
-                {cat.img
-                  ? <img src={cat.img} className="sbs-cat-ico" alt="" />
-                  : <div className="sbs-cat-ico-placeholder" />}
-                <span className="sbs-cat-label">
-                  {cat.label[0]}{cat.label[1] ? <><br />{cat.label[1]}</> : null}
-                </span>
-                {i === activeCat && <div className="sbs-cat-bar" />}
-              </button>
-            ))}
-          </div>
-
-          {/* Scroll indicator for category strip */}
-          <div className="sbs-scroll-indicator" data-name="trip-scroll-indicator">
-            <div className="sbs-scroll-track">
-              <div
-                className="sbs-scroll-thumb"
-                style={{ width: `${thumb.width}px`, transform: `translateX(${thumb.left}px)` }}
-              />
-            </div>
-          </div>
-
-          {/* ── Step 1: Where expanded / Step 2: Where collapsed ── */}
-          {step === "where" ? (
-            <div className="sbs-card">
-              <p className="sbs-card-title">Where?</p>
-              <div className="sbs-search-wrap">
-                <input
-                  className="sbs-search-input"
-                  type="text"
-                  placeholder="Where do you want to go?"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  autoFocus
-                />
-                <img src="/figma/search/search-icon.svg" width={18} height={18} alt="" />
-              </div>
-              <div className="sbs-suggestions">
-                {menuMatches.length > 0 && (
-                  <div className="sbs-sugg-group">
-                    <p className="sbs-sugg-heading">Destinations</p>
-                    <ul className="sbs-sugg-list" role="listbox" aria-label="Matching destinations">
-                      {menuMatches.map((s) => (
-                        <li
-                          key={s}
-                          role="option"
-                          aria-selected={query === s}
-                          className={`sbs-suggestion${query === s ? " sbs-suggestion--active" : ""}`}
-                          onClick={() => pickDestination(s)}
-                        >
-                          <SuggestionIcon name={s} />
-                          <span>{s}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {recentDestinations.length > 0 && (
-                  <div className="sbs-sugg-group">
-                    <p className="sbs-sugg-heading">Recent searches</p>
-                    <ul className="sbs-sugg-list" role="listbox" aria-label="Recent searches">
-                      {recentDestinations.map((s) => (
-                        <li
-                          key={s}
-                          role="option"
-                          aria-selected={query === s}
-                          className={`sbs-suggestion${query === s ? " sbs-suggestion--active" : ""}`}
-                          onClick={() => setQuery(s)}
-                        >
-                          <SuggestionIcon name={s} />
-                          <span>{s}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {suggestedDestinations.length > 0 && (
-                  <div className="sbs-sugg-group">
-                    <p className="sbs-sugg-heading">Suggested destinations</p>
-                    <ul className="sbs-sugg-list" role="listbox" aria-label="Suggested destinations">
-                      {suggestedDestinations.map((s) => (
-                        <li
-                          key={s}
-                          role="option"
-                          aria-selected={query === s}
-                          className={`sbs-suggestion${query === s ? " sbs-suggestion--active" : ""}`}
-                          onClick={() => setQuery(s)}
-                        >
-                          <SuggestionIcon name={s} />
-                          <span>{s}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : (
-            /* Where — collapsed */
+        {/* Category strip */}
+        <div className="sbs-cats" ref={catsRef}>
+          {CATEGORIES.map((cat, i) => (
             <button
-              className="sbs-card sbs-row-card"
-              onClick={() => setStep("where")}
+              key={i}
+              className={`sbs-cat${i === activeCat ? " sbs-cat--active" : ""}`}
+              onClick={() => setActiveCat(i)}
             >
-              <span className="sbs-row-label">Where</span>
-              <span className="sbs-row-value">
-                <img src={distanceIcon} width={10} height={15} alt="" />
-                <span>{destination || "Anywhere"}</span>
+              {cat.img
+                ? <img src={cat.img} className="sbs-cat-ico" alt="" />
+                : <div className="sbs-cat-ico-placeholder" />}
+              <span className="sbs-cat-label">
+                {cat.label[0]}{cat.label[1] ? <><br />{cat.label[1]}</> : null}
               </span>
+              {i === activeCat && <div className="sbs-cat-bar" />}
             </button>
-          )}
+          ))}
+        </div>
 
-          {/* ── Step 1: When collapsed / Step 2: When expanded ── */}
-          {step === "when" ? (
-            <div className="sbs-card sbs-when-card">
-              <p className="sbs-card-title">When?</p>
+        {/* Scroll indicator for category strip */}
+        <div className="sbs-scroll-indicator" data-name="trip-scroll-indicator">
+          <div className="sbs-scroll-track">
+            <div
+              className="sbs-scroll-thumb"
+              style={{ width: `${thumb.width}px`, transform: `translateX(${thumb.left}px)` }}
+            />
+          </div>
+        </div>
 
-              {/* Mode toggle */}
-              <div className="sbs-toggle">
-                <button
-                  className={`sbs-toggle-opt${whenMode === "months" ? " sbs-toggle-opt--active" : ""}`}
-                  onClick={() => setWhenMode("months")}
-                  type="button"
-                >Months</button>
-                <button
-                  className={`sbs-toggle-opt${whenMode === "dates" ? " sbs-toggle-opt--active" : ""}`}
-                  onClick={() => setWhenMode("dates")}
-                  type="button"
-                >Dates</button>
-              </div>
-
-              {/* Months list */}
-              {whenMode === "months" && (
-                <ul className="sbs-months">
-                  {monthsFromNow(8).map((mk) => {
-                    const active = selMonths.includes(mk);
-                    return (
-                      <li key={mk}>
-                        <button
-                          className={`sbs-month-item${active ? " sbs-month-item--active" : ""}`}
-                          onClick={() => toggleMonth(mk)}
-                          type="button"
-                        >
-                          <img
-                            src={active ? calendarCheckIcon : calendarMonthIcon}
-                            width={20} height={20} alt=""
-                          />
-                          <span>{fmtMonth(mk)}</span>
-                        </button>
+        {/* ── Step 1: Where expanded / Step 2: Where collapsed ── */}
+        {step === "where" ? (
+          <div className="sbs-card">
+            <p className="sbs-card-title">Where?</p>
+            <div className="sbs-search-wrap">
+              <input
+                className="sbs-search-input"
+                type="text"
+                placeholder="Where do you want to go?"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                autoFocus
+              />
+              <img src="/figma/search/search-icon.svg" width={18} height={18} alt="" />
+            </div>
+            <div className="sbs-suggestions">
+              {menuMatches.length > 0 && (
+                <div className="sbs-sugg-group">
+                  <p className="sbs-sugg-heading">Destinations</p>
+                  <ul className="sbs-sugg-list" role="listbox" aria-label="Matching destinations">
+                    {menuMatches.map((s) => (
+                      <li
+                        key={s}
+                        role="option"
+                        aria-selected={query === s}
+                        className={`sbs-suggestion${query === s ? " sbs-suggestion--active" : ""}`}
+                        onClick={() => pickDestination(s)}
+                      >
+                        <SuggestionIcon name={s} />
+                        <span>{s}</span>
                       </li>
-                    );
-                  })}
-                </ul>
+                    ))}
+                  </ul>
+                </div>
               )}
 
-              {/* Calendar */}
-              {whenMode === "dates" && (
-                <div className="sbs-cal-wrap">
-                  {(!dateFrom) && (
-                    <p className="sbs-cal-hint">*Select a date range!</p>
-                  )}
-                  <CalendarPicker
-                    from={dateFrom}
-                    to={dateTo}
-                    onSelect={(f, t) => { setDateFrom(f); setDateTo(t); }}
-                    focusMonth={selMonths.length ? [...selMonths].sort()[0] : undefined}
-                  />
+              {recentDestinations.length > 0 && (
+                <div className="sbs-sugg-group">
+                  <p className="sbs-sugg-heading">Recent searches</p>
+                  <ul className="sbs-sugg-list" role="listbox" aria-label="Recent searches">
+                    {recentDestinations.map((s) => (
+                      <li
+                        key={s}
+                        role="option"
+                        aria-selected={query === s}
+                        className={`sbs-suggestion${query === s ? " sbs-suggestion--active" : ""}`}
+                        onClick={() => setQuery(s)}
+                      >
+                        <SuggestionIcon name={s} />
+                        <span>{s}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {suggestedDestinations.length > 0 && (
+                <div className="sbs-sugg-group">
+                  <p className="sbs-sugg-heading">Suggested destinations</p>
+                  <ul className="sbs-sugg-list" role="listbox" aria-label="Suggested destinations">
+                    {suggestedDestinations.map((s) => (
+                      <li
+                        key={s}
+                        role="option"
+                        aria-selected={query === s}
+                        className={`sbs-suggestion${query === s ? " sbs-suggestion--active" : ""}`}
+                        onClick={() => setQuery(s)}
+                      >
+                        <SuggestionIcon name={s} />
+                        <span>{s}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
             </div>
-          ) : (
-            /* When — collapsed */
-            <button
-              className="sbs-card sbs-row-card"
-              onClick={() => setStep("when")}
-            >
-              <span className="sbs-row-label">When</span>
-              <span className={`sbs-row-value${hasWhen ? " sbs-row-value--set" : ""}`}>
-                <img src={calendarMonthIcon} width={13} height={15} alt="" />
-                <span>{dateLabel()}</span>
-              </span>
-            </button>
-          )}
-
-          {/* Actions */}
-          <div className="sbs-actions">
-            <button className="sbs-clear" onClick={handleClear}>Clear all</button>
-            <button className="wo-cta sbs-find"  onClick={handleFindTrip}>Find Trip</button>
           </div>
+        ) : (
+          /* Where — collapsed */
+          <button
+            className="sbs-card sbs-row-card"
+            onClick={() => setStep("where")}
+          >
+            <span className="sbs-row-label">Where</span>
+            <span className="sbs-row-value">
+              <img src={distanceIcon} width={10} height={15} alt="" />
+              <span>{destination || "Anywhere"}</span>
+            </span>
+          </button>
+        )}
 
+        {/* ── Step 1: When collapsed / Step 2: When expanded ── */}
+        {step === "when" ? (
+          <div className="sbs-card sbs-when-card">
+            <p className="sbs-card-title">When?</p>
+
+            {/* Mode toggle */}
+            <div className="sbs-toggle">
+              <button
+                className={`sbs-toggle-opt${whenMode === "months" ? " sbs-toggle-opt--active" : ""}`}
+                onClick={() => setWhenMode("months")}
+                type="button"
+              >Months</button>
+              <button
+                className={`sbs-toggle-opt${whenMode === "dates" ? " sbs-toggle-opt--active" : ""}`}
+                onClick={() => setWhenMode("dates")}
+                type="button"
+              >Dates</button>
+            </div>
+
+            {/* Months list */}
+            {whenMode === "months" && (
+              <ul className="sbs-months">
+                {monthsFromNow(8).map((mk) => {
+                  const active = selMonths.includes(mk);
+                  return (
+                    <li key={mk}>
+                      <button
+                        className={`sbs-month-item${active ? " sbs-month-item--active" : ""}`}
+                        onClick={() => toggleMonth(mk)}
+                        type="button"
+                      >
+                        <img
+                          src={active ? calendarCheckIcon : calendarMonthIcon}
+                          width={20} height={20} alt=""
+                        />
+                        <span>{fmtMonth(mk)}</span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+
+            {/* Calendar */}
+            {whenMode === "dates" && (
+              <div className="sbs-cal-wrap">
+                {(!dateFrom) && (
+                  <p className="sbs-cal-hint">*Select a date range!</p>
+                )}
+                <CalendarPicker
+                  from={dateFrom}
+                  to={dateTo}
+                  onSelect={(f, t) => { setDateFrom(f); setDateTo(t); }}
+                  focusMonth={selMonths.length ? [...selMonths].sort()[0] : undefined}
+                />
+              </div>
+            )}
+          </div>
+        ) : (
+          /* When — collapsed */
+          <button
+            className="sbs-card sbs-row-card"
+            onClick={() => setStep("when")}
+          >
+            <span className="sbs-row-label">When</span>
+            <span className={`sbs-row-value${hasWhen ? " sbs-row-value--set" : ""}`}>
+              <img src={calendarMonthIcon} width={13} height={15} alt="" />
+              <span>{dateLabel()}</span>
+            </span>
+          </button>
+        )}
+
+        {/* Actions */}
+        <div className="sbs-actions">
+          <button className="sbs-clear" onClick={handleClear}>Clear all</button>
+          <CtaButton className="sbs-find"  onClick={handleFindTrip}>Find Trip</CtaButton>
         </div>
+
       </div>
-    </div>
+    </Sheet>
   );
 }

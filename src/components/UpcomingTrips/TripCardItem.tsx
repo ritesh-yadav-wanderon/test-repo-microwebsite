@@ -1,8 +1,9 @@
 import { memo } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import type { Trip } from "../../types";
-import { useWishlist } from "../../context/WishlistContext";
-import HeartIcon from "../HeartIcon/HeartIcon";
+import type { Trip } from "@/types";
+import { useWishlist } from "@/context/WishlistContext";
+import { IMAGE_WIDTHS, sizedImageUrl } from "@/repositories";
+import HeartIcon from "@/components/ui/HeartIcon";
 import "./UpcomingTrips.css";
 import "./TripCardItem.css";
 
@@ -53,7 +54,7 @@ export const TripCardItem = memo(function TripCardItem({ trip, batchesText, href
     <Link className="tdp2-more-card-v2" to={href ?? `/trip/${trip.slug}`}>
       <div className="tdp2-more-cv2-img-wrap">
         {trip.image
-          ? <img src={trip.image} alt={trip.title} className="tdp2-more-cv2-img" loading="lazy" />
+          ? <img src={sizedImageUrl(trip.image, IMAGE_WIDTHS.thumb)} alt={trip.title} className="tdp2-more-cv2-img" loading="lazy" />
           : <div className="tdp2-more-cv2-img" style={{ background: "#d6d6d6" }} />
         }
         <button
@@ -113,23 +114,6 @@ export const TripCardItem = memo(function TripCardItem({ trip, batchesText, href
   );
 });
 
-export const TripCardShimmer = memo(function TripCardShimmer() {
-  return (
-    <div className="tdp2-more-card-v2" aria-hidden>
-      {/* The shimmer sits inside the media frame — the frame's own background
-          would otherwise paint over it. */}
-      <div className="tdp2-more-cv2-img-wrap">
-        <div className="tdp2-more-cv2-sk-img up-shimmer-block" />
-      </div>
-      <div className="tdp2-more-cv2-info">
-        <div className="up-shimmer-line" style={{ width: "90%", height: 21 }} />
-        <div className="up-shimmer-line" style={{ width: "40%", height: 14 }} />
-        <div className="up-shimmer-line" style={{ width: "100%", height: 14 }} />
-        <div className="up-shimmer-line" style={{ width: "55%", height: 24 }} />
-      </div>
-    </div>
-  );
-});
 
 export interface ViewMoreCardProps {
   a: string;

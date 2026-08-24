@@ -1,58 +1,20 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BottomNav from "../components/BottomNav";
-import BurgerMenu from "../components/BurgerMenu/BurgerMenu";
-import DesktopEvents from "../components/desktop/DesktopEvents";
-import { useIsDesktop } from "../hooks/useIsDesktop";
+import BottomNav from "@/components/BottomNav";
+import BurgerMenu from "@/components/BurgerMenu";
+import DesktopEvents from "@/components/desktop/DesktopEvents";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import {
+  EVENT_ARTISTS,
+  EVENT_CATEGORIES,
+  EVENT_CONCERT,
+  EVENT_FOUNDERS_MEET,
+  EVENTS_HERO,
+  type EventItem,
+} from "@/repositories";
 import "./Events.css";
 
 const A = "/figma/events/";
-
-const CATEGORIES = [
-  { label: "Music", icon: `${A}cat-music.svg` },
-  { label: "Sports", icon: `${A}cat-sports.svg` },
-  { label: "Festivals", icon: `${A}cat-festivals.svg` },
-] as const;
-
-const HERO = {
-  video:
-    "https://wanderon-images.gumlet.io/events-and-festivals/events-and-festivals/tomorrowland-thailand/tomorrowland.mp4",
-  poster: `${A}hero-bg.jpg`,
-  logo: `${A}hero-logo.svg`,
-  title: "Tomorrowland Belgium | ORBYZ",
-  location: "Belgium",
-};
-
-const ORIGINALS = [
-  { name: "Billie Eilish", img: `${A}billie.jpg` },
-  { name: "Diljit Dosanjh", img: `${A}diljit.jpg` },
-  { name: "Ed Sheeran", img: `${A}edsheeran.jpg` },
-  { name: "B Praak", img: `${A}bpraak.jpg` },
-];
-
-interface EventItem {
-  image: string;
-  location: string;
-  title: string;
-  date: string;
-  price: string;
-}
-
-const CONCERT: EventItem = {
-  image: `${A}event-chainsmokers.jpg`,
-  location: "Yashobhoomi | Delhi",
-  title: "La Clairière : The Chainsmokers",
-  date: "Sat, 06 Jun - Sun, 07 Jun, 10:00 PM",
-  price: "₹10,999/-",
-};
-
-const FOUNDERS_MEET: EventItem = {
-  image: `${A}event-founders.jpg`,
-  location: "trident | Gurugram",
-  title: "Wanderon: Founders Meet",
-  date: "Sat, 06 Jun, 10:00 PM",
-  price: "₹10,999/-",
-};
 
 function SectionTitle({ label }: { label: string }) {
   return (
@@ -141,7 +103,7 @@ export default function Events() {
       <main className="ev-main">
         {/* Category bar (Figma 5572:14074) */}
         <div className="ev-catbar">
-          {CATEGORIES.map((cat, i) => (
+          {EVENT_CATEGORIES.map((cat, i) => (
             <div className="ev-catbar-item" key={cat.label}>
               {i > 0 && <span className="ev-catbar-dot" aria-hidden />}
               <button
@@ -171,8 +133,8 @@ export default function Events() {
               <video
                 ref={videoRef}
                 className="ev-hero-img"
-                src={HERO.video}
-                poster={HERO.poster}
+                src={EVENTS_HERO.video}
+                poster={EVENTS_HERO.poster}
                 autoPlay
                 loop
                 muted
@@ -181,7 +143,7 @@ export default function Events() {
                 onPlay={() => setPlaying(true)}
                 onPause={() => setPlaying(false)}
               />
-              <img src={HERO.logo} alt="" className="ev-hero-logo" aria-hidden />
+              <img src={EVENTS_HERO.logo} alt="" className="ev-hero-logo" aria-hidden />
               <button
                 type="button"
                 className="ev-hero-play"
@@ -201,10 +163,10 @@ export default function Events() {
               </button>
             </div>
             <div className="ev-hero-info">
-              <p className="ev-hero-title">{HERO.title}</p>
+              <p className="ev-hero-title">{EVENTS_HERO.title}</p>
               <div className="ev-hero-loc">
                 <img src={`${A}icon-location.svg`} alt="" className="ev-hero-pin" aria-hidden />
-                <span>{HERO.location}</span>
+                <span>{EVENTS_HERO.location}</span>
               </div>
             </div>
           </div>
@@ -223,7 +185,7 @@ export default function Events() {
         <section className="ev-section">
           <SectionTitle label="Wanderon Originals" />
           <div className="ev-hscroll">
-            {ORIGINALS.map((a) => (
+            {EVENT_ARTISTS.map((a) => (
               <figure
                 className="ev-artist"
                 key={a.name}
@@ -253,7 +215,7 @@ export default function Events() {
         </div>
 
         {/* Featured concert (Figma 4518:23849) */}
-        <EventCard item={CONCERT} onOpen={openEvent} />
+        <EventCard item={EVENT_CONCERT} onOpen={openEvent} />
 
         {/* Founders Circle (Figma 4518:23872) */}
         <section className="ev-section">
@@ -311,7 +273,7 @@ export default function Events() {
         </section>
 
         {/* Featured founders meet (Figma 4518:23886) */}
-        <EventCard item={FOUNDERS_MEET} onOpen={openEvent} />
+        <EventCard item={EVENT_FOUNDERS_MEET} onOpen={openEvent} />
       </main>
 
       <BurgerMenu isOpen={menuOpen} onClose={() => setMenuOpen(false)} />

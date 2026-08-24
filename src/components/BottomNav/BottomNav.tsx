@@ -1,6 +1,6 @@
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import { useCompare } from "../../context/CompareContext";
+import { useAuth } from "@/context/AuthContext";
+import { useCompare } from "@/context/CompareContext";
 import "./BottomNav.css";
 
 interface BottomNavProps {

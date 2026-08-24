@@ -1,7 +1,11 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import {
+  readBookingStatuses,
+  saveBookingStatuses,
+  type BookingStatus,
+} from "@/repositories";
 
-/** Lifecycle status of a booking. */
-export type BookingStatus = "active" | "cancellation_requested" | "cancelled";
+export type { BookingStatus };
 
 interface BookingCtx {
   /** Current status for a booking reference (defaults to "active"). */
@@ -14,17 +18,6 @@ interface BookingCtx {
   setStatus: (ref: string, status: BookingStatus) => void;
 }
 
-const STORAGE_KEY = "wanderon_booking_status";
-
-function readStore(): Record<string, BookingStatus> {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as Record<string, BookingStatus>) : {};
-  } catch {
-    return {};
-  }
-}
-
 const BookingContext = createContext<BookingCtx>({
   statusOf: () => "active",
   requestCancellation: () => {},
@@ -34,16 +27,12 @@ const BookingContext = createContext<BookingCtx>({
 
 export function BookingProvider({ children }: { children: React.ReactNode }) {
   const [statuses, setStatuses] = useState<Record<string, BookingStatus>>(() =>
-    readStore()
+    readBookingStatuses()
   );
 
   // Keep the persisted copy in sync with in-memory state.
   useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(statuses));
-    } catch {
-      /* ignore quota / private-mode errors */
-    }
+    saveBookingStatuses(statuses);
   }, [statuses]);
 
   const setStatus = useCallback((ref: string, status: BookingStatus) => {

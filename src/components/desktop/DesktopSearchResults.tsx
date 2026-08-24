@@ -1,21 +1,22 @@
-// Desktop product listing. Shared list helpers come from
-// `../../pages/searchResults.helpers` (not the page) to avoid a circular import.
+// Desktop product listing. List helpers are shared with the mobile listing via
+// `@/utils/searchResults`.
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import type { Trip } from "../../types";
-import { getCachedListingTrips, getListingTrips } from "../../api";
-import TripCard from "../TripCard";
+import type { Trip } from "@/types";
+import { getCachedListingTrips, getListingTrips } from "@/repositories";
+import TripCard from "@/components/TripCard";
 import DesktopFilterSheet from "./DesktopFilterSheet";
 import DesktopBatchesSheet from "./DesktopBatchesSheet";
 import DesktopFooter from "./DesktopFooter";
 import DesktopNav from "./DesktopNav";
+import ToggleSwitch from "@/components/ui/ToggleSwitch";
+import TripCardShimmer from "@/components/ui/TripCardShimmer";
 import {
   filterTrips,
   sortTrips,
   fmtDate,
   fmtMonthLabel,
-  playTapSound,
-} from "../../pages/searchResults.helpers";
+} from "@/utils/searchResults";
 import "./DesktopSearchResults.css";
 
 const PAGE_SIZE = 6; // two rows of three cards
@@ -24,19 +25,6 @@ const AS = "/figma/desktop-listing/";
 
 type Chip = { key: string; label: string; onRemove: () => void };
 
-function TripCardShimmer() {
-  return (
-    <div className="dsr-shimmer">
-      <div className="dsr-shimmer-img" />
-      <div className="dsr-shimmer-body">
-        <div className="dsr-shimmer-line" style={{ width: "85%", height: 14 }} />
-        <div className="dsr-shimmer-line" style={{ width: "60%" }} />
-        <div className="dsr-shimmer-line" style={{ width: "70%" }} />
-        <div className="dsr-shimmer-line" style={{ width: "45%", height: 18, marginTop: 8 }} />
-      </div>
-    </div>
-  );
-}
 
 /** Desktop product listing page (Figma 5854:24702 "Listing"). Reuses the mobile
  *  TripCard and the shared listing filter/sort helpers. */
@@ -211,30 +199,21 @@ export default function DesktopSearchResults() {
             <p className="dsr-count">
               {filteredTrips.length} Trip{filteredTrips.length !== 1 ? "s" : ""} Found
             </p>
-            <button
-              type="button"
+            <ToggleSwitch
+              checked={showFeatures}
+              onChange={setShowFeatures}
+              label="Show Features"
               className="dsr-features-toggle"
-              role="switch"
-              aria-checked={showFeatures}
-              onClick={() => {
-                playTapSound();
-                setShowFeatures((v) => !v);
-              }}
-            >
-              <span className="dsr-features-toggle-label">Show Features</span>
-              <img
-                className="dsr-features-toggle-switch"
-                src={`${LI}toggle/toggle-${showFeatures ? "on" : "off"}.svg`}
-                alt=""
-                aria-hidden
-              />
-            </button>
+              labelClassName="dsr-features-toggle-label"
+              imgClassName="dsr-features-toggle-switch"
+              tapSound
+            />
           </div>
         )}
 
         <div className="dsr-grid">
           {loading
-            ? Array.from({ length: PAGE_SIZE }, (_, i) => <TripCardShimmer key={i} />)
+            ? Array.from({ length: PAGE_SIZE }, (_, i) => <TripCardShimmer key={i} variant="search-desktop" />)
             : visibleTrips.map((trip, i) => (
                 <div className="dsr-cell" key={trip.slug}>
                   <TripCard

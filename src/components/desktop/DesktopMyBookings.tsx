@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useBooking } from "../../context/BookingContext";
+import { useBooking } from "@/context/BookingContext";
 import { ProfileRail, ProfileHeader } from "./DesktopProfile";
-import ProfileWatermark from "./ProfileWatermark";
+import EndMark from "@/components/ui/EndMark";
 import {
-  SAMPLE_BOOKINGS,
+  getBookings,
   type BookingSummary,
   type BookingsTabKey,
-} from "../../data/myBookings";
+} from "@/repositories";
 import "./DesktopProfile.css";
 import "./DesktopMyBookings.css";
 
@@ -35,9 +35,9 @@ export default function DesktopMyBookings() {
   const effectiveTab = (b: BookingSummary): BookingsTabKey =>
     statusOf(b.ref) === "cancelled" ? "cancelled" : b.category;
 
-  const visible =
-    tab === "ongoing" ? [] : SAMPLE_BOOKINGS.filter((b) => effectiveTab(b) === tab);
-  const cancellationRequests = SAMPLE_BOOKINGS.filter(
+  const bookings = getBookings();
+  const visible = tab === "ongoing" ? [] : bookings.filter((b) => effectiveTab(b) === tab);
+  const cancellationRequests = bookings.filter(
     (b) => statusOf(b.ref) === "cancellation_requested"
   );
 
@@ -168,7 +168,7 @@ export default function DesktopMyBookings() {
       </div>
 
       {/* Grey sign-off — page level, aligned with the content gutter */}
-      <ProfileWatermark />
+      <EndMark variant="watermark" />
 
       {/* ── Footer ─────────────────────────────────────────── */}
       <footer className="dpr-footer">

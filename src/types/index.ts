@@ -1,5 +1,11 @@
 export type ApiSource = "live" | "sample";
 
+/** Repository payload plus where it came from (live API vs bundled sample). */
+export interface ApiResult<T> {
+  data: T;
+  source: ApiSource;
+}
+
 export interface TripDuration {
   nights: number;
   days: number;

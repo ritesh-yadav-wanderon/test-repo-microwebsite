@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { COUNTRIES, type Country } from "../../data/countries";
+import { COUNTRIES, type Country } from "@/repositories";
 import "./PhoneInput.css";
 
 const CHEVRON = "/figma/login-sheet/icon-chevron.svg";

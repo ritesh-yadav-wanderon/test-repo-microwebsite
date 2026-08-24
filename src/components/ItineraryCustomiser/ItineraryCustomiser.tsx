@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { useIsDesktop } from "../../hooks/useIsDesktop";
-import { useScrollLock } from "../../hooks/useScrollLock";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import Sheet from "@/components/ui/Sheet";
 import "./ItineraryCustomiser.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const T = "/figma/train/";
 
@@ -84,7 +85,6 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, stations.length]);
 
-  useScrollLock(isOpen);
 
   const tapStation = (idx: number) => {
     // A finished trip (or a freshly opened sheet) restarts the selection.
@@ -245,7 +245,6 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
     }, exit + 120));
   }, [isOpen, isDesktop, pickStart, pickEnd, perRow, rowW, stations.length]);
 
-  if (!isOpen) return null;
 
   if (isDesktop) {
     // Chunk the mother itinerary into rows of `perRow` station indices.
@@ -261,251 +260,258 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
     };
 
     return (
-      <div className="itc-overlay itc-overlay--desktop" onClick={closeAndApply}>
-        <div
-          className="itc-sheet itc-sheet--desktop"
-          onClick={e => e.stopPropagation()}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Customise itinerary"
-        >
-          <div className="itcd-coverage">
-            This route cover {selEnd - selStart + 1} of {stations.length} stops on our Europe Route
-          </div>
-
-          <div className="itcd-card">
-            <header className="itcd-header">
-              <img src={thumb} alt="" className="itcd-thumb" />
-              <div className="itcd-header-text">
-                <p className="itcd-sub">Europe · full route</p>
-                <p className="itcd-title">Where do you want to hop on &amp; off?</p>
-              </div>
-              <button className="itcd-close" type="button" onClick={closeAndApply} aria-label="Close and apply selection">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
-                  <path d="M5 5l14 14M19 5L5 19" stroke="#121212" strokeWidth="1.8" strokeLinecap="round" />
-                </svg>
-              </button>
-            </header>
-
-            <section className="itcd-popular" aria-labelledby="itcd-popular-title">
-              <h2 id="itcd-popular-title" className="itcd-popular-title">Popular Choices</h2>
-              <div className="itcd-popular-list">
-                {popular.map(({ start, end }, pi) => (
-                  <button className="itcd-popular-card" type="button" key={pi} onClick={() => applyPreset(start, end)}>
-                    {stations.slice(start, end + 1).map((name, i) => (
-                      <span key={`${name}-${i}`} className="itcd-popular-item">
-                        {i > 0 && <img src={`${T}route-arrow.svg`} alt="" aria-hidden />}
-                        <span>{name}</span>
-                      </span>
-                    ))}
-                  </button>
-                ))}
-              </div>
-            </section>
-
-            <div className="itcd-selector">
-              <div className="itcd-rows" ref={rowsRef}>
-                {rows.map((row, ri) => {
-                  const first = row[0];
-                  const last = row[row.length - 1];
-                  // Only a finished trip lays live rail, and each row shows
-                  // just the stretch that falls inside it.
-                  const covered = hasTrip && pickEnd! >= first && pickStart! <= last;
-                  const runsIn = covered && pickStart! < first;
-                  const runsOut = covered && pickEnd! > last;
-                  return (
-                    <div className="itcd-row" key={first}>
-                      <div
-                        className="itcd-stations"
-                        style={{ gridTemplateColumns: `repeat(${perRow}, ${STATION_W}px)` }}
-                      >
-                        {row.map(i => {
-                          const isStart = i === pickStart;
-                          const isEnd = i === pickEnd;
-                          const outside = isOutside(i);
-                          const selected = hasTrip
-                            ? i >= pickStart! && i <= pickEnd!
-                            : isStart;
-                          const n = nights?.[i] ?? 2;
-                          return (
-                            <button
-                              key={i}
-                              type="button"
-                              className={`itcd-station${outside ? " itcd-station--outside" : ""}${
-                                selected ? " itcd-station--selected" : ""
-                              }${isStart || isEnd ? " itcd-station--endpoint" : ""}`}
-                              onClick={() => tapStation(i)}
-                            >
-                              {(isStart || isEnd) && (
-                                <span className="itcd-endpoint-tag">{isStart ? "Start" : "End"}</span>
-                              )}
-                              <span>{stations[i]}</span>
-                              <span>{n}N</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-
-                      <div className="itcd-track" aria-hidden>
-                        {covered && (
-                          <span
-                            className="itcd-track-active"
-                            style={
-                              runsIn
-                                ? { left: 0, width: runsOut ? "100%" : chipCentre(pickEnd! - first) }
-                                : {
-                                    left: chipCentre(pickStart! - first),
-                                    right: runsOut ? 0 : undefined,
-                                    width: runsOut
-                                      ? undefined
-                                      : chipCentre(pickEnd! - first) - chipCentre(pickStart! - first),
-                                  }
-                            }
-                          />
-                        )}
-                        {dTrain?.row === ri && (
-                          <img
-                            src="/figma/train/card-train-horizontal.png"
-                            alt=""
-                            className="itcd-train"
-                            style={{ left: dTrain.left, transitionDuration: `${dTrain.dur}ms` }}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+      <Sheet
+        isOpen={isOpen}
+        onClose={closeAndApply}
+        overlayClassName="itc-overlay itc-overlay--desktop"
+        panelClassName="itc-sheet itc-sheet--desktop"
+        openModifier=""
+        ariaLabel="Customise itinerary"
+        unmountWhenClosed
+      >
+        <div className="itcd-coverage">
+          This route cover {selEnd - selStart + 1} of {stations.length} stops on our Europe Route
         </div>
-      </div>
-    );
-  }
 
-  return (
-    <div className="itc-overlay" onClick={onClose}>
-      <div className="itc-sheet" onClick={e => e.stopPropagation()} role="dialog" aria-label="Customise itinerary">
-
-        <header className="itc-header">
-          <img src={thumb} alt="" className="itc-header-thumb" />
-          <div className="itc-header-text">
-            <p className="itc-header-sub">Europe · full route</p>
-            <p className="itc-header-title">Where do you want to hop on &amp; off?</p>
-          </div>
-          <button className="itc-close" onClick={onClose} aria-label="Close">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M1 1l16 16M17 1L1 17" stroke="#121212" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </button>
-        </header>
-
-        <div className="itc-scroll" ref={scrollRef}>
-          <div className="itc-top">
-            <div className="itc-route">
-              {stations.map((name, i) => (
-                <span key={i} className="itc-route-item">
-                  {i > 0 && <span className={`itc-route-dot${i > selStart && i <= selEnd ? "" : " off"}`} />}
-                  <span className={`itc-route-city${i >= selStart && i <= selEnd ? "" : " off"}`}>{name}</span>
-                </span>
-              ))}
+        <div className="itcd-card">
+          <header className="itcd-header">
+            <img src={thumb} alt="" className="itcd-thumb" />
+            <div className="itcd-header-text">
+              <p className="itcd-sub">Europe · full route</p>
+              <p className="itcd-title">Where do you want to hop on &amp; off?</p>
             </div>
+            <button className="itcd-close" type="button" onClick={closeAndApply} aria-label="Close and apply selection">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden>
+                <path d="M5 5l14 14M19 5L5 19" stroke="#121212" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            </button>
+          </header>
 
-            <div className="itc-price-row">
-              <span className="itc-price-label">Starting price per person</span>
-              <span className="itc-price-value">{formatINR(price)}</span>
-            </div>
-
-            <div className="itc-band" />
-
-            <p className="itc-pop-title">Popular Choices</p>
-            <div className="itc-pop-list">
+          <section className="itcd-popular" aria-labelledby="itcd-popular-title">
+            <h2 id="itcd-popular-title" className="itcd-popular-title">Popular Choices</h2>
+            <div className="itcd-popular-list">
               {popular.map(({ start, end }, pi) => (
-                <button className="itc-pop-card" key={pi} onClick={() => applyPreset(start, end)}>
+                <button className="itcd-popular-card" type="button" key={pi} onClick={() => applyPreset(start, end)}>
                   {stations.slice(start, end + 1).map((name, i) => (
-                    <span key={i} className="itc-route-item">
-                      {i > 0 && <img src={`${T}route-arrow.svg`} alt="" aria-hidden className="itc-route-arrow" />}
-                      <span className="itc-pop-city">{name}</span>
+                    <span key={`${name}-${i}`} className="itcd-popular-item">
+                      {i > 0 && <img src={`${T}route-arrow.svg`} alt="" aria-hidden />}
+                      <span>{name}</span>
                     </span>
                   ))}
                 </button>
               ))}
             </div>
+          </section>
 
-            <div className="itc-banner-wrap">
-              <div className="itc-band" />
-              <div className="itc-banner">
-                <img src={`${T}info-gold.svg`} alt="" className="itc-banner-icon" />
-                <p className="itc-banner-text">
-                  Tap a city to start, tap another to end. Nights per city are fixed.
-                </p>
-              </div>
+          <div className="itcd-selector">
+            <div className="itcd-rows" ref={rowsRef}>
+              {rows.map((row, ri) => {
+                const first = row[0];
+                const last = row[row.length - 1];
+                // Only a finished trip lays live rail, and each row shows
+                // just the stretch that falls inside it.
+                const covered = hasTrip && pickEnd! >= first && pickStart! <= last;
+                const runsIn = covered && pickStart! < first;
+                const runsOut = covered && pickEnd! > last;
+                return (
+                  <div className="itcd-row" key={first}>
+                    <div
+                      className="itcd-stations"
+                      style={{ gridTemplateColumns: `repeat(${perRow}, ${STATION_W}px)` }}
+                    >
+                      {row.map(i => {
+                        const isStart = i === pickStart;
+                        const isEnd = i === pickEnd;
+                        const outside = isOutside(i);
+                        const selected = hasTrip
+                          ? i >= pickStart! && i <= pickEnd!
+                          : isStart;
+                        const n = nights?.[i] ?? 2;
+                        return (
+                          <button
+                            key={i}
+                            type="button"
+                            className={`itcd-station${outside ? " itcd-station--outside" : ""}${
+                              selected ? " itcd-station--selected" : ""
+                            }${isStart || isEnd ? " itcd-station--endpoint" : ""}`}
+                            onClick={() => tapStation(i)}
+                          >
+                            {(isStart || isEnd) && (
+                              <span className="itcd-endpoint-tag">{isStart ? "Start" : "End"}</span>
+                            )}
+                            <span>{stations[i]}</span>
+                            <span>{n}N</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <div className="itcd-track" aria-hidden>
+                      {covered && (
+                        <span
+                          className="itcd-track-active"
+                          style={
+                            runsIn
+                              ? { left: 0, width: runsOut ? "100%" : chipCentre(pickEnd! - first) }
+                              : {
+                                  left: chipCentre(pickStart! - first),
+                                  right: runsOut ? 0 : undefined,
+                                  width: runsOut
+                                    ? undefined
+                                    : chipCentre(pickEnd! - first) - chipCentre(pickStart! - first),
+                                }
+                          }
+                        />
+                      )}
+                      {dTrain?.row === ri && (
+                        <img
+                          src="/figma/train/card-train-horizontal.png"
+                          alt=""
+                          className="itcd-train"
+                          style={{ left: dTrain.left, transitionDuration: `${dTrain.dur}ms` }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
+        </div>
+      </Sheet>
+    );
+  }
 
-          <div className="itc3-list" ref={listRef}>
-            {stations.map((name, i) => {
-              const isStart = i === pickStart;
-              const isEnd = i === pickEnd;
-              const outside = isOutside(i);
-              const n = nights?.[i] ?? 2;
-              const cls = isStart || isEnd
-                ? "itc3-row itc3-row--endpoint"
-                : outside
-                  ? "itc3-row itc3-row--outside"
-                  : "itc3-row";
-              return (
-                <button key={i} data-v2-row className={cls} onClick={() => tapStation(i)}>
-                  <span className="itc3-row-text">
-                    <span className="itc3-row-city">{name}</span>
-                    <span className="itc3-row-nights">
-                      {n} Night{n > 1 ? "s" : ""} · <span className="itc3-row-price">{formatINRShort(cityPrice(i))}</span>
-                    </span>
+  return (
+    <Sheet
+      isOpen={isOpen}
+      onClose={onClose}
+      overlayClassName="itc-overlay"
+      panelClassName="itc-sheet"
+      openModifier=""
+      ariaModal={false}
+      ariaLabel="Customise itinerary"
+      unmountWhenClosed
+    >
+
+      <header className="itc-header">
+        <img src={thumb} alt="" className="itc-header-thumb" />
+        <div className="itc-header-text">
+          <p className="itc-header-sub">Europe · full route</p>
+          <p className="itc-header-title">Where do you want to hop on &amp; off?</p>
+        </div>
+        <button className="itc-close" onClick={onClose} aria-label="Close">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+            <path d="M1 1l16 16M17 1L1 17" stroke="#121212" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+        </button>
+      </header>
+
+      <div className="itc-scroll" ref={scrollRef}>
+        <div className="itc-top">
+          <div className="itc-route">
+            {stations.map((name, i) => (
+              <span key={i} className="itc-route-item">
+                {i > 0 && <span className={`itc-route-dot${i > selStart && i <= selEnd ? "" : " off"}`} />}
+                <span className={`itc-route-city${i >= selStart && i <= selEnd ? "" : " off"}`}>{name}</span>
+              </span>
+            ))}
+          </div>
+
+          <div className="itc-price-row">
+            <span className="itc-price-label">Starting price per person</span>
+            <span className="itc-price-value">{formatINR(price)}</span>
+          </div>
+
+          <div className="itc-band" />
+
+          <p className="itc-pop-title">Popular Choices</p>
+          <div className="itc-pop-list">
+            {popular.map(({ start, end }, pi) => (
+              <button className="itc-pop-card" key={pi} onClick={() => applyPreset(start, end)}>
+                {stations.slice(start, end + 1).map((name, i) => (
+                  <span key={i} className="itc-route-item">
+                    {i > 0 && <img src={`${T}route-arrow.svg`} alt="" aria-hidden className="itc-route-arrow" />}
+                    <span className="itc-pop-city">{name}</span>
                   </span>
-                  {(isStart || isEnd) && (
-                    <span className="itc3-pill">{isStart ? "Start" : "End"}</span>
-                  )}
-                </button>
-              );
-            })}
-            <div className="itc3-rail" aria-hidden />
-            {railSeg && (
-              <div
-                className="itc3-rail itc3-rail--active"
-                style={{ top: railSeg.top, height: railSeg.height }}
-                aria-hidden
-              />
-            )}
-            {train && (
-              <img
-                src={`${T}v3-train.png`}
-                alt=""
-                className="itc3-train"
-                style={{
-                  top: train.y,
-                  transition: train.dur > 0 ? `top ${train.dur}ms linear` : "none",
-                }}
-              />
-            )}
+                ))}
+              </button>
+            ))}
+          </div>
+
+          <div className="itc-banner-wrap">
+            <div className="itc-band" />
+            <div className="itc-banner">
+              <img src={`${T}info-gold.svg`} alt="" className="itc-banner-icon" />
+              <p className="itc-banner-text">
+                Tap a city to start, tap another to end. Nights per city are fixed.
+              </p>
+            </div>
           </div>
         </div>
 
-        <div className="itc-cta">
-          <div className="itc-cta-price">
-            <span className="itc-cta-value">{formatINR(price)}</span>
-            <span className="itc-cta-label">Starting price per person</span>
-          </div>
-          <button
-            className="wo-cta itc-cta-btn"
-            onClick={() => {
-              onSelectionChange?.(selStart, selEnd);
-              onClose();
-            }}
-          >
-            Apply Selection
-          </button>
+        <div className="itc3-list" ref={listRef}>
+          {stations.map((name, i) => {
+            const isStart = i === pickStart;
+            const isEnd = i === pickEnd;
+            const outside = isOutside(i);
+            const n = nights?.[i] ?? 2;
+            const cls = isStart || isEnd
+              ? "itc3-row itc3-row--endpoint"
+              : outside
+                ? "itc3-row itc3-row--outside"
+                : "itc3-row";
+            return (
+              <button key={i} data-v2-row className={cls} onClick={() => tapStation(i)}>
+                <span className="itc3-row-text">
+                  <span className="itc3-row-city">{name}</span>
+                  <span className="itc3-row-nights">
+                    {n} Night{n > 1 ? "s" : ""} · <span className="itc3-row-price">{formatINRShort(cityPrice(i))}</span>
+                  </span>
+                </span>
+                {(isStart || isEnd) && (
+                  <span className="itc3-pill">{isStart ? "Start" : "End"}</span>
+                )}
+              </button>
+            );
+          })}
+          <div className="itc3-rail" aria-hidden />
+          {railSeg && (
+            <div
+              className="itc3-rail itc3-rail--active"
+              style={{ top: railSeg.top, height: railSeg.height }}
+              aria-hidden
+            />
+          )}
+          {train && (
+            <img
+              src={`${T}v3-train.png`}
+              alt=""
+              className="itc3-train"
+              style={{
+                top: train.y,
+                transition: train.dur > 0 ? `top ${train.dur}ms linear` : "none",
+              }}
+            />
+          )}
         </div>
       </div>
-    </div>
+
+      <div className="itc-cta">
+        <div className="itc-cta-price">
+          <span className="itc-cta-value">{formatINR(price)}</span>
+          <span className="itc-cta-label">Starting price per person</span>
+        </div>
+        <CtaButton
+          className="itc-cta-btn"
+          onClick={() => {
+            onSelectionChange?.(selStart, selEnd);
+            onClose();
+          }}
+        >
+          Apply Selection
+        </CtaButton>
+      </div>
+    </Sheet>
   );
 }

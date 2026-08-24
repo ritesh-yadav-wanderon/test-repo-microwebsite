@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getScrollTop, onAppScroll } from "../../utils/scroll";
+import { getScrollTop, onAppScroll } from "@/utils/scroll";
 import "./Header.css";
 
 export interface HeaderProps {

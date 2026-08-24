@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { CoTravellerData } from "../CoTravellerSheet/CoTravellerSheet";
-import CancelBookingSheet from "../CancelBookingSheet/CancelBookingSheet";
-import ProfileWatermark from "./ProfileWatermark";
-import { useBooking } from "../../context/BookingContext";
-import { BILL_ITEMS } from "../../data/bookingBill";
-import { startTripPayment } from "../../api/payment";
+import type { CoTravellerData } from "@/components/CoTravellerSheet";
+import CancelBookingSheet from "@/components/CancelBookingSheet";
+import EndMark from "@/components/ui/EndMark";
+import { useBooking } from "@/context/BookingContext";
+import { BILL_ITEMS } from "@/repositories";
+import { startTripPayment } from "@/repositories";
 import "./DesktopMyBooking.css";
+import CtaButton from "@/components/ui/CtaButton";
 
 const A = "/figma/booking/";
 const MB = "/figma/my-booking/";
@@ -469,9 +470,9 @@ export default function DesktopMyBooking({
                       <button className="dmb-co-cancel" type="button" onClick={cancelCoForm}>
                         Cancel
                       </button>
-                      <button className="wo-cta dmb-co-save" type="button" onClick={saveCoTraveller}>
+                      <CtaButton className="dmb-co-save" onClick={saveCoTraveller}>
                         Save Details
-                      </button>
+                      </CtaButton>
                     </div>
                   </>
                 )}
@@ -572,14 +573,13 @@ export default function DesktopMyBooking({
                       <span>Convenience fee</span>
                     </button>
                   </div>
-                  <button
-                    className="wo-cta dmb-bill-pay"
-                    type="button"
+                  <CtaButton
+                    className="dmb-bill-pay"
                     disabled={payLoading}
                     onClick={payDueBalance}
                   >
                     {payLoading ? "Processing…" : "Pay Due Balance"}
-                  </button>
+                  </CtaButton>
                 </div>
               </>
             )}
@@ -632,7 +632,7 @@ export default function DesktopMyBooking({
       </div>
 
       {/* Grey sign-off — page level, aligned with the content gutter */}
-      <ProfileWatermark />
+      <EndMark variant="watermark" />
 
       {/* ── Footer ───────────────────────────────────────────── */}
       <footer className="dmb-footer">

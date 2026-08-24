@@ -1,8 +1,9 @@
 import { memo, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { ApiSource, Trip, TripGroup } from "../../types";
-import BatchesSheet from "../BatchesSheet/BatchesSheet";
-import { TripCardItem, TripCardShimmer, ViewMoreCard } from "./TripCardItem";
+import type { ApiSource, Trip, TripGroup } from "@/types";
+import BatchesSheet from "@/components/BatchesSheet";
+import { TripCardItem, ViewMoreCard } from "./TripCardItem";
+import TripCardShimmer from "@/components/ui/TripCardShimmer";
 import "./UpcomingTrips.css";
 
 export interface UpcomingTripsProps {
@@ -53,7 +54,7 @@ function UpcomingTrips({ trips, loading, source: _source, activeCategory }: Upco
 
       <div className="up-cards" aria-busy={loading}>
         {loading
-          ? Array.from({ length: 3 }, (_, i) => <TripCardShimmer key={i} />)
+          ? Array.from({ length: 3 }, (_, i) => <TripCardShimmer key={i} variant="compact" />)
           : flat.length > 0
             ? [
                 ...flat.map(t => (

@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import type { ApiSource, TripGroup } from "../types";
-import HeroSection from "../components/HeroSection";
-import DestinationStrip from "../components/DestinationStrip";
-import UpcomingTrips from "../components/UpcomingTrips";
-import OriginalsSection from "../components/OriginalsSection";
-import TribeStories from "../components/TribeStories";
-import PlotBanner from "../components/PlotBanner";
-import WhyWanderon from "../components/WhyWanderon/WhyWanderon";
-import QueryBanner from "../components/QueryBanner";
-import FooterMessage from "../components/FooterMessage/FooterMessage";
-import Footer from "../components/Footer";
-import BottomNav from "../components/BottomNav";
-import { getCachedUpcomingTrips, getUpcomingTrips } from "../api";
-import DesktopHome from "../components/desktop/DesktopHome";
-import { useIsDesktop } from "../hooks/useIsDesktop";
+import type { ApiSource, TripGroup } from "@/types";
+import HeroSection from "@/components/HeroSection";
+import DestinationStrip from "@/components/DestinationStrip";
+import UpcomingTrips from "@/components/UpcomingTrips";
+import OriginalsSection from "@/components/OriginalsSection";
+import TribeStories from "@/components/TribeStories";
+import PlotBanner from "@/components/PlotBanner";
+import WhyWanderon from "@/components/WhyWanderon";
+import QueryBanner from "@/components/QueryBanner";
+import EndMark from "@/components/ui/EndMark";
+import Footer from "@/components/Footer";
+import BottomNav from "@/components/BottomNav";
+import { getCachedUpcomingTrips, getUpcomingTrips } from "@/repositories";
+import DesktopHome from "@/components/desktop/DesktopHome";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 import "./Home.css";
 
 export default function Home() {
@@ -52,7 +52,7 @@ export default function Home() {
       <PlotBanner />
       <WhyWanderon />
       <QueryBanner />
-      <FooterMessage />
+      <EndMark variant="mobile" />
       <Footer />
       <BottomNav />
     </>

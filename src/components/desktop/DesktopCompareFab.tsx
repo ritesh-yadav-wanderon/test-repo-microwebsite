@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { useCompare } from "../../context/CompareContext";
-import { useIsDesktop } from "../../hooks/useIsDesktop";
+import { useCompare } from "@/context/CompareContext";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
 import "./DesktopCompareFab.css";
 
 /** Vertical "Compare selected trips (N)" tab pinned to the right edge of the

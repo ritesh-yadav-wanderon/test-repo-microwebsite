@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { Trip } from "../../types";
+import type { Trip } from "@/types";
 import DesktopNav from "./DesktopNav";
 import DesktopListingStrip from "./DesktopListingStrip";
 import DesktopBatchesSheet from "./DesktopBatchesSheet";
 import DesktopWhyChooseUs from "./DesktopWhyChooseUs";
 import DesktopQuery from "./DesktopQuery";
-import DesktopFooterMsg from "./DesktopFooterMsg";
+import EndMark from "@/components/ui/EndMark";
 import DesktopPovCarousel, { type PovCard } from "./DesktopPovCarousel";
-import PhotoStack from "../PhotoStack/PhotoStack";
+import PhotoStack from "@/components/PhotoStack";
 import "./DesktopDestination.css";
 
 const BASE = "/figma/desktop-dest";
@@ -271,7 +271,7 @@ export default function DesktopDestination({
         sub="Tell us where. We'll find your people."
       />
 
-      <DesktopFooterMsg />
+      <EndMark variant="desktop" />
     </div>
   );
 }

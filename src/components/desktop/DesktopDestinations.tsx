@@ -1,33 +1,14 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getMonuments } from "@/repositories";
 import "./DesktopDestinations.css";
 
 const BASE = "/figma/desktop";
-const MOBILE = "/figma/dest";
 
-type Destination = { name: string; img: string; flip?: boolean };
-
-/* Same destination lists as the mobile DestinationStrip component.
- * Desktop monument art is used where it exists; the remaining cutouts
- * come from the shared mobile set. */
-const INTERNATIONAL: Destination[] = [
-  { name: "Egypt", img: `${BASE}/monument-egypt.png` },
-  { name: "Bali", img: `${MOBILE}/bali.png` },
-  { name: "Japan", img: `${MOBILE}/japan.png` },
-  { name: "Thailand", img: `${MOBILE}/thailand.png` },
-  { name: "Europe", img: `${MOBILE}/meghalaya.png` },
-  { name: "Dubai", img: `${MOBILE}/dubai.png` },
-  { name: "Vietnam", img: `${MOBILE}/vietnam.png` },
-];
-
-const DOMESTIC: Destination[] = [
-  { name: "Kerala", img: `${BASE}/monument-kerala.png` },
-  { name: "Rajasthan", img: `${MOBILE}/rajasthan.png`, flip: true },
-  { name: "Spiti", img: `${MOBILE}/spiti.png` },
-  { name: "Meghalaya", img: `${MOBILE}/meghalaya.png` },
-  { name: "Kashmir", img: `${MOBILE}/kashmir.png` },
-  { name: "Ladakh", img: `${MOBILE}/ladakh.png`, flip: true },
-];
+/* Same destination lists as the mobile DestinationStrip component; the desktop
+ * surface swaps in its own monument art where it exists. */
+const INTERNATIONAL = getMonuments("international", "desktop");
+const DOMESTIC = getMonuments("domestic", "desktop");
 
 /** "Destinations for the Wanderon community" monuments carousel (Figma 4715:22657). */
 export default function DesktopDestinations() {

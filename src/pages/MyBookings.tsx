@@ -1,15 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import FooterMessage from "../components/FooterMessage/FooterMessage";
-import DesktopMyBookings from "../components/desktop/DesktopMyBookings";
-import { useIsDesktop } from "../hooks/useIsDesktop";
-import { useBooking } from "../context/BookingContext";
+import EndMark from "@/components/ui/EndMark";
+import DesktopMyBookings from "@/components/desktop/DesktopMyBookings";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import { useBooking } from "@/context/BookingContext";
 import {
-  SAMPLE_BOOKINGS,
+  getBookings,
   BOOKINGS_TABS,
   type BookingSummary,
   type BookingsTabKey,
-} from "../data/myBookings";
+} from "@/repositories";
 import "./MyBookings.css";
 
 const A = "/figma/booking/";
@@ -30,8 +30,9 @@ export default function MyBookings() {
   const effectiveTab = (b: BookingSummary): TabKey =>
     statusOf(b.ref) === "cancelled" ? "cancelled" : b.category;
 
-  const visible = SAMPLE_BOOKINGS.filter((b) => effectiveTab(b) === tab);
-  const cancellationRequests = SAMPLE_BOOKINGS.filter(
+  const bookings = getBookings();
+  const visible = bookings.filter((b) => effectiveTab(b) === tab);
+  const cancellationRequests = bookings.filter(
     (b) => statusOf(b.ref) === "cancellation_requested"
   );
 
@@ -167,7 +168,7 @@ export default function MyBookings() {
           </button>
         )}
 
-        <FooterMessage />
+        <EndMark variant="mobile" />
       </div>
     </div>
   );
