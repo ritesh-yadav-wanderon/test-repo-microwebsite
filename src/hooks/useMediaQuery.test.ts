@@ -25,12 +25,14 @@ function fakeMediaQueryList(initialMatches: boolean) {
 
 beforeEach(() => {
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
 });
 
 describe("useMediaQuery", () => {
   it("returns the real matchMedia value on the client", () => {
     const mql = fakeMediaQueryList(true);
-    vi.spyOn(window, "matchMedia").mockReturnValue(mql as unknown as MediaQueryList);
+    // jsdom has no matchMedia, so stub it (Vitest 4 refuses to spyOn a missing method).
+    vi.stubGlobal("matchMedia", vi.fn().mockReturnValue(mql as unknown as MediaQueryList));
 
     const { result } = renderHook(() => useMediaQuery("(min-width: 1024px)", false));
     expect(result.current).toBe(true);
@@ -38,7 +40,8 @@ describe("useMediaQuery", () => {
 
   it("updates when the media query's match state changes", () => {
     const mql = fakeMediaQueryList(false);
-    vi.spyOn(window, "matchMedia").mockReturnValue(mql as unknown as MediaQueryList);
+    // jsdom has no matchMedia, so stub it (Vitest 4 refuses to spyOn a missing method).
+    vi.stubGlobal("matchMedia", vi.fn().mockReturnValue(mql as unknown as MediaQueryList));
 
     const { result } = renderHook(() => useMediaQuery("(min-width: 1024px)", false));
     expect(result.current).toBe(false);

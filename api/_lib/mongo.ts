@@ -5,6 +5,8 @@
 // on `global` — without this every request would open a new TCP/TLS
 // connection to Atlas and quickly exhaust the connection limit.
 
+import "server-only";
+
 import { MongoClient, type Db, type Document } from "mongodb";
 
 const DB_NAME = "test-trip-data";

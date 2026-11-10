@@ -5,6 +5,8 @@
 // logic lives. Lives under app/_lib (not src/) because it pulls in the
 // `mongodb` driver, which must never reach the client bundle.
 
+import "server-only";
+
 import { getProductsCollection } from "../../api/_lib/mongo";
 import { findProduct, redactProduct } from "../../api/_lib/products";
 import { mergeProductData } from "../../src/repositories/productDetailMapper";

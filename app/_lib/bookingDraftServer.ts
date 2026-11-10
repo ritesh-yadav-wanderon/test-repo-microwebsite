@@ -3,6 +3,8 @@
 // Lives under app/_lib (not src/) because it pulls in the `mongodb` driver,
 // which must never reach the client bundle.
 
+import "server-only";
+
 import { getBookingsCollection } from "../../api/_lib/mongo";
 import { getBooking, type BookingDoc } from "../../api/_lib/bookings";
 import type { BookingDraft } from "../../src/repositories";

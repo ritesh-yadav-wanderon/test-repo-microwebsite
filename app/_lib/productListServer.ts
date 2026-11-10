@@ -5,6 +5,8 @@
 // app/_lib (not src/) because it pulls in the `mongodb` driver, which must
 // never reach the client bundle.
 
+import "server-only";
+
 import { getProductsCollection } from "../../api/_lib/mongo";
 import { filterSortPaginate, PAGE_SIZE, type ProductListQuery } from "../../api/_lib/products";
 import { toTrip } from "../../src/repositories/productRepository";
