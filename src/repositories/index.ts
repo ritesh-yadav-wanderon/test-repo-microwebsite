@@ -6,6 +6,7 @@ export * from "./core/config";
 export * from "./core/images";
 export * from "./core/storage";
 export * from "./tripRepository";
+export * from "./productRepository";
 export * from "./batchRepository";
 export * from "./destinationRepository";
 export * from "./bookingRepository";

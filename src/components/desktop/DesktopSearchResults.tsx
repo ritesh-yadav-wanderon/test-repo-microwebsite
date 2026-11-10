@@ -1,9 +1,13 @@
 // Desktop product listing. List helpers are shared with the mobile listing via
-// `@/utils/searchResults`.
-import { useEffect, useMemo, useState } from "react";
-import { useSearchParams, useNavigate } from "react-router-dom";
+// `@/utils/searchResults` and `@/hooks/useSearchFilters`.
+import { useState } from "react";
 import type { Trip } from "@/types";
-import { getCachedListingTrips, getListingTrips } from "@/repositories";
+import type { ProductListResult } from "@/repositories";
+import { useProductList } from "@/hooks/useProductList";
+import { useAppNav } from "@/hooks/useAppNav";
+import { useAppSearchParams } from "@/hooks/useAppSearchParams";
+import { useSearchFilters } from "@/hooks/useSearchFilters";
+import { tripHref } from "@/utils/tripUrl";
 import TripCard from "@/components/TripCard";
 import DesktopFilterSheet from "./DesktopFilterSheet";
 import DesktopBatchesSheet from "./DesktopBatchesSheet";
@@ -11,105 +15,51 @@ import DesktopFooter from "./DesktopFooter";
 import DesktopNav from "./DesktopNav";
 import ToggleSwitch from "@/components/ui/ToggleSwitch";
 import TripCardShimmer from "@/components/ui/TripCardShimmer";
-import {
-  filterTrips,
-  sortTrips,
-  fmtDate,
-  fmtMonthLabel,
-} from "@/utils/searchResults";
 import "./DesktopSearchResults.css";
 
 const PAGE_SIZE = 6; // two rows of three cards
 const LI = "/figma/listing/";
 const AS = "/figma/desktop-listing/";
 
-type Chip = { key: string; label: string; onRemove: () => void };
-
+export interface DesktopSearchResultsProps {
+  /** Page 1, pre-fetched server-side (Next.js). See SearchResultsView's
+   *  matching prop for the full explanation. */
+  initialData?: ProductListResult;
+}
 
 /** Desktop product listing page (Figma 5854:24702 "Listing"). Reuses the mobile
  *  TripCard and the shared listing filter/sort helpers. */
-export default function DesktopSearchResults() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-
-  const cachedTrips = getCachedListingTrips();
-  const [allTrips, setAllTrips] = useState<Trip[]>(() => cachedTrips ?? []);
-  const [loading, setLoading] = useState(() => !cachedTrips);
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+export default function DesktopSearchResults({ initialData }: DesktopSearchResultsProps) {
+  const nav = useAppNav();
+  const searchParams = useAppSearchParams();
 
   const [filterOpen, setFilterOpen] = useState(false);
   const [filterTab, setFilterTab] = useState(0);
   const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
   const [showFeatures, setShowFeatures] = useState(true);
 
-  useEffect(() => {
-    if (cachedTrips) return;
-    let cancelled = false;
-    getListingTrips().then((trips) => {
-      if (!cancelled) {
-        setAllTrips(trips);
-        setLoading(false);
-      }
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [cachedTrips]);
+  // "private-trips" is a client-only routing marker (the bottom nav's
+  // Private trips tab) — the real product API's category taxonomy doesn't
+  // recognize it, so forwarding it would always return zero results.
+  // Private trips shows the full, unfiltered trip list instead.
+  const rawCategory = searchParams.get("category") ?? undefined;
+  const apiCategory = rawCategory === "private-trips" ? undefined : rawCategory;
 
-  useEffect(() => {
-    setVisibleCount(PAGE_SIZE);
-  }, [searchParams]);
-
-  const filteredTrips = useMemo(
-    () => sortTrips(filterTrips(allTrips, searchParams), null),
-    [allTrips, searchParams]
+  const { items: visibleTrips, loading, hasMore, total, loadMore } = useProductList(
+    {
+      destination: searchParams.get("destination") ?? undefined,
+      category: apiCategory,
+      months: searchParams.get("months") ?? undefined,
+      from: searchParams.get("from") ?? undefined,
+      to: searchParams.get("to") ?? undefined,
+      bucketList: searchParams.get("bucketList") ?? undefined,
+    },
+    true,
+    initialData
   );
 
-  const visibleTrips = filteredTrips.slice(0, visibleCount);
+  const { chips } = useSearchFilters();
 
-  // ── Active filter params ──────────────────────────────────────────────
-  const destination = searchParams.get("destination") ?? "";
-  const dateFrom = searchParams.get("from") ?? "";
-  const dateTo = searchParams.get("to") ?? "";
-  const monthsParam = searchParams.get("months") ?? "";
-  const selMonths = monthsParam ? monthsParam.split(",") : [];
-  const category = searchParams.get("category") ?? "";
-  const planningWith = searchParams.get("planningWith") ?? "";
-  const addons = searchParams.get("addons") ?? "";
-  const fromCity = searchParams.get("fromCity") ?? "";
-  const accommodation = searchParams.get("accommodation") ?? "";
-  const bucketList = searchParams.get("bucketList") ?? "";
-  const selBucket = bucketList ? bucketList.split(",").map((s) => s.trim()).filter(Boolean) : [];
-
-  function removeParam(...keys: string[]) {
-    const p = new URLSearchParams(searchParams);
-    keys.forEach((k) => p.delete(k));
-    navigate(`/search?${p.toString()}`);
-  }
-
-  function removeOneFromParam(key: string, value: string) {
-    const cur = searchParams.get(key) ?? "";
-    const remaining = cur.split(",").filter((v) => v.trim() !== value).join(",");
-    const p = new URLSearchParams(searchParams);
-    remaining ? p.set(key, remaining) : p.delete(key);
-    navigate(`/search?${p.toString()}`);
-  }
-
-  const chips: Chip[] = [];
-  if (destination) chips.push({ key: `dest`, label: destination, onRemove: () => removeParam("destination") });
-  if (monthsParam) selMonths.forEach((ym) => chips.push({ key: `m-${ym}`, label: fmtMonthLabel(ym), onRemove: () => removeOneFromParam("months", ym) }));
-  if (!monthsParam && (dateFrom || dateTo))
-    chips.push({
-      key: "dates",
-      label: dateFrom && dateTo ? `${fmtDate(dateFrom)} – ${fmtDate(dateTo)}` : dateFrom ? fmtDate(dateFrom) : fmtDate(dateTo),
-      onRemove: () => removeParam("from", "to"),
-    });
-  if (category) category.split(",").forEach((c) => chips.push({ key: `c-${c}`, label: c, onRemove: () => removeOneFromParam("category", c) }));
-  if (planningWith) planningWith.split(",").forEach((pw) => chips.push({ key: `pw-${pw}`, label: pw, onRemove: () => removeOneFromParam("planningWith", pw) }));
-  if (addons) addons.split(",").forEach((a) => chips.push({ key: `a-${a}`, label: a, onRemove: () => removeOneFromParam("addons", a) }));
-  if (fromCity) fromCity.split(",").forEach((city) => chips.push({ key: `fc-${city}`, label: `From ${city}`, onRemove: () => removeOneFromParam("fromCity", city) }));
-  if (accommodation) accommodation.split(",").forEach((acc) => chips.push({ key: `ac-${acc}`, label: acc, onRemove: () => removeOneFromParam("accommodation", acc) }));
-  selBucket.forEach((entry) => chips.push({ key: `b-${entry}`, label: entry, onRemove: () => removeOneFromParam("bucketList", entry) }));
 
   // Toggles the anchored filters popover; clicking the same pill again closes it.
   const openFilter = (e: React.MouseEvent, tab: number) => {
@@ -131,13 +81,13 @@ export default function DesktopSearchResults() {
         nights={batchesTrip?.duration?.nights ?? 7}
         ctaLabel="View Trip"
         onSelectBatch={(batch, start, end) => {
-          const slug = batchesTrip?.slug;
+          const trip = batchesTrip;
           setBatchesTrip(null);
-          if (!slug) return;
+          if (!trip) return;
           const fmt = (d: Date, withYear: boolean) =>
             d.toLocaleDateString("en-GB", { day: "numeric", month: "short", ...(withYear ? { year: "numeric" } : {}) });
           const price = Number(String(batch.price).replace(/,/g, "")).toLocaleString("en-IN");
-          navigate(`/trip/${slug}`, {
+          nav.push(tripHref(trip), {
             state: { from: "batches", selectedBatch: { dateRange: `${fmt(start, false)} - ${fmt(end, true)}`, price: `${price}/-` } },
           });
         }}
@@ -175,7 +125,12 @@ export default function DesktopSearchResults() {
           </button>
 
           {/* Anchored filters popover — opens alongside the filter pills */}
-          <DesktopFilterSheet isOpen={filterOpen} onClose={() => setFilterOpen(false)} initialTab={filterTab} />
+          <DesktopFilterSheet
+            isOpen={filterOpen}
+            onClose={() => setFilterOpen(false)}
+            initialTab={filterTab}
+            searchParams={searchParams}
+          />
         </div>
       </div>
 
@@ -197,7 +152,7 @@ export default function DesktopSearchResults() {
         {!loading && (
           <div className="dsr-count-row">
             <p className="dsr-count">
-              {filteredTrips.length} Trip{filteredTrips.length !== 1 ? "s" : ""} Found
+              {total} Trip{total !== 1 ? "s" : ""} Found
             </p>
             <ToggleSwitch
               checked={showFeatures}
@@ -227,17 +182,13 @@ export default function DesktopSearchResults() {
               ))}
         </div>
 
-        {!loading && filteredTrips.length === 0 && allTrips.length > 0 && (
+        {!loading && total === 0 && (
           <p className="dsr-no-results">No trips match your filters. Try adjusting your search.</p>
         )}
 
-        {!loading && visibleCount < filteredTrips.length && (
+        {!loading && hasMore && (
           <div className="dsr-viewmore-wrap">
-            <button
-              type="button"
-              className="dsr-viewmore"
-              onClick={() => setVisibleCount((c) => Math.min(c + PAGE_SIZE, filteredTrips.length))}
-            >
+            <button type="button" className="dsr-viewmore" onClick={loadMore}>
               View more trips
             </button>
           </div>

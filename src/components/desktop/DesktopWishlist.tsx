@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import { useWishlist, type WishlistTrip } from "@/context/WishlistContext";
 import { useCompare } from "@/context/CompareContext";
 import DesktopFooter from "./DesktopFooter";
@@ -22,14 +22,14 @@ function strikeDisplay(raw: string): string {
 
 /** Desktop wishlist trip card (Figma 6493:27974). */
 function DesktopWishCard({ trip }: { trip: WishlistTrip }) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const { remove } = useWishlist();
   const { isInCompare, toggle: toggleCompare } = useCompare();
   const inCompare = isInCompare(trip.slug);
   const strike = strikeDisplay(trip.price);
 
   return (
-    <article className="dwl-card" onClick={() => navigate(`/trip/${trip.slug}`)}>
+    <article className="dwl-card" onClick={() => nav.push(`/trip/${trip.slug}`)}>
       <div className="dwl-card-img">
         <img src={trip.image} alt={trip.title} loading="lazy" />
         <div className="dwl-card-overlays">
@@ -89,7 +89,7 @@ function DesktopWishCard({ trip }: { trip: WishlistTrip }) {
 
 /** Desktop wishlist page (Figma 6487:26792). */
 export default function DesktopWishlist() {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const { items, count } = useWishlist();
   const [activeMonth, setActiveMonth] = useState<string | null>(MONTHS[0]);
 
@@ -97,7 +97,7 @@ export default function DesktopWishlist() {
     <div className="dwl">
       {/* ── Slim page header (Figma 6588:31196) ── */}
       <header className="dwl-header">
-        <button className="dwl-header-back" type="button" aria-label="Back" onClick={() => navigate(-1)}>
+        <button className="dwl-header-back" type="button" aria-label="Back" onClick={() => nav.go(-1)}>
           <img src="/figma/compare/arrow-back.svg" alt="" width={24} height={24} aria-hidden />
         </button>
         <span className="dwl-header-title">Wishlist</span>
@@ -143,7 +143,7 @@ export default function DesktopWishlist() {
           <div className="dwl-empty">
             <p className="dwl-empty-title">No trips in your wishlist yet</p>
             <p className="dwl-empty-sub">Click the heart on any trip card to save it here.</p>
-            <button className="dwl-empty-cta" type="button" onClick={() => navigate("/search")}>
+            <button className="dwl-empty-cta" type="button" onClick={() => nav.push("/search")}>
               Explore trips
             </button>
           </div>

@@ -19,6 +19,10 @@ export interface TripDestination {
 
 export interface Trip {
   slug: string;
+  /** Mongo `productId` from the new-trip-data collection. Used to build the
+   *  `?id=` query param the product-detail API reads. Absent for trips that
+   *  haven't come through the product-list service (e.g. sample fixtures). */
+  productId?: string;
   title: string;
   type?: string;
   image: string;

@@ -1,10 +1,11 @@
 import { memo, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import type { Trip, TripGroup } from "@/types";
 import { IMAGE_WIDTHS, sizedImageUrl } from "@/repositories";
 import DesktopBatchesSheet from "./DesktopBatchesSheet";
 import DesktopTripCard from "@/components/TripCard/DesktopTripCard";
 import PagerButtons from "@/components/ui/PagerButtons";
+import { tripHref } from "@/utils/tripUrl";
 import "./DesktopTrips.css";
 
 /** Decorative 40px thumbnails behind the "View More Trips" button. */
@@ -28,7 +29,7 @@ function DesktopTrips({
   title = "Upcoming Group trips",
   seeAllHref = "/search",
 }: Props) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const trackRef = useRef<HTMLDivElement>(null);
   const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
 
@@ -44,7 +45,7 @@ function DesktopTrips({
     <section className="dtrips">
       <div className="dtrips__head">
         <h2 className="dtrips__title">{title}</h2>
-        <button className="dtrips__seeall" onClick={() => navigate(seeAllHref)}>
+        <button className="dtrips__seeall" onClick={() => nav.push(seeAllHref)}>
           See all
         </button>
       </div>
@@ -64,7 +65,7 @@ function DesktopTrips({
             ))}
 
         {!loading && (
-          <button className="dtrips__more" onClick={() => navigate(seeAllHref)}>
+          <button className="dtrips__more" onClick={() => nav.push(seeAllHref)}>
             <span className="dtrips__more-stack">
               <span className="dtrips__more-mini dtrips__more-mini--left">
                 <img src={miniThumb(flat[0]?.image)} alt="" />
@@ -94,13 +95,13 @@ function DesktopTrips({
         nights={batchesTrip?.duration?.nights ?? 7}
         ctaLabel="View Trip"
         onSelectBatch={(batch, start, end) => {
-          const slug = batchesTrip?.slug;
+          const trip = batchesTrip;
           setBatchesTrip(null);
-          if (!slug) return;
+          if (!trip) return;
           const fmt = (d: Date, withYear: boolean) =>
             d.toLocaleDateString("en-GB", { day: "numeric", month: "short", ...(withYear ? { year: "numeric" } : {}) });
           const price = Number(String(batch.price).replace(/,/g, "")).toLocaleString("en-IN");
-          navigate(`/trip/${slug}`, {
+          nav.push(tripHref(trip), {
             state: { from: "batches", selectedBatch: { dateRange: `${fmt(start, false)} - ${fmt(end, true)}`, price: `${price}/-` } },
           });
         }}

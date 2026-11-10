@@ -1,9 +1,10 @@
 import { memo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import type { Trip } from "@/types";
 import { useWishlist } from "@/context/WishlistContext";
 import { IMAGE_WIDTHS, sizedImageUrl } from "@/repositories";
 import HeartIcon from "@/components/ui/HeartIcon";
+import { tripHref } from "@/utils/tripUrl";
 
 const T = "/figma/trips";
 
@@ -20,7 +21,7 @@ export interface DesktopTripCardProps {
 
 /** Trip card used by the desktop carousels (Figma 3394:11786). */
 const DesktopTripCard = memo(function DesktopTripCard({ trip, onMoreDates }: DesktopTripCardProps) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const { isWishlisted, toggle: toggleWishlist } = useWishlist();
   const wishlisted = isWishlisted(trip.slug);
   const batches = trip.batches ?? [];
@@ -33,7 +34,7 @@ const DesktopTripCard = memo(function DesktopTripCard({ trip, onMoreDates }: Des
   const price = priceNum ? priceNum.toLocaleString("en-IN") : String(trip.startingPrice ?? "");
 
   return (
-    <article className="dtrips__card" onClick={() => navigate(`/trip/${trip.slug}`)}>
+    <article className="dtrips__card" onClick={() => nav.push(tripHref(trip))}>
       <div className="dtrips__img">
         <img
           src={trip.image ? sizedImageUrl(trip.image, IMAGE_WIDTHS.carousel) : `${T}/trip-1.jpg`}

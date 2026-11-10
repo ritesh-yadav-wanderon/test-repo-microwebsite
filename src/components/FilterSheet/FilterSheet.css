@@ -10,8 +10,8 @@
   width: 100%;
   max-width: var(--app-width);
   z-index: 1010;
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8));
   opacity: 0;
   pointer-events: none;
@@ -58,8 +58,8 @@
   height: 44px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(2.75px);
   -webkit-backdrop-filter: blur(2.75px);
+  backdrop-filter: blur(2.75px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -85,7 +85,7 @@
 .fs-title {
   font-family: "Roboto", sans-serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: #202020;
 }
 
@@ -139,7 +139,7 @@
 .fs-tab-count {
   font-family: "Roboto", sans-serif;
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 600;
   color: #01afd1;
   background: rgba(1, 175, 209, 0.1);
   border-radius: 30px;
@@ -155,7 +155,7 @@
 }
 .fs-tab--active .fs-tab-label {
   color: #015f74;
-  font-weight: 500;
+  font-weight: 600;
 }
 .fs-tab--active::after {
   content: "";
@@ -187,7 +187,7 @@
 .fs-section-head {
   font-family: "Roboto", sans-serif;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: #202020;
   padding: 6px 12px 8px;
 }
@@ -241,7 +241,7 @@
 .fs-trending {
   font-family: "Roboto", sans-serif;
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 600;
   color: #b1da3a;
   background: rgba(198, 255, 36, 0.2);
   border: 1px solid #b1da3a;
@@ -283,7 +283,7 @@
 .fs-see-more {
   font-family: "Roboto", sans-serif;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: #01afd1;
   text-decoration: underline;
   background: none;
@@ -357,7 +357,7 @@
 .fs-date-toggle-btn--active {
   background: #015f74;
   color: #fff;
-  font-weight: 500;
+  font-weight: 600;
   box-shadow: 0px 4px 2px rgba(0, 0, 0, 0.08);
 }
 
@@ -430,7 +430,7 @@
   justify-content: center;
   font-family: "Roboto", sans-serif;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: #757575;
   letter-spacing: 0.5px;
 }
@@ -465,7 +465,7 @@
   justify-content: center;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: #586474;
   box-shadow: 0px 5px 15px rgba(93, 68, 248, 0.04);
 }
@@ -539,7 +539,7 @@
 }
 .fs-cal-circle--selected .fs-cal-day {
   color: #fff;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* ── Footer ── */
@@ -567,7 +567,7 @@
 .fs-dest-region-head {
   font-family: "Roboto", sans-serif;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: #3d3d3d;
   height: 48px;
   padding: 0 12px;
@@ -631,7 +631,7 @@
 .fs-trending-text {
   font-family: "Roboto", sans-serif;
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 600;
   color: #b1da3a;
   white-space: nowrap;
 }
@@ -738,7 +738,7 @@
   border: none;
   font-family: "Roboto", sans-serif;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   flex-shrink: 0;
 }
@@ -763,7 +763,7 @@
   background: #f0f0f0;
   font-family: "Roboto", sans-serif;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: #121212;
 }
 

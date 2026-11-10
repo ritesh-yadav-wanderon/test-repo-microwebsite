@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import { getMonuments } from "@/repositories";
 import "./DesktopDestinations.css";
 
@@ -12,7 +12,7 @@ const DOMESTIC = getMonuments("domestic", "desktop");
 
 /** "Destinations for the Wanderon community" monuments carousel (Figma 4715:22657). */
 export default function DesktopDestinations() {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const [tab, setTab] = useState<"international" | "domestic">("international");
   const trackRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
@@ -54,7 +54,7 @@ export default function DesktopDestinations() {
           <button
             key={d.name}
             className="ddest__item"
-            onClick={() => navigate(`/destination/${d.name.toLowerCase()}`)}
+            onClick={() => nav.push(`/destination/${d.name.toLowerCase()}`)}
           >
             <span className="ddest__figure">
               <img className="ddest__shadow" src={`${BASE}/monument-shadow.svg`} alt="" />

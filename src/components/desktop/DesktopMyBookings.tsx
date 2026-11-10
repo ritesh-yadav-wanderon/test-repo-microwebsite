@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import { useBooking } from "@/context/BookingContext";
 import { ProfileRail, ProfileHeader } from "./DesktopProfile";
 import EndMark from "@/components/ui/EndMark";
@@ -28,7 +28,7 @@ const PANEL_TABS: { key: PanelTab; label: string }[] = [
 /** Desktop "My Bookings" — profile shell (header + left menu rail) with a
  *  bookings panel of ticket-style cards on the right. Figma 3996:12266. */
 export default function DesktopMyBookings() {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const { statusOf } = useBooking();
   const [tab, setTab] = useState<PanelTab>("upcoming");
 
@@ -43,7 +43,7 @@ export default function DesktopMyBookings() {
 
   const openBooking = (b: BookingSummary) => {
     const [pickUpDate, dropDate] = b.dateRange.split(" - ").map((s) => s.trim());
-    navigate(`/bookings/${b.ref}`, {
+    nav.push(`/bookings/${b.ref}`, {
       state: {
         from: "list",
         ref: b.ref,
@@ -63,7 +63,7 @@ export default function DesktopMyBookings() {
   };
 
   const openCancellation = (ref: string) =>
-    navigate(`/bookings/${ref}/cancellation`, { state: { ref } });
+    nav.push(`/bookings/${ref}/cancellation`, { state: { ref } });
 
   return (
     <div className="dpr dmbl">

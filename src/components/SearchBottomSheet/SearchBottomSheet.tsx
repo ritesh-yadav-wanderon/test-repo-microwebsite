@@ -1,28 +1,40 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import { addRecentDestination, DEST_REGIONS, getRecentDestinations } from "@/repositories";
 import Sheet from "@/components/ui/Sheet";
-import distanceIcon     from "../../assets/search-bottom-sheet/distance.svg";
-import calendarMonthIcon from "../../assets/search-bottom-sheet/calendar-month.svg";
-import calendarCheckIcon from "../../assets/search-bottom-sheet/calendar-check.svg";
-import catAdventureImg   from "../../assets/search-bottom-sheet/cat-adventure.png";
-import catLuxuryImg      from "../../assets/search-bottom-sheet/cat-luxury.png";
-import catCultureImg     from "../../assets/search-bottom-sheet/cat-culture.png";
-import catFestivalImg    from "../../assets/search-bottom-sheet/cat-festival.png";
-import catWellnessImg    from "../../assets/search-bottom-sheet/cat-wellness.png";
-import catWeekendImg     from "../../assets/search-bottom-sheet/cat-weekend.png";
+import distanceIconRaw     from "../../assets/search-bottom-sheet/distance.svg";
+import calendarMonthIconRaw from "../../assets/search-bottom-sheet/calendar-month.svg";
+import calendarCheckIconRaw from "../../assets/search-bottom-sheet/calendar-check.svg";
+import catAdventureImgRaw   from "../../assets/search-bottom-sheet/cat-adventure.png";
+import catLuxuryImgRaw      from "../../assets/search-bottom-sheet/cat-luxury.png";
+import catCultureImgRaw     from "../../assets/search-bottom-sheet/cat-culture.png";
+import catFestivalImgRaw    from "../../assets/search-bottom-sheet/cat-festival.png";
+import catWellnessImgRaw    from "../../assets/search-bottom-sheet/cat-wellness.png";
+import catWeekendImgRaw     from "../../assets/search-bottom-sheet/cat-weekend.png";
 import "./SearchBottomSheet.css";
 import CtaButton from "@/components/ui/CtaButton";
 
+// Vite's asset imports resolve to a plain URL string; Next.js's resolve to a
+// StaticImageData-shaped object ({ src, width, height, ... }), meant for
+// next/image. These files use plain <img src>, so every import needs
+// normalizing to a string to render correctly under both bundlers.
+function srcOf(img: string | { src: string }): string {
+  return typeof img === "string" ? img : img.src;
+}
+
+const distanceIcon = srcOf(distanceIconRaw);
+const calendarMonthIcon = srcOf(calendarMonthIconRaw);
+const calendarCheckIcon = srcOf(calendarCheckIconRaw);
+
 /* ─── constants ─────────────────────────────────── */
 const CATEGORIES = [
-  { label: ["All", "Trips"], img: null },
-  { label: ["Adventure"],       img: catAdventureImg },
-  { label: ["Luxury"],          img: catLuxuryImg },
-  { label: ["Culture"],         img: catCultureImg },
-  { label: ["Festival"],        img: catFestivalImg },
-  { label: ["Wellness"],        img: catWellnessImg },
-  { label: ["Weekend"],         img: catWeekendImg },
+  { label: ["All", "Trips"], img: null as string | null },
+  { label: ["Adventure"],       img: srcOf(catAdventureImgRaw) },
+  { label: ["Luxury"],          img: srcOf(catLuxuryImgRaw) },
+  { label: ["Culture"],         img: srcOf(catCultureImgRaw) },
+  { label: ["Festival"],        img: srcOf(catFestivalImgRaw) },
+  { label: ["Wellness"],        img: srcOf(catWellnessImgRaw) },
+  { label: ["Weekend"],         img: srcOf(catWeekendImgRaw) },
 ];
 
 const SUGGESTIONS = ["Bali", "Vietnam", "Europe", "Ladakh", "Meghalaya"];
@@ -226,7 +238,7 @@ export default function SearchBottomSheet({
   initialTo          = "",
   initialMonths      = [],
 }: Props) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
 
   const [step,     setStep]     = useState<"where" | "when">(initialDestination ? "when" : "where");
   const [query,    setQuery]    = useState(initialDestination);
@@ -323,7 +335,7 @@ export default function SearchBottomSheet({
     }
     const qs = params.toString();
     onClose();
-    navigate(`/search${qs ? `?${qs}` : ""}`);
+    nav.push(`/search${qs ? `?${qs}` : ""}`);
   }
 
   function handleClear() {

@@ -14,6 +14,23 @@ export function fmtMonthLabel(ym: string) {
   return new Date(y, m - 1, 1).toLocaleDateString("en-GB", { month: "short", year: "numeric" });
 }
 
+/** Query string with `keys` removed entirely. Pure — callers still do the navigate(). */
+export function withoutParams(params: URLSearchParams, ...keys: string[]): string {
+  const p = new URLSearchParams(params);
+  keys.forEach((k) => p.delete(k));
+  return p.toString();
+}
+
+/** Query string with one value removed from a comma-separated param (the
+ *  param is dropped entirely once its last value is removed). */
+export function withoutParamValue(params: URLSearchParams, key: string, value: string): string {
+  const cur = params.get(key) ?? "";
+  const remaining = cur.split(",").filter((v) => v.trim() !== value).join(",");
+  const p = new URLSearchParams(params);
+  remaining ? p.set(key, remaining) : p.delete(key);
+  return p.toString();
+}
+
 function closeMatch(needle: string, haystack: string[]): boolean {
   const n = needle.toLowerCase();
   return haystack.some(h => h.toLowerCase().includes(n) || n.includes(h.toLowerCase()));

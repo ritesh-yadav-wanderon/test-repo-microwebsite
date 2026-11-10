@@ -1,10 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import type { ReactNode } from "react";
+import { useAppNav } from "@/hooks/useAppNav";
 import "./DesktopFooter.css";
 
 /** Desktop site footer (Figma 6439:15473 "footer"). Shared across the desktop
  *  home, product, listing and account pages. */
 
-type Column = { heading: React.ReactNode; links: string[] };
+type Column = { heading: ReactNode; links: string[] };
 
 const COLUMNS: Column[] = [
   {
@@ -57,7 +58,7 @@ const COLUMNS: Column[] = [
 ];
 
 export default function DesktopFooter() {
-  const navigate = useNavigate();
+  const nav = useAppNav();
 
   return (
     <footer className="dft">
@@ -75,7 +76,7 @@ export default function DesktopFooter() {
                       <button
                         type="button"
                         className="dft-link"
-                        onClick={() => navigate("/search")}
+                        onClick={() => nav.push("/search")}
                       >
                         {link}
                       </button>

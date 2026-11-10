@@ -1,9 +1,10 @@
 import { memo, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import type { ApiSource, Trip, TripGroup } from "@/types";
 import BatchesSheet from "@/components/BatchesSheet";
 import { TripCardItem, ViewMoreCard } from "./TripCardItem";
 import TripCardShimmer from "@/components/ui/TripCardShimmer";
+import { tripHref } from "@/utils/tripUrl";
 import "./UpcomingTrips.css";
 
 export interface UpcomingTripsProps {
@@ -16,7 +17,7 @@ export interface UpcomingTripsProps {
 const CATEGORY_NAMES = ["All Trips","Adventure","Luxury","Culture","Festival","Wellness","Weekend"];
 
 function UpcomingTrips({ trips, loading, source: _source, activeCategory }: UpcomingTripsProps) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
 
   const categoryName = CATEGORY_NAMES[activeCategory] ?? "All Trips";
@@ -82,13 +83,13 @@ function UpcomingTrips({ trips, loading, source: _source, activeCategory }: Upco
         nights={batchesTrip?.duration?.nights ?? 7}
         ctaLabel="View Trip"
         onSelectBatch={(batch, start, end) => {
-          const slug = batchesTrip?.slug;
+          const trip = batchesTrip;
           setBatchesTrip(null);
-          if (!slug) return;
+          if (!trip) return;
           const fmt = (d: Date, withYear: boolean) =>
             d.toLocaleDateString("en-GB", { day: "numeric", month: "short", ...(withYear ? { year: "numeric" } : {}) });
           const price = Number(String(batch.price).replace(/,/g, "")).toLocaleString("en-IN");
-          navigate(`/trip/${slug}`, {
+          nav.push(tripHref(trip), {
             state: { from: "batches", selectedBatch: { dateRange: `${fmt(start, false)} - ${fmt(end, true)}`, price: `${price}/-` } },
           });
         }}

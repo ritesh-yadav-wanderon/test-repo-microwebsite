@@ -1,5 +1,5 @@
 import { memo, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import type { Trip } from "@/types";
 import TripCard from "@/components/TripCard";
 import TripCardShimmer from "@/components/ui/TripCardShimmer";
@@ -31,7 +31,7 @@ function DesktopListingStrip({
   showFeatures,
   onShowFeaturesChange,
 }: Props) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const trackRef = useRef<HTMLDivElement>(null);
 
   const scrollBy = (dir: 1 | -1) =>
@@ -43,7 +43,7 @@ function DesktopListingStrip({
         <h2 className="dls__title">{title}</h2>
         <div className="dls__head-right">
           <FeaturesToggle checked={showFeatures} onChange={onShowFeaturesChange} />
-          <button className="dls__seeall" type="button" onClick={() => navigate(seeAllHref)}>
+          <button className="dls__seeall" type="button" onClick={() => nav.push(seeAllHref)}>
             See all
           </button>
         </div>

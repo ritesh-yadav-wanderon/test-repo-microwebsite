@@ -79,7 +79,7 @@
 }
 .psh-later-title {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #202020;
 }
@@ -199,7 +199,7 @@
 }
 .psh-full-title {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #202020;
 }
@@ -306,7 +306,7 @@
 }
 .psh-cta-saved-text {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 15.6px;
   color: #316868;
 }
@@ -511,7 +511,7 @@
 .psh-status--success {
   color: #25793d;
   background: #eef8f1;
-  font-weight: 500;
+  font-weight: 600;
   text-align: center;
 }
 

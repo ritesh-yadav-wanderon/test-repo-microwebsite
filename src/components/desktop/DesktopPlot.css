@@ -61,7 +61,7 @@
   overflow: hidden;
   transform: scale(0.864);
   transform-origin: center center;
-  transition: transform 0.25s ease;
+  transition: transform var(--duration-expressive-sm) var(--ease-expressive);
   will-change: transform;
   cursor: pointer;
 }
@@ -123,7 +123,7 @@
 
 .dplot__cap strong {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   color: #fff;
 }

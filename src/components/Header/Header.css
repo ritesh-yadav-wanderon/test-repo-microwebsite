@@ -21,8 +21,8 @@
 /* Once the user starts scrolling, blur the backdrop behind the header. */
 .site-header--scrolled {
   background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
 .site-header--visible {

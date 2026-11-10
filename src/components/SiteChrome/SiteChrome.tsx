@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import Header from "@/components/Header";
 import OnScrollTopNav from "@/components/OnScrollTopNav";
 import SearchBottomSheet from "@/components/SearchBottomSheet";
@@ -12,10 +12,9 @@ import DesktopFloatingActions from "@/components/desktop/DesktopFloatingActions"
 import { useScrollNav } from "@/hooks/useScrollNav";
 
 export default function SiteChrome() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const isHome = location.pathname === "/";
-  const isSearch = location.pathname.startsWith("/search");
+  const nav = useAppNav();
+  const isHome = nav.pathname === "/";
+  const isSearch = nav.pathname.startsWith("/search");
   const { showHeroHeader, showScrollHeader } = useScrollNav(isHome);
   const [searchOpen, setSearchOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -49,7 +48,7 @@ export default function SiteChrome() {
   function handleLoginSuccess() {
     const redirect = loginRedirectRef.current;
     loginRedirectRef.current = null;
-    if (redirect) navigate(redirect);
+    if (redirect) nav.push(redirect);
   }
 
   const openSearch = () => setSearchOpen(true);
@@ -73,7 +72,7 @@ export default function SiteChrome() {
         <OnScrollTopNav
           visible={showScrollHeader}
           isHome={isHome}
-          onBack={() => navigate(-1)}
+          onBack={() => nav.go(-1)}
           onSearch={openSearch}
           onBurger={openMenu}
         />

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import type { Trip } from "@/types";
 import DesktopNav from "./DesktopNav";
 import DesktopListingStrip from "./DesktopListingStrip";
@@ -9,6 +9,7 @@ import DesktopQuery from "./DesktopQuery";
 import EndMark from "@/components/ui/EndMark";
 import DesktopPovCarousel, { type PovCard } from "./DesktopPovCarousel";
 import PhotoStack from "@/components/PhotoStack";
+import { tripHref } from "@/utils/tripUrl";
 import "./DesktopDestination.css";
 
 const BASE = "/figma/desktop-dest";
@@ -71,7 +72,7 @@ export default function DesktopDestination({
   const [openFaq, setOpenFaq] = useState(0);
   const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
   const [showFeatures, setShowFeatures] = useState(true);
-  const navigate = useNavigate();
+  const nav = useAppNav();
 
   const stripTrips = trips.slice(0, 6);
   const seeAllHref = `/search?destination=${encodeURIComponent(destination)}`;
@@ -138,13 +139,13 @@ export default function DesktopDestination({
         nights={batchesTrip?.duration?.nights ?? 7}
         ctaLabel="View Trip"
         onSelectBatch={(batch, start, end) => {
-          const slug = batchesTrip?.slug;
+          const trip = batchesTrip;
           setBatchesTrip(null);
-          if (!slug) return;
+          if (!trip) return;
           const fmt = (d: Date, withYear: boolean) =>
             d.toLocaleDateString("en-GB", { day: "numeric", month: "short", ...(withYear ? { year: "numeric" } : {}) });
           const price = Number(String(batch.price).replace(/,/g, "")).toLocaleString("en-IN");
-          navigate(`/trip/${slug}`, {
+          nav.push(tripHref(trip), {
             state: { from: "batches", selectedBatch: { dateRange: `${fmt(start, false)} - ${fmt(end, true)}`, price: `${price}/-` } },
           });
         }}

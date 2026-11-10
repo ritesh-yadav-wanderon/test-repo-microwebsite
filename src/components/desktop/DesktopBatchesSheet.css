@@ -50,7 +50,7 @@
 .dbat-head-title {
   margin: 0;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   color: #3d3d3d;
 }
@@ -68,7 +68,7 @@
 
 .dbat-head-dur span {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: #757575;
 }
 
@@ -108,7 +108,7 @@
   border-color: #01afd1;
   color: #01afd1;
   background: #f0fbfd;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* Cards */
@@ -153,7 +153,7 @@
 
 .dbat-day-num {
   font-size: 24px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   color: #3d3d3d;
 }
@@ -188,7 +188,7 @@
 
 .dbat-range-date {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #3d3d3d;
   white-space: nowrap;
@@ -329,7 +329,7 @@
 
 .dbat-strike {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #ababab;
   text-decoration: line-through;

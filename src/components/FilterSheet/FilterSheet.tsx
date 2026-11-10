@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import Sheet from "@/components/ui/Sheet";
 import "./FilterSheet.css";
 import CtaButton from "@/components/ui/CtaButton";
@@ -584,21 +584,36 @@ export function seedFromParams(params: URLSearchParams): Record<string, Set<stri
   return s;
 }
 
+export interface FilterSheetProps {
+  isOpen: boolean;
+  onClose: () => void;
+  initialTab?: number;
+  /** Query string to seed initial selections from — pass the CURRENT page's
+   *  real search params when this is the /search page's own instance;
+   *  omitted everywhere else (e.g. SiteChrome's globally-mounted instance,
+   *  opened from any other page), which starts empty — also the correct
+   *  product behavior, since no other page has "current filters" to carry
+   *  over. Kept as a prop rather than calling useAppSearchParams()
+   *  internally: that hook isn't safe to call unconditionally under
+   *  Next.js everywhere this component is mounted (it would force every
+   *  page rendering the global FilterSheet out of static generation). */
+  searchParams?: URLSearchParams;
+}
+
 /* ── FilterSheet ── */
-export default function FilterSheet({ isOpen, onClose, initialTab = 0 }: { isOpen: boolean; onClose: () => void; initialTab?: number }) {
+export default function FilterSheet({ isOpen, onClose, initialTab = 0, searchParams }: FilterSheetProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [selections, setSelections] = useState<Record<string, Set<string>>>(() =>
     Object.fromEntries(TABS.map((t) => [t, new Set<string>()]))
   );
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const nav = useAppNav();
 
   useEffect(() => {
     if (!isOpen) return;
     setActiveTab(initialTab);
-    setSelections(seedFromParams(searchParams));
+    setSelections(seedFromParams(searchParams ?? new URLSearchParams()));
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, initialTab]);
+  }, [isOpen, initialTab, searchParams]);
 
   function toggle(tab: string, value: string) {
     setSelections((prev) => {
@@ -615,7 +630,7 @@ export default function FilterSheet({ isOpen, onClose, initialTab = 0 }: { isOpe
   function handleShowResults() {
     const qs = buildSearchParams(selections);
     onClose();
-    navigate(`/search${qs ? `?${qs}` : ""}`);
+    nav.push(`/search${qs ? `?${qs}` : ""}`);
   }
 
   const activeTabName = TABS[activeTab];

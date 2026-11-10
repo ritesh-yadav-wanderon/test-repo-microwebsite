@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import Sheet from "@/components/ui/Sheet";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import { DEFAULT_BATCHES, getBatchStatus, type BatchItem } from "@/repositories";
 import "./BatchesSheet.css";
 import CtaButton from "@/components/ui/CtaButton";
@@ -197,11 +197,29 @@ export default function BatchesSheet({
   ctaLabel = "Book Trip",
   onSelectBatch,
 }: BatchesSheetProps) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const [selectedMonth, setSelectedMonth] = useState("");
 
-  const goToBooking = (state: Record<string, unknown>) => {
-    navigate("/booking", { state });
+  const goToBooking = (state: {
+    tripTitle: string;
+    tripName: string;
+    dateRange: string;
+    durationLabel: string;
+    perPerson: string;
+    travelers: number;
+  }) => {
+    // Carried as query params too (in addition to `state`, Vite's fast
+    // same-tab path) — Next.js's AppNav drops `state` (no location.state
+    // equivalent), so /booking reads these instead. See
+    // TripDetailView.handleContinueBook for the same pattern.
+    const qs = new URLSearchParams({
+      tripTitle: state.tripTitle,
+      dateRange: state.dateRange,
+      duration: state.durationLabel,
+      perPerson: state.perPerson,
+      travelers: String(state.travelers),
+    });
+    nav.push(`/booking?${qs.toString()}`, { state });
   };
 
   const handleBook = (batch: BatchItem, startDate: Date, endDate: Date) => {

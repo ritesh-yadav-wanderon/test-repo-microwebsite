@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import DesktopNav from "./DesktopNav";
 import "./DesktopEvents.css";
 
@@ -175,13 +175,13 @@ function DesktopEventCard({ item, onOpen }: { item: EventItem; onOpen: (slug: st
 /** Desktop events listing page (Figma 5326:22442) — dark layout with a
  *  featured-event hero carousel; photos reused from the mobile events page. */
 export default function DesktopEvents() {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const [slide, setSlide] = useState(0);
   const [flipTop, setFlipTop] = useState(false);
   const [flipBottom, setFlipBottom] = useState(false);
 
   const feat = FEATURED[slide];
-  const openEvent = (slug: string) => navigate(`/event/${slug}`);
+  const openEvent = (slug: string) => nav.push(`/event/${slug}`);
 
   const topCards = flipTop ? [FOUNDERS_MEET, CONCERT] : [CONCERT, FOUNDERS_MEET];
   const bottomCards = flipBottom ? [CONCERT, FOUNDERS_MEET] : [FOUNDERS_MEET, CONCERT];

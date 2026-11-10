@@ -40,7 +40,7 @@
 
 .tribe-score {
   font-family: var(--font);
-  font-weight: 500;
+  font-weight: 600;
   font-size: 38px;
   line-height: 38px;
   color: #3d3d3d;
@@ -125,7 +125,7 @@
   background: #015f74;
   color: #fff;
   border-color: #015f74;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* ── Review cards ── */
@@ -220,7 +220,7 @@
   margin: 0;
   font-family: var(--font);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 18.2px;
   letter-spacing: 0.014px;
   color: #202020;
@@ -265,7 +265,7 @@
   padding: 0;
   font-family: var(--font);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 16px;
   letter-spacing: 0.07px;
   color: #202020;
@@ -286,7 +286,7 @@
   background: #f2f2f2;
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: #3d3d3d;
   text-decoration: none;
   flex-shrink: 0;

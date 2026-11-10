@@ -51,7 +51,7 @@
   display: flex;
   align-items: center;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   color: #3d3d3d;
 }
@@ -112,7 +112,7 @@
 .dft-company-name {
   margin: 0;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   color: #3d3d3d;
 }

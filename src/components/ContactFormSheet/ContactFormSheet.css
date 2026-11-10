@@ -2,8 +2,8 @@
 .cfs-overlay {
   position: fixed;
   inset: 0;
-  backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
   background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.8));
   z-index: 1009;
   opacity: 0;
@@ -30,7 +30,7 @@
   z-index: 1010;
   border-radius: 16px 16px 0 0;
   transform: translateY(100%);
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.35s;
+  transition: transform var(--duration-expressive-md) var(--ease-expressive), visibility 0s linear 0.35s;
   max-width: var(--app-width);
   margin: 0 auto;
   max-height: 92vh;
@@ -44,7 +44,7 @@
 .cfs--open {
   transform: translateY(0);
   visibility: visible;
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform var(--duration-expressive-md) var(--ease-expressive);
 }
 
 /* ── Hero image header ───────────────────────────────────────── */
@@ -90,8 +90,8 @@
   height: 30px;
   border-radius: 24px;
   background: rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
   border: none;
   padding: 0;
   cursor: pointer;
@@ -321,7 +321,7 @@
 }
 .cfs-dest-trending-text {
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 600;
   color: #e8a200;
 }
 .cfs-dest-sep {

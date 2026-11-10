@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { startTripPayment, TEST_CARD, type RazorpayPrefill } from "@/repositories";
-import { PAYMENT_MODE } from "@/repositories";
+import { RAZORPAY_TEST_MODE } from "@/repositories";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import Sheet from "@/components/ui/Sheet";
 import "./PaymentSheet.css";
 
@@ -17,7 +18,8 @@ interface PaymentSheetProps {
   dueAmount?: string;
   dueDate?: string;
   savedAmount?: string;
-  bookingReferenceId?: string;
+  /** Shared booking/payment reference this payment is recorded against. */
+  orderId: string;
   description?: string;
   prefill?: RazorpayPrefill;
   onPaymentSuccess?: (data: unknown) => void;
@@ -43,16 +45,7 @@ function formatINR(n: number): string {
 const DESKTOP_QUERY = "(min-width: 1024px), (hover: hover) and (pointer: fine)";
 
 function useIsDesktopPointer(): boolean {
-  const [isDesktop, setIsDesktop] = useState(() => window.matchMedia(DESKTOP_QUERY).matches);
-
-  useEffect(() => {
-    const mql = window.matchMedia(DESKTOP_QUERY);
-    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
-  }, []);
-
-  return isDesktop;
+  return useMediaQuery(DESKTOP_QUERY, false);
 }
 
 export default function PaymentSheet({
@@ -64,7 +57,7 @@ export default function PaymentSheet({
   dueAmount = "79,720",
   dueDate = "8th August 2026",
   savedAmount = "5000",
-  bookingReferenceId,
+  orderId,
   description,
   prefill,
   onPaymentSuccess,
@@ -135,9 +128,8 @@ export default function PaymentSheet({
         : dueAmount;
 
     startTripPayment({
-      bookingReferenceId: bookingReferenceId || `WO-${Date.now()}`,
-      // Amount in rupees; the PMS converts to paise. Flip to paise here if the
-      // order endpoint expects paise instead.
+      orderId,
+      // Amount in rupees; startTripPayment converts to paise for Checkout.
       amount: payNum,
       description,
       prefill,
@@ -146,7 +138,7 @@ export default function PaymentSheet({
       onSuccess: (data) => {
         setStatus("success");
         onPaymentSuccess?.({
-          ...(data as Record<string, unknown>),
+          ...data,
           option: selected,
           amountPaid,
           dueBalance,
@@ -289,7 +281,7 @@ export default function PaymentSheet({
       ariaLabel="Payment options"
     >
       <div className="psh-body">
-        {PAYMENT_MODE === "frontend-test" && (
+        {RAZORPAY_TEST_MODE && (
           <button
             type="button"
             className="psh-testcard"

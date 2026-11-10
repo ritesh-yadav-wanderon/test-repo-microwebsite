@@ -1,9 +1,11 @@
 import { memo } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import AppLink from "@/components/ui/AppLink";
+import { useAppNav } from "@/hooks/useAppNav";
 import type { Trip } from "@/types";
 import { useWishlist } from "@/context/WishlistContext";
 import { IMAGE_WIDTHS, sizedImageUrl } from "@/repositories";
 import HeartIcon from "@/components/ui/HeartIcon";
+import { tripHref } from "@/utils/tripUrl";
 import "./UpcomingTrips.css";
 import "./TripCardItem.css";
 
@@ -51,7 +53,7 @@ export const TripCardItem = memo(function TripCardItem({ trip, batchesText, href
     : formatBatchesParts(trip.batches);
 
   return (
-    <Link className="tdp2-more-card-v2" to={href ?? `/trip/${trip.slug}`}>
+    <AppLink className="tdp2-more-card-v2" to={href ?? tripHref(trip)}>
       <div className="tdp2-more-cv2-img-wrap">
         {trip.image
           ? <img src={sizedImageUrl(trip.image, IMAGE_WIDTHS.thumb)} alt={trip.title} className="tdp2-more-cv2-img" loading="lazy" />
@@ -110,7 +112,7 @@ export const TripCardItem = memo(function TripCardItem({ trip, batchesText, href
           <p className="tdp2-more-cv2-per">Onwards per person</p>
         </div>
       </div>
-    </Link>
+    </AppLink>
   );
 });
 
@@ -123,9 +125,9 @@ export interface ViewMoreCardProps {
 }
 
 export const ViewMoreCard = memo(function ViewMoreCard({ a, b, to = "/search" }: ViewMoreCardProps) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   return (
-    <button className="tdp2-more-vm-card" type="button" onClick={() => navigate(to)}>
+    <button className="tdp2-more-vm-card" type="button" onClick={() => nav.push(to)}>
       <div className="tdp2-more-vm-imgs">
         <span className="tdp2-more-vm-img tdp2-more-vm-back">
           <img src={b || `${T}trip-2.jpg`} alt="" aria-hidden loading="lazy" />

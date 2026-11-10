@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
+import { useAppSearchParams } from "@/hooks/useAppSearchParams";
 import { STATIC_DATA } from "@/repositories";
 import "./DesktopGallery.css";
 
@@ -26,8 +27,8 @@ const STEP = 300 + 16; // card width + gap
 
 /** Desktop trip image gallery page (Figma 6584:30629). */
 export default function DesktopGallery() {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const nav = useAppNav();
+  const searchParams = useAppSearchParams();
   const [activeTab, setActiveTab] = useState(0);
   const [activeIdx, setActiveIdx] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -57,7 +58,7 @@ export default function DesktopGallery() {
     <div className="dgal">
       {/* ── Slim page header ── */}
       <header className="dgal-header">
-        <button className="dgal-back" type="button" aria-label="Back" onClick={() => navigate(-1)}>
+        <button className="dgal-back" type="button" aria-label="Back" onClick={() => nav.go(-1)}>
           <img src="/figma/compare/arrow-back.svg" alt="" width={24} height={24} aria-hidden />
         </button>
         <span className="dgal-header-title">Gallery</span>

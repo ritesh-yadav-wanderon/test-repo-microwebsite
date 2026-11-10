@@ -1,4 +1,4 @@
-/* SearchBottomSheet — Figma 3014:11251/11249/11248 */
+/* SearchBottomSheet — Figma 3014:11251/11249/11248 (overlay background/blur: 3014:11253) */
 
 /* ── Overlay ── */
 .sbs-overlay {
@@ -12,9 +12,9 @@
   z-index: 1010;
   display: flex;
   justify-content: center;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(16px);
-  background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0.4));
 }
 
 /* ── Sheet ── */
@@ -26,7 +26,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: sbs-slide-up 0.28s cubic-bezier(0.32, 0.72, 0, 1) forwards;
+  animation: sbs-slide-up var(--duration-expressive-md) var(--ease-expressive) forwards;
 }
 
 @keyframes sbs-slide-up {
@@ -86,7 +86,7 @@
   text-align: center;
   line-height: 16px;
 }
-.sbs-cat--active .sbs-cat-label { font-weight: 500; color: #121212; }
+.sbs-cat--active .sbs-cat-label { font-weight: 600; color: #121212; }
 .sbs-cat-bar {
   position: absolute;
   bottom: -8px;
@@ -152,7 +152,7 @@
 
 .sbs-card-title {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: #202020;
   letter-spacing: 0.35px;
   line-height: 16px;
@@ -184,7 +184,7 @@
   line-height: 16px;
   letter-spacing: 0.35px;
 }
-.sbs-row-value--set { color: #015f74; font-weight: 500; }
+.sbs-row-value--set { color: #015f74; font-weight: 600; }
 
 /* ── Where search input ── */
 .sbs-search-wrap {
@@ -303,7 +303,7 @@
 .sbs-toggle-opt--active {
   background: #015f74;
   color: #fff;
-  font-weight: 500;
+  font-weight: 600;
   box-shadow: 0 4px 2px rgba(0,0,0,0.08);
 }
 
@@ -378,7 +378,7 @@
 .cal-dh {
   text-align: center;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: #757575;
   line-height: 20px;
 }
@@ -393,7 +393,7 @@
 .cal-month-name {
   text-align: center;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: #202020;
   padding: 10px 0 6px;
   margin: 0;
@@ -513,7 +513,7 @@
   flex: 1;
   background: transparent;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: #121212;
   text-align: left;
   padding: 0;

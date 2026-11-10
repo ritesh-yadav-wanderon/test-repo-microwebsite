@@ -60,7 +60,7 @@
 
 .dbk-header-title {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   color: #3d3d3d;
 }
@@ -124,7 +124,7 @@
 
 .dbk-package-name {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   color: #3d3d3d;
   display: -webkit-box;
@@ -274,7 +274,7 @@
   flex: 1;
   min-width: 0;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   color: #3d3d3d;
 }
@@ -296,7 +296,7 @@
 
 .dbk-passport-tag span {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 14px;
   letter-spacing: 0.36px;
   color: #a27e17;
@@ -380,8 +380,8 @@
 }
 
 .dbk-select {
-  appearance: none;
   -webkit-appearance: none;
+  appearance: none;
   cursor: pointer;
   padding-right: 40px;
 }
@@ -445,7 +445,7 @@
 /* ── Documents ──────────────────────────────────────────────────────── */
 .dbk-doc-group {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 16px;
   color: #202020;
 }
@@ -546,7 +546,7 @@
 
 .dbk-warn-tag span {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 12px;
   letter-spacing: 0.36px;
   color: #a27e17;
@@ -567,7 +567,7 @@
 
 .dbk-room-name {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   color: #3d3d3d;
 }
@@ -583,7 +583,7 @@
   display: inline-flex;
   align-items: center;
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 13px;
   color: #ababab;
   text-decoration: line-through;
@@ -597,7 +597,7 @@
 
 .dbk-room-price {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #3d3d3d;
 }
@@ -638,7 +638,7 @@
 
 .dbk-step-count {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 18.2px;
   color: #1d201f;
   min-width: 10px;
@@ -657,7 +657,7 @@
   flex: 1;
   min-width: 0;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #3d3d3d;
 }
@@ -705,7 +705,7 @@
   flex: 1;
   min-width: 0;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #3d3d3d;
 }
@@ -739,8 +739,8 @@
 
 /* Checkbox */
 .dbk-checkbox {
-  appearance: none;
   -webkit-appearance: none;
+  appearance: none;
   width: 20px;
   height: 20px;
   border: 1.5px solid #121212;
@@ -833,7 +833,7 @@
 
 .dbk-notes-label {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 18.2px;
   color: #4e4e4e;
 }
@@ -911,7 +911,7 @@
 
 .dbk-bill-pill span {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 15.6px;
   color: #435c3d;
 }
@@ -928,7 +928,7 @@
   justify-content: space-between;
   gap: 4px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 15.6px;
   color: #757575;
 }
@@ -966,7 +966,7 @@
   cursor: pointer;
   font-family: var(--font);
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 15.6px;
   color: #757575;
 }
@@ -987,7 +987,7 @@
   justify-content: space-between;
   gap: 4px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 20px;
   letter-spacing: 0.035px;
   color: #3d3d3d;
@@ -1009,7 +1009,7 @@
   flex: 1;
   min-width: 0;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 18px;
   color: #3d3d3d;
 }
@@ -1045,7 +1045,7 @@
 
 .dbk-rail-tag {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 12px;
   letter-spacing: 0.36px;
   color: #1b0052;
@@ -1077,7 +1077,7 @@
 
 .dbk-rail-price {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: normal;
   color: #323232;
   white-space: nowrap;

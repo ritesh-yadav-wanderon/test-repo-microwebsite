@@ -58,7 +58,7 @@
 .hero-rating-score {
   font-family: var(--font);
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: #fff;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.6);
   white-space: nowrap;
@@ -82,8 +82,8 @@
   max-width: 358px;
   height: 48px;
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(17px);
   -webkit-backdrop-filter: blur(17px);
+  backdrop-filter: blur(17px);
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 30px;
   cursor: pointer;

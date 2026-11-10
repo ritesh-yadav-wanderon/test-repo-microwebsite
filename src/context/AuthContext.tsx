@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { readJSON, removeKey, STORAGE_KEYS, writeJSON } from "@/repositories";
+import { createContext, useContext, type ReactNode } from "react";
+import { STORAGE_KEYS } from "@/repositories";
+import { usePersistentState } from "@/hooks/usePersistentState";
 
 interface User {
   name?: string;
@@ -16,10 +17,6 @@ interface AuthCtx {
   logout: () => void;
 }
 
-function readStoredUser(): User | null {
-  return readJSON<User | null>(STORAGE_KEYS.user, null);
-}
-
 const AuthContext = createContext<AuthCtx>({
   user: null,
   isLoggedIn: false,
@@ -28,25 +25,18 @@ const AuthContext = createContext<AuthCtx>({
   logout: () => {},
 });
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(() => readStoredUser());
-  const [authReady, setAuthReady] = useState(false);
-
-  // Confirm the persisted status once mounted, then mark auth as verified.
-  useEffect(() => {
-    setUser(readStoredUser());
-    setAuthReady(true);
-  }, []);
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const { value: user, setValue: setUser, ready: authReady } = usePersistentState<User | null>(
+    STORAGE_KEYS.user,
+    null
+  );
 
   function login(phone: string, countryCode: string) {
-    const u: User = { phone, countryCode };
-    setUser(u);
-    writeJSON(STORAGE_KEYS.user, u);
+    setUser({ phone, countryCode });
   }
 
   function logout() {
     setUser(null);
-    removeKey(STORAGE_KEYS.user);
   }
 
   return (

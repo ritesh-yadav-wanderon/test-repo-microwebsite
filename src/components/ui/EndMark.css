@@ -31,7 +31,7 @@
 .ftmsg-line1 {
   margin: 0 0 7px;
   font-family: var(--font);
-  font-weight: 500;
+  font-weight: 600;
   font-size: 30px;
   line-height: normal;
   color: #d2d2d2;
@@ -64,7 +64,7 @@
 }
 
 .dfmsg__line--medium {
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 7px;
 }/* "Life's a Trip" sign-off — sits below the two-column body at page level,
    left-aligned with the content gutter, just above the page footer. */
@@ -86,6 +86,6 @@
 }
 
 .pwm-line--medium {
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 7px;
 }

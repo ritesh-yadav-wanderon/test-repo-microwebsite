@@ -69,7 +69,7 @@
   flex-shrink: 0;
   transform: scale(0.864);
   transform-origin: center center;
-  transition: transform 0.25s ease;
+  transition: transform var(--duration-expressive-sm) var(--ease-expressive);
   will-change: transform;
 }
 
@@ -143,7 +143,7 @@
 
 .plot-cap strong {
   font-family: var(--font);
-  font-weight: 500;
+  font-weight: 600;
   font-size: 20px;
   line-height: 24px;
   color: #fff;

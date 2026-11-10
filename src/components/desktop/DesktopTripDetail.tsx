@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import type { Trip, TripGroup } from "@/types";
+import type { ProductData } from "@/repositories";
+import { useAppNav } from "@/hooks/useAppNav";
 import { useCompare } from "@/context/CompareContext";
-import { getRelatedTrips, STATIC_DATA, TDP_FAQS } from "@/repositories";
+import { getRelatedTrips, TDP_FAQS } from "@/repositories";
 import { DayCard, FaqItem, TiFitRow } from "@/components/TripItinerary";
 import { itineraryTransfers, selectedTrip } from "@/utils/tripItinerary";
-import "../../pages/TripDetail.css";
+import "../../views/TripDetail.css";
 import ItineraryCustomiser from "@/components/ItineraryCustomiser";
 import ShareSheet from "@/components/ShareSheet";
 import HeartIcon from "@/components/ui/HeartIcon";
@@ -69,13 +70,20 @@ const TAB_SECTIONS = [
   "dtdp-section-captains",
 ];
 
+export interface DesktopTripDetailProps {
+  /** Already-fetched by the parent TripDetailView's own useProductData()
+   *  call — this component must NOT fetch it again itself. That duplicate
+   *  fetch (both trees independently calling useProductData for the same
+   *  id) was a real bug; receiving `data` as a prop is the fix. */
+  data: ProductData;
+  slug: string;
+}
+
 /** Desktop (≥1024px) product / trip-detail page — Figma frame 3999:11555.
  *  Content (title, itinerary, inclusions, captain, FAQs …) is reused verbatim
  *  from the mobile product page via the shared STATIC_DATA export. */
-export default function DesktopTripDetail() {
-  const data = STATIC_DATA;
-  const navigate = useNavigate();
-  const { slug = "trip" } = useParams<{ slug: string }>();
+export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps) {
+  const nav = useAppNav();
 
   const [wishlisted, setWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
@@ -117,7 +125,7 @@ export default function DesktopTripDetail() {
 
   const gallery = data.gallery.length ? data.gallery : data.heroImages;
   /* Hero image / "View Gallery" clicks open the dedicated gallery page. */
-  const openGallery = (idx = 0) => navigate(`/trip/${slug}/gallery?i=${idx}`);
+  const openGallery = (idx = 0) => nav.push(`/trip/${slug}/gallery?i=${idx}`);
 
   function scrollToSection(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });

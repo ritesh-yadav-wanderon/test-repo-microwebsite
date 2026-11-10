@@ -71,7 +71,7 @@
 .devt__hero-title {
   margin: 0;
   font-size: 28px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 36px;
   letter-spacing: 0.5px;
   text-transform: capitalize;
@@ -114,7 +114,7 @@
   background: #fff;
   color: #3d3d3d;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 12px;
   box-sizing: border-box;
 }
@@ -258,7 +258,7 @@
 .devt__cat-text em {
   font-style: normal;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 15px;
   color: #fff;
   white-space: nowrap;
@@ -308,7 +308,7 @@
 .devt__orig-text em {
   font-style: normal;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   color: #fff;
   white-space: nowrap;
   margin-bottom: 9px;
@@ -368,7 +368,7 @@
 .devt__card-title {
   margin: 0;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 22px;
   color: #fff;
 }
@@ -463,7 +463,7 @@
 
 .devt__fc-name {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #fff;
   text-align: center;

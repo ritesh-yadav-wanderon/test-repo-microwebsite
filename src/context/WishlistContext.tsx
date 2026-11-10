@@ -1,5 +1,6 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { readJSON, STORAGE_KEYS, writeJSON } from "@/repositories";
+import { createContext, useCallback, useContext, useMemo, type ReactNode } from "react";
+import { STORAGE_KEYS } from "@/repositories";
+import { usePersistentState } from "@/hooks/usePersistentState";
 
 /** Minimal trip data stored for a wishlisted trip. */
 export interface WishlistTrip {
@@ -31,33 +32,34 @@ const WishlistContext = createContext<WishlistCtx>({
   clear: () => {},
 });
 
-export function WishlistProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<WishlistTrip[]>(() =>
-    readJSON<WishlistTrip[]>(STORAGE_KEYS.wishlist, [])
+export function WishlistProvider({ children }: { children: ReactNode }) {
+  const { value: items, setValue: setItems } = usePersistentState<WishlistTrip[]>(
+    STORAGE_KEYS.wishlist,
+    []
   );
-
-  useEffect(() => {
-    writeJSON(STORAGE_KEYS.wishlist, items);
-  }, [items]);
 
   const isWishlisted = useCallback(
     (slug: string) => items.some((t) => t.slug === slug),
     [items]
   );
 
-  const toggle = useCallback((trip: WishlistTrip) => {
-    setItems((prev) =>
-      prev.some((t) => t.slug === trip.slug)
-        ? prev.filter((t) => t.slug !== trip.slug)
-        : [...prev, trip]
-    );
-  }, []);
+  const toggle = useCallback(
+    (trip: WishlistTrip) => {
+      setItems((prev) =>
+        prev.some((t) => t.slug === trip.slug)
+          ? prev.filter((t) => t.slug !== trip.slug)
+          : [...prev, trip]
+      );
+    },
+    [setItems]
+  );
 
-  const remove = useCallback((slug: string) => {
-    setItems((prev) => prev.filter((t) => t.slug !== slug));
-  }, []);
+  const remove = useCallback(
+    (slug: string) => setItems((prev) => prev.filter((t) => t.slug !== slug)),
+    [setItems]
+  );
 
-  const clear = useCallback(() => setItems([]), []);
+  const clear = useCallback(() => setItems([]), [setItems]);
 
   const value = useMemo(
     () => ({ items, count: items.length, isWishlisted, toggle, remove, clear }),

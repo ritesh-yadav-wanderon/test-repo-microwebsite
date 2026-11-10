@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { startTripPayment, TEST_CARD } from "@/repositories";
-import { PAYMENT_MODE } from "@/repositories";
+import { RAZORPAY_TEST_MODE } from "@/repositories";
 import { formatINR, type BookingForm } from "@/hooks/useBookingForm";
 import "./DesktopReviewBooking.css";
 import CtaButton from "@/components/ui/CtaButton";
@@ -43,7 +43,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
     passportValidUpto,
     appliedVoucher,
     pricing,
-    bookingReferenceId,
+    orderId,
     handlePaymentSuccess,
   } = form;
 
@@ -97,7 +97,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
     const dueBalance = selected === "full" ? "0" : formatINR(dueLater);
 
     startTripPayment({
-      bookingReferenceId,
+      orderId,
       amount: payNum,
       description: data.tripName,
       prefill: { name: fullName, email, contact: phone },
@@ -105,7 +105,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
       onProcessing: () => setStatus("processing"),
       onSuccess: (result) => {
         handlePaymentSuccess({
-          ...(result as Record<string, unknown>),
+          ...result,
           option: selected,
           amountPaid,
           dueBalance,
@@ -343,7 +343,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
               </button>
             </div>
 
-            {PAYMENT_MODE === "frontend-test" && (
+            {RAZORPAY_TEST_MODE && (
               <button
                 type="button"
                 className="drb-testcard"

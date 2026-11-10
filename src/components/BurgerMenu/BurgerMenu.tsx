@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import { DEST_REGIONS } from "@/repositories";
 import { useAuth } from "@/context/AuthContext";
 import Sheet from "@/components/ui/Sheet";
@@ -20,6 +20,7 @@ const NAV_ITEMS = [
   { label: "Bike Trips",               icon: `${M}icon-bike.svg`,         to: null,             subView: "bike-trips" as const },
   { label: "Categories",              icon: `${M}icon-categories.svg`,   to: null,             subView: "categories" as const },
   { label: "Wishlist",                icon: "/figma/desktop-profile/icon-wishlist.svg", to: "/wishlist", subView: null },
+  { label: "Compare",                 icon: "/figma/nav2/icon-compare.svg",             to: "/compare",  subView: null },
   { label: "Events",                  icon: `${M}icon-events.svg`,       to: "/events",        subView: null },
   { label: "MICE",                    icon: `${M}icon-mice.svg`,         to: "/mice",          subView: null },
   { label: "Blogs",                   icon: `${M}icon-blogs.svg`,        to: "/blog",          subView: null },
@@ -64,7 +65,7 @@ const CATEGORY_GROUP2 = [
 type SubView = "bike-trips" | "about" | "categories" | "destinations" | null;
 
 export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const { isLoggedIn, logout } = useAuth();
   const [subView, setSubView] = useState<SubView>(null);
   const [expandedRegion, setExpandedRegion] = useState<string>("india");
@@ -80,7 +81,7 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
 
   function go(to: string) {
     onClose();
-    navigate(to);
+    nav.push(to);
   }
 
   return (

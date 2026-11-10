@@ -1,7 +1,7 @@
 /** Remembers the last "main website" page (home, listing, destination,
  *  trip details) so account pages can exit back to the site. */
 
-import type { NavigateFunction } from "react-router-dom";
+import type { AppNav } from "@/hooks/useAppNav";
 import { readJSON, STORAGE_KEYS, writeJSON } from "@/repositories";
 
 const MAIN_ROUTES = [
@@ -44,12 +44,12 @@ export function getLastMainPage(): string {
 
 /** Leave the account section for the site page the user came from, unwinding
  *  the account pages out of the history instead of stacking on top of them. */
-export function exitToMainPage(navigate: NavigateFunction): void {
+export function exitToMainPage(nav: Pick<AppNav, "go" | "replace">): void {
   const { url, idx } = readMainPage();
   const current = historyIndex();
   if (idx !== null && current !== null && current > idx) {
-    navigate(idx - current);
+    nav.go(idx - current);
     return;
   }
-  navigate(url, { replace: true });
+  nav.replace(url);
 }

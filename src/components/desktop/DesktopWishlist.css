@@ -48,7 +48,7 @@
 
 .dwl-header-title {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   color: #3d3d3d;
 }
@@ -171,7 +171,7 @@
   border-radius: 30px;
   background: rgba(0, 0, 0, 0.4);
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 12px;
   letter-spacing: 0.03px;
   color: #fff;
@@ -197,7 +197,7 @@
   min-height: 44px;
   margin: 0;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 26px;
   color: #202020;
 }
@@ -217,7 +217,7 @@
   gap: 5px;
   margin-top: 8px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 17px;
   color: #575757;
 }
@@ -230,7 +230,7 @@
 }
 
 .dwl-card-dates strong {
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .dwl-card-price-row {
@@ -274,7 +274,7 @@
 .dwl-empty-title {
   margin: 0;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   color: #202020;
 }
 
@@ -291,6 +291,6 @@
   border-radius: 73px;
   background: #121212;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: #fff;
 }

@@ -1,8 +1,20 @@
 node_modules
 dist
+undefined
 dist-ssr
 *.local
 .DS_Store
 .env
 .vite
 tsconfig.tsbuildinfo
+coverage
+test-results
+playwright-report
+blob-report
+playwright/.cache
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+.vercel

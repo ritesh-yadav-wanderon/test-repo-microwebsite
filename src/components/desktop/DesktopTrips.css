@@ -99,7 +99,7 @@
 
 .dtrips__card-title {
   font-size: 17px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 26px;
   color: #202020;
   display: -webkit-box;
@@ -149,7 +149,7 @@
   border: none;
   background: none;
   font: inherit;
-  font-weight: 500;
+  font-weight: 600;
   color: inherit;
   white-space: nowrap;
   cursor: pointer;
@@ -191,7 +191,7 @@
   background: #fbfbfb;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.16);
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: #4d4d4d;
 }
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import "./OriginalsSection.css";
 
 /* Figma "Inspiring Stories" component — 3113:9840 / 9862 / 9648.
@@ -103,7 +103,7 @@ function SlideMedia({ variant }: { variant: SlideVariant }) {
 
 export default function OriginalsSection() {
   const [active, setActive] = useState(0);
-  const navigate = useNavigate();
+  const nav = useAppNav();
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -113,7 +113,7 @@ export default function OriginalsSection() {
   }, []);
 
   const openDestination = (destination: string) => {
-    navigate(`/destination/${destination}`);
+    nav.push(`/destination/${destination}`);
   };
 
   return (

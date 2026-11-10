@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import "./Footer.css";
 
 const DEST_TABS = [
@@ -53,7 +53,7 @@ function tabFromPath(pathname: string): number {
 }
 
 export default function Footer() {
-  const { pathname } = useLocation();
+  const { pathname } = useAppNav();
   const [activeTab, setActiveTab] = useState(() => tabFromPath(pathname));
 
   return (

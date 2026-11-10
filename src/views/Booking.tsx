@@ -1,0 +1,688 @@
+import PaymentSheet from "@/components/PaymentSheet";
+import LoginSheet from "@/components/LoginSheet";
+import Voucher from "@/components/Voucher";
+import AppLink from "@/components/ui/AppLink";
+import { useIsDesktop } from "@/hooks/useIsDesktop";
+import DesktopBooking from "@/components/desktop/DesktopBooking";
+import { useBookingForm, formatINR, type BookingState } from "@/hooks/useBookingForm";
+import type { BookingDraft } from "@/repositories";
+import Checkbox from "@/components/ui/Checkbox";
+import OptionRow from "@/components/ui/OptionRow";
+import Stepper from "@/components/ui/Stepper";
+import "./Booking.css";
+import CtaButton from "@/components/ui/CtaButton";
+
+const A = "/figma/booking/";
+const TRIP_THUMB = "/figma/trip-hero/hero-bg.png";
+
+export interface BookingViewProps {
+  /** React Router history state — the fast path for a same-tab nav (from
+   *  TripDetail, or between the two booking steps). Undefined on a refresh/
+   *  direct link (or always under Next.js, which falls back to fetching the
+   *  persisted draft by the `?orderId=` query param instead). */
+  navState?: BookingState | null;
+  /** Already-fetched by Next.js's page.tsx server-side, keyed by `?orderId=`. */
+  initialDraftData?: BookingDraft | null;
+}
+
+/** Pure presentational shell — no react-router import — shared as-is with
+ *  Next.js. Navigation goes through useAppNav() directly. */
+export function BookingView({ navState, initialDraftData }: BookingViewProps) {
+  const isDesktop = useIsDesktop();
+  const form = useBookingForm(navState ?? undefined, initialDraftData);
+  const {
+    navigate,
+    data,
+    isPersonalDetails,
+    loginOpen,
+    goToPersonalDetails,
+    goBack,
+    handleLoginSuccess,
+    handleLoginClose,
+    accommodationOpen,
+    setAccommodationOpen,
+    travelers,
+    setTravelers,
+    flexibleCancel,
+    setFlexibleCancel,
+    notesOpen,
+    setNotesOpen,
+    agreed,
+    setAgreed,
+    paymentOpen,
+    setPaymentOpen,
+    orderId,
+    openPayment,
+    firstName,
+    setFirstName,
+    middleName,
+    setMiddleName,
+    lastName,
+    setLastName,
+    gender,
+    setGender,
+    dob,
+    setDob,
+    phone,
+    setPhone,
+    email,
+    setEmail,
+    panNumber,
+    setPanNumber,
+    panFile,
+    setPanFile,
+    passportNumber,
+    setPassportNumber,
+    passportValidUpto,
+    setPassportValidUpto,
+    passportFile,
+    setPassportFile,
+    femaleMin,
+    maleMin,
+    effectiveFemale,
+    effectiveMale,
+    setFemaleCount,
+    setMaleCount,
+    appliedVoucher,
+    setAppliedVoucher,
+    pricing,
+    handlePaymentSuccess,
+  } = form;
+
+  if (isDesktop) {
+    return (
+      <>
+        <DesktopBooking form={form} />
+        <LoginSheet
+          isOpen={loginOpen}
+          onClose={handleLoginClose}
+          onSuccess={handleLoginSuccess}
+        />
+      </>
+    );
+  }
+
+  return (
+    <div className="bkg-page">
+      {/* Fixed top header */}
+      <header className="bkg-header">
+        <div className="bkg-header-left">
+          <button
+            className="bkg-header-back"
+            type="button"
+            aria-label="Back"
+            onClick={goBack}
+          >
+            <img src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+          </button>
+          <span className="bkg-header-title">
+            {isPersonalDetails ? "Personal Details" : "Select Services"}
+          </span>
+        </div>
+        <button
+          className="bkg-header-close"
+          type="button"
+          aria-label="Close"
+          onClick={() => navigate.go(-1)}
+        >
+          <img src={`${A}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+        </button>
+      </header>
+
+      {/* Scrollable body */}
+      <div className="bkg-body">
+        {/* ── Your Trip ─────────────────────────────────────── */}
+        <section className="bkg-section">
+          <div className="bkg-package">
+            <div className="bkg-package-top">
+              <img className="bkg-package-thumb" src={TRIP_THUMB} alt="" loading="lazy" />
+              <p className="bkg-package-name">{data.tripTitle}</p>
+            </div>
+
+            <div className="bkg-package-duration">
+              <div className="bkg-dur-label">
+                <img src={`${A}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
+                <span>Trip Duration:</span>
+              </div>
+              <div className="bkg-dur-values">
+                <span>{data.dateRange}</span>
+                <span>{data.durationLabel}</span>
+              </div>
+            </div>
+
+            <div className="bkg-package-divider" />
+
+            <div className="bkg-package-pd">
+              <div className="bkg-pd-col">
+                <div className="bkg-pd-label">
+                  <img src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
+                  <span>Pick Up</span>
+                </div>
+                <p className="bkg-pd-place">{data.pickUp}</p>
+              </div>
+              <div className="bkg-pd-col bkg-pd-col--right">
+                <div className="bkg-pd-label">
+                  <img src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
+                  <span>Drop</span>
+                </div>
+                <p className="bkg-pd-place">{data.drop}</p>
+              </div>
+            </div>
+
+            <div className="bkg-cities">
+              {data.cities.map((c, i) => (
+                <span className="bkg-city" key={i}>
+                  {i > 0 && <span className="bkg-city-dot" aria-hidden />}
+                  {c}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {isPersonalDetails && (<>
+        <div className="bkg-strip" />
+
+        {/* ── Personal Details ──────────────────────────────── */}
+        <section className="bkg-section bkg-section--gap">
+          <div className="bkg-subhead">
+            <span className="bkg-section-icon">
+              <img src={`${A}icon-person2.svg`} width={16} height={16} alt="" aria-hidden />
+            </span>
+            <span className="bkg-section-title">Personal Details</span>
+          </div>
+
+          <div className="bkg-passport-tag">
+            <img src={`${A}icon-passport.svg`} width={23} height={16} alt="" aria-hidden />
+            <span>
+              Enter your full first and last name as stated in your ID or passport, including any
+              middle name(s) and/or initials.
+            </span>
+          </div>
+
+          <div className="bkg-form">
+            <div className="bkg-field">
+              <input
+                id="bkg-fn"
+                className="bkg-input"
+                placeholder=" "
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              <label htmlFor="bkg-fn" className="bkg-flabel">First Name*</label>
+            </div>
+
+            <div className="bkg-field">
+              <input
+                id="bkg-mn"
+                className="bkg-input"
+                placeholder=" "
+                value={middleName}
+                onChange={(e) => setMiddleName(e.target.value)}
+              />
+              <label htmlFor="bkg-mn" className="bkg-flabel">Middle Name</label>
+            </div>
+
+            <div className="bkg-field">
+              <input
+                id="bkg-ln"
+                className="bkg-input"
+                placeholder=" "
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+              <label htmlFor="bkg-ln" className="bkg-flabel">Last Name*</label>
+            </div>
+
+            <div className="bkg-field">
+              <select
+                id="bkg-gender"
+                className={`bkg-input bkg-select${gender ? "" : " bkg-select--empty"}`}
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+              >
+                <option value="" disabled hidden></option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="other">Other</option>
+              </select>
+              <label htmlFor="bkg-gender" className="bkg-flabel">Gender*</label>
+              <span className="bkg-field-icon" aria-hidden>
+                <img src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
+              </span>
+            </div>
+
+            <div className="bkg-field bkg-field--float">
+              <input
+                id="bkg-dob"
+                className="bkg-input"
+                placeholder="DD-MM-YYYY"
+                value={dob}
+                onChange={(e) => setDob(e.target.value)}
+              />
+              <label htmlFor="bkg-dob" className="bkg-flabel">Date Of Birth*</label>
+              <span className="bkg-field-icon" aria-hidden>
+                <img src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
+              </span>
+            </div>
+
+            <div className="bkg-phone">
+              <button className="bkg-phone-code" type="button">
+                <span>IN +91</span>
+                <img src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
+              </button>
+              <div className="bkg-field bkg-field--grow">
+                <input
+                  id="bkg-phone"
+                  className="bkg-input"
+                  placeholder=" "
+                  inputMode="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
+                <label htmlFor="bkg-phone" className="bkg-flabel">WhatsApp Number*</label>
+              </div>
+            </div>
+
+            <div className="bkg-field">
+              <input
+                id="bkg-email"
+                className="bkg-input"
+                type="email"
+                placeholder=" "
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <label htmlFor="bkg-email" className="bkg-flabel">Email address*</label>
+            </div>
+          </div>
+        </section>
+
+        <div className="bkg-strip" />
+
+        {/* ── Documents ─────────────────────────────────────── */}
+        <section className="bkg-section bkg-section--gap">
+          <div className="bkg-subhead">
+            <span className="bkg-section-icon">
+              <img src={`${A}icon-id-card.svg`} width={16} height={16} alt="" aria-hidden />
+            </span>
+            <span className="bkg-section-title">Documents</span>
+          </div>
+
+          <div className="bkg-form">
+            <p className="bkg-doc-group">PAN Card</p>
+
+            <div className="bkg-field">
+              <input
+                id="bkg-pan"
+                className="bkg-input"
+                placeholder=" "
+                value={panNumber}
+                onChange={(e) => setPanNumber(e.target.value.toUpperCase())}
+              />
+              <label htmlFor="bkg-pan" className="bkg-flabel">PAN Number*</label>
+            </div>
+
+            <label className={`bkg-upload${panFile ? " bkg-upload--filled" : ""}`}>
+              <span className="bkg-upload-label">
+                {panFile ? panFile.name : "Upload PAN Card Front Image*"}
+              </span>
+              <img src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
+              <input
+                type="file"
+                accept="image/*,.pdf"
+                className="bkg-upload-input"
+                onChange={(e) => setPanFile(e.target.files?.[0] ?? null)}
+              />
+            </label>
+
+            <p className="bkg-doc-group">Passport</p>
+
+            <div className="bkg-doc-tag">
+              <img src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
+              <span>Minimum passport validity upto 3rd January 2027.</span>
+            </div>
+
+            <div className="bkg-doc-row">
+              <div className="bkg-field bkg-field--grow">
+                <input
+                  id="bkg-passport"
+                  className="bkg-input"
+                  placeholder=" "
+                  value={passportNumber}
+                  onChange={(e) => setPassportNumber(e.target.value.toUpperCase())}
+                />
+                <label htmlFor="bkg-passport" className="bkg-flabel">Passport Number*</label>
+              </div>
+              <div className="bkg-field bkg-field--grow">
+                <input
+                  id="bkg-passport-valid"
+                  className="bkg-input"
+                  placeholder=" "
+                  value={passportValidUpto}
+                  onChange={(e) => setPassportValidUpto(e.target.value)}
+                />
+                <label htmlFor="bkg-passport-valid" className="bkg-flabel">Passport Valid Upto*</label>
+                <span className="bkg-field-icon" aria-hidden>
+                  <img src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
+                </span>
+              </div>
+            </div>
+
+            <label className={`bkg-upload${passportFile ? " bkg-upload--filled" : ""}`}>
+              <span className="bkg-upload-label">
+                {passportFile ? passportFile.name : "Upload Passport Front*"}
+              </span>
+              <img src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
+              <input
+                type="file"
+                accept="image/*,.pdf"
+                className="bkg-upload-input"
+                onChange={(e) => setPassportFile(e.target.files?.[0] ?? null)}
+              />
+            </label>
+          </div>
+        </section>
+
+        <div className="bkg-strip" />
+        </>)}
+
+        {!isPersonalDetails && (<>
+        {/* ── Select Accommodation Type ─────────────────────── */}
+        <section className="bkg-section bkg-section--pad0">
+          <button
+            className="bkg-accordion-head"
+            type="button"
+            onClick={() => setAccommodationOpen((v) => !v)}
+            aria-expanded={accommodationOpen}
+          >
+            <span className="bkg-section-icon">
+              <img src={`${A}icon-villa.svg`} width={16} height={16} alt="" aria-hidden />
+            </span>
+            <span className="bkg-section-title">Select Accommodation Type</span>
+            <span
+              className={`bkg-caret${accommodationOpen ? " bkg-caret--open" : ""}`}
+              aria-hidden
+            >
+              <img src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
+            </span>
+          </button>
+
+          {accommodationOpen && (
+            <div className="bkg-accommodation">
+              <div className="bkg-warn-tag">
+                <img src={`${A}icon-info-yellow.svg`} width={14} height={14} alt="" aria-hidden />
+                <span>Add total number of travelers</span>
+              </div>
+
+              <div className="bkg-room-row">
+                <div className="bkg-room-info">
+                  <p className="bkg-room-name">Hotel - (Double Sharing)</p>
+                  <div className="bkg-room-price-line">
+                    <span className="bkg-room-strike">
+                      <img src={`${A}icon-rupee.svg`} width={10} height={10} alt="" aria-hidden />
+                      {data.perPersonStrike}/-
+                    </span>
+                    <span className="bkg-room-price">&#8377; {data.perPerson}/-</span>
+                    <span className="bkg-room-per">per person</span>
+                  </div>
+                </div>
+                <Stepper
+                  value={travelers}
+                  onChange={setTravelers}
+                  classPrefix="bkg"
+                  decreaseLabel="Decrease travelers"
+                  increaseLabel="Increase travelers"
+                />
+              </div>
+            </div>
+          )}
+        </section>
+
+        {travelers > 1 && (
+          <>
+            <div className="bkg-strip" />
+
+            {/* ── Who are you booking for? ──────────────────────── */}
+            <section className="bkg-section bkg-section--pad0">
+              <div className="bkg-subhead bkg-subhead--pad">
+                <span className="bkg-section-icon">
+                  <img src={`${A}icon-groups.svg`} width={16} height={16} alt="" aria-hidden />
+                </span>
+                <span className="bkg-section-title">Who are you booking for?</span>
+              </div>
+
+              <div className="bkg-bookingfor">
+                <div className="bkg-bf-row">
+                  <div className="bkg-bf-col">
+                    <span className="bkg-bf-label">Female</span>
+                    <Stepper
+                      value={effectiveFemale}
+                      onChange={setFemaleCount}
+                      min={femaleMin}
+                      classPrefix="bkg"
+                      disableAtBounds
+                      decreaseLabel="Decrease female travelers"
+                      increaseLabel="Increase female travelers"
+                    />
+                  </div>
+
+                  <div className="bkg-bf-divider" aria-hidden />
+
+                  <div className="bkg-bf-col">
+                    <span className="bkg-bf-label">Male</span>
+                    <Stepper
+                      value={effectiveMale}
+                      onChange={setMaleCount}
+                      min={maleMin}
+                      classPrefix="bkg"
+                      disableAtBounds
+                      decreaseLabel="Decrease male travelers"
+                      increaseLabel="Increase male travelers"
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+          </>
+        )}
+
+        <div className="bkg-strip" />
+
+        {/* ── Flexible Cancellation ─────────────────────────── */}
+        <section className="bkg-section">
+          <OptionRow
+            checked={flexibleCancel}
+            onChange={setFlexibleCancel}
+            classPrefix="bkg-option"
+            checkboxClassName="bkg-checkbox"
+            icon={<img src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />}
+            label="Flexible Cancellation"
+            price={<>+ &#8377;5,999/-</>}
+          />
+          <p className="bkg-option-desc">
+            Want more flexibility with your booking? Purchase our Flexible Cancellation to cover
+            your trip up to 1 day before departure.
+          </p>
+        </section>
+
+        <div className="bkg-strip" />
+
+        {/* ── Insurance ─────────────────────────────────────── */}
+        <section className="bkg-section">
+          <div className="bkg-insurance">
+            <p className="bkg-insurance-title">Medical and Baggage Insurance included</p>
+            <p className="bkg-insurance-desc">
+              The price includes Medical and Baggage Insurance which covers all services included in
+              the WanderOn trip. International flights and any arrangements booked independently
+              outside of the WeRoad trip are excluded. Any pre-existing medical condition is also
+              excluded.
+            </p>
+          </div>
+        </section>
+
+        <div className="bkg-strip" />
+        </>)}
+
+        {/* ── Coupon + Bill Summary ─────────────────────────── */}
+        <section className="bkg-section bkg-section--gap">
+          <Voucher
+            initialVoucher={appliedVoucher}
+            onApply={(v) => setAppliedVoucher(v)}
+            onRemove={() => setAppliedVoucher(null)}
+          />
+
+          <div className="bkg-bill">
+            <div className="bkg-bill-head">
+              <img src={`${A}icon-receipt.svg`} width={16} height={16} alt="" aria-hidden />
+              <span>Bill Summary</span>
+            </div>
+
+            <div className="bkg-bill-rows">
+              <div className="bkg-bill-row">
+                <span>Hotel - (Double Sharing)</span>
+                <span>&#8377;{formatINR(pricing.perPersonNum)}/- x {travelers}</span>
+              </div>
+              {flexibleCancel && (
+                <div className="bkg-bill-row">
+                  <span>Flexible Cancellation</span>
+                  <span>+&#8377;{formatINR(pricing.flexTotal)}/-</span>
+                </div>
+              )}
+            </div>
+
+            <div className="bkg-bill-divider" />
+
+            <div className="bkg-bill-rows">
+              {pricing.voucherDiscount > 0 && appliedVoucher && (
+                <div className="bkg-bill-row">
+                  <span>Voucher - {appliedVoucher.code}</span>
+                  <span>-&#8377;{formatINR(pricing.voucherDiscount)}/-</span>
+                </div>
+              )}
+              {pricing.wanderOnDiscount > 0 && (
+                <div className="bkg-bill-row">
+                  <span>WanderOn Discount - (Upto &#8377;500 Off)</span>
+                  <span>-&#8377;{formatINR(pricing.wanderOnDiscount)}/-</span>
+                </div>
+              )}
+              <div className="bkg-bill-row">
+                <span className="bkg-bill-strong">GST @ 5%</span>
+                <span>&#8377;{formatINR(pricing.gst)}/-</span>
+              </div>
+              <div className="bkg-bill-row">
+                <button className="bkg-bill-tcs" type="button">
+                  <span>TCS @ 5%</span>
+                  <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
+                </button>
+                <span>&#8377;{formatINR(pricing.tcs)}/-</span>
+              </div>
+            </div>
+
+            <div className="bkg-bill-divider" />
+
+            <div className="bkg-bill-total">
+              <span>To Pay</span>
+              <span>&#8377;{formatINR(pricing.toPay)}/-</span>
+            </div>
+
+            {pricing.saved > 0 && (
+              <div className="bkg-saved">
+                <img src={`${A}icon-person.svg`} width={24} height={24} alt="" aria-hidden />
+                <span className="bkg-saved-amt">&#8377;{formatINR(pricing.saved)}/-</span>
+                <span className="bkg-saved-text">saved on this trip.</span>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {isPersonalDetails && (<>
+        <div className="bkg-strip" />
+
+        {/* ── Notes ─────────────────────────────────────────── */}
+        <section className="bkg-section">
+          <button
+            className="bkg-notes"
+            type="button"
+            onClick={() => setNotesOpen((v) => !v)}
+            aria-expanded={notesOpen}
+          >
+            <span className="bkg-notes-label">Notes</span>
+            <span className={`bkg-caret${notesOpen ? " bkg-caret--open" : ""}`} aria-hidden>
+              <img src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
+            </span>
+          </button>
+        </section>
+
+        {/* ── Agreement ─────────────────────────────────────── */}
+        <section className="bkg-agree">
+          <Checkbox
+            checked={agreed}
+            onChange={setAgreed}
+            className="bkg-checkbox bkg-checkbox--round"
+          />
+          <p className="bkg-agree-text">
+            I agree to the <AppLink to="/legal">Payment Terms</AppLink>, <AppLink to="/legal">Cancellation Policy</AppLink>,
+            General <AppLink to="/legal">Terms &amp; Conditions</AppLink>, and <AppLink to="/legal">Privacy Policy</AppLink>.
+          </p>
+        </section>
+        </>)}
+      </div>
+
+      {/* Fixed bottom CTA */}
+      <div className="bkg-cta">
+        <div className="bkg-cta-tags">
+          <img src={`${A}icon-your-trips.svg`} width={16} height={16} alt="" aria-hidden />
+          <span className="bkg-cta-tag">Europe Trip</span>
+          <span className="bkg-cta-dot" aria-hidden />
+          <span className="bkg-cta-tag">{data.dateRange}</span>
+          {travelers > 0 && (
+            <>
+              <span className="bkg-cta-dot" aria-hidden />
+              <span className="bkg-cta-tag">
+                {travelers} {travelers === 1 ? "Traveller" : "Travellers"}
+              </span>
+            </>
+          )}
+        </div>
+        <div className="bkg-cta-bar">
+          <div className="bkg-cta-price-col">
+            <span className="bkg-cta-price">&#8377; {formatINR(pricing.toPay)}/-</span>
+            <button className="bkg-cta-fee" type="button">
+              <span>+</span>
+              <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
+              <span>Convenience fee</span>
+            </button>
+          </div>
+          <CtaButton
+            className="bkg-cta-btn"
+            disabled={isPersonalDetails && !agreed}
+            onClick={() => isPersonalDetails ? openPayment() : goToPersonalDetails()}
+          >
+            <span>{isPersonalDetails ? "Proceed to Payment" : "Book Now"}</span>
+          </CtaButton>
+        </div>
+      </div>
+
+      <PaymentSheet
+        isOpen={paymentOpen}
+        onClose={() => setPaymentOpen(false)}
+        totalAmount={formatINR(pricing.toPay)}
+        savedAmount={String(pricing.saved)}
+        orderId={orderId}
+        description={data.tripName}
+        prefill={{
+          name: [firstName, middleName, lastName].filter(Boolean).join(" ").trim(),
+          email,
+          contact: phone,
+        }}
+        onPaymentSuccess={handlePaymentSuccess}
+      />
+      <LoginSheet
+        isOpen={loginOpen}
+        onClose={handleLoginClose}
+        onSuccess={handleLoginSuccess}
+      />
+    </div>
+  );
+}

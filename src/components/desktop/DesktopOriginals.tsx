@@ -1,15 +1,15 @@
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import "./DesktopOriginals.css";
 
 const BASE = "/figma/desktop";
 
 /** "We don't do surface level" originals banner (Figma 5154:26012 / 2914:8636). */
 export default function DesktopOriginals() {
-  const navigate = useNavigate();
+  const nav = useAppNav();
 
   return (
     <section className="dorig">
-      <div className="dorig__card" onClick={() => navigate("/search")} role="button" tabIndex={0}>
+      <div className="dorig__card" onClick={() => nav.push("/search")} role="button" tabIndex={0}>
         <div className="dorig__climber">
           <img src={`${BASE}/originals-climber.png`} alt="" loading="lazy" />
         </div>

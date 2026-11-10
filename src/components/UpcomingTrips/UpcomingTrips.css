@@ -157,7 +157,7 @@
   margin: 0;
   font-family: "Roboto", sans-serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 18px;
   color: #202020;
   display: -webkit-box;
@@ -176,7 +176,7 @@
 .up-card-dur {
   font-family: "Roboto", sans-serif;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: #575757;
 }
 
@@ -190,7 +190,7 @@
 }
 
 .up-card-batches-more {
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .up-card-price {
@@ -272,7 +272,7 @@
   margin: 0;
   font-family: "Roboto", sans-serif;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: #4d4d4d;
   text-align: center;
   white-space: nowrap;

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import type { CoTravellerData } from "@/components/CoTravellerSheet";
 import CancelBookingSheet from "@/components/CancelBookingSheet";
 import EndMark from "@/components/ui/EndMark";
 import { useBooking } from "@/context/BookingContext";
-import { BILL_ITEMS } from "@/repositories";
+import { BILL_ITEMS, updateBookingDraft } from "@/repositories";
 import { startTripPayment } from "@/repositories";
 import "./DesktopMyBooking.css";
 import CtaButton from "@/components/ui/CtaButton";
@@ -77,6 +77,9 @@ export interface DesktopMyBookingData {
   tripTitle: string;
   tripName: string;
   travellerName: string;
+  /** Mobile number + email stored on the booking — required to pay. */
+  phone: string;
+  email: string;
   travelers: number;
   durationLabel: string;
   pickUp: string;
@@ -102,7 +105,7 @@ export default function DesktopMyBooking({
   initialTab,
   fromList,
 }: DesktopMyBookingProps) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const { statusOf, requestCancellation } = useBooking();
   const bookingStatus = statusOf(refId);
 
@@ -148,10 +151,10 @@ export default function DesktopMyBooking({
   const hasDue = dueNum > 0;
 
   // Per design feedback, the desktop back button always lands on the profile page.
-  const goBack = () => navigate("/profile");
+  const goBack = () => nav.push("/profile");
 
   const goToCancellation = () =>
-    navigate(`/bookings/${refId}/cancellation`, {
+    nav.push(`/bookings/${refId}/cancellation`, {
       state: {
         tripTitle: data.tripTitle,
         tripDuration: `${data.pickUpDate} - ${data.dropDate} | ${data.durationLabel}`,
@@ -171,10 +174,10 @@ export default function DesktopMyBooking({
     if (!hasDue || payLoading) return;
     setPayError(null);
     startTripPayment({
-      bookingReferenceId: refId,
+      orderId: refId,
       amount: dueNum,
       description: data.tripName,
-      prefill: { name: data.travellerName, email: "shivam.trivedi@wanderon.in" },
+      prefill: { name: data.travellerName, email: data.email, contact: data.phone },
       setLoading: setPayLoading,
       onSuccess: (result) => {
         const r = (result || {}) as { amountPaid?: string; dueBalance?: string };
@@ -187,9 +190,18 @@ export default function DesktopMyBooking({
             minute: "2-digit",
             hour12: true,
           });
+        // Persist the payment result — same fix as useBookingForm's initial
+        // checkout: a refresh on the success/booking-detail page must see
+        // real data, not fall back to a fixture.
+        updateBookingDraft(refId, {
+          status: "paid",
+          amountPaid: r.amountPaid ?? data.dueBalance,
+          dueBalance: r.dueBalance ?? "0",
+          paymentMethod: "UPI",
+          paidAt,
+        });
         // Buttonless confirmation, then back to the Payments tab of this page.
-        navigate(`/bookings/${refId}/success`, {
-          replace: true,
+        nav.replace(`/bookings/${refId}/success`, {
           state: {
             ref: refId,
             travellerName: data.travellerName,

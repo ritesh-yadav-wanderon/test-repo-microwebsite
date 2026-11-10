@@ -1,5 +1,6 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { readJSON, STORAGE_KEYS, writeJSON } from "@/repositories";
+import { createContext, useCallback, useContext, useMemo, type ReactNode } from "react";
+import { STORAGE_KEYS } from "@/repositories";
+import { usePersistentState } from "@/hooks/usePersistentState";
 
 /** Minimal trip data needed to represent an entry in the compare tray. */
 export interface CompareTrip {
@@ -28,33 +29,34 @@ const CompareContext = createContext<CompareCtx>({
   clear: () => {},
 });
 
-export function CompareProvider({ children }: { children: React.ReactNode }) {
-  const [items, setItems] = useState<CompareTrip[]>(() =>
-    readJSON<CompareTrip[]>(STORAGE_KEYS.compare, [])
+export function CompareProvider({ children }: { children: ReactNode }) {
+  const { value: items, setValue: setItems } = usePersistentState<CompareTrip[]>(
+    STORAGE_KEYS.compare,
+    []
   );
-
-  useEffect(() => {
-    writeJSON(STORAGE_KEYS.compare, items);
-  }, [items]);
 
   const isInCompare = useCallback(
     (slug: string) => items.some((t) => t.slug === slug),
     [items]
   );
 
-  const toggle = useCallback((trip: CompareTrip) => {
-    setItems((prev) =>
-      prev.some((t) => t.slug === trip.slug)
-        ? prev.filter((t) => t.slug !== trip.slug)
-        : [...prev, trip]
-    );
-  }, []);
+  const toggle = useCallback(
+    (trip: CompareTrip) => {
+      setItems((prev) =>
+        prev.some((t) => t.slug === trip.slug)
+          ? prev.filter((t) => t.slug !== trip.slug)
+          : [...prev, trip]
+      );
+    },
+    [setItems]
+  );
 
-  const remove = useCallback((slug: string) => {
-    setItems((prev) => prev.filter((t) => t.slug !== slug));
-  }, []);
+  const remove = useCallback(
+    (slug: string) => setItems((prev) => prev.filter((t) => t.slug !== slug)),
+    [setItems]
+  );
 
-  const clear = useCallback(() => setItems([]), []);
+  const clear = useCallback(() => setItems([]), [setItems]);
 
   const value = useMemo(
     () => ({ items, count: items.length, isInCompare, toggle, remove, clear }),

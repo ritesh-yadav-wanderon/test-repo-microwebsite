@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import { DEFAULT_BATCHES, getBatchStatus, type BatchItem } from "@/repositories";
 import Sheet from "@/components/ui/Sheet";
 import "./DesktopBatchesSheet.css";
@@ -171,7 +171,7 @@ export default function DesktopBatchesSheet({
   ctaLabel = "Book Trip",
   onSelectBatch,
 }: Props) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const [selectedMonth, setSelectedMonth] = useState("");
 
 
@@ -194,7 +194,7 @@ export default function DesktopBatchesSheet({
     [batches, activeMonth]
   );
 
-  const goToBooking = (state: Record<string, unknown>) => navigate("/booking", { state });
+  const goToBooking = (state: Record<string, unknown>) => nav.push("/booking", { state });
 
   const handleBook = (batch: BatchItem, startDate: Date, endDate: Date) => {
     if (onSelectBatch) {

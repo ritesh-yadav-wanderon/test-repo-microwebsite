@@ -1,11 +1,12 @@
 import { memo } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import type { Trip } from "@/types";
 import { useCompare } from "@/context/CompareContext";
 import { useWishlist } from "@/context/WishlistContext";
 import HeartIcon from "@/components/ui/HeartIcon";
 import "./TripCard.css";
 import CtaButton from "@/components/ui/CtaButton";
+import { tripHref } from "@/utils/tripUrl";
 
 function fmtDate(d: string): string {
   const dt = new Date(d);
@@ -54,7 +55,7 @@ export interface TripCardProps {
 }
 
 function TripCard({ trip, onSeeAllDates, eager, showFeatures = true }: TripCardProps) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const { isInCompare, toggle } = useCompare();
   const { isWishlisted, toggle: toggleWishlist } = useWishlist();
   const {
@@ -115,7 +116,7 @@ function TripCard({ trip, onSeeAllDates, eager, showFeatures = true }: TripCardP
   // Strike price is not part of the API response yet — static per design.
   const strikeDisplay = STATIC_STRIKE;
 
-  const goToTrip = () => navigate(`/trip/${trip.slug}`);
+  const goToTrip = () => nav.push(tripHref(trip));
 
   return (
     <article className={`tc${recommended ? " tc--recommended" : ""}`}>

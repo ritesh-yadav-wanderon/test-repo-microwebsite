@@ -32,6 +32,20 @@ export async function postJSON<T>(url: string, body: unknown): Promise<T> {
   return json as T;
 }
 
+/** PATCH a JSON body and read the JSON reply (or null for an empty body). */
+export async function patchJSON<T>(url: string, body: unknown): Promise<T> {
+  const res = await fetch(url, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const json = (await res.json().catch(() => null)) as unknown;
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status} for ${url}`);
+  }
+  return json as T;
+}
+
 /** Narrowing helper for walking untyped API payloads. */
 export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;

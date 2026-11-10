@@ -11,8 +11,8 @@ APIs.
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173
-npm run build    # production build -> dist/
+npm run dev      # http://localhost:3000 (Next.js)
+npm run build    # production build
 ```
 
 ## Data sources (read-only)

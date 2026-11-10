@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import {
   TABS,
   PLANNING_WITH,
@@ -21,25 +21,26 @@ interface DesktopFilterSheetProps {
   isOpen: boolean;
   onClose: () => void;
   initialTab?: number;
+  /** See FilterSheetProps.searchParams — same reasoning applies here. */
+  searchParams?: URLSearchParams;
 }
 
 /** Desktop filters popover (Figma 6595:32717) — anchored beside the Filters
  *  button. Options and interactions are shared with the mobile FilterSheet. */
-export default function DesktopFilterSheet({ isOpen, onClose, initialTab = 0 }: DesktopFilterSheetProps) {
+export default function DesktopFilterSheet({ isOpen, onClose, initialTab = 0, searchParams }: DesktopFilterSheetProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [selections, setSelections] = useState<Record<string, Set<string>>>(() =>
     Object.fromEntries(TABS.map((t) => [t, new Set<string>()]))
   );
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const nav = useAppNav();
 
   // Re-seed from the URL each time the popover opens.
   useEffect(() => {
     if (!isOpen) return;
     setActiveTab(initialTab);
-    setSelections(seedFromParams(searchParams));
+    setSelections(seedFromParams(searchParams ?? new URLSearchParams()));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOpen, initialTab]);
+  }, [isOpen, initialTab, searchParams]);
 
   // Close on outside click / Escape (toggling buttons must stopPropagation).
   useEffect(() => {
@@ -73,7 +74,7 @@ export default function DesktopFilterSheet({ isOpen, onClose, initialTab = 0 }: 
   function handleShowResults() {
     const qs = buildSearchParams(selections);
     onClose();
-    navigate(`/search${qs ? `?${qs}` : ""}`);
+    nav.push(`/search${qs ? `?${qs}` : ""}`);
   }
 
   const activeTabName = TABS[activeTab];

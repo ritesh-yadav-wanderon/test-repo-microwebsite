@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import AppLink from "@/components/ui/AppLink";
 import Voucher from "@/components/Voucher";
 import DesktopReviewBooking from "./DesktopReviewBooking";
 import { formatINR, type BookingForm } from "@/hooks/useBookingForm";
@@ -541,10 +541,10 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
               {isPersonalDetails && <div className="dbk-agree">
                 <Checkbox checked={agreed} onChange={setAgreed} className="dbk-checkbox" />
                 <p className="dbk-agree-text">
-                  I agree to the <Link to="/legal">Payment Terms</Link>,{" "}
-                  <Link to="/legal">Cancellation Policy</Link>, General{" "}
-                  <Link to="/legal">Terms &amp; Conditions</Link>, and{" "}
-                  <Link to="/legal">Privacy Policy</Link>.
+                  I agree to the <AppLink to="/legal">Payment Terms</AppLink>,{" "}
+                  <AppLink to="/legal">Cancellation Policy</AppLink>, General{" "}
+                  <AppLink to="/legal">Terms &amp; Conditions</AppLink>, and{" "}
+                  <AppLink to="/legal">Privacy Policy</AppLink>.
                 </p>
               </div>}
             </div>

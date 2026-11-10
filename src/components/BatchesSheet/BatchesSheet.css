@@ -113,6 +113,7 @@
   gap: 4px;
   padding: 6px 8px;
   background: #f1ebff;
+  -webkit-backdrop-filter: blur(7px);
   backdrop-filter: blur(7px);
   flex-shrink: 0;
   z-index: 3;
@@ -134,7 +135,7 @@
 .bsh-tag-label {
   font-family: "Roboto", sans-serif;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.3px;
   line-height: 12px;
   color: #1b0052;
@@ -273,7 +274,7 @@
 .bsh-card-date-main {
   font-family: "Roboto", sans-serif;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 15.6px;
   color: #3d3d3d;
   white-space: nowrap;

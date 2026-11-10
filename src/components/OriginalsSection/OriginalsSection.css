@@ -68,7 +68,7 @@
   margin: 0;
   font-family: "Roboto Condensed", "Roboto", sans-serif;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.2;
   color: #3d3d3d;
 }
@@ -92,8 +92,8 @@
   border: 0.667px solid rgba(61, 61, 61, 0.35);
   border-radius: 32px;
   background: rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(10px) saturate(140%);
   -webkit-backdrop-filter: blur(10px) saturate(140%);
+  backdrop-filter: blur(10px) saturate(140%);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.45);
   cursor: pointer;

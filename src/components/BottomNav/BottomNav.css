@@ -1,4 +1,4 @@
-/* Bottom nav — Figma 5068:18463 */
+/* Bottom nav — trip-type switcher (Figma 8264:7794) */
 
 .bottom-nav {
   position: fixed;
@@ -65,13 +65,16 @@
   transition: background 0.15s ease;
 }
 
-/* Center logo button — background only applies when active via bn-item--active */
-.bn-item--logo {
-}
-
 /* Active route highlight */
 .bn-item--active {
-  background: #f0f0f0;
+  background: #f5f4f4;
+  border-radius: 51px;
+}
+
+/* Weekend trips' label is the longest — Figma pins this one item to a wider
+   fixed width instead of the equal flex share the other three get. */
+.bn-item--weekend {
+  flex: 0 0 85px;
 }
 
 /* Icon wrapper */
@@ -89,12 +92,6 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
-}
-
-/* Larger logo icon */
-.bn-ico--logo {
-  width: 40px;
-  height: 40px;
 }
 
 /* Label */
@@ -117,34 +114,49 @@
   color: #fff;
 }
 
-/* Center logo sits on its own black rounded backing */
-.bn-pill--dark .bn-item--logo {
-  background: #000;
-}
-
 .bn-pill--dark .bn-item--active {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.bn-pill--dark .bn-item--logo.bn-item--active {
-  background: #000;
+/* These icons only ship as dark-stroke assets — force them to white rather
+   than maintaining a second recolored SVG set per icon. */
+.bn-pill--dark .bn-ico img {
+  filter: brightness(0) invert(1);
 }
 
-/* Compare count badge */
-.bn-badge {
+/* ── Floating WhatsApp FAB — replaces the old in-pill Chat tab. Floats
+   directly above the pill, same positioning trick as the product pages'
+   own tdp2-wa-fab (anchored to the fixed bar via bottom: 100%). ── */
+.bn-wa-fab {
   position: absolute;
-  top: 2px;
-  left: calc(50% + 12px);
-  width: 20px;
-  height: 20px;
-  background: #fff2c2;
-  border-radius: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font);
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 12px;
-  color: #332900;
+  right: 12px;
+  bottom: 100%;
+  margin-bottom: 10px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  -webkit-tap-highlight-color: transparent;
+}
+.bn-wa-fab-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ── Promo tile — decorative, not a nav link (Figma's own reference markup
+   doesn't wrap it in a clickable element either). ── */
+.bn-promo {
+  flex-shrink: 0;
+  width: 47px;
+  height: 41px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.bn-promo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }

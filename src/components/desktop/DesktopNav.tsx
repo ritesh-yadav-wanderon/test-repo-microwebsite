@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import { useAuth } from "@/context/AuthContext";
 import { openLoginSheet } from "@/utils/login";
 import { getScrollTop, onAppScroll } from "@/utils/scroll";
@@ -98,7 +98,7 @@ interface DesktopNavProps {
  *  Transparent over the hero on load; fills white once the page scrolls or
  *  the destinations dropdown opens (black blur instead when `dark`). */
 export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = false, dark = false }: DesktopNavProps) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const { isLoggedIn, logout } = useAuth();
   const rootRef = useRef<HTMLDivElement>(null);
 
@@ -143,17 +143,17 @@ export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = fal
 
   const goDestination = (name: string) => {
     setOpen(false);
-    navigate(`/destination/${encodeURIComponent(name.toLowerCase())}`);
+    nav.push(`/destination/${encodeURIComponent(name.toLowerCase())}`);
   };
 
   return (
     <div ref={rootRef} className={`dnav${solid ? " dnav--solid" : ""}${dark ? " dnav--dark" : ""}`}>
       <div className="dnav__bar">
-        <button className="dnav__logo" onClick={() => navigate("/")} aria-label="WanderOn home">
+        <button className="dnav__logo" onClick={() => nav.push("/")} aria-label="WanderOn home">
           <img src={`${BASE}/${lightAssets ? "nav-logo.png" : "nav-logo-color.png"}`} alt="WanderOn" />
         </button>
         <div className="dnav__right">
-          <button className="dnav__link" onClick={() => navigate("/search")}>
+          <button className="dnav__link" onClick={() => nav.push("/search")}>
             MICE
           </button>
           <button
@@ -181,12 +181,12 @@ export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = fal
               <img src={`${BASE}/nav-search-fab.svg`} alt="" />
             </button>
           )}
-          <button className="dnav__events" onClick={() => navigate("/events")}>
+          <button className="dnav__events" onClick={() => nav.push("/events")}>
             Events
           </button>
           <button
             className="dnav__login"
-            onClick={() => (isLoggedIn ? navigate("/profile") : openLoginSheet("/profile"))}
+            onClick={() => (isLoggedIn ? nav.push("/profile") : openLoginSheet("/profile"))}
           >
             <img src={`${BASE}/nav-person.svg`} alt="" />
             {isLoggedIn ? "Profile" : "Log In"}
@@ -231,7 +231,7 @@ export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = fal
               role="menuitem"
               onClick={() => {
                 setBurgerOpen(false);
-                navigate(item.to);
+                nav.push(item.to);
               }}
             >
               <img
@@ -250,7 +250,7 @@ export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = fal
             role="menuitem"
             onClick={() => {
               setBurgerOpen(false);
-              navigate("/about-us");
+              nav.push("/about-us");
             }}
           >
             <img src={`${BASE}/menu-about.svg`} width={16} height={16} alt="" aria-hidden />
@@ -311,7 +311,7 @@ export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = fal
               className="dnav__menu-all"
               onClick={() => {
                 setOpen(false);
-                navigate("/search");
+                nav.push("/search");
               }}
             >
               All trips in {group.name}

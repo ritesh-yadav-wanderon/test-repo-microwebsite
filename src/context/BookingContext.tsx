@@ -1,9 +1,6 @@
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import {
-  readBookingStatuses,
-  saveBookingStatuses,
-  type BookingStatus,
-} from "@/repositories";
+import { createContext, useCallback, useContext, type ReactNode } from "react";
+import { STORAGE_KEYS, type BookingStatus } from "@/repositories";
+import { usePersistentState } from "@/hooks/usePersistentState";
 
 export type { BookingStatus };
 
@@ -25,19 +22,18 @@ const BookingContext = createContext<BookingCtx>({
   setStatus: () => {},
 });
 
-export function BookingProvider({ children }: { children: React.ReactNode }) {
-  const [statuses, setStatuses] = useState<Record<string, BookingStatus>>(() =>
-    readBookingStatuses()
+export function BookingProvider({ children }: { children: ReactNode }) {
+  const { value: statuses, setValue: setStatuses } = usePersistentState<Record<string, BookingStatus>>(
+    STORAGE_KEYS.bookingStatus,
+    {}
   );
 
-  // Keep the persisted copy in sync with in-memory state.
-  useEffect(() => {
-    saveBookingStatuses(statuses);
-  }, [statuses]);
-
-  const setStatus = useCallback((ref: string, status: BookingStatus) => {
-    setStatuses((prev) => ({ ...prev, [ref]: status }));
-  }, []);
+  const setStatus = useCallback(
+    (ref: string, status: BookingStatus) => {
+      setStatuses((prev) => ({ ...prev, [ref]: status }));
+    },
+    [setStatuses]
+  );
 
   const statusOf = useCallback(
     (ref: string): BookingStatus => statuses[ref] ?? "active",

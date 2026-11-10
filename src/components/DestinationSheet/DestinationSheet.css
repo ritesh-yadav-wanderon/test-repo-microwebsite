@@ -51,7 +51,7 @@
 .dsh-title {
   font-family: "Roboto", sans-serif;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: #202020;
 }
 .dsh-close {
@@ -107,7 +107,7 @@
 .dsh-region-label {
   font-family: "Roboto", sans-serif;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   color: #3d3d3d;
   white-space: nowrap;
   text-align: left;
@@ -169,7 +169,7 @@
 .dsh-trending-text {
   font-family: "Roboto", sans-serif;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: #b1da3a;
   white-space: nowrap;
 }

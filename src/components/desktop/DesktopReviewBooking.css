@@ -22,7 +22,7 @@
   border-radius: 46px;
   background: #eaeaea;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #202020;
 }
@@ -85,7 +85,7 @@
   border-radius: 30px;
   background: #e4f1e0;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: #435c3d;
 }
 
@@ -110,7 +110,7 @@
 
 .drb-opt-title {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #202020;
 }
@@ -286,7 +286,7 @@
 
 .drb-testcard-copy {
   margin-left: auto;
-  font-weight: 500;
+  font-weight: 600;
   color: #01afd1;
 }
 
@@ -316,7 +316,7 @@
 
 .drb-saved-text {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 15.6px;
   color: #316868;
 }
@@ -349,7 +349,7 @@
 
 .drb-cta-price {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   color: #323232;
 }
 

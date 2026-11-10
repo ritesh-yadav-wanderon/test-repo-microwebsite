@@ -60,7 +60,7 @@
 
 .dpr-header-title {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   color: #3d3d3d;
 }
@@ -135,7 +135,7 @@
 
 .dpr-name {
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   letter-spacing: 0.04px;
   color: #202020;
@@ -263,7 +263,7 @@
 
 .dpr-card-head span {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 18.2px;
   color: #202020;
 }
@@ -318,7 +318,7 @@
 
 .dpr-input--medium {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 16px;
 }
 
@@ -368,8 +368,8 @@
 }
 
 .dpr-select {
-  appearance: none;
   -webkit-appearance: none;
+  appearance: none;
   cursor: pointer;
   padding-right: 40px;
 }
@@ -468,7 +468,7 @@
   cursor: pointer;
   font-family: var(--font);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #ffffff;
 }

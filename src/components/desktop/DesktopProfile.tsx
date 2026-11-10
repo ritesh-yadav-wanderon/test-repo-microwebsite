@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import { useAuth } from "@/context/AuthContext";
 import EndMark from "@/components/ui/EndMark";
 import { exitToMainPage } from "@/utils/lastMainPage";
@@ -37,11 +37,10 @@ interface MenuItem {
  *  (or exits from /profile itself); the cross always returns to the last
  *  visited main-site page (home / listing / destination / trip details). */
 export function ProfileHeader() {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const nav = useAppNav();
 
-  const exit = () => exitToMainPage(navigate);
-  const back = () => (pathname === "/profile" ? exit() : navigate("/profile"));
+  const exit = () => exitToMainPage(nav);
+  const back = () => (nav.pathname === "/profile" ? exit() : nav.push("/profile"));
 
   return (
     <header className="dpr-header">
@@ -66,26 +65,26 @@ export function ProfileHeader() {
 /** Left rail (avatar + menu + referral tag + logout) shared by the desktop
  *  Profile and My Bookings pages — Figma 3996:11227 / 3996:12266. */
 export function ProfileRail() {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const { user, logout } = useAuth();
 
   // Warm the allied account-page chunks so rail navigation renders instantly
   // instead of suspending into the loading skeleton.
   useEffect(() => {
-    import("../../pages/Profile");
-    import("../../pages/MyProfile");
-    import("../../pages/MyBookings");
-    import("../../pages/MyBooking");
-    import("../../pages/Support");
+    import("../../views/Profile");
+    import("../../views/MyProfile");
+    import("../../views/MyBookings");
+    import("../../views/MyBooking");
+    import("../../views/Support");
   }, []);
 
   const name = user?.name ?? "Shivam Trivedi";
   const initial = name.charAt(0).toUpperCase();
 
   const menu: MenuItem[] = [
-    { label: "My Profile", icon: `${DP}icon-profile.svg`, onClick: () => navigate("/my-profile") },
-    { label: "My bookings", icon: `${DP}icon-bookings.svg`, onClick: () => navigate("/bookings") },
-    { label: "Your feedback", icon: `${DP}icon-feedback.svg`, onClick: () => navigate("/feedback") },
+    { label: "My Profile", icon: `${DP}icon-profile.svg`, onClick: () => nav.push("/my-profile") },
+    { label: "My bookings", icon: `${DP}icon-bookings.svg`, onClick: () => nav.push("/bookings") },
+    { label: "Your feedback", icon: `${DP}icon-feedback.svg`, onClick: () => nav.push("/feedback") },
     { label: "Payments", icon: `${DP}icon-payments.svg` },
     { label: "Referrals", icon: `${DP}icon-referrals.svg` },
     { label: "Add Friends & Family", icon: `${DP}icon-friends.svg` },
@@ -94,13 +93,13 @@ export function ProfileRail() {
     {
       label: "Help  & Support",
       icon: `${DP}icon-help.svg`,
-      onClick: () => navigate("/support"),
+      onClick: () => nav.push("/support"),
     },
   ];
 
   const handleLogout = () => {
     logout();
-    navigate("/");
+    nav.push("/");
   };
 
   return (

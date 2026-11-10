@@ -87,7 +87,7 @@
   color: #fff;
   font-family: inherit;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.03px;
   white-space: nowrap;
   cursor: pointer;
@@ -125,7 +125,7 @@
 }
 .tc-ribbon span {
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 16px;
   color: #202020;
   white-space: nowrap;
@@ -148,7 +148,7 @@
 .tc-title {
   margin: 0;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #202020;
   overflow: hidden;
@@ -214,7 +214,7 @@
   color: #015f74;
   font-family: inherit;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 14px;
   text-decoration: underline;
   cursor: pointer;
@@ -278,7 +278,7 @@
 }
 .tc-price-old {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 16px;
   color: #ababab;
   text-decoration: line-through;

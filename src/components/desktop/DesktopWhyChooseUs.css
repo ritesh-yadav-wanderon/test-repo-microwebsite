@@ -79,7 +79,7 @@
 
 .dwhy__stat-award {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 22.64px;
   color: #3d3d3d;
   text-align: center;
@@ -87,7 +87,7 @@
 
 .dwhy__stat-score {
   font-size: 18px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 22.64px;
   color: #3d3d3d;
 }
@@ -137,7 +137,7 @@
 
 .dwhy__review-name {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 18.2px;
   color: #202020;
 }
@@ -170,7 +170,7 @@
 .dwhy__read-more {
   align-self: flex-start;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 16px;
   letter-spacing: 0.07px;
   color: #202020;
@@ -250,7 +250,7 @@
   border-radius: 8px;
   background: #f2f2f2;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   color: #3d3d3d;
 }

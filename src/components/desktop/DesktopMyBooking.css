@@ -53,7 +53,7 @@
 
 .dmb-header-title {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 14px;
   color: #202020;
 }
@@ -99,7 +99,7 @@
 }
 
 .dmb-tab--active {
-  font-weight: 500;
+  font-weight: 600;
   color: #015f74;
   box-shadow: inset 0 -2px 0 #015f74;
 }
@@ -139,7 +139,7 @@
 
 .dmb-package-name {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #202020;
 }
@@ -243,7 +243,7 @@
 
 .dmb-primary-title {
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #202020;
 }
@@ -279,7 +279,7 @@
 }
 
 .dmb-row-value {
-  font-weight: 500;
+  font-weight: 600;
   color: #3d3d3d;
   text-align: right;
 }
@@ -302,7 +302,7 @@
   border-radius: 46px;
   background: #ebfcff;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 20px;
   letter-spacing: 0.25px;
   color: #015f74;
@@ -311,7 +311,7 @@
 
 .dmb-co-pending {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.25px;
   color: #757575;
   text-transform: capitalize;
@@ -322,7 +322,7 @@
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 18.2px;
   color: #202020;
 }
@@ -336,7 +336,7 @@
   border: 1px solid #e6e6e6;
   border-radius: 12px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 18.2px;
   color: #3d3d3d;
 }
@@ -527,7 +527,7 @@
   flex: 1;
   min-width: 0;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 16px;
   color: #3d3d3d;
   text-transform: capitalize;
@@ -544,7 +544,7 @@
   background: rgba(1, 95, 116, 0.1);
   font-family: var(--font);
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.25px;
   color: #015f74;
   text-transform: capitalize;
@@ -569,7 +569,7 @@
   gap: 6px;
   width: 100%;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: #4d4d4d;
 }
 
@@ -612,7 +612,7 @@
   align-items: center;
   gap: 4px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 16px;
   color: #333;
 }
@@ -665,7 +665,7 @@
   border-radius: 30px;
   background: #e4f1e0;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   color: #435c3d;
 }
 
@@ -701,7 +701,7 @@
   align-items: center;
   justify-content: space-between;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 21px;
   color: #3d3d3d;
 }
@@ -729,7 +729,7 @@
 
 .dmb-bill-price {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   color: #323232;
 }
 

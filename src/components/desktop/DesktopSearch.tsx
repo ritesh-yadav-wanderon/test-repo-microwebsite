@@ -1,9 +1,19 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import { addRecentDestination, DEST_REGIONS } from "@/repositories";
-import calendarMonthIcon from "../../assets/search-bottom-sheet/calendar-month.svg";
-import calendarCheckIcon from "../../assets/search-bottom-sheet/calendar-check.svg";
+import calendarMonthIconRaw from "../../assets/search-bottom-sheet/calendar-month.svg";
+import calendarCheckIconRaw from "../../assets/search-bottom-sheet/calendar-check.svg";
 import "./DesktopSearch.css";
+
+// Vite's asset imports resolve to a plain URL string; Next.js's resolve to a
+// StaticImageData-shaped object ({ src, width, height, ... }) meant for
+// next/image. These render via plain <img src>, so both need normalizing to
+// a string to work under either bundler.
+function srcOf(img: string | { src: string }): string {
+  return typeof img === "string" ? img : img.src;
+}
+const calendarMonthIcon = srcOf(calendarMonthIconRaw);
+const calendarCheckIcon = srcOf(calendarCheckIconRaw);
 
 const BASE = "/figma/desktop";
 const DAY_LABELS = ["S", "M", "T", "W", "T", "F", "S"];
@@ -189,7 +199,7 @@ export default function DesktopSearch({
   onSearched,
   onClose,
 }: DesktopSearchProps) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const rootRef = useRef<HTMLDivElement>(null);
 
   const [panel, setPanel] = useState<"where" | "when" | null>(autoOpenWhere ? "where" : null);
@@ -260,7 +270,7 @@ export default function DesktopSearch({
     }
     setPanel(null);
     const qs = params.toString();
-    navigate(`/search${qs ? `?${qs}` : ""}`);
+    nav.push(`/search${qs ? `?${qs}` : ""}`);
     onSearched?.();
   }
 

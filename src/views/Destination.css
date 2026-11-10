@@ -1,0 +1,792 @@
+/* Destination landing page — Figma 3014:13138 */
+
+.dp-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+/* ── Sticky top nav ── */
+.dp-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: 56px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  gap: 8px;
+}
+
+.dp-nav-back {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #3d3d3d;
+  padding: 0;
+}
+
+.dp-nav-title {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  font-family: "Roboto", sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dp-nav-actions {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.dp-nav-ico {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3d3d3d;
+  padding: 0;
+}
+
+/* ── Hero (Figma 10554:18634) — the destination artwork on its own; the
+   destination name is baked into the image, so the heading is screen-reader
+   only. ── */
+.dp-hero {
+  position: relative;
+  height: 440px;
+  overflow: hidden;
+}
+
+.dp-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+.dp-hero-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Info section ── */
+.dp-info {
+  background: #ffffff;
+  padding: 20px 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Breadcrumb */
+.dp-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dp-bc-sep {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #757575;
+  line-height: 1.5;
+}
+.dp-bc-dest {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #757575;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+  text-transform: capitalize;
+}
+.dp-bc-home {
+  display: block;
+  width: 12px;
+  height: 13px;
+  flex-shrink: 0;
+}
+
+/* ── Info card + women strip ── */
+.dp-info-card-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.dp-info-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 8px 12px 12px;
+  border: 1px solid #ababab;
+  border-radius: 12px;
+}
+.dp-tags-text {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666666;
+  line-height: 16px;
+  letter-spacing: 0.03px;
+}
+
+.dp-info-ico {
+  display: block;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.dp-bestmonth-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.dp-bestmonth-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #4e4e4e;
+  white-space: nowrap;
+  line-height: 21px;
+}
+
+.dp-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+.dp-price-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.dp-discount-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #4e4e4e;
+  white-space: nowrap;
+}
+.dp-info-price {
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #121212;
+  white-space: nowrap;
+  line-height: 26px;
+}
+
+/* Women travellers strip attached under the card */
+.dp-women-strip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: calc(100% - 20px);
+  height: 20px;
+  box-sizing: border-box;
+  padding: 0 8px 0 4px;
+  background: #faf1ff;
+  border: 1px solid #e7c0fc;
+  border-top: none;
+  border-radius: 0 0 30px 30px;
+  overflow: hidden;
+}
+.dp-women-ico {
+  display: block;
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+.dp-women-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #c458fe;
+  white-space: nowrap;
+  line-height: 12px;
+}
+
+.dp-deco-strip {
+  width: 100%;
+  height: 8px;
+  background: #f5f5f5;
+  flex-shrink: 0;
+}
+
+/* ── Upcoming trips ── */
+.dp-trips {
+  background: #f7f7f7;
+  padding: 20px 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dp-trips-head { display: flex; flex-direction: column; gap: 4px; }
+
+.dp-trips-title {
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.dp-trips-sub {
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  color: #666666;
+  margin: 0;
+}
+
+/* Experience tabs */
+.dp-exp-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.dp-exp-tabs::-webkit-scrollbar { display: none; }
+
+.dp-exp-tab {
+  flex: 0 0 auto;
+  padding: 7px 16px;
+  border-radius: 20px;
+  border: 1px solid #d0d0d0;
+  background: #ffffff;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  color: #555555;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+
+.dp-exp-tab--active {
+  border-color: #006073;
+  background: #e6f7fb;
+  color: #006073;
+  font-weight: 600;
+}
+
+.dp-trips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dp-view-all {
+  width: 100%;
+  height: 40px;
+  border: 1.5px solid #006073;
+  border-radius: 8px;
+  background: #ffffff;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #006073;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 96, 115, 0.1);
+}
+
+/* ── Customise CTA ── */
+.dp-customise {
+  background: linear-gradient(135deg, #003e4d 0%, #006073 50%, #01afd1 100%);
+  padding: 32px 20px 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.dp-cust-eyebrow {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 1.2px;
+}
+
+.dp-cust-title {
+  font-family: "Roboto", sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.dp-cust-btn {
+  margin-top: 6px;
+  padding: 10px 22px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
+  background: transparent;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+
+
+/* ── Testimonials ── */
+.dp-testimonials {
+  background: #ffffff;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-bottom: 8px solid #f5f5f5;
+}
+
+.dp-test-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.dp-test-label {
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #444444;
+  letter-spacing: 1.5px;
+}
+
+.dp-test-diamond { font-size: 12px; color: #c8a96e; }
+
+.dp-rating {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.dp-rating-score {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333333;
+}
+
+.dp-test-sub {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  color: #555555;
+  text-align: center;
+  margin: 0;
+}
+
+.dp-test-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+  -webkit-overflow-scrolling: touch;
+}
+.dp-test-scroll::-webkit-scrollbar { display: none; }
+
+.dp-test-card {
+  flex: 0 0 calc(100% - 32px);
+  scroll-snap-align: start;
+  border: 1.5px solid #b2e4ee;
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(1, 175, 209, 0.08);
+}
+
+.dp-test-card-head { display: flex; align-items: center; gap: 10px; }
+
+.dp-test-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e5e5;
+  flex-shrink: 0;
+}
+
+.dp-test-name {
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.dp-test-stars { display: flex; align-items: center; gap: 2px; margin-top: 2px; }
+
+.dp-test-rating {
+  font-size: 12px;
+  font-weight: 600;
+  color: #444444;
+  margin-left: 4px;
+  font-family: "Roboto", sans-serif;
+}
+
+.dp-test-text {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  color: #444444;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.dp-test-footer { display: flex; align-items: center; justify-content: space-between; }
+
+.dp-test-date { font-family: "Roboto", sans-serif; font-size: 14px; color: #888888; }
+
+.dp-test-read {
+  font-family: "Roboto", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #006073;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.dp-test-dots { display: flex; justify-content: center; gap: 6px; }
+
+.dp-test-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d0d0d0;
+  display: block;
+}
+
+.dp-test-dot--active {
+  background: #01afd1;
+  width: 18px;
+  border-radius: 4px;
+}
+
+/* ── Cultural and Local Voices (Figma 5390:5939) ── */
+.dp-culture {
+  background: #fff;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.dp-culture-head {
+  text-align: center;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dp-culture-title {
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: #4e4e4e;
+  margin: 0;
+}
+
+.dp-culture-sub {
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #757575;
+  margin: 0;
+}
+
+/* Collage row: main Paris polaroid (with stamp) + side Seville polaroid.
+   Same layered assets as the desktop culture section, scaled to Figma mobile. */
+.dp-cult-collage {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  height: 260px;
+  width: 100%;
+}
+
+/* Layered polaroid: photo behind, textured frame on top, live caption */
+.dp-cult-pol {
+  position: relative;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+.dp-cult-pol-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.dp-cult-pol-photo {
+  position: absolute;
+  object-fit: cover;
+}
+
+.dp-cult-pol-caption {
+  position: absolute;
+  font-family: "Roboto Condensed", "Roboto", sans-serif;
+  font-weight: 600;
+  color: #3d3d3d;
+  text-align: justify;
+}
+
+.dp-cult-pol--main {
+  width: 184px;
+  height: 219px;
+  margin-top: 6px;
+  transform: rotate(-2.66deg);
+  z-index: 2;
+}
+
+.dp-cult-pol--main .dp-cult-pol-photo {
+  left: 15px;
+  top: 14px;
+  width: 155px;
+  height: 184px;
+}
+
+.dp-cult-pol--main .dp-cult-pol-caption {
+  left: 16px;
+  top: 177px;
+  width: 152px;
+  font-size: 7px;
+  line-height: 10.3px;
+}
+
+.dp-cult-stamp {
+  position: absolute;
+  left: 136px;
+  top: 181px;
+  width: 90px;
+  height: 90px;
+  transform: rotate(2.91deg);
+}
+
+.dp-cult-pol--side {
+  width: 150px;
+  height: 179px;
+  margin-top: 8px;
+  z-index: 1;
+}
+
+.dp-cult-pol--side .dp-cult-pol-photo {
+  left: 12px;
+  top: 11px;
+  width: 127px;
+  height: 150px;
+}
+
+.dp-cult-pol--side .dp-cult-pol-caption {
+  left: 12px;
+  top: 145px;
+  width: 114px;
+  font-size: 6.7px;
+  line-height: 8.4px;
+}
+
+/* Violin cutout + quote (Figma 6550:26539) */
+.dp-cult-quote-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 16px; /* 358px content width, as in the design */
+}
+
+.dp-cult-violin {
+  position: relative;
+  width: 77px;
+  height: 120px;
+  flex-shrink: 0;
+  margin-right: -30px;
+  transform: scaleX(-1); /* mirrored in the design */
+}
+
+.dp-cult-violin-img,
+.dp-cult-violin-blur {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.dp-cult-violin-blur {
+  filter: blur(4px);
+  opacity: 0.67;
+  transform: translateX(4px) scale(0.92);
+}
+
+.dp-culture-quote {
+  flex: 1;
+  min-width: 0;
+  font-family: "Roboto Condensed", "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 500; /* Roboto Condensed Medium (Figma 10554:19374) */
+  line-height: 21px;
+  color: #3d3d3d;
+  margin: 0;
+  text-align: center;
+}
+
+/* 18px below the quote (Figma 10554:19375), not the section's 40px gap. */
+.dp-culture-stack {
+  width: 100%;
+  margin-top: -22px;
+  padding: 0 0 8px;
+  transform: rotate(-2.75deg);
+}
+
+/* ── Trip strips (Figma 10554:18691): header block, cards, scroll indicator,
+   16px apart. ── */
+.dp-trip-strip {
+  padding: 0 16px;
+}
+/* Header row and cards both align to the 16px page margin provided by the
+   wrapper above (the shared .up-cards adds its own 16px, so zero it here to
+   avoid a double indent that misaligns cards from the section header). */
+.dp-trip-strip.up {
+  gap: 16px;
+  margin-top: 0;
+}
+.dp-trip-strip .up-header-row {
+  padding: 0;
+}
+.dp-trip-strip .up-cards {
+  gap: 16px;
+  padding-left: 0;
+  padding-right: 0;
+  scroll-padding-left: 0;
+}
+
+/* Title row + Filters/"Show Highlights" row, 10px apart. */
+.dp-strip-head {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* "See all" pill (Figma 10554:18695). */
+.dp-see-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 8px 0 12px;
+  border: none;
+  border-radius: 37.5px;
+  background: #e6e6e6;
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: #4d4d4d;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.dp-see-all img {
+  display: block;
+  width: 25px;
+  height: 25px;
+}
+
+.dp-strip-filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.dp-strip-filters-hidden {
+  visibility: hidden;
+}
+
+/* Scroll indicator (Figma 10554:18720): 120px track, 33px thumb. */
+.dp-strip-progress {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0;
+}
+.dp-strip-track {
+  position: relative;
+  width: 120px;
+  height: 6px;
+  box-sizing: border-box;
+  border-radius: 32px;
+  background: #fbfbfb;
+  border: 1px solid #e5e5e5;
+}
+.dp-strip-fill {
+  position: absolute;
+  top: -1px;
+  height: 6px;
+  width: 33px;
+  border-radius: 32px;
+  background: #757575;
+}
+
+/* Listing cards need a fixed slide width in this horizontal strip. */
+.dp-trip-strip .up-cards > .tc,
+.dp-trip-strip .up-cards > .tc-shimmer {
+  flex: 0 0 328px;
+  width: 328px;
+  scroll-snap-align: start;
+}
+
+/* ── Section divider (Figma 4544:31916) ── */
+.dp-section-div {
+  width: 100%;
+  height: 8px;
+  background: #f5f5f5;
+  margin: 30px 0;
+  flex-shrink: 0;
+}

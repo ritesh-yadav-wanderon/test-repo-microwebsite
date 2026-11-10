@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import type { Trip } from "@/types";
 import { useCompare } from "@/context/CompareContext";
 import { getSampleTripPool } from "@/repositories";
@@ -128,7 +128,7 @@ function SuggestionCard({ trip }: { trip: Trip }) {
 
 /** Desktop compare page (Figma 6509:30416). */
 export default function DesktopCompare() {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const { items, isInCompare, remove } = useCompare();
   const [showDiff, setShowDiff] = useState(false);
   const [query, setQuery] = useState("");
@@ -179,7 +179,7 @@ export default function DesktopCompare() {
     <div className="dcmp">
       {/* ── Slim page header (Figma 6674:26125) ── */}
       <header className="dcmp-header">
-        <button className="dcmp-back" type="button" aria-label="Go back" onClick={() => navigate(-1)}>
+        <button className="dcmp-back" type="button" aria-label="Go back" onClick={() => nav.go(-1)}>
           <img src={`${P}arrow-back.svg`} alt="" width={24} height={24} />
         </button>
         <h1 className="dcmp-header-title">Compare Trips</h1>
@@ -328,7 +328,7 @@ export default function DesktopCompare() {
                     </button>
                   </div>
 
-                  <button className="dcmp-book" type="button" onClick={() => navigate("/booking")}>
+                  <button className="dcmp-book" type="button" onClick={() => nav.push("/booking")}>
                     Book Trip
                   </button>
                 </div>

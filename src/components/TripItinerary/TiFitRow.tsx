@@ -1,11 +1,18 @@
 const TI = "/figma/trip-info/";
 const FOOT_FILLED = [`${TI}foot-1.svg`, `${TI}foot-2.svg`, `${TI}foot-3.svg`, `${TI}foot-4.svg`, `${TI}foot-5.svg`];
 const FOOT_EMPTY = `${TI}foot-empty.svg`;
+// Keyed by normalized label (see fitKey) so the product data's
+// "Nature & Adventure" matches the fixture's "Nature and Adventure".
 const FIT_ICONS: Record<string, string> = {
-  "Party & Night Life":   `${TI}icon-party.svg`,
-  "Nature and Adventure": `${TI}icon-nature.svg`,
-  "City and Culture":     `${TI}icon-culture.svg`,
+  partynightlife:     `${TI}icon-party.svg`,
+  natureadventure:    `${TI}icon-nature.svg`,
+  cityculture:        `${TI}icon-culture.svg`,
 };
+
+/** "Nature & Adventure" / "Nature and Adventure" -> "natureadventure". */
+function fitKey(label: string): string {
+  return label.toLowerCase().replace(/&|\band\b/g, "").replace(/[^a-z]/g, "");
+}
 
 export interface TiFitRowProps {
   label: string;
@@ -14,11 +21,11 @@ export interface TiFitRowProps {
 
 /** "Who is this trip for" footprint rating row. */
 export default function TiFitRow({ label, rating }: TiFitRowProps) {
-  const icon = FIT_ICONS[label] ?? `${TI}icon-culture.svg`;
+  const icon = FIT_ICONS[fitKey(label)];
   return (
     <div className="tdp2-ti-fit-row">
       <div className="tdp2-ti-fit-label">
-        <img src={icon} alt="" className="tdp2-ti-fit-icon" aria-hidden loading="lazy" />
+        {icon && <img src={icon} alt="" className="tdp2-ti-fit-icon" aria-hidden loading="lazy" />}
         <span className="tdp2-ti-fit-text">{label}</span>
       </div>
       <div className="tdp2-ti-fit-prints">

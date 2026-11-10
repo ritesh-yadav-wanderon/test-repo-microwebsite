@@ -65,7 +65,7 @@
 
 .itc-header-title {
   margin: 0;
-  font: 500 16px/24px Roboto, sans-serif;
+  font: 600 16px/24px Roboto, sans-serif;
   color: #333;
   white-space: nowrap;
   overflow: hidden;
@@ -178,7 +178,7 @@
 
 .itc-pop-title {
   margin: 0 16px;
-  font: 500 16px/24px Roboto, sans-serif;
+  font: 600 16px/24px Roboto, sans-serif;
   color: #333;
 }
 
@@ -239,7 +239,7 @@
 
 .itc-banner-text {
   margin: 0;
-  font: 500 12px/16px Roboto, sans-serif;
+  font: 600 12px/16px Roboto, sans-serif;
   letter-spacing: 0.36px;
   color: #a27e17;
 }
@@ -295,7 +295,7 @@
 }
 
 .itc3-row-city {
-  font: 500 14px/24px Roboto, sans-serif;
+  font: 600 14px/24px Roboto, sans-serif;
   color: #3d3d3d;
 }
 
@@ -305,7 +305,7 @@
 }
 
 .itc3-row-price {
-  font-weight: 500;
+  font-weight: 600;
   color: #0b7ea6;
 }
 
@@ -423,7 +423,7 @@
     border-radius: 8px 8px 0 0;
     background: #fff8f2;
     color: #864129;
-    font: 500 12px/16px Roboto, sans-serif;
+    font: 600 12px/16px Roboto, sans-serif;
     letter-spacing: 0.36px;
     box-sizing: border-box;
   }
@@ -484,7 +484,7 @@
   }
 
   .itcd-title {
-    font: 500 16px/24px Roboto, sans-serif;
+    font: 600 16px/24px Roboto, sans-serif;
   }
 
   .itcd-close {
@@ -515,7 +515,7 @@
   .itcd-popular-title {
     margin: 0;
     color: #333;
-    font: 500 16px/24px Roboto, sans-serif;
+    font: 600 16px/24px Roboto, sans-serif;
   }
 
   .itcd-popular-list {

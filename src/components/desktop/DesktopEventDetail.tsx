@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useAppNav } from "@/hooks/useAppNav";
 import DesktopNav from "./DesktopNav";
 import EventItinerary, { ITINERARY } from "@/components/EventItinerary";
 import "./DesktopEventDetail.css";
@@ -15,7 +15,7 @@ const HERO_VIDEO =
 const HERO_BACKDROP =
   "https://wanderon-images.gumlet.io/new-website-test/event-pdt-page-hero-bg.gif";
 
-/* Content reused from the mobile event product page (src/pages/EventDetail.tsx). */
+/* Content reused from the mobile event product page (src/views/EventDetail.tsx). */
 const EVENT = {
   title: "Tomorrowland Belgium | ORBYZ",
   dates: "Jul 18, 2026 - Jul 25, 2026",
@@ -65,7 +65,7 @@ function SectionHead() {
 /** Desktop event product page (Figma 6281:24823) — dark-themed detail layout
  *  reusing the mobile event page's content, video and gallery assets. */
 export default function DesktopEventDetail() {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const [saved, setSaved] = useState(false);
   const [compared, setCompared] = useState(false);
   const [playing, setPlaying] = useState(true);
@@ -89,7 +89,7 @@ export default function DesktopEventDetail() {
   };
 
   const handleBook = () => {
-    navigate("/booking", {
+    nav.push("/booking", {
       state: {
         tripTitle: EVENT.title,
         tripName: EVENT.title,

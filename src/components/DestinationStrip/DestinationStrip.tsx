@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import AppLink from "@/components/ui/AppLink";
+import { useAppNav } from "@/hooks/useAppNav";
 import DestinationSheet from "@/components/DestinationSheet";
 import {
   DESTINATION_CATEGORIES,
@@ -26,7 +27,7 @@ const INTERNATIONAL = getMonuments("international");
 
 function DestItem({ dest }: { dest: MonumentDestination }) {
   return (
-    <Link className="dest-item" to={`/destination/${dest.name}`} aria-label={dest.name}>
+    <AppLink className="dest-item" to={`/destination/${dest.name}`} aria-label={dest.name}>
       <div className="dest-item-img-wrap">
         <img
           className={`dest-item-ellipse dest-item-ellipse--${dest.ellipse}`}
@@ -42,7 +43,7 @@ function DestItem({ dest }: { dest: MonumentDestination }) {
         />
       </div>
       <span className="dest-item-label">{dest.name}</span>
-    </Link>
+    </AppLink>
   );
 }
 
@@ -52,7 +53,7 @@ interface Props {
 }
 
 export default function DestinationStrip({ activeCategory, onCategoryChange }: Props) {
-  const navigate = useNavigate();
+  const nav = useAppNav();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
   const [stuck, setStuck] = useState(false);
@@ -163,7 +164,7 @@ export default function DestinationStrip({ activeCategory, onCategoryChange }: P
       isOpen={destSheetOpen}
       onClose={() => setDestSheetOpen(false)}
       initialRegion={destSheetRegion}
-      onSelect={(dest) => navigate(`/search?destination=${dest.slug}`)}
+      onSelect={(dest) => nav.push(`/search?destination=${dest.slug}`)}
     />
     </>
   );
