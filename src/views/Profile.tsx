@@ -90,13 +90,13 @@ export default function Profile() {
             onClick={() => exitToMainPage(nav)}
             aria-label="Go back"
           >
-            <img src={`${P}v2-icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+            <img loading="lazy" src={`${P}v2-icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
           <span className="prf-header-title">Profile</span>
         </div>
         <div className="prf-header-right">
           <button className="prf-header-bell" type="button" aria-label="Notifications">
-            <img src={`${P}v2-icon-bell.svg`} width={36} height={36} alt="" aria-hidden />
+            <img loading="lazy" src={`${P}v2-icon-bell.svg`} width={36} height={36} alt="" aria-hidden />
           </button>
           <button
             className="prf-header-close"

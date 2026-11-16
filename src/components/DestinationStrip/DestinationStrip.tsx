@@ -111,7 +111,7 @@ export default function DestinationStrip({ activeCategory, onCategoryChange }: P
 
         {CATEGORIES.map((cat, i) => (
           <Fragment key={cat}>
-            <img className="dest-cat-sep" src={CAT_SEP} width={6} height={16} alt="" aria-hidden />
+            <img loading="lazy" className="dest-cat-sep" src={CAT_SEP} width={6} height={16} alt="" aria-hidden />
             <button
               className={`dest-cat-tab${activeCategory === i + 1 ? " dest-cat-tab--active" : ""}`}
               type="button"
@@ -122,7 +122,7 @@ export default function DestinationStrip({ activeCategory, onCategoryChange }: P
           </Fragment>
         ))}
 
-        <img className="dest-cat-sep" src={CAT_SEP} width={6} height={16} alt="" aria-hidden />
+        <img loading="lazy" className="dest-cat-sep" src={CAT_SEP} width={6} height={16} alt="" aria-hidden />
         <button className="dest-cat-see-all" type="button">
           {"See all\ncategories"}
         </button>

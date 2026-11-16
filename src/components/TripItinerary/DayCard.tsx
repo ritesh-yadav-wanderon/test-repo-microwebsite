@@ -1,6 +1,7 @@
 import React from "react";
 import type { DayItinerary } from "@/repositories";
 import type { TransferLeg } from "@/utils/tripItinerary";
+import HotelRating from "./HotelRating";
 
 /** Transfer leg shown at the top of an expanded day (Figma 7165:7171). */
 export function DayTransfer({ from: fromCity, to: toCity, duration }: TransferLeg) {
@@ -101,6 +102,7 @@ export default function DayCard({ day, index, isOpen, onToggle, transfer }: DayC
                       <div className="tdp2-day-hotel-option" key={photo}>
                         <img src={photo} alt={day.stayName ?? ""} className="tdp2-day-hotel-photo" loading="lazy" />
                         <p className="tdp2-day-hotel-name">{day.stayName}</p>
+                        {day.stayName && <HotelRating hotel={day.stayName} />}
                       </div>
                     ))}
                   </div>
@@ -108,7 +110,7 @@ export default function DayCard({ day, index, isOpen, onToggle, transfer }: DayC
                 {!day.stayPhotos?.length && (
                   isSameAccommodation ? (
                     <div className="tdp2-day-same-stay">
-                      <img
+                      <img loading="lazy"
                         src="/figma/itin-section/same-accommodation-info.svg"
                         alt=""
                         className="tdp2-day-same-stay-icon"
@@ -117,7 +119,10 @@ export default function DayCard({ day, index, isOpen, onToggle, transfer }: DayC
                       <span>{day.stayName}</span>
                     </div>
                   ) : (
-                    <p className="tdp2-day-stay-name">{day.stayName}</p>
+                    <div className="tdp2-day-stay">
+                      <p className="tdp2-day-stay-name">{day.stayName}</p>
+                      {day.stayName && <HotelRating hotel={day.stayName} />}
+                    </div>
                   )
                 )}
                 {day.stayMeals && day.stayMeals.length > 0 && (

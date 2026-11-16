@@ -66,12 +66,12 @@ export default function MyBookings() {
       <header className="mbl-nav">
         <div className="mbl-nav-left">
           <button className="mbl-nav-back" type="button" aria-label="Back" onClick={() => nav.push("/profile")}>
-            <img src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+            <img loading="lazy" src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
           <p className="mbl-nav-title">My Bookings</p>
         </div>
         <button className="mbl-nav-close" type="button" aria-label="Close" onClick={() => nav.push("/profile")}>
-          <img src={`${A}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+          <img loading="lazy" src={`${A}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
         </button>
       </header>
 
@@ -119,7 +119,7 @@ export default function MyBookings() {
 
                 <div className="mbl-card-dates">
                   <span className="mbl-card-duration">
-                    <img src={`${M}icon-luggage.svg`} width={8} height={12} alt="" aria-hidden />
+                    <img loading="lazy" src={`${M}icon-luggage.svg`} width={8} height={12} alt="" aria-hidden />
                     {b.dateRange}
                   </span>
                   <span className="mbl-card-nights">{b.durationLabel}</span>
@@ -128,14 +128,14 @@ export default function MyBookings() {
                 <div className="mbl-card-route">
                   <div className="mbl-card-place">
                     <span className="mbl-card-place-tag">
-                      <img src={`${A}icon-location.svg`} width={8} height={10} alt="" aria-hidden />
+                      <img loading="lazy" src={`${A}icon-location.svg`} width={8} height={10} alt="" aria-hidden />
                       Pick Up
                     </span>
                     <span className="mbl-card-place-name">{b.pickUp}</span>
                   </div>
                   <div className="mbl-card-place mbl-card-place--right">
                     <span className="mbl-card-place-tag">
-                      <img src={`${A}icon-location.svg`} width={8} height={10} alt="" aria-hidden />
+                      <img loading="lazy" src={`${A}icon-location.svg`} width={8} height={10} alt="" aria-hidden />
                       Drop
                     </span>
                     <span className="mbl-card-place-name">{b.drop}</span>
@@ -148,7 +148,7 @@ export default function MyBookings() {
                   <div className="mbl-cancel-note">Cancel request is in progress</div>
                 ) : (
                   <div className="mbl-info-tag">
-                    <img src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
+                    <img loading="lazy" src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
                     <p>Complete KYC, Co-Traveller Details and the remaining due amount to confirm your booking.</p>
                   </div>
                 )}
@@ -163,7 +163,7 @@ export default function MyBookings() {
             type="button"
             onClick={() => openCancellation(cancellationRequests[0].ref)}
           >
-            <img src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />
+            <img loading="lazy" src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />
             <span>View Cancellation Request ({cancellationRequests.length})</span>
           </button>
         )}

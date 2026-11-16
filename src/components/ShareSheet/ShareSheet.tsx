@@ -72,7 +72,7 @@ export default function ShareSheet({ isOpen, onClose, title, image, duration, pr
 
       {/* Preview card (Spotify-style) */}
       <div className="shs-preview">
-        <img src={image} alt="" className="shs-preview-img" />
+        <img loading="lazy" src={image} alt="" className="shs-preview-img" />
         <div className="shs-preview-info">
           <p className="shs-preview-name">{title}</p>
           <div className="shs-preview-meta">

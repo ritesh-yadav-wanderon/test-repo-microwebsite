@@ -114,16 +114,16 @@ export default function Footer() {
               </p>
               <div className="ft-social">
                 <a className="ft-social-link" href="https://www.instagram.com/wanderon.in" target="_blank" rel="noreferrer" aria-label="Instagram">
-                  <img src="/figma/footer/ig-black.svg" alt="" className="ft-social-ig" />
+                  <img loading="lazy" src="/figma/footer/ig-black.svg" alt="" className="ft-social-ig" />
                 </a>
                 <a className="ft-social-link" href="https://www.facebook.com/wanderon.in" target="_blank" rel="noreferrer" aria-label="Facebook">
-                  <img src="/figma/footer/fb-black.svg" alt="" className="ft-social-fb" />
+                  <img loading="lazy" src="/figma/footer/fb-black.svg" alt="" className="ft-social-fb" />
                 </a>
                 <a className="ft-social-link" href="https://www.linkedin.com/company/wanderon" target="_blank" rel="noreferrer" aria-label="LinkedIn">
-                  <img src="/figma/footer/li-black.svg" alt="" className="ft-social-li" />
+                  <img loading="lazy" src="/figma/footer/li-black.svg" alt="" className="ft-social-li" />
                 </a>
                 <a className="ft-social-link" href="https://www.youtube.com/@WanderOn" target="_blank" rel="noreferrer" aria-label="YouTube">
-                  <img src="/figma/footer/yt-black.png" alt="" className="ft-social-yt" />
+                  <img loading="lazy" src="/figma/footer/yt-black.png" alt="" className="ft-social-yt" />
                 </a>
               </div>
             </div>

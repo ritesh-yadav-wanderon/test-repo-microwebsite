@@ -9,13 +9,18 @@ import { IMAGE_BASE_URL } from "./config";
 
 const CDN_HOST = new URL(IMAGE_BASE_URL).host;
 
-/** The CMS's own origin — Gumlet is configured to pull from this host, so
- *  any URL still pointing at it directly (as raw Mongo product data does)
- *  needs its host swapped to go through the CDN instead. */
-const LEGACY_IMAGE_HOST = "images.wanderon.in";
+/** Origins Gumlet pulls from. Raw Mongo product data points straight at
+ *  them — the CMS host, or the S3 bucket itself (some card images were
+ *  2.3 MB PNGs fetched from S3) — so their host is swapped onto the CDN
+ *  (same path) to get resized, AVIF/WebP-encoded images instead. */
+const LEGACY_IMAGE_HOSTS = new Set([
+  "images.wanderon.in",
+  "wanderon-sales.s3.amazonaws.com",
+  "wanderon-sales.s3.ap-south-1.amazonaws.com",
+]);
 
 /**
- * Rewrite a legacy `images.wanderon.in` URL onto the Gumlet host (same path/
+ * Rewrite a legacy `images.wanderon.in` / S3 URL onto the Gumlet host (same path/
  * query — Gumlet pulls from the same origin), so every image renders through
  * the CDN. URLs already on Gumlet, and anything else (bundled app assets,
  * sample fixtures), pass through untouched.
@@ -24,7 +29,7 @@ export function toGumletUrl(url: string): string {
   if (!url) return url;
   try {
     const parsed = new URL(url);
-    if (parsed.host !== LEGACY_IMAGE_HOST) return url;
+    if (!LEGACY_IMAGE_HOSTS.has(parsed.host)) return url;
     parsed.host = CDN_HOST;
     parsed.protocol = "https:";
     return parsed.toString();

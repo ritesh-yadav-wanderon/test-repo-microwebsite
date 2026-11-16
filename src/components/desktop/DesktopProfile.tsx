@@ -45,7 +45,7 @@ export function ProfileHeader() {
   return (
     <header className="dpr-header">
       <button className="dpr-header-back" type="button" aria-label="Back" onClick={back}>
-        <img src={`${P}v2-icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+        <img loading="lazy" src={`${P}v2-icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
       </button>
       <span className="dpr-header-title">Profile</span>
       <button
@@ -123,7 +123,7 @@ export function ProfileRail() {
               <img src={item.icon} width={20} height={20} alt="" aria-hidden loading="lazy" />
               <span className="dpr-menu-label">{item.label}</span>
             </span>
-            <img
+            <img loading="lazy"
               className="dpr-menu-chevron"
               src={`${P}v2-icon-chevron.svg`}
               width={16}
@@ -136,7 +136,7 @@ export function ProfileRail() {
       </nav>
 
       <div className="dpr-referral">
-        <img src={`${DP}icon-refer.svg`} width={16} height={16} alt="" aria-hidden />
+        <img loading="lazy" src={`${DP}icon-refer.svg`} width={16} height={16} alt="" aria-hidden />
         <p>Get &#8377;500 OFF every time your invitee does their first booking.</p>
       </div>
 
@@ -166,7 +166,7 @@ export default function DesktopProfile() {
         <div className="dpr-main">
           <section className="dpr-card">
             <div className="dpr-card-head">
-              <img src={`${DP}icon-person.svg`} width={20} height={20} alt="" aria-hidden />
+              <img loading="lazy" src={`${DP}icon-person.svg`} width={20} height={20} alt="" aria-hidden />
               <span>Personal Information</span>
             </div>
 
@@ -220,7 +220,7 @@ export default function DesktopProfile() {
                   </select>
                   <label htmlFor="dpr-gender" className="dpr-flabel">Gender*</label>
                   <span className="dpr-field-icon" aria-hidden>
-                    <img src={`${MP}icon-dropdown.svg`} width={24} height={24} alt="" />
+                    <img loading="lazy" src={`${MP}icon-dropdown.svg`} width={24} height={24} alt="" />
                   </span>
                 </div>
                 <div className="dpr-field dpr-field--float">
@@ -233,7 +233,7 @@ export default function DesktopProfile() {
                   />
                   <label htmlFor="dpr-dob" className="dpr-flabel">Date Of Birth*</label>
                   <span className="dpr-field-icon" aria-hidden>
-                    <img src={`${MP}icon-calendar.svg`} width={16} height={16} alt="" />
+                    <img loading="lazy" src={`${MP}icon-calendar.svg`} width={16} height={16} alt="" />
                   </span>
                 </div>
               </div>
@@ -252,7 +252,7 @@ export default function DesktopProfile() {
               <div className="dpr-phone">
                 <button className="dpr-phone-code" type="button">
                   <span>IN +91</span>
-                  <img src={`${MP}icon-chevron.svg`} width={8} height={6} alt="" aria-hidden />
+                  <img loading="lazy" src={`${MP}icon-chevron.svg`} width={8} height={6} alt="" aria-hidden />
                 </button>
                 <div className="dpr-field dpr-field--grow">
                   <input
@@ -265,8 +265,8 @@ export default function DesktopProfile() {
                   />
                   <label htmlFor="dpr-whatsapp" className="dpr-flabel">WhatsApp Number*</label>
                   <span className="dpr-field-icon" aria-hidden>
-                    <img src={`${MP}icon-verified.svg`} width={16} height={16} alt="" />
-                    <img src={`${MP}icon-dropdown.svg`} width={24} height={24} alt="" />
+                    <img loading="lazy" src={`${MP}icon-verified.svg`} width={16} height={16} alt="" />
+                    <img loading="lazy" src={`${MP}icon-dropdown.svg`} width={24} height={24} alt="" />
                   </span>
                 </div>
               </div>
@@ -274,7 +274,7 @@ export default function DesktopProfile() {
               <div className="dpr-phone">
                 <button className="dpr-phone-code" type="button">
                   <span>IN +91</span>
-                  <img src={`${MP}icon-chevron.svg`} width={8} height={6} alt="" aria-hidden />
+                  <img loading="lazy" src={`${MP}icon-chevron.svg`} width={8} height={6} alt="" aria-hidden />
                 </button>
                 <div className="dpr-field dpr-field--grow">
                   <input
@@ -312,7 +312,7 @@ export default function DesktopProfile() {
                   />
                 </div>
                 <div className="dpr-addr-note">
-                  <img src={`${MP}icon-info.svg`} width={13} height={13} alt="" aria-hidden />
+                  <img loading="lazy" src={`${MP}icon-info.svg`} width={13} height={13} alt="" aria-hidden />
                   <p>Address is required for invoice generation.</p>
                 </div>
               </div>

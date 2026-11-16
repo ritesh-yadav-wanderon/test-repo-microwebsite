@@ -99,7 +99,7 @@ function TicketPanel({ state }: { state: TicketsState }) {
     <>
       <section className="sup-card">
         <div className="sup-card-mail">
-          <img src={`${S}icon-mail.svg`} width={20} height={20} alt="" aria-hidden />
+          <img loading="lazy" src={`${S}icon-mail.svg`} width={20} height={20} alt="" aria-hidden />
           <span>support@wanderon.in</span>
         </div>
         <div className="sup-card-issue">Issue: Customer Support Request</div>
@@ -109,7 +109,7 @@ function TicketPanel({ state }: { state: TicketsState }) {
             type="button"
             onClick={() => fileRef.current?.click()}
           >
-            <img src={`${S}icon-attachment.svg`} width={20} height={20} alt="" aria-hidden />
+            <img loading="lazy" src={`${S}icon-attachment.svg`} width={20} height={20} alt="" aria-hidden />
             <span>{fileName ?? "Attach a File"}</span>
           </button>
           <input
@@ -202,7 +202,7 @@ export default function Support() {
             aria-label="Back"
             onClick={() => nav.push("/profile")}
           >
-            <img src={`${P}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+            <img loading="lazy" src={`${P}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
           <span className="sup-m-title">Help &amp; Support</span>
         </div>

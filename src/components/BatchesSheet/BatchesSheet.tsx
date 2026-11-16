@@ -97,7 +97,7 @@ function BatchCard({
     <div className="bsh-card">
       <div className="bsh-card-dates">
         <div className="bsh-card-cal-icon" aria-hidden>
-          <img
+          <img loading="lazy"
             src={`${ASSETS}icon-calendar.svg`}
             width={16}
             height={16}
@@ -130,13 +130,13 @@ function BatchCard({
       </div>
 
       <div className="bsh-card-sep" aria-hidden>
-        <img src={`${ASSETS}card-sep.svg`} alt="" />
+        <img loading="lazy" src={`${ASSETS}card-sep.svg`} alt="" />
       </div>
 
       <div className="bsh-card-group-row">
         <div className="bsh-card-group-left">
           <div className="bsh-card-groups-icon" aria-hidden>
-            <img
+            <img loading="lazy"
               src={`${ASSETS}icon-groups.svg`}
               width={16}
               height={16}
@@ -158,10 +158,10 @@ function BatchCard({
       <div className="bsh-card-people">
         <div className="bsh-card-avatars" aria-hidden>
           <div className="bsh-card-avatar">
-            <img src={`${ASSETS}avatar-person.svg`} alt="" />
+            <img loading="lazy" src={`${ASSETS}avatar-person.svg`} alt="" />
           </div>
           <div className="bsh-card-avatar">
-            <img src={`${ASSETS}avatar-woman.svg`} alt="" />
+            <img loading="lazy" src={`${ASSETS}avatar-woman.svg`} alt="" />
           </div>
         </div>
         <span className="bsh-card-people-text">
@@ -284,7 +284,7 @@ export default function BatchesSheet({
             aria-label="Back"
             onClick={onClose}
           >
-            <img
+            <img loading="lazy"
               src={`${ASSETS}icon-arrow-back.svg`}
               width={24}
               height={24}
@@ -300,7 +300,7 @@ export default function BatchesSheet({
           aria-label="Close"
           onClick={onClose}
         >
-          <img
+          <img loading="lazy"
             src={`${ASSETS}icon-close.svg`}
             width={30}
             height={30}
@@ -312,7 +312,7 @@ export default function BatchesSheet({
 
       <div className="bsh-tag-bar">
         <div className="bsh-tag-icon" aria-hidden>
-          <img
+          <img loading="lazy"
             src={`${ASSETS}icon-your-trips.svg`}
             width={14}
             height={14}
@@ -336,7 +336,7 @@ export default function BatchesSheet({
                 <span>{monthLabel(m)}</span>
                 {isActive && (
                   <span className="bsh-month-clear" aria-hidden>
-                    <img
+                    <img loading="lazy"
                       src={`${ASSETS}icon-close-chip.svg`}
                       width={16}
                       height={16}

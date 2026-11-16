@@ -65,7 +65,7 @@ function TripStrip({
           {seeAllHref && (
             <button className="dp-see-all" type="button" onClick={() => nav.push(seeAllHref)}>
               See all
-              <img src="/figma/destination/icon-arrow-right-alt.svg" width={25} height={25} alt="" aria-hidden />
+              <img loading="lazy" src="/figma/destination/icon-arrow-right-alt.svg" width={25} height={25} alt="" aria-hidden />
             </button>
           )}
         </div>
@@ -80,7 +80,7 @@ function TripStrip({
             onClick={() => window.dispatchEvent(new CustomEvent("wanderon:open-filter"))}
           >
             <span>Filters</span>
-            <img src="/figma/trips/filter-icon.svg" width={16} height={16} alt="" aria-hidden />
+            <img loading="lazy" src="/figma/trips/filter-icon.svg" width={16} height={16} alt="" aria-hidden />
           </button>
           <FeaturesToggle checked={showFeatures} onChange={onShowFeaturesChange} label="Show Highlights" />
         </div>
@@ -148,14 +148,14 @@ export function DestinationView({ slug, destTrips, loading }: DestinationViewPro
       {/* ── Hero (Figma 10554:18634) ── */}
       <section className="dp-hero">
         <h1 className="dp-hero-sr">{heroTitle}</h1>
-        <img src="/figma/destination/hero.jpg" alt="" className="dp-hero-img" />
+        <img loading="lazy" src="/figma/destination/hero.jpg" alt="" className="dp-hero-img" />
       </section>
 
       {/* ── Dates-Costing-General (Figma 4620:23656) ── */}
       <section className="dp-info">
         {/* Breadcrumb */}
         <div className="dp-breadcrumb">
-          <img src="/figma/destination/icon-home.svg" alt="" className="dp-bc-home" aria-hidden />
+          <img loading="lazy" src="/figma/destination/icon-home.svg" alt="" className="dp-bc-home" aria-hidden />
           <span className="dp-bc-sep">{">"}</span>
           <span className="dp-bc-dest">{slug}</span>
         </div>
@@ -165,19 +165,19 @@ export function DestinationView({ slug, destTrips, loading }: DestinationViewPro
           <div className="dp-info-card">
             <p className="dp-tags-text">{data.tags.join(" | ")}</p>
             <div className="dp-bestmonth-row">
-              <img src="/figma/destination/icon-bestmonth.svg" alt="" className="dp-info-ico" aria-hidden />
+              <img loading="lazy" src="/figma/destination/icon-bestmonth.svg" alt="" className="dp-info-ico" aria-hidden />
               <span className="dp-bestmonth-text">Best month to travel: {data.bestMonth}</span>
             </div>
             <div className="dp-price-row">
               <div className="dp-price-left">
-                <img src="/figma/destination/icon-price.svg" alt="" className="dp-info-ico" aria-hidden />
+                <img loading="lazy" src="/figma/destination/icon-price.svg" alt="" className="dp-info-ico" aria-hidden />
                 <span className="dp-discount-text">Starting Price (per person):</span>
               </div>
               <span className="dp-info-price">{data.startingPrice}</span>
             </div>
           </div>
           <div className="dp-women-strip">
-            <img src="/figma/destination/icon-women.svg" alt="" className="dp-women-ico" aria-hidden />
+            <img loading="lazy" src="/figma/destination/icon-women.svg" alt="" className="dp-women-ico" aria-hidden />
             <span className="dp-women-text">{data.womenPct} Women travellers have joined!</span>
           </div>
         </div>
@@ -279,7 +279,7 @@ export function DestinationView({ slug, destTrips, loading }: DestinationViewPro
               alt="Eiffel Tower over the Seine, Paris"
               loading="lazy"
             />
-            <img className="dp-cult-pol-frame" src="/figma/desktop-dest/cult-frame.png" alt="" aria-hidden />
+            <img loading="lazy" className="dp-cult-pol-frame" src="/figma/desktop-dest/cult-frame.png" alt="" aria-hidden />
             <figcaption className="dp-cult-pol-caption">
               From Paris cafés to Roman backstreets, travellers arrive chasing
               the postcard and leave with the version no postcard shows.
@@ -299,7 +299,7 @@ export function DestinationView({ slug, destTrips, loading }: DestinationViewPro
               alt="Flamenco dancers in Plaza de España, Seville"
               loading="lazy"
             />
-            <img className="dp-cult-pol-frame" src="/figma/desktop-dest/cult-frame.png" alt="" aria-hidden />
+            <img loading="lazy" className="dp-cult-pol-frame" src="/figma/desktop-dest/cult-frame.png" alt="" aria-hidden />
             <figcaption className="dp-cult-pol-caption">
               For many, Europe is the first great trip: the continent that
               turns a traveller into a storyteller

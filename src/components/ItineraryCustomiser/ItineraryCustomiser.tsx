@@ -275,7 +275,7 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
 
         <div className="itcd-card">
           <header className="itcd-header">
-            <img src={thumb} alt="" className="itcd-thumb" />
+            <img loading="lazy" src={thumb} alt="" className="itcd-thumb" />
             <div className="itcd-header-text">
               <p className="itcd-sub">Europe · full route</p>
               <p className="itcd-title">Where do you want to hop on &amp; off?</p>
@@ -294,7 +294,7 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
                 <button className="itcd-popular-card" type="button" key={pi} onClick={() => applyPreset(start, end)}>
                   {stations.slice(start, end + 1).map((name, i) => (
                     <span key={`${name}-${i}`} className="itcd-popular-item">
-                      {i > 0 && <img src={`${T}route-arrow.svg`} alt="" aria-hidden />}
+                      {i > 0 && <img loading="lazy" src={`${T}route-arrow.svg`} alt="" aria-hidden />}
                       <span>{name}</span>
                     </span>
                   ))}
@@ -364,7 +364,7 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
                         />
                       )}
                       {dTrain?.row === ri && (
-                        <img
+                        <img loading="lazy"
                           src="/figma/train/card-train-horizontal.png"
                           alt=""
                           className="itcd-train"
@@ -395,7 +395,7 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
     >
 
       <header className="itc-header">
-        <img src={thumb} alt="" className="itc-header-thumb" />
+        <img loading="lazy" src={thumb} alt="" className="itc-header-thumb" />
         <div className="itc-header-text">
           <p className="itc-header-sub">Europe · full route</p>
           <p className="itc-header-title">Where do you want to hop on &amp; off?</p>
@@ -431,7 +431,7 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
               <button className="itc-pop-card" key={pi} onClick={() => applyPreset(start, end)}>
                 {stations.slice(start, end + 1).map((name, i) => (
                   <span key={i} className="itc-route-item">
-                    {i > 0 && <img src={`${T}route-arrow.svg`} alt="" aria-hidden className="itc-route-arrow" />}
+                    {i > 0 && <img loading="lazy" src={`${T}route-arrow.svg`} alt="" aria-hidden className="itc-route-arrow" />}
                     <span className="itc-pop-city">{name}</span>
                   </span>
                 ))}
@@ -442,7 +442,7 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
           <div className="itc-banner-wrap">
             <div className="itc-band" />
             <div className="itc-banner">
-              <img src={`${T}info-gold.svg`} alt="" className="itc-banner-icon" />
+              <img loading="lazy" src={`${T}info-gold.svg`} alt="" className="itc-banner-icon" />
               <p className="itc-banner-text">
                 Tap a city to start, tap another to end. Nights per city are fixed.
               </p>
@@ -484,7 +484,7 @@ export default function ItineraryCustomiser({ isOpen, onClose, thumb, stations, 
             />
           )}
           {train && (
-            <img
+            <img loading="lazy"
               src={`${T}v3-train.png`}
               alt=""
               className="itc3-train"

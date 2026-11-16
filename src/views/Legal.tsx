@@ -28,7 +28,7 @@ export function LegalView({ onBack, onNavigate, endMark }: LegalViewProps) {
       <header className="leg-header">
         <div className="leg-header-left">
           <button className="leg-back" type="button" onClick={onBack} aria-label="Go back">
-            <img src={`${L}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+            <img loading="lazy" src={`${L}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
           <span className="leg-header-title">Legal</span>
         </div>
@@ -44,10 +44,10 @@ export function LegalView({ onBack, onNavigate, endMark }: LegalViewProps) {
               onClick={() => onNavigate(item.to)}
             >
               <div className="leg-row-left">
-                <img src={`${L}icon-book.svg`} width={16} height={16} alt="" aria-hidden className="leg-row-icon" />
+                <img loading="lazy" src={`${L}icon-book.svg`} width={16} height={16} alt="" aria-hidden className="leg-row-icon" />
                 <span className="leg-row-label">{item.label}</span>
               </div>
-              <img src={`${L}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
+              <img loading="lazy" src={`${L}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
             </button>
           ))}
         </div>

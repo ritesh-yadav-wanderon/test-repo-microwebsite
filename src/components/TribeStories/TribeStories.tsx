@@ -34,7 +34,7 @@ export default function TribeStories() {
           </div>
           <div className="tribe-review-meta">
             <div className="tribe-google-row">
-              <img src="/figma/reviews/google-logo.svg" width={20} height={20} alt="Google" />
+              <img loading="lazy" src="/figma/reviews/google-logo.svg" width={20} height={20} alt="Google" />
               <span className="tribe-review-count">14921 Reviews</span>
             </div>
             <p className="tribe-wanderers">Over 300,000 Wanderers have traveled with us</p>

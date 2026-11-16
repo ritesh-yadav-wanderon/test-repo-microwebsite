@@ -26,7 +26,7 @@ export function PaymentsView({ onBack, onExit }: PaymentsViewProps) {
             aria-label="Back"
             onClick={onBack}
           >
-            <img src={`${P}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+            <img loading="lazy" src={`${P}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
           <span className="pay-title">Payments</span>
         </div>
@@ -75,7 +75,7 @@ export function PaymentsView({ onBack, onExit }: PaymentsViewProps) {
 
             <div className="pay-dates">
               <span className="pay-dates-tag">
-                <img src={`${PAY}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${PAY}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
                 Trip Dates:
               </span>
               <span className="pay-dates-value">{entry.tripDates}</span>
@@ -117,7 +117,7 @@ export function PaymentsView({ onBack, onExit }: PaymentsViewProps) {
             ) : (
               <CtaButton className="pay-cta">
                 Invoice
-                <img src={`${PAY}icon-invoice.svg`} width={20} height={20} alt="" aria-hidden />
+                <img loading="lazy" src={`${PAY}icon-invoice.svg`} width={20} height={20} alt="" aria-hidden />
               </CtaButton>
             )}
           </section>

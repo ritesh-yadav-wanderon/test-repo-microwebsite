@@ -50,7 +50,7 @@ export default function WhyTravellerCard({
         aria-expanded={open}
         onClick={onToggle}
       >
-        <img src={`${BASE}/why-plus.svg`} alt="" />
+        <img loading="lazy" src={`${BASE}/why-plus.svg`} alt="" />
       </button>
     </div>
   );

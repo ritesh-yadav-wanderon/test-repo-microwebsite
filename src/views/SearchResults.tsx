@@ -152,7 +152,7 @@ export function SearchResultsView({ initialData }: SearchResultsViewProps) {
         <div className="sr-sort-head">
           <p className="sr-sort-title">Sort By</p>
           <button className="sr-sort-close" type="button" onClick={() => setSortOpen(false)} aria-label="Close">
-            <img src="/figma/listing/close-icon.svg" alt="" width={20} height={20} />
+            <img loading="lazy" src="/figma/listing/close-icon.svg" alt="" width={20} height={20} />
           </button>
         </div>
         <div className="sr-sort-list">
@@ -211,7 +211,7 @@ export function SearchResultsView({ initialData }: SearchResultsViewProps) {
                   onClick={(e) => { e.stopPropagation(); setSortBy(null); }}
                   onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); setSortBy(null); } }}
                 >
-                  <img src="/figma/listing/close-icon.svg" alt="" width={14} height={14} />
+                  <img loading="lazy" src="/figma/listing/close-icon.svg" alt="" width={14} height={14} />
                 </span>
               ) : (
                 <img src="/figma/listing/sort-arrow.svg" alt="" className="sr-fpill-ico" loading="lazy" />

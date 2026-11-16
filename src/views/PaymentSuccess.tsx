@@ -97,7 +97,7 @@ export function PaymentSuccessView({ refParam, navState, initialData }: PaymentS
             aria-label="Back"
             onClick={handleContinue}
           >
-            <img src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+            <img loading="lazy" src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
           <span className="ps-dheader-title">Payment Confirmations</span>
         </header>
@@ -108,12 +108,12 @@ export function PaymentSuccessView({ refParam, navState, initialData }: PaymentS
           <div className="ps-avatars">
             <span className="ps-avatar ps-avatar--check">
               <span className="ps-avatar-inner">
-                <img src={`${M}check-circle.svg`} width={20} height={20} alt="" aria-hidden />
+                <img loading="lazy" src={`${M}check-circle.svg`} width={20} height={20} alt="" aria-hidden />
               </span>
             </span>
             <span className="ps-avatar">
               <span className="ps-avatar-inner">
-                <img src={`${M}avatar.png`} alt="" aria-hidden />
+                <img loading="lazy" src={`${M}avatar.png`} alt="" aria-hidden />
               </span>
             </span>
           </div>

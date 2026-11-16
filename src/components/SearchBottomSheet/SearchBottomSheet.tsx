@@ -16,7 +16,7 @@ import CtaButton from "@/components/ui/CtaButton";
 
 // Vite's asset imports resolve to a plain URL string; Next.js's resolve to a
 // StaticImageData-shaped object ({ src, width, height, ... }), meant for
-// next/image. These files use plain <img src>, so every import needs
+// next/image. These files use plain <img loading="lazy" src>, so every import needs
 // normalizing to a string to render correctly under both bundlers.
 function srcOf(img: string | { src: string }): string {
   return typeof img === "string" ? img : img.src;
@@ -384,7 +384,7 @@ export default function SearchBottomSheet({
               onClick={() => setActiveCat(i)}
             >
               {cat.img
-                ? <img src={cat.img} className="sbs-cat-ico" alt="" />
+                ? <img loading="lazy" src={cat.img} className="sbs-cat-ico" alt="" />
                 : <div className="sbs-cat-ico-placeholder" />}
               <span className="sbs-cat-label">
                 {cat.label[0]}{cat.label[1] ? <><br />{cat.label[1]}</> : null}
@@ -417,7 +417,7 @@ export default function SearchBottomSheet({
                 onChange={(e) => setQuery(e.target.value)}
                 autoFocus
               />
-              <img src="/figma/search/search-icon.svg" width={18} height={18} alt="" />
+              <img loading="lazy" src="/figma/search/search-icon.svg" width={18} height={18} alt="" />
             </div>
             <div className="sbs-suggestions">
               {menuMatches.length > 0 && (
@@ -489,7 +489,7 @@ export default function SearchBottomSheet({
           >
             <span className="sbs-row-label">Where</span>
             <span className="sbs-row-value">
-              <img src={distanceIcon} width={10} height={15} alt="" />
+              <img loading="lazy" src={distanceIcon} width={10} height={15} alt="" />
               <span>{destination || "Anywhere"}</span>
             </span>
           </button>
@@ -526,7 +526,7 @@ export default function SearchBottomSheet({
                         onClick={() => toggleMonth(mk)}
                         type="button"
                       >
-                        <img
+                        <img loading="lazy"
                           src={active ? calendarCheckIcon : calendarMonthIcon}
                           width={20} height={20} alt=""
                         />
@@ -561,7 +561,7 @@ export default function SearchBottomSheet({
           >
             <span className="sbs-row-label">When</span>
             <span className={`sbs-row-value${hasWhen ? " sbs-row-value--set" : ""}`}>
-              <img src={calendarMonthIcon} width={13} height={15} alt="" />
+              <img loading="lazy" src={calendarMonthIcon} width={13} height={15} alt="" />
               <span>{dateLabel()}</span>
             </span>
           </button>

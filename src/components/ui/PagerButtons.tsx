@@ -36,7 +36,7 @@ export default function PagerButtons({
     <div className={wrap}>
       <button className={btn} type="button" onClick={onPrev} aria-label={prevLabel} disabled={!prevActive}>
         {variant === "pill" ? (
-          <img
+          <img loading="lazy"
             src={prevActive ? "/figma/scroll-btn/chevron-right.svg" : "/figma/scroll-btn/chevron-left.svg"}
             alt=""
             aria-hidden
@@ -50,7 +50,7 @@ export default function PagerButtons({
       </button>
       <button className={btn} type="button" onClick={onNext} aria-label={nextLabel}>
         {variant === "pill" ? (
-          <img src="/figma/scroll-btn/chevron-right.svg" alt="" aria-hidden className="pgr-icon" />
+          <img loading="lazy" src="/figma/scroll-btn/chevron-right.svg" alt="" aria-hidden className="pgr-icon" />
         ) : (
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
             <path d="m9 4 8 8-8 8" stroke="#3d3d3d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

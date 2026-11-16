@@ -82,7 +82,7 @@ export const TripCardItem = memo(function TripCardItem({ trip, batchesText, href
         <p className="tdp2-more-cv2-title">{trip.title}</p>
         {dur && (
           <div className="tdp2-more-cv2-dur">
-            <img src={`${T}icon-calendar-clock.svg`} width={12} height={12} alt="" aria-hidden />
+            <img loading="lazy" src={`${T}icon-calendar-clock.svg`} width={12} height={12} alt="" aria-hidden />
             <span>{dur}</span>
           </div>
         )}

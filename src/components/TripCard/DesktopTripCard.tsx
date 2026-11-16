@@ -63,7 +63,7 @@ const DesktopTripCard = memo(function DesktopTripCard({ trip, onMoreDates }: Des
       <h3 className="dtrips__card-title">{trip.title}</h3>
       {trip.duration && (
         <p className="dtrips__duration">
-          <img src={`${T}/icon-calendar-clock.svg`} alt="" />
+          <img loading="lazy" src={`${T}/icon-calendar-clock.svg`} alt="" />
           {trip.duration.nights}N/{trip.duration.days}D
         </p>
       )}

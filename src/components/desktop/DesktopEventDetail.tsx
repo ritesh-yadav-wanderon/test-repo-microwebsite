@@ -133,7 +133,7 @@ export default function DesktopEventDetail() {
     <div className="depd">
       {/* Blurred gif backdrop behind the hero (Figma 6626:9523) */}
       <div className="depd__backdrop" aria-hidden>
-        <img src={HERO_BACKDROP} alt="" />
+        <img loading="lazy" src={HERO_BACKDROP} alt="" />
       </div>
 
       {/* Global header — transparent by default, black blur on scroll */}
@@ -163,14 +163,14 @@ export default function DesktopEventDetail() {
               aria-pressed={saved}
               onClick={() => setSaved((s) => !s)}
             >
-              <img src={`${A}heart.svg`} alt="" width={18} height={18} aria-hidden />
+              <img loading="lazy" src={`${A}heart.svg`} alt="" width={18} height={18} aria-hidden />
             </button>
             <button className="depd__chip" type="button" onClick={() => setCompared((c) => !c)}>
-              <img src="/figma/nav2/events/compare.svg" alt="" width={14} height={14} aria-hidden />
+              <img loading="lazy" src="/figma/nav2/events/compare.svg" alt="" width={14} height={14} aria-hidden />
               <span>{compared ? "Remove from Compare" : "Add to Compare"}</span>
             </button>
             <button className="depd__chip" type="button" onClick={handleShare}>
-              <img src={`${A}share.svg`} alt="" width={14} height={14} aria-hidden />
+              <img loading="lazy" src={`${A}share.svg`} alt="" width={14} height={14} aria-hidden />
               <span>Share</span>
             </button>
             <button
@@ -180,7 +180,7 @@ export default function DesktopEventDetail() {
               aria-pressed={playing}
               onClick={togglePlay}
             >
-              <img src={`${A}play-circle.svg`} alt="" width={27} height={27} aria-hidden />
+              <img loading="lazy" src={`${A}play-circle.svg`} alt="" width={27} height={27} aria-hidden />
             </button>
           </div>
         </section>
@@ -219,14 +219,14 @@ export default function DesktopEventDetail() {
             <div className="depd__pd">
               <div className="depd__pd-col">
                 <span className="depd__pd-label">
-                  <img src={`${A}location.svg`} alt="" width={12} height={14} aria-hidden /> Pick Up
+                  <img loading="lazy" src={`${A}location.svg`} alt="" width={12} height={14} aria-hidden /> Pick Up
                 </span>
                 <p className="depd__pd-place">{EVENT.pickup}</p>
               </div>
               <span className="depd__pd-line" aria-hidden />
               <div className="depd__pd-col depd__pd-col--right">
                 <span className="depd__pd-label">
-                  <img src={`${A}location.svg`} alt="" width={12} height={14} aria-hidden /> Drop
+                  <img loading="lazy" src={`${A}location.svg`} alt="" width={12} height={14} aria-hidden /> Drop
                 </span>
                 <p className="depd__pd-place">{EVENT.drop}</p>
               </div>
@@ -240,7 +240,7 @@ export default function DesktopEventDetail() {
               <div className="depd__tk-grid">
                 {EVENT.thingsToKnow.map((item) => (
                   <div className="depd__tk-item" key={item.label}>
-                    <img src={item.icon} width={36} height={36} alt="" aria-hidden />
+                    <img loading="lazy" src={item.icon} width={36} height={36} alt="" aria-hidden />
                     <div className="depd__tk-text">
                       <span className="depd__tk-label">{item.label}</span>
                       <span className="depd__tk-value">{item.value}</span>
@@ -301,7 +301,7 @@ export default function DesktopEventDetail() {
                 Book Now
               </CtaButton>
               <div className="depd__book-women">
-                <img src="/figma/desktop-trip/bc-women.svg" alt="" aria-hidden />
+                <img loading="lazy" src="/figma/desktop-trip/bc-women.svg" alt="" aria-hidden />
                 <span>60% Women travellers have joined!</span>
               </div>
             </div>

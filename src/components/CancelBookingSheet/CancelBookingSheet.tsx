@@ -44,7 +44,7 @@ export default function CancelBookingSheet({
 
       <div className="cbs-head">
         <div className="cbs-emoji">
-          <img src={`${C}emoji-sad.png`} alt="" aria-hidden />
+          <img loading="lazy" src={`${C}emoji-sad.png`} alt="" aria-hidden />
         </div>
         <p className="cbs-title">We are sorry to see you cancel an adventure with us!</p>
       </div>

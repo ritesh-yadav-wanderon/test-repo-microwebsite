@@ -85,7 +85,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
           aria-label="Back"
           onClick={goBack}
         >
-          <img src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+          <img loading="lazy" src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
         </button>
         <span className="dbk-header-title">
           {isPersonalDetails ? "Personal Details" : "Select Services"}
@@ -104,7 +104,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
 
                 <div className="dbk-package-duration">
                   <div className="dbk-dur-label">
-                    <img src={`${A}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
+                    <img loading="lazy" src={`${A}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
                     <span>Trip Duration:</span>
                   </div>
                   <div className="dbk-dur-values">
@@ -116,14 +116,14 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                 <div className="dbk-package-pd">
                   <div className="dbk-pd-col">
                     <div className="dbk-pd-label">
-                      <img src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
+                      <img loading="lazy" src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
                       <span>Pick Up</span>
                     </div>
                     <p className="dbk-pd-place">{data.pickUp}</p>
                   </div>
                   <div className="dbk-pd-col dbk-pd-col--right">
                     <div className="dbk-pd-label">
-                      <img src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
+                      <img loading="lazy" src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
                       <span>Drop</span>
                     </div>
                     <p className="dbk-pd-place">{data.drop}</p>
@@ -145,13 +145,13 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
             <div className="dbk-panel">
               <div className="dbk-subhead">
                 <span className="dbk-section-icon">
-                  <img src={`${A}icon-person2.svg`} width={16} height={16} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-person2.svg`} width={16} height={16} alt="" aria-hidden />
                 </span>
                 <span className="dbk-section-title">Personal Details</span>
               </div>
 
               <div className="dbk-passport-tag">
-                <img src={`${A}icon-passport.svg`} width={20} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${A}icon-passport.svg`} width={20} height={16} alt="" aria-hidden />
                 <span>
                   Enter your full first and last name as stated in your ID or passport, including
                   any middle name(s) and/or initials.
@@ -206,7 +206,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                   </select>
                   <label htmlFor="dbk-gender" className="dbk-flabel">Gender*</label>
                   <span className="dbk-field-icon" aria-hidden>
-                    <img src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
+                    <img loading="lazy" src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
                   </span>
                 </div>
 
@@ -220,14 +220,14 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                   />
                   <label htmlFor="dbk-dob" className="dbk-flabel">Date Of Birth*</label>
                   <span className="dbk-field-icon" aria-hidden>
-                    <img src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
+                    <img loading="lazy" src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
                   </span>
                 </div>
 
                 <div className="dbk-phone">
                   <button className="dbk-phone-code" type="button">
                     <span>IN +91</span>
-                    <img src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
+                    <img loading="lazy" src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
                   </button>
                   <div className="dbk-field dbk-field--grow">
                     <input
@@ -260,7 +260,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
             <div className="dbk-panel">
               <div className="dbk-subhead">
                 <span className="dbk-section-icon">
-                  <img src={`${A}icon-id-card.svg`} width={16} height={16} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-id-card.svg`} width={16} height={16} alt="" aria-hidden />
                 </span>
                 <span className="dbk-section-title">Documents</span>
               </div>
@@ -283,7 +283,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                   <span className="dbk-upload-label">
                     {panFile ? panFile.name : "Upload PAN Card Front Image*"}
                   </span>
-                  <img src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
+                  <img loading="lazy" src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
                   <input
                     type="file"
                     accept="image/*,.pdf"
@@ -295,7 +295,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                 <p className="dbk-doc-group">Passport</p>
 
                 <div className="dbk-doc-tag">
-                  <img src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
                   <span>Minimum passport validity upto 3rd January 2027.</span>
                 </div>
 
@@ -322,7 +322,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                       Passport Valid Upto*
                     </label>
                     <span className="dbk-field-icon" aria-hidden>
-                      <img src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
+                      <img loading="lazy" src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
                     </span>
                   </div>
                 </div>
@@ -331,7 +331,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                   <span className="dbk-upload-label">
                     {passportFile ? passportFile.name : "Upload Passport Front*"}
                   </span>
-                  <img src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
+                  <img loading="lazy" src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
                   <input
                     type="file"
                     accept="image/*,.pdf"
@@ -349,14 +349,14 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
           <section className="dbk-card dbk-card--accommodation">
             <div className="dbk-subhead">
               <span className="dbk-section-icon">
-                <img src={`${A}icon-villa.svg`} width={16} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${A}icon-villa.svg`} width={16} height={16} alt="" aria-hidden />
               </span>
               <span className="dbk-section-title">Select Accommodation Type</span>
             </div>
 
             <div className="dbk-block">
               <div className="dbk-warn-tag">
-                <img src={`${A}icon-info-yellow.svg`} width={14} height={14} alt="" aria-hidden />
+                <img loading="lazy" src={`${A}icon-info-yellow.svg`} width={14} height={14} alt="" aria-hidden />
                 <span>Add total number of travelers</span>
               </div>
 
@@ -365,7 +365,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                   <p className="dbk-room-name">Hotel - (Double Sharing)</p>
                   <div className="dbk-room-price-line">
                     <span className="dbk-room-strike">
-                      <img src={`${A}icon-rupee.svg`} width={10} height={10} alt="" aria-hidden />
+                      <img loading="lazy" src={`${A}icon-rupee.svg`} width={10} height={10} alt="" aria-hidden />
                       {data.perPersonStrike}/-
                     </span>
                     <span className="dbk-room-price">&#8377; {data.perPerson}/-</span>
@@ -387,7 +387,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
               <div className="dbk-block">
                 <div className="dbk-blockhead">
                   <span className="dbk-section-icon">
-                    <img src={`${A}icon-groups.svg`} width={16} height={16} alt="" aria-hidden />
+                    <img loading="lazy" src={`${A}icon-groups.svg`} width={16} height={16} alt="" aria-hidden />
                   </span>
                   <span className="dbk-blockhead-title">Who are you booking for?</span>
                 </div>
@@ -433,7 +433,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                 classPrefix="dbk-option"
                 iconClassName="dbk-section-icon"
                 checkboxClassName="dbk-checkbox"
-                icon={<img src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />}
+                icon={<img loading="lazy" src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />}
                 label="Flexible Cancellation"
                 price={<>+ &#8377;5,999/-</>}
               />
@@ -461,7 +461,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
             >
               <span className="dbk-notes-label">Notes</span>
               <span className={`dbk-caret${notesOpen ? " dbk-caret--open" : ""}`} aria-hidden>
-                <img src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
+                <img loading="lazy" src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
               </span>
             </button>
           </section>
@@ -474,7 +474,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
             <div className="dbk-rail-inner">
               <div className="dbk-bill">
                 <div className="dbk-bill-pill">
-                  <img src={`${A}icon-receipt.svg`} width={16} height={16} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-receipt.svg`} width={16} height={16} alt="" aria-hidden />
                   <span>Bill Summary</span>
                 </div>
 
@@ -520,7 +520,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                   <div className="dbk-bill-row">
                     <button className="dbk-bill-tcs" type="button">
                       <span>TCS @ 5%</span>
-                      <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
+                      <img loading="lazy" src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
                     </button>
                     <span>&#8377;{formatINR(pricing.tcs)}/-</span>
                   </div>
@@ -551,7 +551,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
 
             <div className="dbk-rail-bottom">
               <div className="dbk-rail-tags">
-                <img src={`${A}icon-your-trips.svg`} width={14} height={14} alt="" aria-hidden />
+                <img loading="lazy" src={`${A}icon-your-trips.svg`} width={14} height={14} alt="" aria-hidden />
                 <span className="dbk-rail-tag">Europe Trip</span>
                 <span className="dbk-rail-dot" aria-hidden />
                 <span className="dbk-rail-tag">{data.dateRange}</span>
@@ -570,7 +570,7 @@ export default function DesktopBooking({ form }: DesktopBookingProps) {
                   <span className="dbk-rail-price">&#8377;{formatINR(pricing.toPay)}/-</span>
                   <button className="dbk-rail-fee" type="button">
                     <span>+</span>
-                    <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
+                    <img loading="lazy" src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
                     <span>Convenience fee</span>
                   </button>
                 </div>

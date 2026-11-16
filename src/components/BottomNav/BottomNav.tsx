@@ -1,4 +1,4 @@
-import type { MouseEvent, ReactNode } from "react";
+import { useSyncExternalStore, type MouseEvent, type ReactNode } from "react";
 import { useAppNav } from "@/hooks/useAppNav";
 import "./BottomNav.css";
 
@@ -18,11 +18,11 @@ export const WHATSAPP_URL =
  *  URL's own query params for those same keys — read straight off
  *  `window.location` since this nav is mounted on pages that don't all wrap
  *  useAppSearchParams()'s provider. */
-function isActivePath(pathname: string, to: string, end?: boolean): boolean {
+function isActivePath(pathname: string, search: string | null, to: string, end?: boolean): boolean {
   const [toPath, toQuery] = to.split("?");
   if (toQuery) {
-    if (typeof window === "undefined" || pathname !== toPath) return false;
-    const current = new URLSearchParams(window.location.search);
+    if (search === null || pathname !== toPath) return false;
+    const current = new URLSearchParams(search);
     const wanted = new URLSearchParams(toQuery);
     for (const [key, value] of wanted.entries()) {
       if (current.get(key) !== value) return false;
@@ -33,6 +33,9 @@ function isActivePath(pathname: string, to: string, end?: boolean): boolean {
   return pathname === to || pathname.startsWith(`${to}/`);
 }
 
+// Navigation re-renders NavItem via useAppNav(), so no subscription is needed.
+const subscribeNoop = () => () => {};
+
 /** Drop-in replacement for react-router's <NavLink> — same active-state
  *  styling and client-side navigation, routed through useAppNav() so this
  *  works identically under Next.js (no <BrowserRouter> ancestor there). */
@@ -42,7 +45,10 @@ function NavItem({
   to: string; end?: boolean; className: string; ariaLabel: string; children: ReactNode;
 }) {
   const nav = useAppNav();
-  const active = isActivePath(nav.pathname, to, end);
+  // Server snapshot is null (no window.location) so the first client render
+  // matches the SSR markup; the query-param match applies right after hydration.
+  const search = useSyncExternalStore(subscribeNoop, () => window.location.search, () => null);
+  const active = isActivePath(nav.pathname, search, to, end);
 
   function handleClick(e: MouseEvent<HTMLAnchorElement>) {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;

@@ -281,7 +281,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
             aria-label="Back"
             onClick={goBack}
           >
-            <img src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+            <img loading="lazy" src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
           <div className="mb-nav-crumb">
             <span className="mb-nav-crumb-root">My Bookings</span>
@@ -295,7 +295,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
           aria-label="Close"
           onClick={() => nav.push("/profile")}
         >
-          <img src={`${A}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+          <img loading="lazy" src={`${A}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
         </button>
       </header>
 
@@ -321,7 +321,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
         {/* ── Info tag (hidden once KYC / co-travellers / due balance are all done) ── */}
         {!allComplete && (
           <div className="mb-info-tag">
-            <img src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
+            <img loading="lazy" src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
             <p>Complete {joinItems(pendingItems)} to confirm your booking.</p>
           </div>
         )}
@@ -333,7 +333,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
 
             {/* Personal Information */}
             <div className="mb-subhead">
-              <img src={`${A}icon-person2.svg`} width={20} height={20} alt="" aria-hidden />
+              <img loading="lazy" src={`${A}icon-person2.svg`} width={20} height={20} alt="" aria-hidden />
               <span>Personal Information</span>
             </div>
 
@@ -359,7 +359,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
                 </select>
                 <label htmlFor="mb-gender" className="mb-label">Gender*</label>
                 <span className="mb-field-icon" aria-hidden>
-                  <img src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
+                  <img loading="lazy" src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
                 </span>
               </div>
 
@@ -367,7 +367,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
                 <input id="mb-dob" className={`mb-input${errCls("dob")}`} placeholder="DD-MM-YYYY" value={dob} onChange={(e) => setDob(e.target.value)} />
                 <label htmlFor="mb-dob" className="mb-label">Date Of Birth*</label>
                 <span className="mb-field-icon" aria-hidden>
-                  <img src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
+                  <img loading="lazy" src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
                 </span>
               </div>
 
@@ -375,13 +375,13 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
               <div className="mb-phone">
                 <button className="mb-phone-code" type="button">
                   <span>IN +91</span>
-                  <img src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
                 </button>
                 <div className="mb-field mb-field--grow">
                   <input id="mb-whatsapp" className={`mb-input${errCls("whatsapp")}`} inputMode="tel" placeholder=" " value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
                   <label htmlFor="mb-whatsapp" className="mb-label">WhatsApp Number*</label>
                   <span className="mb-field-icon" aria-hidden>
-                    <img src={`${M}icon-whatsapp-check.svg`} width={16} height={16} alt="" />
+                    <img loading="lazy" src={`${M}icon-whatsapp-check.svg`} width={16} height={16} alt="" />
                   </span>
                 </div>
               </div>
@@ -390,7 +390,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
               <div className="mb-phone">
                 <button className="mb-phone-code" type="button">
                   <span>IN +91</span>
-                  <img src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
                 </button>
                 <div className="mb-field mb-field--grow">
                   <input id="mb-altNumber" className="mb-input" inputMode="tel" placeholder=" " value={altNumber} onChange={(e) => setAltNumber(e.target.value)} />
@@ -409,7 +409,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
                   <label htmlFor="mb-addr1" className="mb-label">Address Line 1</label>
                 </div>
                 <div className="mb-hint">
-                  <img src={`${A}icon-info-grey.svg`} width={13} height={13} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-info-grey.svg`} width={13} height={13} alt="" aria-hidden />
                   <span>Address is required for invoice generation.</span>
                 </div>
               </div>
@@ -453,11 +453,11 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
               <div className="mb-row2">
                 <button className="mb-upload" type="button">
                   <span>Upload Aadhaar Front*</span>
-                  <img src={`${M}icon-upload.svg`} width={20} height={20} alt="" aria-hidden />
+                  <img loading="lazy" src={`${M}icon-upload.svg`} width={20} height={20} alt="" aria-hidden />
                 </button>
                 <button className="mb-upload" type="button">
                   <span>Upload Aadhaar Back*</span>
-                  <img src={`${M}icon-upload.svg`} width={20} height={20} alt="" aria-hidden />
+                  <img loading="lazy" src={`${M}icon-upload.svg`} width={20} height={20} alt="" aria-hidden />
                 </button>
               </div>
             </div>
@@ -466,7 +466,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
             <div className="mb-doc-block">
               <p className="mb-doc-title">Passport</p>
               <div className="mb-info-tag mb-info-tag--full">
-                <img src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
                 <p>Minimum passport validity upto 3rd January 2027.</p>
               </div>
               <div className="mb-row2">
@@ -476,13 +476,13 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
                 <div className="mb-field">
                   <input id="mb-passportValid" className="mb-input" placeholder="Passport Valid Upto*" value={passportValid} onChange={(e) => setPassportValid(e.target.value)} />
                   <span className="mb-field-icon" aria-hidden>
-                    <img src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
+                    <img loading="lazy" src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
                   </span>
                 </div>
               </div>
               <button className="mb-upload mb-upload--full" type="button">
                 <span>Upload Passport Front*</span>
-                <img src={`${M}icon-upload.svg`} width={20} height={20} alt="" aria-hidden />
+                <img loading="lazy" src={`${M}icon-upload.svg`} width={20} height={20} alt="" aria-hidden />
               </button>
             </div>
 
@@ -506,13 +506,13 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
 
               <div className="mb-trip-route">
                 <span className="mb-trip-loc">
-                  <img src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
                   Pick Up
                 </span>
                 <span className="mb-trip-line" aria-hidden />
                 <span className="mb-trip-dur">{data.durationLabel}</span>
                 <span className="mb-trip-loc mb-trip-loc--right">
-                  <img src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
                   Drop
                 </span>
               </div>
@@ -529,7 +529,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
               </div>
 
               <button className="mb-download" type="button">
-                <img src={`${ITIN}download-icon.svg`} width={16} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${ITIN}download-icon.svg`} width={16} height={16} alt="" aria-hidden />
                 <span>Download Itinerary</span>
               </button>
             </div>
@@ -546,7 +546,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
                   aria-label="Edit KYC details"
                   onClick={() => setSaved(false)}
                 >
-                  <img src={`${PROF}icon-edit.svg`} width={24} height={24} alt="" aria-hidden />
+                  <img loading="lazy" src={`${PROF}icon-edit.svg`} width={24} height={24} alt="" aria-hidden />
                 </button>
               </div>
 
@@ -617,7 +617,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
                   type="button"
                   onClick={() => setCancelOpen(true)}
                 >
-                  <img src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />
                   <span>Cancel Booking</span>
                 </button>
               )}
@@ -637,7 +637,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
                 <span className="mb-co-card-name">
                   {[c.firstName, c.middleName, c.lastName].filter(Boolean).join(" ")}
                 </span>
-                <img src={`${CT}icon-view.svg`} width={20} height={20} alt="" aria-hidden />
+                <img loading="lazy" src={`${CT}icon-view.svg`} width={20} height={20} alt="" aria-hidden />
               </div>
             ))}
 
@@ -646,7 +646,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
               type="button"
               onClick={() => setCoSheetOpen(true)}
             >
-              <img src={`${CT}icon-plus.svg`} width={20} height={20} alt="" aria-hidden />
+              <img loading="lazy" src={`${CT}icon-plus.svg`} width={20} height={20} alt="" aria-hidden />
               <span>Add Co-Traveller</span>
             </button>
 
@@ -658,7 +658,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
               <div className="mb-co-share">
                 <span className="mb-co-share-label">Get Your Co-Travelers Onboard!</span>
                 <button className="mb-co-share-btn" type="button">
-                  <img src={`${CT}icon-people-add.svg`} width={20} height={20} alt="" aria-hidden />
+                  <img loading="lazy" src={`${CT}icon-people-add.svg`} width={20} height={20} alt="" aria-hidden />
                   <span>Share</span>
                 </button>
               </div>
@@ -670,7 +670,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
           <div className="mb-pay">
             {/* Bill summary */}
             <div className="mb-pay-billhead">
-              <img src={`${PAY}icon-receipt.svg`} width={16} height={16} alt="" aria-hidden />
+              <img loading="lazy" src={`${PAY}icon-receipt.svg`} width={16} height={16} alt="" aria-hidden />
               <span>Bill Summary</span>
               <span className="mb-pay-billhead-sep" aria-hidden />
               <span>Travellers: {data.travelers}</span>
@@ -708,7 +708,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
             {/* Transactions */}
             <div className="mb-pay-section">
               <div className="mb-pay-section-head">
-                <img src={`${PAY}icon-account-balance.svg`} width={16} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${PAY}icon-account-balance.svg`} width={16} height={16} alt="" aria-hidden />
                 <span>Transactions</span>
               </div>
               <div className="mb-pay-txns">
@@ -718,7 +718,7 @@ export function MyBookingView({ refParam, navState, initialData }: MyBookingView
                       <span className="mb-pay-txn-ref">Reference No. {t.ref}</span>
                       <span className="mb-pay-txn-amount">
                         {t.amount}
-                        <img src={`${A}icon-arrow-drop.svg`} width={24} height={14} alt="" aria-hidden />
+                        <img loading="lazy" src={`${A}icon-arrow-drop.svg`} width={24} height={14} alt="" aria-hidden />
                       </span>
                     </div>
                     <span className="mb-pay-txn-date">{t.date}</span>

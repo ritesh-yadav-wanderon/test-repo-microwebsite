@@ -125,7 +125,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
       {/* ── Header ─────────────────────────────────────────── */}
       <header className="dbk-header">
         <button className="dbk-header-back" type="button" aria-label="Back" onClick={onBack}>
-          <img src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+          <img loading="lazy" src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
         </button>
         <span className="dbk-header-title">Review Booking Details</span>
       </header>
@@ -142,7 +142,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
 
                 <div className="dbk-package-duration">
                   <div className="dbk-dur-label">
-                    <img src={`${A}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
+                    <img loading="lazy" src={`${A}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
                     <span>Trip Duration:</span>
                   </div>
                   <div className="dbk-dur-values">
@@ -154,14 +154,14 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
                 <div className="dbk-package-pd">
                   <div className="dbk-pd-col">
                     <div className="dbk-pd-label">
-                      <img src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
+                      <img loading="lazy" src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
                       <span>Pick Up</span>
                     </div>
                     <p className="dbk-pd-place">{data.pickUp}</p>
                   </div>
                   <div className="dbk-pd-col dbk-pd-col--right">
                     <div className="dbk-pd-label">
-                      <img src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
+                      <img loading="lazy" src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
                       <span>Drop</span>
                     </div>
                     <p className="dbk-pd-place">{data.drop}</p>
@@ -182,7 +182,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
             {/* Personal details recap */}
             <div className="drb-details">
               <div className="drb-pill">
-                <img src={`${A}icon-person2.svg`} width={16} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${A}icon-person2.svg`} width={16} height={16} alt="" aria-hidden />
                 <span>Personal Details (Primary Traveller)</span>
               </div>
 
@@ -219,7 +219,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
             {/* Bill summary */}
             <div className="drb-bill">
               <div className="drb-bill-pill">
-                <img src={`${A}icon-receipt.svg`} width={16} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${A}icon-receipt.svg`} width={16} height={16} alt="" aria-hidden />
                 <span>Bill Summary</span>
               </div>
 
@@ -265,7 +265,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
                 <div className="dbk-bill-row">
                   <button className="dbk-bill-tcs" type="button">
                     <span>TCS @ 5%</span>
-                    <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
+                    <img loading="lazy" src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
                   </button>
                   <span>&#8377;{formatINR(pricing.tcs)}/-</span>
                 </div>
@@ -288,7 +288,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
               <div className={`drb-later${selected === "later" ? " drb-opt--active" : ""}`}>
                 <button className="drb-later-card" type="button" onClick={() => setSelected("later")}>
                   <div className="drb-opt-head">
-                    <img
+                    <img loading="lazy"
                       src={selected === "later" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
                       width={16}
                       height={16}
@@ -328,7 +328,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
                 type="button"
                 onClick={() => setSelected("full")}
               >
-                <img
+                <img loading="lazy"
                   src={selected === "full" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
                   width={16}
                   height={16}
@@ -363,7 +363,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
             <div className="drb-cta">
               {pricing.saved > 0 && (
                 <div className="drb-saved">
-                  <img src={`${A}icon-person.svg`} width={24} height={24} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-person.svg`} width={24} height={24} alt="" aria-hidden />
                   <span className="drb-saved-amt">&#8377;{formatINR(pricing.saved)}/-</span>
                   <span className="drb-saved-text">saved on this trip.</span>
                 </div>
@@ -381,7 +381,7 @@ export default function DesktopReviewBooking({ form, onBack }: DesktopReviewBook
                   <span className="drb-cta-price">&#8377;{formatINR(payNum)}/-</span>
                   <button className="dbk-rail-fee" type="button">
                     <span>+</span>
-                    <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
+                    <img loading="lazy" src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
                     <span>Convenience fee</span>
                   </button>
                 </div>

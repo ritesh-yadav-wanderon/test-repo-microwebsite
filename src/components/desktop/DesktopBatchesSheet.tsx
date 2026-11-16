@@ -118,7 +118,7 @@ function DBatchCard({
         </div>
 
         <div className="dbat-group-row">
-          <img className="dbat-group-icon" src={`${ASSETS}icon-groups.svg`} alt="" aria-hidden />
+          <img loading="lazy" className="dbat-group-icon" src={`${ASSETS}icon-groups.svg`} alt="" aria-hidden />
           <span className="dbat-group-text">
             Group Size <span>{groupSize}</span>
           </span>
@@ -128,10 +128,10 @@ function DBatchCard({
         <div className="dbat-people">
           <span className="dbat-avatars" aria-hidden>
             <span className="dbat-avatar">
-              <img src={`${ASSETS}avatar-person.svg`} alt="" />
+              <img loading="lazy" src={`${ASSETS}avatar-person.svg`} alt="" />
             </span>
             <span className="dbat-avatar">
-              <img src={`${ASSETS}avatar-woman.svg`} alt="" />
+              <img loading="lazy" src={`${ASSETS}avatar-woman.svg`} alt="" />
             </span>
           </span>
           <span className="dbat-people-text">+{interested} people interested in this trip</span>
@@ -225,13 +225,13 @@ export default function DesktopBatchesSheet({
     >
       <header className="dbat-header">
         <button className="dbat-back" type="button" aria-label="Back" onClick={onClose}>
-          <img src={`${ASSETS}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+          <img loading="lazy" src={`${ASSETS}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
         </button>
         <div className="dbat-head-info">
           <h1 className="dbat-head-title">{tripTitle}</h1>
           {duration && (
             <div className="dbat-head-dur">
-              <img src={`${ASSETS}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
+              <img loading="lazy" src={`${ASSETS}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
               <span>{duration}</span>
             </div>
           )}

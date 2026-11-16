@@ -234,7 +234,7 @@ export default function DesktopMyBooking({
       {/* ── Header ─────────────────────────────────────────── */}
       <header className="dmb-header">
         <button className="dmb-header-back" type="button" aria-label="Back" onClick={goBack}>
-          <img src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+          <img loading="lazy" src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
         </button>
         <span className="dmb-header-title">My Bookings / {refId}</span>
       </header>
@@ -272,7 +272,7 @@ export default function DesktopMyBooking({
 
                   <div className="dmb-package-duration">
                     <div className="dmb-dur-label">
-                      <img src={`${A}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
+                      <img loading="lazy" src={`${A}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
                       <span>Trip Duration:</span>
                     </div>
                     <div className="dmb-dur-values">
@@ -286,14 +286,14 @@ export default function DesktopMyBooking({
                   <div className="dmb-package-pd">
                     <div className="dmb-pd-col">
                       <div className="dmb-pd-label">
-                        <img src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
+                        <img loading="lazy" src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
                         <span>Pick Up</span>
                       </div>
                       <p className="dmb-pd-place">{data.pickUp}</p>
                     </div>
                     <div className="dmb-pd-col dmb-pd-col--right">
                       <div className="dmb-pd-label">
-                        <img src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
+                        <img loading="lazy" src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
                         <span>Drop</span>
                       </div>
                       <p className="dmb-pd-place">{data.drop}</p>
@@ -316,7 +316,7 @@ export default function DesktopMyBooking({
                 <div className="dmb-primary-head">
                   <span className="dmb-primary-title">Primary Traveller</span>
                   <button className="dmb-primary-edit" type="button" aria-label="Edit KYC details">
-                    <img src={`${PROF}icon-edit.svg`} width={24} height={24} alt="" aria-hidden />
+                    <img loading="lazy" src={`${PROF}icon-edit.svg`} width={24} height={24} alt="" aria-hidden />
                   </button>
                 </div>
 
@@ -350,7 +350,7 @@ export default function DesktopMyBooking({
 
                 {coFormOpen && (
                   <div className="dmb-co-formtitle">
-                    <img src={`${A}icon-person2.svg`} width={20} height={20} alt="" aria-hidden />
+                    <img loading="lazy" src={`${A}icon-person2.svg`} width={20} height={20} alt="" aria-hidden />
                     <span>Co-Traveller{coTravellers.length + 1}: Personal Details</span>
                   </div>
                 )}
@@ -358,7 +358,7 @@ export default function DesktopMyBooking({
                 {coTravellers.map((c, i) => (
                   <div className="dmb-co-item" key={i}>
                     <span>{[c.firstName, c.middleName, c.lastName].filter(Boolean).join(" ")}</span>
-                    <img src={`${CT}icon-view.svg`} width={20} height={20} alt="" aria-hidden />
+                    <img loading="lazy" src={`${CT}icon-view.svg`} width={20} height={20} alt="" aria-hidden />
                   </div>
                 ))}
 
@@ -391,14 +391,14 @@ export default function DesktopMyBooking({
                           </select>
                           <label htmlFor="dmb-co-gender" className="dmb-flabel">Gender*</label>
                           <span className="dmb-field-icon" aria-hidden>
-                            <img src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
+                            <img loading="lazy" src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
                           </span>
                         </div>
                         <div className="dmb-field">
                           <input id="dmb-co-dob" className={`dmb-input${coErrCls("dob")}`} placeholder="DD-MM-YYYY" value={coForm.dob} onChange={setCo("dob")} />
                           <label htmlFor="dmb-co-dob" className="dmb-flabel dmb-flabel--fixed">Date Of Birth*</label>
                           <span className="dmb-field-icon" aria-hidden>
-                            <img src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
+                            <img loading="lazy" src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
                           </span>
                         </div>
                       </div>
@@ -406,13 +406,13 @@ export default function DesktopMyBooking({
                       <div className="dmb-phone">
                         <button className="dmb-phone-code" type="button">
                           <span>IN +91</span>
-                          <img src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
+                          <img loading="lazy" src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
                         </button>
                         <div className="dmb-field dmb-field--grow">
                           <input id="dmb-co-whatsapp" className={`dmb-input${coErrCls("whatsapp")}`} inputMode="tel" placeholder=" " value={coForm.whatsapp} onChange={setCo("whatsapp")} />
                           <label htmlFor="dmb-co-whatsapp" className="dmb-flabel">WhatsApp Number*</label>
                           <span className="dmb-field-icon" aria-hidden>
-                            <img src={`${MB}icon-whatsapp-check.svg`} width={16} height={16} alt="" />
+                            <img loading="lazy" src={`${MB}icon-whatsapp-check.svg`} width={16} height={16} alt="" />
                           </span>
                         </div>
                       </div>
@@ -420,7 +420,7 @@ export default function DesktopMyBooking({
                       <div className="dmb-phone">
                         <button className="dmb-phone-code" type="button">
                           <span>IN +91</span>
-                          <img src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
+                          <img loading="lazy" src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
                         </button>
                         <div className="dmb-field dmb-field--grow">
                           <input id="dmb-co-altNumber" className="dmb-input" inputMode="tel" placeholder=" " value={coForm.altNumber} onChange={setCo("altNumber")} />
@@ -439,7 +439,7 @@ export default function DesktopMyBooking({
                           <label htmlFor="dmb-co-addr1" className="dmb-flabel">Address Line 1</label>
                         </div>
                         <div className="dmb-form-hint">
-                          <img src={`${A}icon-info-grey.svg`} width={13} height={13} alt="" aria-hidden />
+                          <img loading="lazy" src={`${A}icon-info-grey.svg`} width={13} height={13} alt="" aria-hidden />
                           <span>Address is required for invoice generation.</span>
                         </div>
                       </div>
@@ -495,7 +495,7 @@ export default function DesktopMyBooking({
                 type="button"
                 onClick={() => setCoFormOpen(true)}
               >
-                <img src={`${CT}icon-plus.svg`} width={20} height={20} alt="" aria-hidden />
+                <img loading="lazy" src={`${CT}icon-plus.svg`} width={20} height={20} alt="" aria-hidden />
                 <span>Add Co-Traveller</span>
               </button>
             </>
@@ -504,7 +504,7 @@ export default function DesktopMyBooking({
           {tab === "payments" && (
             <section className="dmb-card dmb-card--payments">
               <div className="dmb-pay-section-head">
-                <img src={`${PAY}icon-account-balance.svg`} width={16} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${PAY}icon-account-balance.svg`} width={16} height={16} alt="" aria-hidden />
                 <span>Transactions</span>
               </div>
               <div className="dmb-txns">
@@ -514,7 +514,7 @@ export default function DesktopMyBooking({
                       <span className="dmb-txn-ref">Reference No. {t.ref}</span>
                       <span className="dmb-txn-amount">
                         {t.amount}
-                        <img src={`${A}icon-arrow-drop.svg`} width={24} height={14} alt="" aria-hidden />
+                        <img loading="lazy" src={`${A}icon-arrow-drop.svg`} width={24} height={14} alt="" aria-hidden />
                       </span>
                     </div>
                     <span className="dmb-txn-date">{t.date}</span>
@@ -543,7 +543,7 @@ export default function DesktopMyBooking({
         <aside className="dmb-rail">
           <div className="dmb-bill-card">
             <div className="dmb-bill-pill">
-              <img src={`${A}icon-receipt.svg`} width={16} height={16} alt="" aria-hidden />
+              <img loading="lazy" src={`${A}icon-receipt.svg`} width={16} height={16} alt="" aria-hidden />
               <span>Bill Summary</span>
             </div>
 
@@ -581,7 +581,7 @@ export default function DesktopMyBooking({
                     <span className="dmb-bill-price">&#8377;{data.dueBalance}/-</span>
                     <button className="dmb-bill-fee" type="button">
                       <span>+</span>
-                      <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
+                      <img loading="lazy" src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
                       <span>Convenience fee</span>
                     </button>
                   </div>
@@ -604,7 +604,7 @@ export default function DesktopMyBooking({
               <div className="dmb-share-pill">
                 <span className="dmb-share-label">Get Your Co-Travelers Onboard!</span>
                 <button className="dmb-share-btn" type="button">
-                  <img src={`${CT}icon-people-add.svg`} width={20} height={20} alt="" aria-hidden />
+                  <img loading="lazy" src={`${CT}icon-people-add.svg`} width={20} height={20} alt="" aria-hidden />
                   <span>Share</span>
                 </button>
               </div>
@@ -634,7 +634,7 @@ export default function DesktopMyBooking({
                 type="button"
                 onClick={() => setCancelOpen(true)}
               >
-                <img src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />
                 <span>Cancel Booking</span>
               </button>
             )}

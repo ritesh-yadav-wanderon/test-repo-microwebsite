@@ -3,11 +3,11 @@ import type { Trip, TripGroup } from "@/types";
 import type { ProductData } from "@/repositories";
 import { useAppNav } from "@/hooks/useAppNav";
 import { useCompare } from "@/context/CompareContext";
-import { getRelatedTrips, TDP_FAQS } from "@/repositories";
-import { DayCard, FaqItem, TiFitRow } from "@/components/TripItinerary";
-import { itineraryTransfers, selectedTrip } from "@/utils/tripItinerary";
+import { TDP_FAQS } from "@/repositories";
+import { useProductList } from "@/hooks/useProductList";
+import { DayCard, FaqItem, TiFitRow, TripGlance } from "@/components/TripItinerary";
+import { anchorForDay, cityAnchors, itineraryTransfers, tripGlance } from "@/utils/tripItinerary";
 import "../../views/TripDetail.css";
-import ItineraryCustomiser from "@/components/ItineraryCustomiser";
 import ShareSheet from "@/components/ShareSheet";
 import HeartIcon from "@/components/ui/HeartIcon";
 import ToggleSwitch from "@/components/ui/ToggleSwitch";
@@ -16,41 +16,46 @@ import DesktopBatchesSheet from "./DesktopBatchesSheet";
 import DesktopWhyChooseUs from "./DesktopWhyChooseUs";
 import DesktopTrips from "./DesktopTrips";
 import DesktopQuery from "./DesktopQuery";
+import DesktopStoriesGallery from "./DesktopStoriesGallery";
 import EndMark from "@/components/ui/EndMark";
 import DesktopFooter from "./DesktopFooter";
 import "./DesktopTripDetail.css";
 import CtaButton from "@/components/ui/CtaButton";
+import ContactFormSheet from "@/components/ContactFormSheet";
+import { useTripEnquiry } from "@/hooks/useTripEnquiry";
+import AppLink from "@/components/ui/AppLink";
+import { onAppScroll } from "@/utils/scroll";
 
-const HL = "/figma/itin-highlights/";
 const BOOK = "/figma/desktop-trip/";
 const MG = "/figma/itin-section/";
+const PDP = "/figma/desktop-pdp/";
 
-// Reused mobile captain assets — content identical to the mobile product page.
-const CAP_AV = [`${MG}captain-av-a.jpg`, `${MG}captain-av-b.jpg`, `${MG}captain-av-c.jpg`];
+// Meet your trip captain (Figma 10948:65821).
+const CAP_AV = [`${PDP}captain-av-1.png`, `${PDP}captain-av-2.png`, `${PDP}captain-av-3.png`];
 const CAP_BULLETS = [
   {
-    icon: `${MG}captain-icon-certified.svg`,
+    icon: `${PDP}captain-icon-certified.svg`,
     title: "Certified",
     body: "Every captain is Wanderon-certified and first-aid trained before they ever lead a batch.",
   },
   {
-    icon: `${MG}captain-icon-route.svg`,
+    icon: `${PDP}captain-icon-route.svg`,
     title: "Knows the route by heart",
     body: "Minimum 10 runs on a route before leading it solo. They know the shortcuts and the scams.",
   },
   {
-    icon: `${MG}captain-icon-women.svg`,
+    icon: `${PDP}captain-icon-women.svg`,
     title: "Women captains on request",
     body: "Booking a Wander Women batch, or just prefer it? We'll assign a woman captain.",
   },
 ];
 
-const SERVICES = [
-  { icon: `${HL}icon-accommodation.svg`, label: "9N Accommodation" },
-  { icon: `${HL}icon-meals.svg`, label: "12 Meals" },
-  { icon: `${HL}icon-transfers.svg`, label: "10 Shared Transfers" },
-  { icon: `${HL}icon-activities.svg`, label: "12 Activities" },
-  { icon: `${HL}icon-guides.svg`, label: "Trip Captains, Local Guides" },
+// Package Type selector (Figma 10703:19980) — SCHEMA_TODO.md #3.
+type PackageTier = "budget" | "standard" | "premium";
+const PACKAGE_TIERS: { key: PackageTier; label: string }[] = [
+  { key: "budget", label: "Budget" },
+  { key: "standard", label: "Standard" },
+  { key: "premium", label: "Premium" },
 ];
 
 // Hero gallery grid images (Figma 5652:12023)
@@ -61,8 +66,9 @@ const HERO_GRID = [
   `${BOOK}hero-g4.png`,
 ];
 
-const TABS = ["Itinerary", "Inclusions", "Exclusions", "Reviews", "Trip Captains"];
+const TABS = ["Trip at a Glance", "Itinerary", "Inclusions", "Exclusions", "Reviews", "Trip Captains"];
 const TAB_SECTIONS = [
+  "dtdp-section-itin",
   "dtdp-section-itin",
   "dtdp-section-incl",
   "dtdp-section-excl",
@@ -86,26 +92,32 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
   const nav = useAppNav();
 
   const [wishlisted, setWishlisted] = useState(false);
+  // Private (customised) trips: "Enquire Now" opens the contact form, then
+  // the CTA stays disabled as "Enquiry Submitted".
+  const [enquireOpen, setEnquireOpen] = useState(false);
+  const enquiry = useTripEnquiry(slug);
   const [activeTab, setActiveTab] = useState(0);
-  const [activeDay, setActiveDay] = useState(0);
+  // "Trip at a Glance" (default) and "Itinerary" swap the same slot; the
+  // other tabs scroll to their sections (Figma 10703:19844 / 3999:11555).
+  const [itinView, setItinView] = useState<"glance" | "itinerary">("glance");
+  const [activeAnchor, setActiveAnchor] = useState(0);
   const [openDays, setOpenDays] = useState<Set<number>>(new Set([0]));
   const [showItineraryMap, setShowItineraryMap] = useState(false);
-  const [inclOpen, setInclOpen] = useState(false);
-  const [exclOpen, setExclOpen] = useState(false);
+  // Inclusions / Exclusions: both closed by default; opening one closes the other.
+  const [openList, setOpenList] = useState<"incl" | "excl" | null>(null);
+  const inclOpen = openList === "incl";
+  const exclOpen = openList === "excl";
+  const toggleList = (which: "incl" | "excl") => setOpenList((cur) => (cur === which ? null : which));
+  const [packageTier, setPackageTier] = useState<PackageTier>("budget");
   const [openFaq, setOpenFaq] = useState(0);
   const [tabsStuck, setTabsStuck] = useState(false);
   const tabsSentinelRef = useRef<HTMLDivElement>(null);
-  // Sticky booking card shows the trip title only after the product title leaves view.
-  const [showBookTitle, setShowBookTitle] = useState(false);
-  const ptitleRef = useRef<HTMLElement>(null);
 
   // Sheets
   const [batchesOpen, setBatchesOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
-  const [customiserOpen, setCustomiserOpen] = useState(false);
-  const [tripSel, setTripSel] = useState<{ start: number; end: number } | null>(null);
 
-  const compareSlug = "current-trip";
+  const compareSlug = slug || "current-trip";
   const { isInCompare, toggle: toggleCompareTrip } = useCompare();
   const inCompare = isInCompare(compareSlug);
   const toggleCompare = () =>
@@ -118,7 +130,6 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
 
   // Booking card: derive the struck-through "original" price from the -10% off.
   const priceNum = Number(String(data.displayPrice).replace(/[^\d]/g, ""));
-  const trip = useMemo(() => selectedTrip(data, tripSel, priceNum), [data, tripSel, priceNum]);
   const strikePrice = priceNum
     ? `₹${Math.round(priceNum / 0.9).toLocaleString("en-IN")}/-`
     : "";
@@ -130,9 +141,29 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
   function scrollToSection(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
-  function scrollToDay(i: number) {
-    setActiveDay(i);
-    document.getElementById(`day-${i}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  function selectTab(i: number) {
+    setActiveTab(i);
+    if (i === 0) setItinView("glance");
+    if (i === 1) setItinView("itinerary");
+    requestAnimationFrame(() => scrollToSection(TAB_SECTIONS[i]));
+  }
+
+  const anchors = useMemo(() => cityAnchors(data.itinerary), [data.itinerary]);
+  const glance = useMemo(() => tripGlance(data), [data]);
+  // Day Plan city → first day in that city: expand it and scroll to it.
+  const spyPaused = useRef(false);
+  const spyTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  function scrollToAnchor(i: number) {
+    const dayIndex = anchors[i]?.firstDay;
+    if (dayIndex == null) return;
+    setActiveAnchor(i);
+    setOpenDays((prev) => (prev.has(dayIndex) ? prev : new Set(prev).add(dayIndex)));
+    spyPaused.current = true;
+    clearTimeout(spyTimer.current);
+    spyTimer.current = setTimeout(() => { spyPaused.current = false; }, 900);
+    requestAnimationFrame(() =>
+      document.getElementById(`day-${dayIndex}`)?.scrollIntoView({ behavior: "smooth", block: "start" })
+    );
   }
 
   const toggleDay = (gIdx: number) =>
@@ -156,54 +187,40 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
     return () => obs.disconnect();
   }, []);
 
-  // Reveal the trip title inside the sticky booking card once the product title
-  // scrolls up past the header (i.e. leaves the viewport).
-  useEffect(() => {
-    const el = ptitleRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => setShowBookTitle(!entry.isIntersecting),
-      { rootMargin: "-73px 0px 0px 0px", threshold: 0 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
 
-  // Track which day is centred in the viewport → highlight the Day Plan rail.
+  // Scroll-spy: highlight the Day Plan city for the day sitting under the
+  // sticky tab bar (header 72 + tabs 44 + breathing room).
   useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible) {
-          const idx = Number((visible.target as HTMLElement).dataset.dayIdx);
-          if (!Number.isNaN(idx)) setActiveDay(idx);
-        }
-      },
-      { rootMargin: "-40% 0px -55% 0px", threshold: [0, 0.25, 0.5] }
-    );
-    data.itinerary.forEach((_, i) => {
-      const el = document.getElementById(`day-${i}`);
-      if (el) {
-        el.dataset.dayIdx = String(i);
-        obs.observe(el);
+    if (itinView !== "itinerary" || !anchors.length) return;
+    const onScroll = () => {
+      if (spyPaused.current) return;
+      let current = 0;
+      for (let d = 0; d < data.itinerary.length; d++) {
+        const el = document.getElementById(`day-${d}`);
+        if (el && el.getBoundingClientRect().top <= 200) current = d;
       }
-    });
-    return () => obs.disconnect();
-  }, [data.itinerary]);
+      setActiveAnchor(anchorForDay(anchors, current));
+    };
+    return onAppScroll(onScroll);
+  }, [data.itinerary.length, itinView, anchors]);
 
   // ── Related "More Europe Trips" (same filter as mobile) ──────────────────
+  // ── Similar Trips (Figma 10948:66117) — live trips for this destination ──
   const productDest = data.breadcrumbs[data.breadcrumbs.length - 1] ?? "";
-  const relatedTrips = useMemo<Trip[]>(
-    () => getRelatedTrips(productDest).slice(0, 8),
-    [productDest]
-  );
+  const { items: destTrips, loading: similarLoading } = useProductList({ destination: productDest });
   const relatedGroups = useMemo<TripGroup[]>(
-    () => [{ title: "", year: "", month: "", tripsArray: relatedTrips }],
-    [relatedTrips]
+    () => [{
+      title: "", year: "", month: "",
+      tripsArray: destTrips.filter((t: Trip) => t.slug !== slug).slice(0, 8),
+    }],
+    [destTrips, slug]
   );
   const moreHref = `/search?destination=${encodeURIComponent(productDest)}`;
+
+  // Trip start / Trip End (Figma 10703:19899) — first and last itinerary
+  // stop until products carry real pickup/drop points (SCHEMA_TODO.md #4).
+  const tripStart = anchors[0]?.city ?? "";
+  const tripEnd = anchors[anchors.length - 1]?.city ?? "";
 
   const transfers = useMemo(() => itineraryTransfers(data), [data]);
   const itineraryNodes = data.itinerary.map((day, index) => (
@@ -250,48 +267,22 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
         </div>
       </section>
 
-      {/* ── Product title + actions + services (Figma 5652:12023) ────────── */}
-      <section className="dtdp-ptitle" ref={ptitleRef}>
-        <div className="dtdp-title-row">
-          <h1 className="dtdp-title">{data.title}</h1>
-          <div className="dtdp-title-actions">
-            <button className="dtdp-pill-action" type="button" aria-pressed={inCompare} onClick={toggleCompare}>
-              {inCompare ? (
-                <svg width={13} height={13} viewBox="0 0 14 14" fill="none" aria-hidden>
-                  <path d="M3 3L11 11M11 3L3 11" stroke="#757575" strokeWidth="1.4" strokeLinecap="round" />
-                </svg>
-              ) : (
-                <img src="/figma/trip-hero/icon-compare.svg" alt="" width={13} height={13} aria-hidden />
-              )}
-              <span>{inCompare ? "Remove" : "Compare"}</span>
-            </button>
-            <button
-              className={`dtdp-icon-btn${wishlisted ? " dtdp-icon-btn--saved" : ""}`}
-              type="button"
-              aria-label="Add to wishlist"
-              aria-pressed={wishlisted}
-              onClick={() => setWishlisted((w) => !w)}
-            >
-              <HeartIcon filled={wishlisted} />
-            </button>
-            <button className="dtdp-icon-btn" type="button" aria-label="Share" onClick={() => setShareOpen(true)}>
-              <img src="/figma/trip-hero/icon-share.svg" alt="" width={13} height={13} aria-hidden />
-            </button>
-          </div>
-        </div>
-        <div className="dtdp-meta-row">
-          <span className="dtdp-meta-chip">{data.duration}</span>
-          <span className="dtdp-meta-chip">{data.totalBatches}</span>
-          <span className="dtdp-meta-chip">Group Size: {data.groupSize}</span>
-        </div>
-        <div className="dtdp-services">
-          {SERVICES.map((s) => (
-            <div className="dtdp-service" key={s.label}>
-              <img src={s.icon} alt="" className="dtdp-service-icon" aria-hidden />
-              <span>{s.label}</span>
-            </div>
+      {/* ── Product title + breadcrumb (Figma 10948:66319) ─────────────── */}
+      <section className="dtdp-ptitle">
+        <h1 className="dtdp-title">{data.title}</h1>
+        <nav className="dtdp-crumbs" aria-label="Breadcrumb">
+          <AppLink to="/" className="dtdp-crumb-home" aria-label="Home">
+            <img loading="lazy" src={`${PDP}icon-home.svg`} width={12} height={13} alt="" aria-hidden />
+          </AppLink>
+          {data.breadcrumbs.map((crumb) => (
+            <React.Fragment key={crumb}>
+              <span className="dtdp-crumb-sep" aria-hidden>&gt;</span>
+              <AppLink to={`/search?destination=${encodeURIComponent(crumb)}`} className="dtdp-crumb">
+                {crumb}
+              </AppLink>
+            </React.Fragment>
           ))}
-        </div>
+        </nav>
       </section>
 
       {/* ── Two-column: details/itinerary + sticky booking card ─────────── */}
@@ -323,41 +314,26 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
             </div>
           )}
 
-          {/* Route selection (Figma 7852:34451) */}
-          <div className="dtdp-route-wrap">
-            <div className="dtdp-route-coverage">
-              This route cover {trip.stops} of {data.motherItinerary.length} stops on our{" "}
-              {data.breadcrumbs[data.breadcrumbs.length - 1]} Route
-            </div>
-            <button
-              className="dtdp-route-card"
-              type="button"
-              onClick={() => setCustomiserOpen(true)}
-              aria-label={`Customise route from ${trip.cities[0]} to ${trip.cities[trip.cities.length - 1]}`}
-            >
-              <span className="dtdp-route-content">
-                <span className="dtdp-route-points">
-                  <span className="dtdp-route-point">
-                    <span className="dtdp-route-label">Trip Start</span>
-                    <span className="dtdp-route-city">{trip.cities[0]}</span>
-                  </span>
-                  <span className="dtdp-route-connector" aria-hidden />
-                  <span className="dtdp-route-point">
-                    <span className="dtdp-route-label">Trip End</span>
-                    <span className="dtdp-route-city">{trip.cities[trip.cities.length - 1]}</span>
-                  </span>
+          {/* Trip start / Trip End (Figma 10703:19899) */}
+          {tripStart && (
+            <div className="dtdp-ends">
+              <div className="dtdp-end">
+                <span className="dtdp-end-label">
+                  <img loading="lazy" src={`${PDP}icon-location.svg`} width={10} height={12} alt="" aria-hidden />
+                  Trip start
                 </span>
-                <span className="dtdp-route-cta">Explore More Options</span>
-              </span>
-              <span className="dtdp-route-rail" aria-hidden>
-                <img
-                  src="/figma/train/card-train-horizontal.png"
-                  alt=""
-                  className="dtdp-route-train-img"
-                />
-              </span>
-            </button>
-          </div>
+                <span className="dtdp-end-place">{tripStart}</span>
+              </div>
+              <span className="dtdp-ends-line" aria-hidden />
+              <div className="dtdp-end dtdp-end--right">
+                <span className="dtdp-end-label">
+                  <img loading="lazy" src={`${PDP}icon-location.svg`} width={10} height={12} alt="" aria-hidden />
+                  Trip End
+                </span>
+                <span className="dtdp-end-place">{tripEnd}</span>
+              </div>
+            </div>
+          )}
 
           {/* Vibes — "Is this trip for me?" footprints */}
           <div className="dtdp-vibes">
@@ -365,6 +341,27 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
               <TiFitRow key={tag.label} label={tag.label} rating={tag.rating} />
             ))}
           </div>
+
+          {/* Package Type (Figma 10703:19980) */}
+          <section className="dtdp-pkg" aria-labelledby="dtdp-pkg-title">
+            <h2 id="dtdp-pkg-title" className="dtdp-pkg-title">Package Type</h2>
+            <div className="dtdp-pkg-options">
+              {PACKAGE_TIERS.map(({ key, label }) => (
+                <button
+                  key={key}
+                  type="button"
+                  className={`dtdp-pkg-btn dtdp-pkg-btn--${key}${packageTier === key ? " active" : ""}`}
+                  aria-pressed={packageTier === key}
+                  onClick={() => setPackageTier(key)}
+                >
+                  {packageTier === key && (
+                    <img loading="lazy" src={`${PDP}icon-check-box.svg`} className="dtdp-pkg-check" width={16} height={16} alt="" aria-hidden />
+                  )}
+                  {label}
+                </button>
+              ))}
+            </div>
+          </section>
 
           {/* Tab bar — sits in-flow (parent width); goes full-bleed when it
               sticks below the header. The sentinel drives the "stuck" state. */}
@@ -376,12 +373,10 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
                   <button
                     key={t}
                     className={`dtdp-tab${activeTab === i ? " active" : ""}`}
-                    onClick={() => {
-                      setActiveTab(i);
-                      scrollToSection(TAB_SECTIONS[i]);
-                    }}
+                    aria-pressed={activeTab === i}
+                    onClick={() => selectTab(i)}
                   >
-                    {i === 0 && <img src={`${HL}icon-overview-key.svg`} alt="" aria-hidden />}
+                    {activeTab === i && <img loading="lazy" src="/figma/trip-glance/icon-overview-key.svg" alt="" aria-hidden />}
                     {t}
                   </button>
                 ))}
@@ -389,35 +384,53 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
             </div>
           </div>
 
-          {/* Itinerary — Day Plan rail + day cards */}
+          {itinView === "glance" ? (
+          /* Trip at a Glance (Figma 10703:20895) */
+          <section id="dtdp-section-itin" className="dtdp-glance" aria-label="Trip at a Glance">
+            <TripGlance glance={glance} captain={data.captain} premiumSelected={packageTier === "premium"} />
+          </section>
+          ) : (
+          /* Itinerary — Show Map + Day Plan rail (Figma 4351:13236) + day cards */
           <section id="dtdp-section-itin" className="dtdp-itin">
             <aside className="dtdp-dayplan">
-              <p className="dtdp-dayplan-title">Day Plan</p>
-              <div className="dtdp-dayplan-list">
-                {data.itinerary.map((_, i) => (
-                  <button
-                    key={i}
-                    className={`dtdp-dayplan-item${activeDay === i ? " active" : ""}`}
-                    onClick={() => scrollToDay(i)}
-                  >
-                    <span className="dtdp-dayplan-dot" aria-hidden />
-                    {`Day-${i + 1}`}
-                  </button>
-                ))}
-              </div>
-            </aside>
-
-            <div className="dtdp-itin-content">
               <ToggleSwitch
                 checked={showItineraryMap}
                 onChange={setShowItineraryMap}
                 label="Show Map"
                 labelOutside
-                className="tdp2-itin-map-toggle"
+                className="tdp2-itin-map-toggle dtdp-dayplan-map"
                 buttonClassName="tdp2-itin-switch"
                 imgClassName="tdp2-itin-switch-img"
                 ariaLabel={showItineraryMap ? "Hide trip map" : "Show trip map"}
               />
+              {anchors.length > 0 && (
+                <nav className="dtdp-dayplan-nav" aria-label="Day Plan">
+                  <p className="dtdp-dayplan-title">Day Plan</p>
+                  <div className="dtdp-dayplan-list">
+                    {anchors.map((a, i) => (
+                      <button
+                        key={`${a.city}-${a.firstDay}`}
+                        type="button"
+                        className={`dtdp-dayplan-item${activeAnchor === i ? " active" : ""}${i < activeAnchor ? " passed" : ""}`}
+                        aria-current={activeAnchor === i ? "true" : undefined}
+                        onClick={() => scrollToAnchor(i)}
+                      >
+                        <img loading="lazy"
+                          src={`/figma/trip-glance/${activeAnchor === i ? "dayplan-dot-active" : "dayplan-dot"}.svg`}
+                          width={8}
+                          height={8}
+                          alt=""
+                          aria-hidden
+                        />
+                        {`${a.city} ${a.nights}N`}
+                      </button>
+                    ))}
+                  </div>
+                </nav>
+              )}
+            </aside>
+
+            <div className="dtdp-itin-content">
               {showItineraryMap && (
                 <div className="tdp2-itin-map-wrap">
                   <img src={data.mapImage} alt="Trip route map" className="tdp2-itin-map" loading="lazy" />
@@ -427,78 +440,86 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
               <p className="tdp2-end-journey">End of the Journey</p>
             </div>
           </section>
+          )}
 
-          {/* Inclusions */}
-          <section id="dtdp-section-incl" className="dtdp-accordion">
-            <button className="dtdp-accordion-head" onClick={() => setInclOpen((o) => !o)}>
-              <img src={`${HL}icon-overview-key.svg`} alt="" aria-hidden />
-              <span>Inclusions</span>
-              <span className={`dtdp-accordion-chev${inclOpen ? " open" : ""}`} aria-hidden>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M6 9l6 6 6-6" stroke="#3d3d3d" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-            </button>
-            {inclOpen && (
-              <div className="dtdp-accordion-body">
-                <ul className="dtdp-incl-list">
-                  {data.inclusions.map((inc, i) => (
-                    <li key={i} className="dtdp-incl-item dtdp-incl-item--yes">
-                      <img src="/figma/itin-section/incl-check.png" alt="" aria-hidden />
-                      <span>{inc}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="dtdp-incl-insurance">
-                  <p className="dtdp-incl-ins-title">Medical and Baggage Insurance included</p>
-                  <p className="dtdp-incl-ins-body">
-                    The price includes Medical and Baggage Insurance which covers all services included in the WanderOn
-                    trip. International flights and any arrangements booked independently outside of the WeRoad trip are
-                    excluded. Any pre-existing medical condition is also excluded.
-                  </p>
+          {/* Inclusions / Exclusions cards (Figma 10973:68720 / 10973:68782) */}
+          {([
+            { id: "dtdp-section-incl", label: "Inclusions", open: inclOpen, toggle: () => toggleList("incl"),
+              items: data.inclusions, icon: `${MG}incl-check.png`, kind: "yes" },
+            { id: "dtdp-section-excl", label: "Exclusions", open: exclOpen, toggle: () => toggleList("excl"),
+              items: data.exclusions, icon: `${MG}excl-x.png`, kind: "no" },
+          ] as const).map((c) => (
+            <section key={c.id} id={c.id} className="dtdp-ie">
+              <button className="dtdp-ie-head" type="button" aria-expanded={c.open} onClick={c.toggle}>
+                <img loading="lazy" src={`${PDP}icon-overview-key.svg`} width={16} height={16} alt="" aria-hidden />
+                <span className="dtdp-ie-title">{c.label}</span>
+                <img loading="lazy"
+                  src={`${PDP}icon-arrow-drop.svg`}
+                  width={24}
+                  height={24}
+                  alt=""
+                  aria-hidden
+                  className={`dtdp-ie-chev${c.open ? " open" : ""}`}
+                />
+              </button>
+              {c.open && (
+                <div className="dtdp-ie-body">
+                  <ul className="dtdp-ie-list">
+                    {c.items.map((text, i) => (
+                      <li key={i} className={`dtdp-ie-item dtdp-ie-item--${c.kind}`}>
+                        <img loading="lazy" src={c.icon} width={16} height={16} alt="" aria-hidden />
+                        <span>{text}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {c.kind === "yes" && (
+                    <div className="dtdp-ie-insurance">
+                      <p className="dtdp-ie-ins-title">Medical and Baggage Insurance included</p>
+                      <p className="dtdp-ie-ins-body">
+                        The price includes Medical and Baggage Insurance which covers all services included in the
+                        WanderOn trip. International flights and any arrangements booked independently outside of the
+                        WanderOn trip are excluded. Any pre-existing medical condition is also excluded.
+                      </p>
+                    </div>
+                  )}
                 </div>
-              </div>
-            )}
-          </section>
-
-          {/* Exclusions */}
-          <section id="dtdp-section-excl" className="dtdp-accordion">
-            <button className="dtdp-accordion-head" onClick={() => setExclOpen((o) => !o)}>
-              <img src={`${HL}icon-overview-key.svg`} alt="" aria-hidden />
-              <span>Exclusions</span>
-              <span className={`dtdp-accordion-chev${exclOpen ? " open" : ""}`} aria-hidden>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                  <path d="M6 9l6 6 6-6" stroke="#3d3d3d" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-            </button>
-            {exclOpen && (
-              <div className="dtdp-accordion-body">
-                <ul className="dtdp-incl-list">
-                  {data.exclusions.map((exc, i) => (
-                    <li key={i} className="dtdp-incl-item dtdp-incl-item--no">
-                      <img src="/figma/itin-section/excl-x.png" alt="" aria-hidden />
-                      <span>{exc}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </section>
+              )}
+            </section>
+          ))}
         </div>
 
-        {/* Sticky booking card (Figma 5788:7351) */}
+        {/* Actions + sticky booking card (Figma 10703:20180) */}
         <aside className={`dtdp-book${tabsStuck ? " tabs-stuck" : ""}`}>
+          <div className="dtdp-book-actions">
+            <button
+              className={`dtdp-wish${wishlisted ? " dtdp-wish--saved" : ""}`}
+              type="button"
+              aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
+              aria-pressed={wishlisted}
+              onClick={() => setWishlisted((w) => !w)}
+            >
+              {wishlisted ? <HeartIcon filled /> : <img loading="lazy" src={`${PDP}btn-wishlist.svg`} width={40} height={40} alt="" aria-hidden />}
+            </button>
+            <button className="dtdp-pill-action" type="button" aria-pressed={inCompare} onClick={toggleCompare}>
+              <img loading="lazy" src="/figma/trip-hero/icon-compare.svg" className="dtdp-pill-icon--tint" alt="" width={14} height={14} aria-hidden />
+              <span>{inCompare ? "Remove from Compare" : "Add to Compare"}</span>
+            </button>
+            <button className="dtdp-pill-action" type="button" onClick={() => setShareOpen(true)}>
+              <img loading="lazy" src={`${PDP}icon-share.svg`} alt="" width={13} height={13} aria-hidden />
+              <span>Share</span>
+            </button>
+          </div>
+
           <div className="dtdp-book-card">
-            <div className={`dtdp-book-head${showBookTitle ? " show-title" : ""}`}>
+            <div className="dtdp-book-head">
               <p className="dtdp-book-title">{data.title}</p>
               <div className="dtdp-book-dur">
-                <img src={`${BOOK}bc-calendar.svg`} alt="" aria-hidden />
+                <img loading="lazy" src={`${PDP}icon-calendar.svg`} alt="" aria-hidden />
                 <span>{data.duration}</span>
               </div>
             </div>
 
-            {showBookTitle && <div className="dtdp-book-divider" aria-hidden />}
+            <div className="dtdp-book-divider" aria-hidden />
 
             <div className="dtdp-book-price">
               <div className="dtdp-book-price-col">
@@ -510,27 +531,35 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
             </div>
 
             <div className="dtdp-book-cta-wrap">
-              <CtaButton className="dtdp-book-cta" onClick={() => setBatchesOpen(true)}>
-                View Batches
-              </CtaButton>
-              <button
-                className="dtdp-book-departures"
-                type="button"
-                onClick={() => setBatchesOpen(true)}
-              >
-                See all departures
-              </button>
+              {data.isCustomised ? (
+                <CtaButton
+                  className="dtdp-book-cta"
+                  onClick={() => setEnquireOpen(true)}
+                  disabled={enquiry.submitted}
+                >
+                  {enquiry.submitted ? "Enquiry Submitted" : "Enquire Now"}
+                </CtaButton>
+              ) : (
+                <CtaButton className="dtdp-book-cta" onClick={() => setBatchesOpen(true)}>
+                  View Batches
+                </CtaButton>
+              )}
             </div>
 
             <div className="dtdp-book-women">
-              <img src={`${BOOK}bc-women.svg`} alt="" aria-hidden />
+              <img loading="lazy" src={`${PDP}icon-women.svg`} alt="" aria-hidden />
               <span>{data.womenBadge}</span>
             </div>
           </div>
         </aside>
       </div>
 
-      {/* ── Meet your trip captain (Figma 3999:11569) ───────────────────── */}
+      {/* ── Reviews / Why Choose Us (Figma 10703:20234) ─────────────────── */}
+      <div id="dtdp-section-reviews">
+        <DesktopWhyChooseUs />
+      </div>
+
+      {/* ── Meet your trip captain (Figma 10948:65821) ──────────────────── */}
       <section id="dtdp-section-captains" className="dtdp-captain">
         <h2 className="dtdp-captain-title">Meet your trip captain</h2>
         <div className="dtdp-captain-cols">
@@ -551,7 +580,7 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
           <div className="dtdp-captain-right">
             {CAP_BULLETS.map((b) => (
               <div className="dtdp-captain-bullet" key={b.title}>
-                <img src={b.icon} alt="" className="dtdp-captain-bullet-icon" aria-hidden />
+                <img loading="lazy" src={b.icon} alt="" className="dtdp-captain-bullet-icon" aria-hidden />
                 <div>
                   <p className="dtdp-captain-bullet-title">{b.title}</p>
                   <p className="dtdp-captain-bullet-body">{b.body}</p>
@@ -562,20 +591,10 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
         </div>
       </section>
 
-      {/* ── Reviews / Why Choose Us (shared) ────────────────────────────── */}
-      <div id="dtdp-section-reviews">
-        <DesktopWhyChooseUs />
-      </div>
+      {/* ── Stories of our travellers (Figma 10947:38984) ──────────────── */}
+      <DesktopStoriesGallery />
 
-      {/* ── More Europe Trips (shared carousel) ─────────────────────────── */}
-      <DesktopTrips
-        trips={relatedGroups}
-        loading={false}
-        title={`More ${productDest} Trips`}
-        seeAllHref={moreHref}
-      />
-
-      {/* ── FAQs (Figma 3999:11813) ─────────────────────────────────────── */}
+      {/* ── FAQs (Figma 10948:66341) ────────────────────────────────────── */}
       <section className="dtdp-faq">
         <div className="dtdp-faq-head">
           <h2 className="dtdp-faq-title">Frequently Asked Questions</h2>
@@ -595,8 +614,16 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
         </div>
       </section>
 
-      {/* ── Enquire CTA (Figma 5874:18789) ──────────────────────────────── */}
-      <DesktopQuery title="Your next group is forming." sub="Tell us where. We'll find your people." />
+      {/* ── Similar Trips (Figma 10948:66117) ───────────────────────────── */}
+      <DesktopTrips
+        trips={relatedGroups}
+        loading={similarLoading}
+        title="Similar Trips"
+        seeAllHref={moreHref}
+      />
+
+      {/* ── Have a query? (Figma 10703:20313) ───────────────────────────── */}
+      <DesktopQuery />
 
       <EndMark variant="desktop" />
       <DesktopFooter />
@@ -610,6 +637,15 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
         duration={data.duration}
         price={data.displayPrice}
       />
+      {data.isCustomised && (
+        <ContactFormSheet
+          isOpen={enquireOpen}
+          onClose={() => setEnquireOpen(false)}
+          onSubmitted={enquiry.markSubmitted}
+          defaultDestination={data.breadcrumbs?.[0]}
+        />
+      )}
+
       <DesktopBatchesSheet
         isOpen={batchesOpen}
         onClose={() => setBatchesOpen(false)}
@@ -617,17 +653,7 @@ export default function DesktopTripDetail({ data, slug }: DesktopTripDetailProps
         duration={data.duration}
         nights={7}
       />
-      <ItineraryCustomiser
-        isOpen={customiserOpen}
-        onClose={() => setCustomiserOpen(false)}
-        title={data.title}
-        thumb={data.heroImages[0]}
-        stations={data.motherItinerary}
-        nights={data.motherNights}
-        basePrice={priceNum}
-        initialSelection={tripSel}
-        onSelectionChange={(start, end) => setTripSel({ start, end })}
-      />
+
     </div>
   );
 }

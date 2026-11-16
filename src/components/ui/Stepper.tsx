@@ -42,7 +42,7 @@ export default function Stepper({
         disabled={disableAtBounds && value <= min}
         onClick={() => onChange(Math.max(min, value - 1))}
       >
-        <img src={`${A}icon-minus.svg`} width={minus} height={minus} alt="" aria-hidden />
+        <img loading="lazy" src={`${A}icon-minus.svg`} width={minus} height={minus} alt="" aria-hidden />
       </button>
       <span className={`${classPrefix}-step-count`}>{value}</span>
       <button
@@ -52,7 +52,7 @@ export default function Stepper({
         disabled={disableAtBounds && value >= max}
         onClick={() => onChange(Math.min(max, value + 1))}
       >
-        <img src={`${A}icon-plus.svg`} width={plus} height={plus} alt="" aria-hidden />
+        <img loading="lazy" src={`${A}icon-plus.svg`} width={plus} height={plus} alt="" aria-hidden />
       </button>
     </div>
   );

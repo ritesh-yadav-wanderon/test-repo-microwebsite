@@ -39,23 +39,23 @@ export default function DesktopWhyChooseUs() {
 
       <div className="dwhy__stats">
         <div className="dwhy__stat">
-          <img className="dwhy__stat-google" src={`${BASE}/google-color.svg`} alt="Google" />
+          <img loading="lazy" className="dwhy__stat-google" src={`${BASE}/google-color.svg`} alt="Google" />
           <span className="dwhy__stat-label">140001 Reviews</span>
         </div>
         <div className="dwhy__stat dwhy__stat--award">
-          <img className="dwhy__laurel" src="/figma/reviews/laurel.png" alt="" />
+          <img loading="lazy" className="dwhy__laurel" src="/figma/reviews/laurel.png" alt="" />
           <span className="dwhy__stat-award">
             Best
             <br />
             Travel Brand
           </span>
-          <img className="dwhy__laurel dwhy__laurel--flip" src="/figma/reviews/laurel.png" alt="" />
+          <img loading="lazy" className="dwhy__laurel dwhy__laurel--flip" src="/figma/reviews/laurel.png" alt="" />
         </div>
         <div className="dwhy__stat">
           <span className="dwhy__stat-score">5.0</span>
           <span className="dwhy__stars">
             {Array.from({ length: 5 }, (_, i) => (
-              <img key={i} src={`${BASE}/star-gold.svg`} alt="" />
+              <img loading="lazy" key={i} src={`${BASE}/star-gold.svg`} alt="" />
             ))}
           </span>
         </div>
@@ -64,11 +64,11 @@ export default function DesktopWhyChooseUs() {
       <div className="dwhy__carousel">
         <article className="dwhy__review" key={review.name}>
           <header className="dwhy__review-head">
-            <img className="dwhy__avatar" src="/figma/reviews/avatar-inner.png" alt="" />
+            <img loading="lazy" className="dwhy__avatar" src="/figma/reviews/avatar-inner.png" alt="" />
             <div>
               <p className="dwhy__review-name">{review.name}</p>
               <div className="dwhy__review-meta">
-                <img src="/figma/reviews/stars-5.svg" alt="5 out of 5 stars" />
+                <img loading="lazy" src="/figma/reviews/stars-5.svg" alt="5 out of 5 stars" />
                 <span>{review.date}</span>
               </div>
             </div>

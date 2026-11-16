@@ -104,10 +104,10 @@ export function EventDetailView() {
         {/* Top nav */}
         <header className="epd-topnav">
           <button className="epd-round-btn" type="button" aria-label="Back" onClick={() => nav.push("/events")}>
-            <img src={`${A}arrow-back.svg`} width={20} height={20} alt="" aria-hidden />
+            <img loading="lazy" src={`${A}arrow-back.svg`} width={20} height={20} alt="" aria-hidden />
           </button>
           <button className="epd-menu" type="button" aria-label="Open menu" onClick={() => setMenuOpen(true)}>
-            <img src={`${EV}menu.svg`} alt="" className="epd-menu-icon" aria-hidden />
+            <img loading="lazy" src={`${EV}menu.svg`} alt="" className="epd-menu-icon" aria-hidden />
           </button>
         </header>
 
@@ -120,14 +120,14 @@ export function EventDetailView() {
             aria-pressed={saved}
             onClick={() => setSaved((s) => !s)}
           >
-            <img src={`${A}heart.svg`} alt="" className="epd-chip-heart" aria-hidden />
+            <img loading="lazy" src={`${A}heart.svg`} alt="" className="epd-chip-heart" aria-hidden />
           </button>
           <button className="epd-chip" type="button" onClick={() => setCompared((c) => !c)}>
-            <img src="/figma/nav2/events/compare.svg" alt="" className="epd-chip-ico" aria-hidden />
+            <img loading="lazy" src="/figma/nav2/events/compare.svg" alt="" className="epd-chip-ico" aria-hidden />
             <span>{compared ? "Remove from Compare" : "Add to Compare"}</span>
           </button>
           <button className="epd-chip" type="button" onClick={handleShare}>
-            <img src={`${A}share.svg`} alt="" className="epd-chip-ico" aria-hidden />
+            <img loading="lazy" src={`${A}share.svg`} alt="" className="epd-chip-ico" aria-hidden />
             <span>Share</span>
           </button>
           <button
@@ -137,7 +137,7 @@ export function EventDetailView() {
             aria-pressed={playing}
             onClick={togglePlay}
           >
-            <img src={`${A}play-circle.svg`} alt="" className="epd-chip-play" aria-hidden />
+            <img loading="lazy" src={`${A}play-circle.svg`} alt="" className="epd-chip-play" aria-hidden />
           </button>
         </div>
       </div>
@@ -154,11 +154,11 @@ export function EventDetailView() {
         <div className="epd-route">
           <div className="epd-route-labels">
             <span className="epd-route-tag">
-              <img src={`${A}location.svg`} alt="" aria-hidden /> Pick Up
+              <img loading="lazy" src={`${A}location.svg`} alt="" aria-hidden /> Pick Up
             </span>
             <span className="epd-route-dash" aria-hidden />
             <span className="epd-route-tag">
-              <img src={`${A}location.svg`} alt="" aria-hidden /> Drop
+              <img loading="lazy" src={`${A}location.svg`} alt="" aria-hidden /> Drop
             </span>
           </div>
           <div className="epd-route-places">
@@ -200,7 +200,7 @@ export function EventDetailView() {
 
         {/* Footer */}
         <div className="epd-footer">
-          <img src={`${A}footer-heart.svg`} width={40} height={40} alt="" aria-hidden />
+          <img loading="lazy" src={`${A}footer-heart.svg`} width={40} height={40} alt="" aria-hidden />
           <p className="epd-footer-text">
             Life's a Trip,
             <br />
@@ -248,7 +248,7 @@ function AboutBody() {
         <h2 className="epd-section-title">Things to Know</h2>
         {EVENT_DETAIL.thingsToKnow.map((item) => (
           <div className="epd-tk-item" key={item.label}>
-            <img src={item.icon} width={36} height={36} alt="" className="epd-tk-ico" aria-hidden />
+            <img loading="lazy" src={item.icon} width={36} height={36} alt="" className="epd-tk-ico" aria-hidden />
             <div className="epd-tk-text">
               <span className="epd-tk-label">{item.label}</span>
               <span className="epd-tk-value">{item.value}</span>
@@ -262,9 +262,9 @@ function AboutBody() {
       <div className="epd-more">
         <h2 className="epd-section-title">More</h2>
         <button className="epd-more-box" type="button">
-          <img src={`${A}doc.svg`} width={24} height={24} alt="" aria-hidden />
+          <img loading="lazy" src={`${A}doc.svg`} width={24} height={24} alt="" aria-hidden />
           <span>Terms &amp; Conditions</span>
-          <img src={`${A}chevron.svg`} className="epd-more-chev" alt="" aria-hidden />
+          <img loading="lazy" src={`${A}chevron.svg`} className="epd-more-chev" alt="" aria-hidden />
         </button>
       </div>
     </>
@@ -433,7 +433,7 @@ function GalleryBody() {
             <button className="epd-spot-card" key={i} type="button">
               <img src={src} alt="" loading="lazy" />
               <span className="epd-spot-play">
-                <img src={`${A}play-sm.svg`} width={20} height={20} alt="" aria-hidden />
+                <img loading="lazy" src={`${A}play-sm.svg`} width={20} height={20} alt="" aria-hidden />
               </span>
             </button>
           ))}

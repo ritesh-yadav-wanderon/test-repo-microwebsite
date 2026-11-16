@@ -3,6 +3,8 @@ import "../src/styles/global.css";
 import NextNavProvider from "./NextNavProvider";
 import AppProviders from "./AppProviders";
 import SiteChromeClient from "./SiteChromeClient";
+import { ViewportProvider } from "../src/context/ViewportContext";
+import { getViewportHint } from "./_lib/viewportHint";
 
 export const metadata: Metadata = {
   title: "WanderOn — Travel Community",
@@ -16,7 +18,11 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  // Server guess of desktop vs mobile, so the first paint uses the right
+  // layout instead of flashing mobile before hydration swaps to desktop.
+  const isDesktop = await getViewportHint();
+
   return (
     <html lang="en">
       {/* Roboto + Roboto Condensed only — every font-family rule in the
@@ -37,12 +43,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           widths. */}
       <body>
         <div className="app-shell">
-          <AppProviders>
-            <NextNavProvider>
-              <SiteChromeClient />
-              {children}
-            </NextNavProvider>
-          </AppProviders>
+          <ViewportProvider isDesktop={isDesktop}>
+            <AppProviders>
+              <NextNavProvider>
+                <SiteChromeClient />
+                {children}
+              </NextNavProvider>
+            </AppProviders>
+          </ViewportProvider>
         </div>
       </body>
     </html>

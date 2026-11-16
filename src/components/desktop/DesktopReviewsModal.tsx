@@ -101,7 +101,7 @@ export default function DesktopReviewsModal({ isOpen, onClose }: Props) {
       portal
     >
       <button className="drm__close" aria-label="Close reviews" onClick={onClose}>
-        <img src={`${R}icon-close.svg`} alt="" />
+        <img loading="lazy" src={`${R}icon-close.svg`} alt="" />
       </button>
 
       <div className="drm__modal" role="dialog" aria-modal="true" aria-label="Reviews">
@@ -116,7 +116,7 @@ export default function DesktopReviewsModal({ isOpen, onClose }: Props) {
               {RATING_BARS.map((r) => (
                 <div key={r.label} className="drm__bar-row">
                   <span className="drm__bar-num">{r.label}</span>
-                  <img src={`${R}star-bar.svg`} alt="" aria-hidden />
+                  <img loading="lazy" src={`${R}star-bar.svg`} alt="" aria-hidden />
                   <span className="drm__bar-track">
                     <span className="drm__bar-fill" style={{ width: `${r.fill}px` }} />
                   </span>
@@ -133,10 +133,10 @@ export default function DesktopReviewsModal({ isOpen, onClose }: Props) {
                   <p className="drm__col-label">{cat.label}</p>
                   <p className="drm__cat-rating">
                     {cat.rating}
-                    <img src={`${R}star-cat.svg`} alt="" aria-hidden />
+                    <img loading="lazy" src={`${R}star-cat.svg`} alt="" aria-hidden />
                   </p>
                 </div>
-                <img className="drm__cat-icon" src={cat.icon} alt="" aria-hidden />
+                <img loading="lazy" className="drm__cat-icon" src={cat.icon} alt="" aria-hidden />
               </div>
             </Fragment>
           ))}
@@ -151,7 +151,7 @@ export default function DesktopReviewsModal({ isOpen, onClose }: Props) {
             onClick={() => setDestOpen((v) => !v)}
           >
             {selectedDest ?? "Destination"}
-            <img src={`${R}icon-dropdown.svg`} alt="" aria-hidden />
+            <img loading="lazy" src={`${R}icon-dropdown.svg`} alt="" aria-hidden />
           </button>
 
           {destOpen && (
@@ -209,7 +209,7 @@ export default function DesktopReviewsModal({ isOpen, onClose }: Props) {
                     <span>{review.date}</span>
                     <span className="drm__review-stars">
                       {Array.from({ length: 5 }, (_, i) => (
-                        <img key={i} src={`${R}star-filled.svg`} alt="" aria-hidden />
+                        <img loading="lazy" key={i} src={`${R}star-filled.svg`} alt="" aria-hidden />
                       ))}
                     </span>
                   </div>
@@ -242,7 +242,7 @@ export default function DesktopReviewsModal({ isOpen, onClose }: Props) {
                 <div className="drm__helpful">
                   Was this helpful?
                   <button type="button" aria-label="Helpful">
-                    <img src={`${R}icon-thumb-up.svg`} alt="" />
+                    <img loading="lazy" src={`${R}icon-thumb-up.svg`} alt="" />
                   </button>
                 </div>
                 <div className="drm__arrows">

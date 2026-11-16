@@ -57,8 +57,8 @@ export default function DesktopDestinations() {
             onClick={() => nav.push(`/destination/${d.name.toLowerCase()}`)}
           >
             <span className="ddest__figure">
-              <img className="ddest__shadow" src={`${BASE}/monument-shadow.svg`} alt="" />
-              <img
+              <img loading="lazy" className="ddest__shadow" src={`${BASE}/monument-shadow.svg`} alt="" />
+              <img loading="lazy"
                 className={`ddest__monument${d.flip ? " ddest__monument--flip" : ""}`}
                 src={d.img}
                 alt={d.name}

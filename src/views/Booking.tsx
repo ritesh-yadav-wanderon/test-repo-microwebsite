@@ -113,7 +113,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
             aria-label="Back"
             onClick={goBack}
           >
-            <img src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+            <img loading="lazy" src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
           <span className="bkg-header-title">
             {isPersonalDetails ? "Personal Details" : "Select Services"}
@@ -125,7 +125,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
           aria-label="Close"
           onClick={() => navigate.go(-1)}
         >
-          <img src={`${A}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+          <img loading="lazy" src={`${A}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
         </button>
       </header>
 
@@ -141,7 +141,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
 
             <div className="bkg-package-duration">
               <div className="bkg-dur-label">
-                <img src={`${A}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${A}icon-calendar.svg`} width={16} height={16} alt="" aria-hidden />
                 <span>Trip Duration:</span>
               </div>
               <div className="bkg-dur-values">
@@ -155,14 +155,14 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
             <div className="bkg-package-pd">
               <div className="bkg-pd-col">
                 <div className="bkg-pd-label">
-                  <img src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
                   <span>Pick Up</span>
                 </div>
                 <p className="bkg-pd-place">{data.pickUp}</p>
               </div>
               <div className="bkg-pd-col bkg-pd-col--right">
                 <div className="bkg-pd-label">
-                  <img src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-location.svg`} width={11} height={12} alt="" aria-hidden />
                   <span>Drop</span>
                 </div>
                 <p className="bkg-pd-place">{data.drop}</p>
@@ -187,13 +187,13 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
         <section className="bkg-section bkg-section--gap">
           <div className="bkg-subhead">
             <span className="bkg-section-icon">
-              <img src={`${A}icon-person2.svg`} width={16} height={16} alt="" aria-hidden />
+              <img loading="lazy" src={`${A}icon-person2.svg`} width={16} height={16} alt="" aria-hidden />
             </span>
             <span className="bkg-section-title">Personal Details</span>
           </div>
 
           <div className="bkg-passport-tag">
-            <img src={`${A}icon-passport.svg`} width={23} height={16} alt="" aria-hidden />
+            <img loading="lazy" src={`${A}icon-passport.svg`} width={23} height={16} alt="" aria-hidden />
             <span>
               Enter your full first and last name as stated in your ID or passport, including any
               middle name(s) and/or initials.
@@ -248,7 +248,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
               </select>
               <label htmlFor="bkg-gender" className="bkg-flabel">Gender*</label>
               <span className="bkg-field-icon" aria-hidden>
-                <img src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
+                <img loading="lazy" src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
               </span>
             </div>
 
@@ -262,14 +262,14 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
               />
               <label htmlFor="bkg-dob" className="bkg-flabel">Date Of Birth*</label>
               <span className="bkg-field-icon" aria-hidden>
-                <img src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
+                <img loading="lazy" src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
               </span>
             </div>
 
             <div className="bkg-phone">
               <button className="bkg-phone-code" type="button">
                 <span>IN +91</span>
-                <img src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
+                <img loading="lazy" src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
               </button>
               <div className="bkg-field bkg-field--grow">
                 <input
@@ -304,7 +304,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
         <section className="bkg-section bkg-section--gap">
           <div className="bkg-subhead">
             <span className="bkg-section-icon">
-              <img src={`${A}icon-id-card.svg`} width={16} height={16} alt="" aria-hidden />
+              <img loading="lazy" src={`${A}icon-id-card.svg`} width={16} height={16} alt="" aria-hidden />
             </span>
             <span className="bkg-section-title">Documents</span>
           </div>
@@ -327,7 +327,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
               <span className="bkg-upload-label">
                 {panFile ? panFile.name : "Upload PAN Card Front Image*"}
               </span>
-              <img src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
+              <img loading="lazy" src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
               <input
                 type="file"
                 accept="image/*,.pdf"
@@ -339,7 +339,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
             <p className="bkg-doc-group">Passport</p>
 
             <div className="bkg-doc-tag">
-              <img src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
+              <img loading="lazy" src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
               <span>Minimum passport validity upto 3rd January 2027.</span>
             </div>
 
@@ -364,7 +364,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
                 />
                 <label htmlFor="bkg-passport-valid" className="bkg-flabel">Passport Valid Upto*</label>
                 <span className="bkg-field-icon" aria-hidden>
-                  <img src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
+                  <img loading="lazy" src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
                 </span>
               </div>
             </div>
@@ -373,7 +373,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
               <span className="bkg-upload-label">
                 {passportFile ? passportFile.name : "Upload Passport Front*"}
               </span>
-              <img src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
+              <img loading="lazy" src="/figma/my-booking/icon-upload.svg" width={20} height={20} alt="" aria-hidden />
               <input
                 type="file"
                 accept="image/*,.pdf"
@@ -397,21 +397,21 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
             aria-expanded={accommodationOpen}
           >
             <span className="bkg-section-icon">
-              <img src={`${A}icon-villa.svg`} width={16} height={16} alt="" aria-hidden />
+              <img loading="lazy" src={`${A}icon-villa.svg`} width={16} height={16} alt="" aria-hidden />
             </span>
             <span className="bkg-section-title">Select Accommodation Type</span>
             <span
               className={`bkg-caret${accommodationOpen ? " bkg-caret--open" : ""}`}
               aria-hidden
             >
-              <img src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
+              <img loading="lazy" src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
             </span>
           </button>
 
           {accommodationOpen && (
             <div className="bkg-accommodation">
               <div className="bkg-warn-tag">
-                <img src={`${A}icon-info-yellow.svg`} width={14} height={14} alt="" aria-hidden />
+                <img loading="lazy" src={`${A}icon-info-yellow.svg`} width={14} height={14} alt="" aria-hidden />
                 <span>Add total number of travelers</span>
               </div>
 
@@ -420,7 +420,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
                   <p className="bkg-room-name">Hotel - (Double Sharing)</p>
                   <div className="bkg-room-price-line">
                     <span className="bkg-room-strike">
-                      <img src={`${A}icon-rupee.svg`} width={10} height={10} alt="" aria-hidden />
+                      <img loading="lazy" src={`${A}icon-rupee.svg`} width={10} height={10} alt="" aria-hidden />
                       {data.perPersonStrike}/-
                     </span>
                     <span className="bkg-room-price">&#8377; {data.perPerson}/-</span>
@@ -447,7 +447,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
             <section className="bkg-section bkg-section--pad0">
               <div className="bkg-subhead bkg-subhead--pad">
                 <span className="bkg-section-icon">
-                  <img src={`${A}icon-groups.svg`} width={16} height={16} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-groups.svg`} width={16} height={16} alt="" aria-hidden />
                 </span>
                 <span className="bkg-section-title">Who are you booking for?</span>
               </div>
@@ -496,7 +496,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
             onChange={setFlexibleCancel}
             classPrefix="bkg-option"
             checkboxClassName="bkg-checkbox"
-            icon={<img src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />}
+            icon={<img loading="lazy" src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />}
             label="Flexible Cancellation"
             price={<>+ &#8377;5,999/-</>}
           />
@@ -534,7 +534,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
 
           <div className="bkg-bill">
             <div className="bkg-bill-head">
-              <img src={`${A}icon-receipt.svg`} width={16} height={16} alt="" aria-hidden />
+              <img loading="lazy" src={`${A}icon-receipt.svg`} width={16} height={16} alt="" aria-hidden />
               <span>Bill Summary</span>
             </div>
 
@@ -573,7 +573,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
               <div className="bkg-bill-row">
                 <button className="bkg-bill-tcs" type="button">
                   <span>TCS @ 5%</span>
-                  <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
+                  <img loading="lazy" src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
                 </button>
                 <span>&#8377;{formatINR(pricing.tcs)}/-</span>
               </div>
@@ -588,7 +588,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
 
             {pricing.saved > 0 && (
               <div className="bkg-saved">
-                <img src={`${A}icon-person.svg`} width={24} height={24} alt="" aria-hidden />
+                <img loading="lazy" src={`${A}icon-person.svg`} width={24} height={24} alt="" aria-hidden />
                 <span className="bkg-saved-amt">&#8377;{formatINR(pricing.saved)}/-</span>
                 <span className="bkg-saved-text">saved on this trip.</span>
               </div>
@@ -609,7 +609,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
           >
             <span className="bkg-notes-label">Notes</span>
             <span className={`bkg-caret${notesOpen ? " bkg-caret--open" : ""}`} aria-hidden>
-              <img src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
+              <img loading="lazy" src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
             </span>
           </button>
         </section>
@@ -632,7 +632,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
       {/* Fixed bottom CTA */}
       <div className="bkg-cta">
         <div className="bkg-cta-tags">
-          <img src={`${A}icon-your-trips.svg`} width={16} height={16} alt="" aria-hidden />
+          <img loading="lazy" src={`${A}icon-your-trips.svg`} width={16} height={16} alt="" aria-hidden />
           <span className="bkg-cta-tag">Europe Trip</span>
           <span className="bkg-cta-dot" aria-hidden />
           <span className="bkg-cta-tag">{data.dateRange}</span>
@@ -650,7 +650,7 @@ export function BookingView({ navState, initialDraftData }: BookingViewProps) {
             <span className="bkg-cta-price">&#8377; {formatINR(pricing.toPay)}/-</span>
             <button className="bkg-cta-fee" type="button">
               <span>+</span>
-              <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
+              <img loading="lazy" src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
               <span>Convenience fee</span>
             </button>
           </div>

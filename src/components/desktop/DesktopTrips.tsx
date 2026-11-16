@@ -68,10 +68,10 @@ function DesktopTrips({
           <button className="dtrips__more" onClick={() => nav.push(seeAllHref)}>
             <span className="dtrips__more-stack">
               <span className="dtrips__more-mini dtrips__more-mini--left">
-                <img src={miniThumb(flat[0]?.image)} alt="" />
+                <img loading="lazy" src={miniThumb(flat[0]?.image)} alt="" />
               </span>
               <span className="dtrips__more-mini dtrips__more-mini--right">
-                <img src={miniThumb(flat[1]?.image)} alt="" />
+                <img loading="lazy" src={miniThumb(flat[1]?.image)} alt="" />
               </span>
             </span>
             View More Trips

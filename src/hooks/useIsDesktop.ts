@@ -1,13 +1,13 @@
+import { DESKTOP_QUERY, useViewportHint } from "@/context/ViewportContext";
 import { useMediaQuery } from "./useMediaQuery";
 
-const QUERY = "(min-width: 1024px)";
-
-/** True on viewports ≥1024px. Used to swap the homepage to its desktop layout
+/** True on viewports ≥1024px. Used to swap pages to their desktop layout
  *  without altering the mobile tree below the breakpoint.
  *
- *  SSR-safe: assumes mobile until the real viewport is known (matches this
- *  app's mobile-first `--app-width` shell), so a server render and the first
- *  client paint agree — see useMediaQuery for why that matters. */
+ *  SSR-safe: the server render and hydration use the server's viewport hint
+ *  (cookie / user-agent, see app/_lib/viewportHint.ts), so a desktop reload
+ *  renders desktop from the first paint; afterwards the real media query
+ *  takes over. */
 export function useIsDesktop(): boolean {
-  return useMediaQuery(QUERY, false);
+  return useMediaQuery(DESKTOP_QUERY, useViewportHint());
 }

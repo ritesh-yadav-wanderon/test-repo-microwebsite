@@ -132,7 +132,7 @@ export default function ReviewsSheet({ isOpen, onClose }: { isOpen: boolean; onC
 
         {/* Google + review count */}
         <div className="rsh-google-row">
-          <img src={`${R}google-color.svg`} alt="Google" className="rsh-google-logo" />
+          <img loading="lazy" src={`${R}google-color.svg`} alt="Google" className="rsh-google-logo" />
           <span className="rsh-review-count">14921 Reviews</span>
         </div>
 

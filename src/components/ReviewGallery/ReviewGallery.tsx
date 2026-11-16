@@ -57,12 +57,12 @@ export default function ReviewGallery({
         <div className="rgal-header">
           <div className="rgal-header-left">
             <button className="rgal-back" type="button" onClick={onClose} aria-label="Back">
-              <img src={`${R}icon-back.svg`} alt="" aria-hidden />
+              <img loading="lazy" src={`${R}icon-back.svg`} alt="" aria-hidden />
             </button>
             <span className="rgal-title">Gallery</span>
           </div>
           <button className="rgal-close" type="button" onClick={onClose} aria-label="Close">
-            <img src={`${B}icon-close.svg`} alt="" aria-hidden />
+            <img loading="lazy" src={`${B}icon-close.svg`} alt="" aria-hidden />
           </button>
         </div>
 
@@ -73,7 +73,7 @@ export default function ReviewGallery({
               <span className="rgal-name">{reviewerName}</span>
               <span className="rgal-rating">
                 <span>{rating}</span>
-                <img src={`${R}star-filled.svg`} alt="" className="rgal-star" aria-hidden />
+                <img loading="lazy" src={`${R}star-filled.svg`} alt="" className="rgal-star" aria-hidden />
               </span>
             </div>
             <p className="rgal-trip">{tripTitle}</p>

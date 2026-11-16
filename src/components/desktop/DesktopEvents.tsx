@@ -159,7 +159,7 @@ function DesktopEventCard({ item, onOpen }: { item: EventItem; onOpen: (slug: st
       </div>
       <div className="devt__card-info">
         <div className="devt__card-loc">
-          <img src={`${A}pin.svg`} alt="" width={12} height={12} aria-hidden />
+          <img loading="lazy" src={`${A}pin.svg`} alt="" width={12} height={12} aria-hidden />
           <span>{item.location}</span>
         </div>
         <p className="devt__card-title">{item.title}</p>
@@ -193,7 +193,7 @@ export default function DesktopEvents() {
 
       {/* Blurred backdrop of the featured image */}
       <div className="devt__backdrop" aria-hidden>
-        <img src={feat.image} alt="" />
+        <img loading="lazy" src={feat.image} alt="" />
       </div>
 
       <div className="devt__inner">
@@ -203,21 +203,21 @@ export default function DesktopEvents() {
             <div className="devt__hero-head">
               <h1 className="devt__hero-title">{feat.title}</h1>
               <div className="devt__hero-host">
-                <img src={feat.avatar} alt="" className="devt__hero-avatar" />
+                <img loading="lazy" src={feat.avatar} alt="" className="devt__hero-avatar" />
                 <span>Hosted by {feat.host}</span>
               </div>
             </div>
             <div className="devt__hero-facts">
               <span className="devt__hero-tag">{feat.category}</span>
               <div className="devt__hero-fact">
-                <img src={`${A}devt-calendar-clock.svg`} alt="" width={18} height={18} aria-hidden />
+                <img loading="lazy" src={`${A}devt-calendar-clock.svg`} alt="" width={18} height={18} aria-hidden />
                 <span>
                   <em>{feat.day}</em>
                   <small>{feat.time}</small>
                 </span>
               </div>
               <div className="devt__hero-fact">
-                <img src={`${A}devt-location.svg`} alt="" width={15} height={18} aria-hidden />
+                <img loading="lazy" src={`${A}devt-location.svg`} alt="" width={15} height={18} aria-hidden />
                 <span>
                   <em>{feat.venue}</em>
                   <small>{feat.city}</small>
@@ -226,7 +226,7 @@ export default function DesktopEvents() {
             </div>
           </div>
           <button className="devt__hero-media" type="button" onClick={() => openEvent(feat.slug)}>
-            <img src={feat.image} alt={feat.title} />
+            <img loading="lazy" src={feat.image} alt={feat.title} />
           </button>
         </section>
 
@@ -245,7 +245,7 @@ export default function DesktopEvents() {
           <div className="devt__cats">
             {CATEGORIES.map((cat) => (
               <button key={cat.label} className="devt__cat" type="button" onClick={() => openEvent(slugify(cat.label))}>
-                <img src={cat.icon} alt="" width={cat.size} height={cat.size} aria-hidden />
+                <img loading="lazy" src={cat.icon} alt="" width={cat.size} height={cat.size} aria-hidden />
                 <span className="devt__cat-text">
                   <em>{cat.label}</em>
                   <small>3k events</small>

@@ -179,3 +179,45 @@ describe("filterSortPaginate — sort", () => {
     expect(result.items.map((i) => i.productId)).toEqual(["short", "long"]);
   });
 });
+
+describe("filterSortPaginate — URL slug categories and destination matching", () => {
+  const all = [
+    makeProduct({ productId: "wk", tripTypeTags: ["Weekend Trip"], themeTags: ["culture"] }),
+    makeProduct({ productId: "adv", themeTags: ["adventure"], intentTag: ["solo", "couple"] }),
+    makeProduct({
+      productId: "leh",
+      destination: { title: "Leh Ladakh", slug: "ladakh", isInternational: false },
+      region: "India",
+      subDestinations: ["Leh", "Khardung", "La", "Nubra"],
+    }),
+    makeProduct({
+      productId: "th",
+      destination: { title: "Thailand", slug: "thailand", isInternational: true },
+      region: "Southeast Asia",
+      subDestinations: ["Phuket", "Krabi"],
+    }),
+  ];
+  const ids = (q: Parameters<typeof filterSortPaginate>[1]) =>
+    filterSortPaginate(all, q).items.map((d) => d.productId);
+
+  it("accepts bottom-nav/menu slugs (weekend-trips, adventure, culture)", () => {
+    expect(ids({ category: "weekend-trips" })).toEqual(["wk"]);
+    expect(ids({ category: "adventure" })).toEqual(["adv"]);
+    expect(ids({ category: "culture" })).toEqual(["wk"]);
+    expect(ids({ category: "romantic-escapes" })).toEqual(["adv"]);
+  });
+
+  it("ignores unknown category markers instead of returning zero trips", () => {
+    expect(ids({ category: "private-trips" })).toHaveLength(all.length);
+  });
+
+  it("does not match a destination through a short sub-destination fragment", () => {
+    // "thailand" contains "la" — must not pull in the Ladakh trip.
+    expect(ids({ destination: "thailand" })).toEqual(["th"]);
+  });
+
+  it("matches region-level slugs", () => {
+    expect(ids({ destination: "south-east-asia" })).toEqual(["th"]);
+    expect(ids({ destination: "india" })).toEqual(["leh"]);
+  });
+});

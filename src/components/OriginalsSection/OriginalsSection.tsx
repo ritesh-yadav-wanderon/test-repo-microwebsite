@@ -55,7 +55,7 @@ function SlideMedia({ variant }: { variant: SlideVariant }) {
       <>
         <div className="orig-mountain-wrap">
           <div className="orig-mountain-inner">
-            <img
+            <img loading="lazy"
               src="/figma/originals/mountain-bottom.png"
               alt=""
               aria-hidden
@@ -63,13 +63,13 @@ function SlideMedia({ variant }: { variant: SlideVariant }) {
             />
           </div>
         </div>
-        <img
+        <img loading="lazy"
           src="/figma/originals/hiker.png"
           alt=""
           aria-hidden
           className="orig-hiker"
         />
-        <img
+        <img loading="lazy"
           src="/figma/originals/birds.png"
           alt=""
           aria-hidden
@@ -81,7 +81,7 @@ function SlideMedia({ variant }: { variant: SlideVariant }) {
 
   if (variant === "rome") {
     return (
-      <img
+      <img loading="lazy"
         src="/figma/originals/roma.png"
         alt=""
         aria-hidden
@@ -92,7 +92,7 @@ function SlideMedia({ variant }: { variant: SlideVariant }) {
 
   // almaty
   return (
-    <img
+    <img loading="lazy"
       src="/figma/originals/mosque.png"
       alt=""
       aria-hidden

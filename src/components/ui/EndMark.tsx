@@ -15,7 +15,7 @@ export default function EndMark({ variant }: EndMarkProps) {
   if (variant === "mobile") {
     return (
       <section className="ftmsg">
-        <img
+        <img loading="lazy"
           src="/figma/footer-msg/logo-black.png"
           alt="WanderOn"
           className="ftmsg-logo"
@@ -33,7 +33,7 @@ export default function EndMark({ variant }: EndMarkProps) {
   if (variant === "desktop") {
     return (
       <section className="dfmsg">
-        <img className="dfmsg__heart" src="/figma/event/footer-heart.svg" alt="" />
+        <img loading="lazy" className="dfmsg__heart" src="/figma/event/footer-heart.svg" alt="" />
         <p className="dfmsg__line dfmsg__line--medium">Life's a Trip,</p>
         <p className="dfmsg__line">Let's Make Yours Epic!</p>
       </section>
@@ -42,7 +42,7 @@ export default function EndMark({ variant }: EndMarkProps) {
 
   return (
     <div className="pwm" aria-hidden>
-      <img src="/figma/event/footer-heart.svg" width={40} height={40} alt="" />
+      <img loading="lazy" src="/figma/event/footer-heart.svg" width={40} height={40} alt="" />
       <p className="pwm-line pwm-line--medium">Life's a Trip,</p>
       <p className="pwm-line">Let's Make Yours Epic!</p>
     </div>

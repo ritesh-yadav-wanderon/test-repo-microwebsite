@@ -59,14 +59,14 @@ export default function DesktopGallery() {
       {/* ── Slim page header ── */}
       <header className="dgal-header">
         <button className="dgal-back" type="button" aria-label="Back" onClick={() => nav.go(-1)}>
-          <img src="/figma/compare/arrow-back.svg" alt="" width={24} height={24} aria-hidden />
+          <img loading="lazy" src="/figma/compare/arrow-back.svg" alt="" width={24} height={24} aria-hidden />
         </button>
         <span className="dgal-header-title">Gallery</span>
       </header>
 
       {/* ── Trip name strip ── */}
       <div className="dgal-strip">
-        <img src="/figma/compare/desktop/your-trips.svg" alt="" width={14} height={14} aria-hidden />
+        <img loading="lazy" src="/figma/compare/desktop/your-trips.svg" alt="" width={14} height={14} aria-hidden />
         <span>{STATIC_DATA.title}</span>
       </div>
 

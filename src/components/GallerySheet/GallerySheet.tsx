@@ -90,7 +90,7 @@ export default function GallerySheet({
       <div className="gsh-header">
         <div className="gsh-header-left">
           <button className="gsh-back" type="button" onClick={onClose} aria-label="Back">
-            <img src="/figma/gallery/icon-arrow-back.svg" alt="" aria-hidden />
+            <img loading="lazy" src="/figma/gallery/icon-arrow-back.svg" alt="" aria-hidden />
           </button>
           <p className="gsh-title">Gallery</p>
         </div>
@@ -111,7 +111,7 @@ export default function GallerySheet({
                 {reviewerRating && (
                   <div className="gsh-reviewer-rating">
                     <span className="gsh-reviewer-score">{reviewerRating}</span>
-                    <img src="/figma/gallery/icon-star.svg" alt="" aria-hidden className="gsh-reviewer-star" />
+                    <img loading="lazy" src="/figma/gallery/icon-star.svg" alt="" aria-hidden className="gsh-reviewer-star" />
                   </div>
                 )}
               </div>

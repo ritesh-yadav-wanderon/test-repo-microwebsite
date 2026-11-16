@@ -474,7 +474,7 @@
   padding: 8px 16px;
   border-radius: 30px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 16px;
   cursor: pointer;
   border: 1px solid #e6e6e6;
@@ -490,6 +490,176 @@
 }
 
 
+
+/* ── Trip at a Glance (Figma 8779:9081) ─────────────────────────────── */
+.tdp2-itin-section.tdp2-glance-section {
+  padding: 20px 0 8px;
+  /* Glance tab bar has no anchor-chip row, so the sticky header is shorter. */
+  scroll-margin-top: 132px;
+}
+.tdp2-glance {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 16px;
+}
+.tdp2-glance-divider {
+  margin: 0 -16px;
+  border: 0;
+  border-top: 1px solid #d0d7d9;
+}
+.tdp2-glance-block {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 16px;
+}
+.tdp2-glance-block--stay { padding-bottom: 20px; }
+.tdp2-glance-block--row { gap: 9px; padding-bottom: 20px; }
+.tdp2-glance-hd {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 21px;
+  color: #01afd1;
+}
+.tdp2-glance-hd img { flex-shrink: 0; }
+.tdp2-glance-stays {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0;
+  padding: 0 0 0 21px;
+  list-style: disc;
+  font-size: 14px;
+  line-height: 21px;
+  color: #3d3d3d;
+}
+.tdp2-glance-stays li::marker { color: #3d3d3d; }
+.tdp2-glance-stays li { display: list-item; }
+.tdp2-glance-stay-name { display: block; }
+/* ★ 4.8 customer ratings (Figma 8779:9114) — shared with the itinerary day cards */
+.tdp2-hotel-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 12px;
+  color: #3d3d3d;
+}
+.tdp2-hotel-rating img { flex-shrink: 0; }
+.tdp2-day-hotel-option .tdp2-hotel-rating,
+.tdp2-day-stay-name + .tdp2-hotel-rating { margin-top: 2px; }
+/* Premium-only activities (Figma 8779:9158) */
+.tdp2-glance-acts--premium { margin-top: 0; }
+.tdp2-glance-act--locked .tdp2-glance-act-text { color: #ababab; }
+.tdp2-glance-act--locked .tdp2-glance-act-img { filter: grayscale(1); }
+.tdp2-glance-premium-note {
+  display: block;
+  color: #e27917;
+  text-transform: capitalize;
+}
+.tdp2-glance-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: #fbeee2;
+}
+.tdp2-glance-note img { flex-shrink: 0; }
+.tdp2-glance-note p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 16px;
+  color: #e27917;
+}
+.tdp2-glance-acts {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tdp2-glance-act {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  min-height: 62px;
+}
+.tdp2-glance-act-text {
+  flex: 1 0 0;
+  min-width: 0;
+  margin: 0;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--ui-color-text-tertiary, #4e4e4e);
+}
+.tdp2-glance-act-img {
+  width: 62px;
+  height: 62px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  object-fit: cover;
+}
+.tdp2-glance-more {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #015f74;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.tdp2-glance-feature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tdp2-glance-feature-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.tdp2-glance-feature-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19.6px;
+  color: #3d3d3d;
+}
+.tdp2-glance-feature-sub {
+  margin: 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: #969696;
+}
+.tdp2-glance-art {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.tdp2-glance-art img {
+  position: absolute;
+  max-width: none;
+}
+/* Coach + badge art is mirrored in the design (-scale-y + rotate 180°). */
+.tdp2-glance-art--coach { width: 59px; height: 45px; transform: scaleX(-1); }
+.tdp2-glance-art--coach img { left: -5.07%; top: 0.33%; width: 112.14%; height: 98.02%; }
+.tdp2-glance-art--badge { width: 43px; height: 37px; transform: scaleX(-1); }
+.tdp2-glance-art--badge img { left: -35.73%; top: -11.95%; width: 166.91%; height: 130.65%; }
+.tdp2-glance-block--row:has(.tdp2-glance-art--badge) .tdp2-glance-feature { gap: 9px; }
+.tdp2-glance-art--community { width: 59px; height: 45px; }
+.tdp2-glance-art--community img { inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
 .tdp2-itin-section {
   scroll-margin-top: 186px;
@@ -2836,4 +3006,46 @@
 }
 .tdp2-sticky-btn-label {
   white-space: nowrap;
+}
+
+/* ── Package Type tiers (Figma 8794:10882) ───────────────────────────── */
+.tdp2-package-type-btn { font-weight: 500; }
+.tdp2-package-type-btn--budget { border-color: #015f74; color: #015f74; }
+.tdp2-package-type-btn--standard { border-color: #0048ac; color: #0048ac; }
+.tdp2-package-type-btn--premium { border-color: #af914d; color: #af914d; }
+.tdp2-package-type-btn.active {
+  background: #f6fcfe;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.16), inset 0 0 5px 1px rgba(0, 0, 0, 0.12);
+}
+.tdp2-package-type-btn--standard.active { border-color: #0048ac; color: #0048ac; }
+.tdp2-package-type-btn--premium.active { border-color: #af914d; color: #af914d; }
+
+/* ── Trip Start / Trip End (Figma 9462:24999) ────────────────────────── */
+.tdp2-ends {
+  position: relative;
+  display: flex;
+  gap: 15px;
+  align-self: stretch;
+  width: 100%;
+  box-sizing: border-box;
+}
+.tdp2-end {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4px;
+  padding: 8px 16px;
+  background: #f3f6f7;
+  border-radius: 12px;
+  font-size: 12px;
+}
+.tdp2-end:last-of-type { padding-left: 20px; }
+.tdp2-end-label { line-height: 12px; color: #8b8b8b; }
+.tdp2-end-place { line-height: 16px; color: #333; }
+.tdp2-ends-icon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }

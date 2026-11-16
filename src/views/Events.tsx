@@ -50,7 +50,7 @@ function EventCard({ item, onOpen }: { item: EventItem; onOpen: (slug: string) =
       </div>
       <div className="ev-card-info">
         <div className="ev-card-loc">
-          <img src={`${A}pin.svg`} alt="" className="ev-card-pin" aria-hidden />
+          <img loading="lazy" src={`${A}pin.svg`} alt="" className="ev-card-pin" aria-hidden />
           <span>{item.location}</span>
         </div>
         <p className="ev-card-title">{item.title}</p>
@@ -96,10 +96,10 @@ export function EventsView() {
       {/* Top navigation (Figma 5036:7100) */}
       <header className="ev-top">
         <button className="ev-logo" type="button" onClick={() => nav.push("/")} aria-label="Home">
-          <img src="/figma/nav2/events/logo.png" alt="WanderOn" width={50} height={50} />
+          <img loading="lazy" src="/figma/nav2/events/logo.png" alt="WanderOn" width={50} height={50} />
         </button>
         <button className="ev-menu" type="button" onClick={() => setMenuOpen(true)} aria-label="Open menu">
-          <img src="/figma/events/menu.svg" alt="" className="ev-menu-icon" aria-hidden />
+          <img loading="lazy" src="/figma/events/menu.svg" alt="" className="ev-menu-icon" aria-hidden />
         </button>
       </header>
 
@@ -114,7 +114,7 @@ export function EventsView() {
                 className={`ev-cat${i === activeCat ? " ev-cat--active" : ""}`}
                 onClick={() => setActiveCat(i)}
               >
-                <img src={cat.icon} alt="" className="ev-cat-icon" aria-hidden />
+                <img loading="lazy" src={cat.icon} alt="" className="ev-cat-icon" aria-hidden />
                 <span>{cat.label}</span>
               </button>
             </div>
@@ -146,7 +146,7 @@ export function EventsView() {
                 onPlay={() => setPlaying(true)}
                 onPause={() => setPlaying(false)}
               />
-              <img src={EVENTS_HERO.logo} alt="" className="ev-hero-logo" aria-hidden />
+              <img loading="lazy" src={EVENTS_HERO.logo} alt="" className="ev-hero-logo" aria-hidden />
               <button
                 type="button"
                 className="ev-hero-play"
@@ -157,7 +157,7 @@ export function EventsView() {
                   togglePlay();
                 }}
               >
-                <img
+                <img loading="lazy"
                   src={`${A}${playing ? "pause.svg" : "play.svg"}`}
                   alt=""
                   className="ev-hero-play-icon"
@@ -168,7 +168,7 @@ export function EventsView() {
             <div className="ev-hero-info">
               <p className="ev-hero-title">{EVENTS_HERO.title}</p>
               <div className="ev-hero-loc">
-                <img src={`${A}icon-location.svg`} alt="" className="ev-hero-pin" aria-hidden />
+                <img loading="lazy" src={`${A}icon-location.svg`} alt="" className="ev-hero-pin" aria-hidden />
                 <span>{EVENTS_HERO.location}</span>
               </div>
             </div>

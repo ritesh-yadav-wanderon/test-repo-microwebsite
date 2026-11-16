@@ -114,7 +114,7 @@ export function CancellationView({ bookingRef, state, onBack, onClose, onWithdra
       <header className="cx-nav">
         <div className="cx-nav-left">
           <button className="cx-nav-back" type="button" aria-label="Back" onClick={onBack}>
-            <img src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+            <img loading="lazy" src={`${A}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
           <div className="cx-nav-crumb">
             <span className="cx-nav-crumb-root">Cancellation</span>
@@ -123,7 +123,7 @@ export function CancellationView({ bookingRef, state, onBack, onClose, onWithdra
           </div>
         </div>
         <button className="cx-nav-close" type="button" aria-label="Close" onClick={onClose}>
-          <img src={`${A}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+          <img loading="lazy" src={`${A}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
         </button>
       </header>
 
@@ -192,7 +192,7 @@ export function CancellationView({ bookingRef, state, onBack, onClose, onWithdra
         {/* Bill summary */}
         <div className="cx-section">
           <div className="cx-billhead">
-            <img src={`${PAY}icon-receipt.svg`} width={16} height={16} alt="" aria-hidden />
+            <img loading="lazy" src={`${PAY}icon-receipt.svg`} width={16} height={16} alt="" aria-hidden />
             <span>Bill Summary</span>
             <span className="cx-billhead-sep" aria-hidden />
             <span>Travellers: {data.travelers}</span>
@@ -231,10 +231,10 @@ export function CancellationView({ bookingRef, state, onBack, onClose, onWithdra
           <span className="cx-help-label">Need help with you booking?</span>
           <div className="cx-help-actions">
             <button className="cx-help-btn cx-help-btn--call" type="button" aria-label="Call support">
-              <img src={`${C}icon-call.svg`} width={18} height={18} alt="" aria-hidden />
+              <img loading="lazy" src={`${C}icon-call.svg`} width={18} height={18} alt="" aria-hidden />
             </button>
             <button className="cx-help-btn cx-help-btn--wa" type="button" aria-label="WhatsApp support">
-              <img src={`${C}icon-whatsapp.svg`} width={18} height={18} alt="" aria-hidden />
+              <img loading="lazy" src={`${C}icon-whatsapp.svg`} width={18} height={18} alt="" aria-hidden />
             </button>
           </div>
         </div>

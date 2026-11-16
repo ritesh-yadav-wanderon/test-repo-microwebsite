@@ -55,7 +55,7 @@ export default function Voucher({
         <div className="vch-applied">
           <div className="vch-applied-info">
             <div className="vch-applied-head">
-              <img
+              <img loading="lazy"
                 className="vch-verified"
                 src={`${A}verified.svg`}
                 width={24}
@@ -93,7 +93,7 @@ export default function Voucher({
         >
           <span className="vch-title">Add Vouchers</span>
           <span className="vch-caret vch-caret--open" aria-hidden>
-            <img src={`${A}arrow-drop.svg`} width={24} height={24} alt="" />
+            <img loading="lazy" src={`${A}arrow-drop.svg`} width={24} height={24} alt="" />
           </span>
         </button>
 
@@ -130,7 +130,7 @@ export default function Voucher({
     >
       <span className="vch-title">Add Vouchers</span>
       <span className="vch-caret" aria-hidden>
-        <img src={`${A}arrow-drop.svg`} width={24} height={24} alt="" />
+        <img loading="lazy" src={`${A}arrow-drop.svg`} width={24} height={24} alt="" />
       </span>
     </button>
   );

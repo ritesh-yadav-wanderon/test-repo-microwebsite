@@ -1,6 +1,6 @@
 // Desktop product listing. List helpers are shared with the mobile listing via
 // `@/utils/searchResults` and `@/hooks/useSearchFilters`.
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Trip } from "@/types";
 import type { ProductListResult } from "@/repositories";
 import { useProductList } from "@/hooks/useProductList";
@@ -60,6 +60,21 @@ export default function DesktopSearchResults({ initialData }: DesktopSearchResul
 
   const { chips } = useSearchFilters();
 
+  // IntersectionObserver infinite scroll — one 6-trip page at a time.
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const loadMoreRef = useRef(loadMore);
+  useEffect(() => { loadMoreRef.current = loadMore; });
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || loading || !hasMore) return;
+    const io = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) loadMoreRef.current(); },
+      { rootMargin: "400px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [hasMore, loading]);
+
 
   // Toggles the anchored filters popover; clicking the same pill again closes it.
   const openFilter = (e: React.MouseEvent, tab: number) => {
@@ -101,27 +116,27 @@ export default function DesktopSearchResults({ initialData }: DesktopSearchResul
         <div className="dsr-fpills">
           <button className="dsr-fpill" type="button" onClick={(e) => openFilter(e, 0)}>
             <span>Filters</span>
-            <img src={`${LI}filter-icon.svg`} alt="" className="dsr-fpill-ico" />
+            <img loading="lazy" src={`${LI}filter-icon.svg`} alt="" className="dsr-fpill-ico" />
           </button>
           <button className="dsr-fpill" type="button" onClick={(e) => openFilter(e, 7)}>
             <span>Bucket List</span>
-            <img src={`${LI}list-alt-add.svg`} alt="" className="dsr-fpill-ico" />
+            <img loading="lazy" src={`${LI}list-alt-add.svg`} alt="" className="dsr-fpill-ico" />
           </button>
           <button className="dsr-fpill" type="button" onClick={(e) => openFilter(e, 3)}>
             <span>Budget</span>
-            <img src={`${AS}arrow-down.svg`} alt="" className="dsr-fpill-caret" />
+            <img loading="lazy" src={`${AS}arrow-down.svg`} alt="" className="dsr-fpill-caret" />
           </button>
           <button className="dsr-fpill" type="button" onClick={(e) => openFilter(e, 2)}>
             <span>Months</span>
-            <img src={`${AS}arrow-down.svg`} alt="" className="dsr-fpill-caret" />
+            <img loading="lazy" src={`${AS}arrow-down.svg`} alt="" className="dsr-fpill-caret" />
           </button>
           <button className="dsr-fpill" type="button" onClick={(e) => openFilter(e, 3)}>
             <span>Categories</span>
-            <img src={`${AS}arrow-down.svg`} alt="" className="dsr-fpill-caret" />
+            <img loading="lazy" src={`${AS}arrow-down.svg`} alt="" className="dsr-fpill-caret" />
           </button>
           <button className="dsr-fpill" type="button" onClick={(e) => openFilter(e, 2)}>
             <span>Duration</span>
-            <img src={`${AS}arrow-down.svg`} alt="" className="dsr-fpill-caret" />
+            <img loading="lazy" src={`${AS}arrow-down.svg`} alt="" className="dsr-fpill-caret" />
           </button>
 
           {/* Anchored filters popover — opens alongside the filter pills */}
@@ -142,7 +157,7 @@ export default function DesktopSearchResults({ initialData }: DesktopSearchResul
               <div className="dsr-chip" key={chip.key}>
                 <span>{chip.label}</span>
                 <button className="dsr-chip-x" aria-label={`Remove ${chip.label}`} onClick={chip.onRemove}>
-                  <img src={`${LI}close-icon.svg`} alt="" width={16} height={16} />
+                  <img loading="lazy" src={`${LI}close-icon.svg`} alt="" width={16} height={16} />
                 </button>
               </div>
             ))}
@@ -186,13 +201,8 @@ export default function DesktopSearchResults({ initialData }: DesktopSearchResul
           <p className="dsr-no-results">No trips match your filters. Try adjusting your search.</p>
         )}
 
-        {!loading && hasMore && (
-          <div className="dsr-viewmore-wrap">
-            <button type="button" className="dsr-viewmore" onClick={loadMore}>
-              View more trips
-            </button>
-          </div>
-        )}
+        {/* Infinite scroll: the next 6 trips load as this nears the viewport. */}
+        {hasMore && <div ref={sentinelRef} className="dsr-sentinel" aria-hidden />}
       </main>
 
       <DesktopFooter />

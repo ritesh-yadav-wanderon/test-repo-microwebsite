@@ -28,7 +28,7 @@ function WaveIcon() {
     <span className="ntf-wave" aria-hidden>
       {WAVE_INSETS.map((inset, i) => (
         <span key={i} className="ntf-wave-layer" style={{ inset }}>
-          <img src={`${N}wave-${i + 1}.svg`} alt="" />
+          <img loading="lazy" src={`${N}wave-${i + 1}.svg`} alt="" />
         </span>
       ))}
     </span>
@@ -58,7 +58,7 @@ export function NotificationsView({ onBack, onExit }: NotificationsViewProps) {
             aria-label="Back"
             onClick={onBack}
           >
-            <img src={`${P}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+            <img loading="lazy" src={`${P}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
           <span className="ntf-title">Notifications</span>
         </div>
@@ -122,7 +122,7 @@ export function NotificationsView({ onBack, onExit }: NotificationsViewProps) {
                 </>
               )}
               {n.unread && (
-                <img className="ntf-dot" src={`${N}dot.svg`} width={6} height={6} alt="" aria-hidden />
+                <img loading="lazy" className="ntf-dot" src={`${N}dot.svg`} width={6} height={6} alt="" aria-hidden />
               )}
             </article>
           ))

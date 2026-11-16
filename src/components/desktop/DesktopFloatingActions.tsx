@@ -40,7 +40,7 @@ export default function DesktopFloatingActions() {
         aria-label="Chat on WhatsApp"
         tabIndex={visible ? 0 : -1}
       >
-        <img src="/figma/cancel/icon-whatsapp.svg" alt="" />
+        <img loading="lazy" src="/figma/cancel/icon-whatsapp.svg" alt="" />
       </a>
     </div>
   );

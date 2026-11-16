@@ -42,7 +42,7 @@ export default function ToggleSwitch({
   };
 
   const img = (
-    <img
+    <img loading="lazy"
       className={imgClassName}
       src={`${TOGGLE}toggle-${checked ? "on" : "off"}.svg`}
       alt=""

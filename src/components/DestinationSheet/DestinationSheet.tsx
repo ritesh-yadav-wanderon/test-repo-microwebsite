@@ -49,7 +49,7 @@ export default function DestinationSheet({
       <div className="dsh-header">
         <span className="dsh-title">Destination</span>
         <button className="dsh-close" type="button" aria-label="Close" onClick={onClose}>
-          <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+          <img loading="lazy" src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
         </button>
       </div>
 
@@ -79,9 +79,9 @@ export default function DestinationSheet({
                     <span className="dsh-item-label">{dest.label}</span>
                     {dest.trending && (
                       <div className="dsh-trending">
-                        <img src={`${M}trending-sparkle-left.png`} width={12} height={8} alt="" aria-hidden />
+                        <img loading="lazy" src={`${M}trending-sparkle-left.png`} width={12} height={8} alt="" aria-hidden />
                         <span className="dsh-trending-text">Trending</span>
-                        <img src={`${M}trending-sparkle-right.png`} width={12} height={8} alt="" aria-hidden />
+                        <img loading="lazy" src={`${M}trending-sparkle-right.png`} width={12} height={8} alt="" aria-hidden />
                       </div>
                     )}
                   </button>
@@ -103,7 +103,7 @@ export default function DestinationSheet({
                 onClick={() => setExpandedRegion(region.slug)}
               >
                 <span className="dsh-region-label">{region.label}</span>
-                <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
               </button>
             )}
             {i < DEST_REGIONS.length - 1 && <div className="dsh-sep" />}

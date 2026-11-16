@@ -45,7 +45,7 @@ function FloatField({
           onChange={e => onChange?.(e.target.value)}
         />
         {trailingIcon && (
-          <img src={trailingIcon} width={trailingIconSize} height={trailingIconSize} alt="" aria-hidden className="mprf-input-icon" />
+          <img loading="lazy" src={trailingIcon} width={trailingIconSize} height={trailingIconSize} alt="" aria-hidden className="mprf-input-icon" />
         )}
       </div>
       {filled && <span className="mprf-float-label">{label}</span>}
@@ -58,7 +58,7 @@ function CountryPill() {
   return (
     <div className="mprf-country-pill">
       <span className="mprf-country-text">IN +91</span>
-      <img src={`${MP}icon-chevron.svg`} width={8} height={6} alt="" aria-hidden />
+      <img loading="lazy" src={`${MP}icon-chevron.svg`} width={8} height={6} alt="" aria-hidden />
     </div>
   );
 }
@@ -84,9 +84,9 @@ function PhoneField({
           />
           <div className="mprf-input-trailing">
             {verified && (
-              <img src={`${MP}icon-verified.svg`} width={16} height={16} alt="Verified" className="mprf-input-icon" />
+              <img loading="lazy" src={`${MP}icon-verified.svg`} width={16} height={16} alt="Verified" className="mprf-input-icon" />
             )}
-            <img src={`${MP}icon-dropdown.svg`} width={24} height={24} alt="" aria-hidden className="mprf-input-icon" />
+            <img loading="lazy" src={`${MP}icon-dropdown.svg`} width={24} height={24} alt="" aria-hidden className="mprf-input-icon" />
           </div>
         </div>
         {filled && <span className="mprf-float-label">{label}</span>}
@@ -102,7 +102,7 @@ function SelectField({ label, value }: { label: string; value: string }) {
     <div className="mprf-field-wrap">
       <div className={`mprf-field-inner${filled ? " mprf-field-inner--filled" : ""}`}>
         <span className="mprf-input mprf-input--text">{filled ? value : <span className="mprf-placeholder">{label}</span>}</span>
-        <img src={`${MP}icon-dropdown.svg`} width={24} height={24} alt="" aria-hidden className="mprf-input-icon" />
+        <img loading="lazy" src={`${MP}icon-dropdown.svg`} width={24} height={24} alt="" aria-hidden className="mprf-input-icon" />
       </div>
       {filled && <span className="mprf-float-label">{label}</span>}
     </div>
@@ -145,12 +145,12 @@ export function MyProfileView({ onBack }: MyProfileViewProps) {
       <header className="mprf-header">
         <div className="mprf-header-left">
           <button className="mprf-header-back" type="button" onClick={onBack} aria-label="Go back">
-            <img src={`${P}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
+            <img loading="lazy" src={`${P}icon-arrow-back.svg`} width={24} height={24} alt="" aria-hidden />
           </button>
           <span className="mprf-header-title">My Profile</span>
         </div>
         <button className="mprf-header-bell" type="button" aria-label="Notifications">
-          <img src={`${P}icon-bell.svg`} width={36} height={36} alt="" aria-hidden />
+          <img loading="lazy" src={`${P}icon-bell.svg`} width={36} height={36} alt="" aria-hidden />
         </button>
       </header>
 
@@ -172,13 +172,13 @@ export function MyProfileView({ onBack }: MyProfileViewProps) {
         {bannerVisible && (
           <div className="mprf-email-banner">
             <div className="mprf-banner-row">
-              <img src={`${MP}icon-email.svg`} width={20} height={20} alt="" aria-hidden className="mprf-banner-icon" />
+              <img loading="lazy" src={`${MP}icon-email.svg`} width={20} height={20} alt="" aria-hidden className="mprf-banner-icon" />
               <div className="mprf-banner-text">
                 <p className="mprf-banner-title">Confirm your email address</p>
                 <p className="mprf-banner-sub">We'll send a code to your inbox.</p>
               </div>
               <button className="mprf-banner-close" type="button" onClick={() => setBannerVisible(false)} aria-label="Dismiss">
-                <img src={`${MP}icon-close.svg`} width={18} height={18} alt="" aria-hidden />
+                <img loading="lazy" src={`${MP}icon-close.svg`} width={18} height={18} alt="" aria-hidden />
               </button>
             </div>
             <button className="mprf-confirm-btn" type="button">Confirm email</button>
@@ -191,11 +191,11 @@ export function MyProfileView({ onBack }: MyProfileViewProps) {
           {/* Section header */}
           <div className="mprf-section-head">
             <div className="mprf-section-head-left">
-              <img src={`${MP}icon-person.svg`} width={20} height={20} alt="" aria-hidden />
+              <img loading="lazy" src={`${MP}icon-person.svg`} width={20} height={20} alt="" aria-hidden />
               <span className="mprf-section-title">Personal Information</span>
             </div>
             <button className="mprf-edit-btn" type="button" aria-label="Edit personal information">
-              <img src={`${MP}icon-edit.svg`} width={24} height={24} alt="" aria-hidden />
+              <img loading="lazy" src={`${MP}icon-edit.svg`} width={24} height={24} alt="" aria-hidden />
             </button>
           </div>
 
@@ -219,7 +219,7 @@ export function MyProfileView({ onBack }: MyProfileViewProps) {
                 <span className="mprf-input mprf-input--text mprf-input--medium">{form.address1}</span>
               </div>
               <div className="mprf-addr-note">
-                <img src={`${MP}icon-info.svg`} width={13} height={13} alt="" aria-hidden />
+                <img loading="lazy" src={`${MP}icon-info.svg`} width={13} height={13} alt="" aria-hidden />
                 <p className="mprf-addr-note-text">Address is required for invoice generation.</p>
               </div>
             </div>

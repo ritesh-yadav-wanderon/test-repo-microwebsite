@@ -7,7 +7,7 @@
 // plumbing changes here (Node req/res -> Web Request/Response).
 
 import { getProductsCollection } from "../../../api/_lib/mongo";
-import { filterSortPaginate } from "../../../api/_lib/products";
+import { filterSortPaginate, listProducts } from "../../../api/_lib/products";
 
 export async function GET(request: Request) {
   try {
@@ -15,7 +15,7 @@ export async function GET(request: Request) {
     const q = (key: string) => searchParams.get(key);
 
     const collection = await getProductsCollection();
-    const all = await collection.find({}).toArray();
+    const all = await listProducts(collection);
 
     const result = filterSortPaginate(all, {
       page: q("page"),

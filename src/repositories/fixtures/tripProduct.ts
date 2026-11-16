@@ -66,6 +66,13 @@ export interface ProductData {
   fitTags: { label: string; rating: number }[];
   mapImage: string;
   captain: { name: string; photo: string; reviews: number; years: number; rating: number };
+  /** Day-wise transfer legs (product `dayWiseTransfer`) — Trip at a Glance. */
+  transferLegs?: { mode: string; from: string; to: string }[];
+  /** Social-proof lines (product `socialTag`) — Trip at a Glance "Community". */
+  socialTags?: { type: string; text: string }[];
+  /** Private/customised trip (product `packageType` "Customised") — the page
+   *  shows "Enquire Now" instead of batches. Group trips are "Fixed Departure". */
+  isCustomised?: boolean;
 }
 
 // ── Static page data (Figma) ─────────────────────────────────────────────────

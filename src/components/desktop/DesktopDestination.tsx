@@ -83,7 +83,7 @@ export default function DesktopDestination({
 
       {/* ── Hero (Figma 5746:6534) ── */}
       <section className="ddp-hero">
-        <img
+        <img loading="lazy"
           className="ddp-hero-img"
           src={`${BASE}/hero.jpg`}
           alt={`Group trips to ${destination}`}
@@ -178,7 +178,7 @@ export default function DesktopDestination({
               alt="Eiffel Tower over the Seine, Paris"
               loading="lazy"
             />
-            <img className="ddp-cult-pol-frame" src={`${BASE}/cult-frame.png`} alt="" aria-hidden />
+            <img loading="lazy" className="ddp-cult-pol-frame" src={`${BASE}/cult-frame.png`} alt="" aria-hidden />
             <figcaption className="ddp-cult-pol-caption">
               From Paris cafés to Roman backstreets, travellers arrive chasing
               the postcard and leave with the version no postcard shows.
@@ -199,7 +199,7 @@ export default function DesktopDestination({
               alt="Flamenco dancers in Plaza de España, Seville"
               loading="lazy"
             />
-            <img className="ddp-cult-pol-frame" src={`${BASE}/cult-frame.png`} alt="" aria-hidden />
+            <img loading="lazy" className="ddp-cult-pol-frame" src={`${BASE}/cult-frame.png`} alt="" aria-hidden />
             <figcaption className="ddp-cult-pol-caption">
               For many, Europe is the first great trip: the continent that
               turns a traveller into a storyteller

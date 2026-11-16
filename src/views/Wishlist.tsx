@@ -33,7 +33,7 @@ function WishCard({ trip }: { trip: WishlistTrip }) {
               remove(trip.slug);
             }}
           >
-            <img src={`${W}heart.svg`} alt="" width={14} height={12} aria-hidden />
+            <img loading="lazy" src={`${W}heart.svg`} alt="" width={14} height={12} aria-hidden />
           </button>
           <button
             className={`wlp-card-compare${inCompare ? " wlp-card-compare--active" : ""}`}
@@ -49,7 +49,7 @@ function WishCard({ trip }: { trip: WishlistTrip }) {
               });
             }}
           >
-            <img src="/figma/trip-hero/icon-compare.svg" alt="" width={14} height={14} aria-hidden />
+            <img loading="lazy" src="/figma/trip-hero/icon-compare.svg" alt="" width={14} height={14} aria-hidden />
             {inCompare ? "Comparing" : "Add to Compare"}
           </button>
         </div>
@@ -57,7 +57,7 @@ function WishCard({ trip }: { trip: WishlistTrip }) {
       <div className="wlp-card-body">
         <p className="wlp-card-title">{trip.title}</p>
         <div className="wlp-card-dur">
-          <img src={`${W}calendar-clock.svg`} alt="" width={12} height={12} aria-hidden />
+          <img loading="lazy" src={`${W}calendar-clock.svg`} alt="" width={12} height={12} aria-hidden />
           <span>{trip.duration ?? "7N/8D"}</span>
         </div>
         <div className="wlp-card-price-block">
@@ -82,7 +82,7 @@ export default function Wishlist() {
     <div className="wlp">
       <header className="wlp-header">
         <button className="wlp-back" type="button" aria-label="Go back" onClick={() => nav.go(-1)}>
-          <img src="/figma/compare/arrow-back.svg" alt="" width={24} height={24} />
+          <img loading="lazy" src="/figma/compare/arrow-back.svg" alt="" width={24} height={24} />
         </button>
         <span className="wlp-header-title">Wishlist</span>
       </header>

@@ -42,7 +42,7 @@ function DesktopWishCard({ trip }: { trip: WishlistTrip }) {
               remove(trip.slug);
             }}
           >
-            <img src={`${W}heart.svg`} alt="" width={14} height={12} aria-hidden />
+            <img loading="lazy" src={`${W}heart.svg`} alt="" width={14} height={12} aria-hidden />
           </button>
           <button
             className={`dwl-card-compare${inCompare ? " dwl-card-compare--active" : ""}`}
@@ -58,7 +58,7 @@ function DesktopWishCard({ trip }: { trip: WishlistTrip }) {
               });
             }}
           >
-            <img src="/figma/trip-hero/icon-compare.svg" alt="" width={14} height={14} aria-hidden />
+            <img loading="lazy" src="/figma/trip-hero/icon-compare.svg" alt="" width={14} height={14} aria-hidden />
             {inCompare ? "Comparing" : "Add to Compare"}
           </button>
         </div>
@@ -67,11 +67,11 @@ function DesktopWishCard({ trip }: { trip: WishlistTrip }) {
       <div className="dwl-card-body">
         <p className="dwl-card-title">{trip.title}</p>
         <div className="dwl-card-route">
-          <img src={`${D}icon-location.svg`} alt="" width={16} height={16} aria-hidden />
+          <img loading="lazy" src={`${D}icon-location.svg`} alt="" width={16} height={16} aria-hidden />
           <span>{trip.route ?? "New Delhi - New Delhi"}</span>
         </div>
         <div className="dwl-card-dur">
-          <img src={`${D}icon-calendar-clock.svg`} alt="" width={17} height={17} aria-hidden />
+          <img loading="lazy" src={`${D}icon-calendar-clock.svg`} alt="" width={17} height={17} aria-hidden />
           <span>{trip.duration ?? "7N/8D"}</span>
         </div>
         <p className="dwl-card-dates">
@@ -98,7 +98,7 @@ export default function DesktopWishlist() {
       {/* ── Slim page header (Figma 6588:31196) ── */}
       <header className="dwl-header">
         <button className="dwl-header-back" type="button" aria-label="Back" onClick={() => nav.go(-1)}>
-          <img src="/figma/compare/arrow-back.svg" alt="" width={24} height={24} aria-hidden />
+          <img loading="lazy" src="/figma/compare/arrow-back.svg" alt="" width={24} height={24} aria-hidden />
         </button>
         <span className="dwl-header-title">Wishlist</span>
       </header>

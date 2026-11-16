@@ -11,6 +11,26 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
+function isEndMarker(city: string): boolean {
+  return city.trim().toLowerCase() === "end";
+}
+
+function mapTransferLegs(raw: unknown): NonNullable<ProductData["transferLegs"]> {
+  if (!Array.isArray(raw)) return [];
+  return raw.filter(isRecord).flatMap((t) =>
+    typeof t.mode === "string" && t.mode && typeof t.pickUp === "string" && typeof t.dropOff === "string"
+      ? [{ mode: t.mode, from: t.pickUp, to: t.dropOff }]
+      : []
+  );
+}
+
+function mapSocialTags(raw: unknown): NonNullable<ProductData["socialTags"]> {
+  if (!Array.isArray(raw)) return [];
+  return raw.filter(isRecord).flatMap((t) =>
+    typeof t.text === "string" && t.text ? [{ type: typeof t.type === "string" ? t.type : "", text: t.text }] : []
+  );
+}
+
 /** Consecutive same-city days in dayWiseAccommodation, collapsed into
  *  {city, nights} — a real (not fabricated) per-city night breakdown. */
 function deriveStays(accommodation: unknown): { city: string; nights: number }[] {
@@ -18,6 +38,8 @@ function deriveStays(accommodation: unknown): { city: string; nights: number }[]
   const stays: { city: string; nights: number }[] = [];
   for (const entry of accommodation) {
     if (!isRecord(entry) || typeof entry.city !== "string" || !entry.city) continue;
+    // The departure day is stored as city "end" — it isn't a night anywhere.
+    if (isEndMarker(entry.city)) continue;
     const last = stays[stays.length - 1];
     if (last && last.city === entry.city) last.nights += 1;
     else stays.push({ city: entry.city, nights: 1 });
@@ -49,7 +71,7 @@ function mapItinerary(doc: ProductDetail): DayItinerary[] {
 
     return {
       days: `Day ${day}`,
-      city: isRecord(acc) && typeof acc.city === "string" ? acc.city : "",
+      city: isRecord(acc) && typeof acc.city === "string" ? (isEndMarker(acc.city) ? "Departure" : acc.city) : "",
       photo: activities.find((a) => a.photos?.[0])?.photos?.[0] ?? "",
       items: activities.map((a) => a.title).filter(Boolean),
       stayName: isRecord(acc) && typeof acc.accommodationName === "string" ? acc.accommodationName : undefined,
@@ -63,6 +85,12 @@ function mapItinerary(doc: ProductDetail): DayItinerary[] {
  *  map cleanly. Fields with no real equivalent (exclusions, effort,
  *  groupSize, bestMonths, womenBadge, map image, pickUp/drop) keep their
  *  static content — see the sanitization notes for why. */
+/** Private trips come from the API as "Customised" (any spelling); group
+ *  trips as "Fixed Departure". */
+export function isCustomisedPackage(packageType: unknown): boolean {
+  return typeof packageType === "string" && /custom/i.test(packageType);
+}
+
 export function mergeProductData(doc: ProductDetail): ProductData {
   const stays = deriveStays(doc.dayWiseAccommodation);
   const gallery = Array.isArray(doc.productImageGallery && (doc.productImageGallery as Record<string, unknown>).gallery)
@@ -96,6 +124,9 @@ export function mergeProductData(doc: ProductDetail): ProductData {
     cityStrip: stays.length ? stays.map((s) => `${s.nights}N ${s.city}`) : STATIC_DATA.cityStrip,
     motherItinerary: stays.length ? stays.map((s) => s.city) : STATIC_DATA.motherItinerary,
     motherNights: stays.length ? stays.map((s) => s.nights) : STATIC_DATA.motherNights,
+    transferLegs: mapTransferLegs(doc.dayWiseTransfer),
+    socialTags: mapSocialTags(doc.socialTag),
+    isCustomised: isCustomisedPackage(doc.packageType),
     fitTags: vibe.length
       ? vibe.filter(isRecord).map((v) => ({ label: String(v.label ?? ""), rating: Number(v.rating ?? 0) }))
       : STATIC_DATA.fitTags,

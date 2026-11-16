@@ -111,7 +111,7 @@ export default function DesktopMyBookings() {
 
                       <div className="dmbl-card-dates">
                         <span className="dmbl-card-duration">
-                          <img src={`${M}icon-luggage.svg`} width={8} height={12} alt="" aria-hidden />
+                          <img loading="lazy" src={`${M}icon-luggage.svg`} width={8} height={12} alt="" aria-hidden />
                           {b.dateRange}
                         </span>
                         <span className="dmbl-card-nights">{b.durationLabel}</span>
@@ -120,14 +120,14 @@ export default function DesktopMyBookings() {
                       <div className="dmbl-card-route">
                         <div className="dmbl-card-place">
                           <span className="dmbl-card-place-tag">
-                            <img src={`${A}icon-location.svg`} width={8} height={10} alt="" aria-hidden />
+                            <img loading="lazy" src={`${A}icon-location.svg`} width={8} height={10} alt="" aria-hidden />
                             Pick Up
                           </span>
                           <span className="dmbl-card-place-name">{b.pickUp}</span>
                         </div>
                         <div className="dmbl-card-place dmbl-card-place--right">
                           <span className="dmbl-card-place-tag">
-                            <img src={`${A}icon-location.svg`} width={8} height={10} alt="" aria-hidden />
+                            <img loading="lazy" src={`${A}icon-location.svg`} width={8} height={10} alt="" aria-hidden />
                             Drop
                           </span>
                           <span className="dmbl-card-place-name">{b.drop}</span>
@@ -140,7 +140,7 @@ export default function DesktopMyBookings() {
                         <div className="dmbl-cancel-note">Cancel request is in progress</div>
                       ) : (
                         <div className="dmbl-info-tag">
-                          <img src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
+                          <img loading="lazy" src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
                           <p>
                             Complete KYC, Co-Traveller Details and the remaining due amount to
                             confirm your booking.
@@ -160,7 +160,7 @@ export default function DesktopMyBookings() {
               type="button"
               onClick={() => openCancellation(cancellationRequests[0].ref)}
             >
-              <img src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />
+              <img loading="lazy" src={`${A}icon-bag-inactive.svg`} width={16} height={16} alt="" aria-hidden />
               <span>View Cancellation Request ({cancellationRequests.length})</span>
             </button>
           )}

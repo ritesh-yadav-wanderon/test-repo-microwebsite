@@ -39,11 +39,11 @@ export default function PaymentConfirmation({
 
       {/* Ticket that slides down out of the slot */}
       <div className="pcf-ticket">
-        <img className="pcf-ticket-bg" src={`${C}ticket.svg`} alt="" aria-hidden />
+        <img loading="lazy" className="pcf-ticket-bg" src={`${C}ticket.svg`} alt="" aria-hidden />
         <div className="pcf-ticket-inner">
           <div className="pcf-confetti" aria-hidden>
             {CONFETTI.map((c, i) => (
-              <img
+              <img loading="lazy"
                 key={i}
                 src={c.src}
                 alt=""
@@ -58,18 +58,18 @@ export default function PaymentConfirmation({
             ))}
           </div>
 
-          <img className="pcf-success" src={`${C}success.svg`} width={30} height={30} alt="" aria-hidden />
+          <img loading="lazy" className="pcf-success" src={`${C}success.svg`} width={30} height={30} alt="" aria-hidden />
           <p className="pcf-congrats">Congratulations!</p>
           <p className="pcf-sub">Payment Successful!</p>
 
           <div className="pcf-card">
-            <img className="pcf-card-bg" src={`${C}card.svg`} alt="" aria-hidden />
+            <img loading="lazy" className="pcf-card-bg" src={`${C}card.svg`} alt="" aria-hidden />
             <div className="pcf-card-inner">
               <div className="pcf-card-row">
                 <span>Reference ID: {reference}</span>
                 <span>Travellers: {travelers}</span>
               </div>
-              <img className="pcf-card-divider" src={`${C}divider.svg`} alt="" aria-hidden />
+              <img loading="lazy" className="pcf-card-divider" src={`${C}divider.svg`} alt="" aria-hidden />
               <div className="pcf-trip">
                 <img className="pcf-trip-thumb" src={thumb} alt="" loading="lazy" />
                 <div className="pcf-trip-text">

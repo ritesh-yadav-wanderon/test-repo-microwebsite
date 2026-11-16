@@ -96,7 +96,7 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
       {/* Header */}
       <div className="bm-header">
         <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
-          <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+          <img loading="lazy" src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
         </button>
       </div>
 
@@ -112,10 +112,10 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
                 onClick={() => setSubView(item.subView as SubView)}
               >
                 <span className="bm-item-left">
-                  <img src={item.icon} width={20} height={20} alt="" aria-hidden />
+                  <img loading="lazy" src={item.icon} width={20} height={20} alt="" aria-hidden />
                   <span className="bm-item-label">{item.label}</span>
                 </span>
-                <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
               </button>
             ) : (
               <button
@@ -125,10 +125,10 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
                 onClick={() => go(item.to!)}
               >
                 <span className="bm-item-left">
-                  <img src={item.icon} width={20} height={20} alt="" aria-hidden />
+                  <img loading="lazy" src={item.icon} width={20} height={20} alt="" aria-hidden />
                   <span className="bm-item-label">{item.label}</span>
                 </span>
-                <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
+                <img loading="lazy" src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
               </button>
             )
           )}
@@ -144,7 +144,7 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
           <span className="bm-item-left">
             <span className="bm-item-label">About WanderOn</span>
           </span>
-          <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
+          <img loading="lazy" src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
         </button>
       </div>
 
@@ -153,7 +153,7 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
         {isLoggedIn ? (
           <>
             <CtaButton className="bm-cta bm-cta--account" onClick={() => go("/profile")}>
-              <img src="/figma/page-header/icon-account.svg" width={40} height={40} alt="" aria-hidden />
+              <img loading="lazy" src="/figma/page-header/icon-account.svg" width={40} height={40} alt="" aria-hidden />
               <span>My Account</span>
             </CtaButton>
             <button
@@ -169,7 +169,7 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
           </>
         ) : (
           <CtaButton className="bm-cta" onClick={() => { onClose(); window.dispatchEvent(new Event("wanderon:open-login")); }}>
-            <img src={`${M}person.svg`} width={11} height={11} alt="" aria-hidden />
+            <img loading="lazy" src={`${M}person.svg`} width={11} height={11} alt="" aria-hidden />
             <span>Log In or Sign Up</span>
           </CtaButton>
         )}
@@ -185,12 +185,12 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
         <div className="bm-subheader">
           <div className="bm-subheader-left">
             <button className="bm-back" type="button" aria-label="Back" onClick={() => setSubView(null)}>
-              <img src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
+              <img loading="lazy" src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
             </button>
             <span className="bm-subheader-title">Bike Trips</span>
           </div>
           <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
-            <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+            <img loading="lazy" src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
           </button>
         </div>
         <div className="bm-sub-content">
@@ -199,9 +199,9 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
               <span className="bm-sub-label">{item.label}</span>
               {item.trending && (
                 <div className="bm-trending">
-                  <img src={`${M}trending-sparkle-left.png`} width={12} height={8} alt="" aria-hidden />
+                  <img loading="lazy" src={`${M}trending-sparkle-left.png`} width={12} height={8} alt="" aria-hidden />
                   <span className="bm-trending-text">Trending</span>
-                  <img src={`${M}trending-sparkle-right.png`} width={12} height={8} alt="" aria-hidden />
+                  <img loading="lazy" src={`${M}trending-sparkle-right.png`} width={12} height={8} alt="" aria-hidden />
                 </div>
               )}
             </div>
@@ -219,12 +219,12 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
         <div className="bm-subheader">
           <div className="bm-subheader-left">
             <button className="bm-back" type="button" aria-label="Back" onClick={() => setSubView(null)}>
-              <img src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
+              <img loading="lazy" src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
             </button>
             <span className="bm-subheader-title">About WanderOn</span>
           </div>
           <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
-            <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+            <img loading="lazy" src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
           </button>
         </div>
         <div className="bm-sub-content">
@@ -252,12 +252,12 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
         <div className="bm-subheader">
           <div className="bm-subheader-left">
             <button className="bm-back" type="button" aria-label="Back" onClick={() => setSubView(null)}>
-              <img src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
+              <img loading="lazy" src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
             </button>
             <span className="bm-subheader-title">All Categories</span>
           </div>
           <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
-            <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+            <img loading="lazy" src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
           </button>
         </div>
         <div className="bm-sub-content">
@@ -295,12 +295,12 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
         <div className="bm-subheader">
           <div className="bm-subheader-left">
             <button className="bm-back" type="button" aria-label="Back" onClick={() => setSubView(null)}>
-              <img src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
+              <img loading="lazy" src={`${M}icon-arrow-back.png`} width={24} height={24} alt="" aria-hidden />
             </button>
             <span className="bm-subheader-title">Destinations</span>
           </div>
           <button className="bm-close" type="button" aria-label="Close menu" onClick={onClose}>
-            <img src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+            <img loading="lazy" src={`${M}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
           </button>
         </div>
         <div className="bm-dest-content">
@@ -319,9 +319,9 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
                       <span className="bm-sub-label">{dest.label}</span>
                       {dest.trending && (
                         <div className="bm-trending">
-                          <img src={`${M}trending-sparkle-left.png`} width={12} height={8} alt="" aria-hidden />
+                          <img loading="lazy" src={`${M}trending-sparkle-left.png`} width={12} height={8} alt="" aria-hidden />
                           <span className="bm-trending-text">Trending</span>
-                          <img src={`${M}trending-sparkle-right.png`} width={12} height={8} alt="" aria-hidden />
+                          <img loading="lazy" src={`${M}trending-sparkle-right.png`} width={12} height={8} alt="" aria-hidden />
                         </div>
                       )}
                     </button>
@@ -339,7 +339,7 @@ export default function BurgerMenu({ isOpen, onClose }: BurgerMenuProps) {
                   onClick={() => setExpandedRegion(region.slug)}
                 >
                   <span className="bm-dest-region-label">{region.label}</span>
-                  <img src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
+                  <img loading="lazy" src={`${M}icon-arrow-forward.svg`} width={16} height={16} alt="" aria-hidden />
                 </button>
               )}
               {i < DEST_REGIONS.length - 1 && <div className="bm-dest-sep" />}

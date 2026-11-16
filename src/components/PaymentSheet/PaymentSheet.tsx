@@ -305,7 +305,7 @@ export default function PaymentSheet({
               type="button"
               onClick={() => setSelected("full")}
             >
-              <img
+              <img loading="lazy"
                 src={selected === "full" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
                 width={16}
                 height={16}
@@ -328,7 +328,7 @@ export default function PaymentSheet({
                 type="button"
                 onClick={() => setSelected("custom")}
               >
-                <img
+                <img loading="lazy"
                   src={selected === "custom" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
                   width={16}
                   height={16}
@@ -377,7 +377,7 @@ export default function PaymentSheet({
             onClick={() => setSelected("later")}
           >
             <div className="psh-later-head">
-              <img
+              <img loading="lazy"
                 src={selected === "later" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
                 width={16}
                 height={16}
@@ -421,7 +421,7 @@ export default function PaymentSheet({
           type="button"
           onClick={() => setSelected("full")}
         >
-          <img
+          <img loading="lazy"
             src={selected === "full" ? `${P}radio-checked.svg` : `${P}radio-empty.svg`}
             width={16}
             height={16}
@@ -451,7 +451,7 @@ export default function PaymentSheet({
           </p>
         ) : mode === "due" ? null : (
           <div className="psh-cta-tags">
-            <img src={`${A}icon-person.svg`} width={24} height={24} alt="" aria-hidden />
+            <img loading="lazy" src={`${A}icon-person.svg`} width={24} height={24} alt="" aria-hidden />
             <span className="psh-cta-saved-amt">&#8377;{savedAmount}/-</span>
             <span className="psh-cta-saved-text">saved on this trip.</span>
           </div>
@@ -461,7 +461,7 @@ export default function PaymentSheet({
             <span className="psh-cta-price">&#8377; {payDisplay}/-</span>
             <button className="psh-cta-fee" type="button">
               <span>+</span>
-              <img src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
+              <img loading="lazy" src={`${A}icon-info-sm.svg`} width={16} height={16} alt="" aria-hidden />
               <span>Convenience fee</span>
             </button>
           </div>
@@ -524,7 +524,7 @@ export default function PaymentSheet({
               ) : status === "success" ? (
                 <span className="psh-swipe-check" aria-hidden>&#10003;</span>
               ) : (
-                <img
+                <img loading="lazy"
                   className="psh-swipe-arrow"
                   src={`${A}icon-arrow-right.svg`}
                   width={22}

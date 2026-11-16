@@ -118,7 +118,7 @@ export default function CoTravellerSheet({
       <div className="cts-body">
         {/* Header */}
         <div className="cts-head">
-          <img src={`${A}icon-person2.svg`} width={20} height={20} alt="" aria-hidden />
+          <img loading="lazy" src={`${A}icon-person2.svg`} width={20} height={20} alt="" aria-hidden />
           <span>Co-Traveller{index}: Personal Details</span>
         </div>
 
@@ -146,7 +146,7 @@ export default function CoTravellerSheet({
             </select>
             <label htmlFor="cts-gender" className="cts-label">Gender*</label>
             <span className="cts-field-icon" aria-hidden>
-              <img src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
+              <img loading="lazy" src={`${A}icon-arrow-drop.svg`} width={24} height={24} alt="" />
             </span>
           </div>
 
@@ -154,7 +154,7 @@ export default function CoTravellerSheet({
             <input id="cts-dob" className={`cts-input${errCls("dob")}`} placeholder="DD-MM-YYYY" value={form.dob} onChange={set("dob")} />
             <label htmlFor="cts-dob" className="cts-label">Date Of Birth*</label>
             <span className="cts-field-icon" aria-hidden>
-              <img src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
+              <img loading="lazy" src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
             </span>
           </div>
 
@@ -162,13 +162,13 @@ export default function CoTravellerSheet({
           <div className="cts-phone">
             <button className="cts-phone-code" type="button">
               <span>IN +91</span>
-              <img src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
+              <img loading="lazy" src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
             </button>
             <div className="cts-field cts-field--grow">
               <input id="cts-whatsapp" className={`cts-input${errCls("whatsapp")}`} inputMode="tel" placeholder=" " value={form.whatsapp} onChange={set("whatsapp")} />
               <label htmlFor="cts-whatsapp" className="cts-label">WhatsApp Number*</label>
               <span className="cts-field-icon" aria-hidden>
-                <img src={`${M}icon-whatsapp-check.svg`} width={16} height={16} alt="" />
+                <img loading="lazy" src={`${M}icon-whatsapp-check.svg`} width={16} height={16} alt="" />
               </span>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default function CoTravellerSheet({
           <div className="cts-phone">
             <button className="cts-phone-code" type="button">
               <span>IN +91</span>
-              <img src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
+              <img loading="lazy" src={`${A}icon-chevron-down.svg`} width={8} height={6} alt="" aria-hidden />
             </button>
             <div className="cts-field cts-field--grow">
               <input id="cts-altNumber" className="cts-input" inputMode="tel" placeholder=" " value={form.altNumber} onChange={set("altNumber")} />
@@ -196,7 +196,7 @@ export default function CoTravellerSheet({
               <label htmlFor="cts-addr1" className="cts-label">Address Line 1</label>
             </div>
             <div className="cts-hint">
-              <img src={`${A}icon-info-grey.svg`} width={13} height={13} alt="" aria-hidden />
+              <img loading="lazy" src={`${A}icon-info-grey.svg`} width={13} height={13} alt="" aria-hidden />
               <span>Address is required for invoice generation.</span>
             </div>
           </div>
@@ -240,11 +240,11 @@ export default function CoTravellerSheet({
           <div className="cts-row2">
             <button className="cts-upload" type="button">
               <span>Upload Aadhaar Front*</span>
-              <img src={`${M}icon-upload.svg`} width={20} height={20} alt="" aria-hidden />
+              <img loading="lazy" src={`${M}icon-upload.svg`} width={20} height={20} alt="" aria-hidden />
             </button>
             <button className="cts-upload" type="button">
               <span>Upload Aadhaar Back*</span>
-              <img src={`${M}icon-upload.svg`} width={20} height={20} alt="" aria-hidden />
+              <img loading="lazy" src={`${M}icon-upload.svg`} width={20} height={20} alt="" aria-hidden />
             </button>
           </div>
         </div>
@@ -253,7 +253,7 @@ export default function CoTravellerSheet({
         <div className="cts-doc">
           <p className="cts-doc-title">Passport</p>
           <div className="cts-tag">
-            <img src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
+            <img loading="lazy" src={`${A}icon-info-yellow.svg`} width={16} height={16} alt="" aria-hidden />
             <p>Minimum passport validity upto 3rd January 2027.</p>
           </div>
           <div className="cts-row2">
@@ -263,13 +263,13 @@ export default function CoTravellerSheet({
             <div className="cts-field">
               <input id="cts-passportValid" className="cts-input cts-input--placeholder" placeholder="Passport Valid Upto*" value={form.passportValid} onChange={set("passportValid")} />
               <span className="cts-field-icon" aria-hidden>
-                <img src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
+                <img loading="lazy" src={`${A}icon-calendar-field.svg`} width={16} height={16} alt="" />
               </span>
             </div>
           </div>
           <button className="cts-upload cts-upload--full" type="button">
             <span>Upload Passport Front*</span>
-            <img src={`${M}icon-upload.svg`} width={20} height={20} alt="" aria-hidden />
+            <img loading="lazy" src={`${M}icon-upload.svg`} width={20} height={20} alt="" aria-hidden />
           </button>
         </div>
       </div>

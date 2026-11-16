@@ -151,9 +151,9 @@ function DestCheckRow({ label, trending, checked, onToggle }: {
         <span className="fs-dest-label">{label}</span>
         {trending && (
           <div className="fs-trending-badge">
-            <img src="/figma/menu/trending-sparkle-left.png" width={12} height={8} alt="" aria-hidden />
+            <img loading="lazy" src="/figma/menu/trending-sparkle-left.png" width={12} height={8} alt="" aria-hidden />
             <span className="fs-trending-text">Trending</span>
-            <img src="/figma/menu/trending-sparkle-right.png" width={12} height={8} alt="" aria-hidden />
+            <img loading="lazy" src="/figma/menu/trending-sparkle-right.png" width={12} height={8} alt="" aria-hidden />
           </div>
         )}
       </div>
@@ -205,7 +205,7 @@ export function DestinationsPanel({ sel, onToggle }: { sel: Set<string>; onToggl
         onClick={() => toggleGroup("india")}
       >
         <span className="fs-region-name">India</span>
-        <img
+        <img loading="lazy"
           src="/figma/menu/icon-arrow-forward.svg"
           alt=""
           width={16}
@@ -240,7 +240,7 @@ export function DestinationsPanel({ sel, onToggle }: { sel: Set<string>; onToggl
             onClick={() => toggleGroup(region.slug)}
           >
             <span className="fs-region-name">{region.label}</span>
-            <img
+            <img loading="lazy"
               src="/figma/menu/icon-arrow-forward.svg"
               alt=""
               width={16}
@@ -424,7 +424,7 @@ export function DateDurationPanel({ sel, onToggle }: { sel: Set<string>; onToggl
                 className={`fs-month-row${selected ? " fs-month-row--selected" : ""}`}
                 onClick={() => onToggle(key)}
               >
-                <img
+                <img loading="lazy"
                   src={selected ? "/figma/listing/calendar-check.svg" : "/figma/listing/calendar-month-sm.svg"}
                   alt=""
                   width={20}
@@ -659,7 +659,7 @@ export default function FilterSheet({ isOpen, onClose, initialTab = 0, searchPar
       ariaLabel="Filters"
     >
       <button className="fs-close" type="button" aria-label="Close filters" onClick={onClose}>
-        <img src="/figma/filter/icon-close.svg" alt="" width={33} height={33} />
+        <img loading="lazy" src="/figma/filter/icon-close.svg" alt="" width={33} height={33} />
       </button>
       <div className="fs-header">
         <span className="fs-title">Filters</span>

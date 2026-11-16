@@ -136,7 +136,7 @@ export default function LoginSheet({ isOpen, onClose, onSuccess }: LoginSheetPro
       ariaLabel="Log in or sign up"
       mountClosed
     >
-      <div className="ls-stripe"><div className="ls-stripe-pattern" /></div>
+      <div className="ls-stripe">{isOpen && <div className="ls-stripe-pattern" />}</div>
 
       <div className="ls-header">
         <div className="ls-hbg" aria-hidden>
@@ -149,10 +149,10 @@ export default function LoginSheet({ isOpen, onClose, onSuccess }: LoginSheetPro
           </div>
         </div>
         <div className="ls-logo">
-          <img src="/figma/nav2/logo.png" width={60} height={60} className="ls-logo-img" alt="WanderOn" />
+          <img loading="lazy" src="/figma/nav2/logo.png" width={60} height={60} className="ls-logo-img" alt="WanderOn" />
         </div>
         <button className="ls-close" type="button" onClick={onClose} aria-label="Close">
-          <img src={`${LS}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
+          <img loading="lazy" src={`${LS}icon-close.svg`} width={30} height={30} alt="" aria-hidden />
         </button>
       </div>
 

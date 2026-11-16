@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useAppNav } from "@/hooks/useAppNav";
 import { useCompare } from "@/context/CompareContext";
 import "./TripDetail.css";
@@ -10,10 +10,11 @@ import ShareSheet from "@/components/ShareSheet";
 import BatchesSheet from "@/components/BatchesSheet";
 import EndMark from "@/components/ui/EndMark";
 import Footer from "@/components/Footer";
-import { getRelatedTrips, TDP_FAQS, type ProductData } from "@/repositories";
+import { TDP_FAQS, type ProductData } from "@/repositories";
+import { useProductList } from "@/hooks/useProductList";
 import { useProductData } from "@/hooks/useProductData";
-import { DayCard, FaqItem, TiFitRow } from "@/components/TripItinerary";
-import { itineraryTransfers, selectedTrip, type SelectedTrip } from "@/utils/tripItinerary";
+import { DayCard, FaqItem, TiFitRow, TripGlance } from "@/components/TripItinerary";
+import { anchorForDay, cityAnchors, itineraryTransfers, selectedTrip, tripGlance } from "@/utils/tripItinerary";
 import { TripCardItem, ViewMoreCard } from "@/components/UpcomingTrips/TripCardItem";
 import { useIsDesktop } from "@/hooks/useIsDesktop";
 import DesktopTripDetail from "@/components/desktop/DesktopTripDetail";
@@ -22,6 +23,8 @@ import HeartIcon from "@/components/ui/HeartIcon";
 import ToggleSwitch from "@/components/ui/ToggleSwitch";
 import { getScrollTop, onAppScroll } from "@/utils/scroll";
 import CtaButton from "@/components/ui/CtaButton";
+import ContactFormSheet from "@/components/ContactFormSheet";
+import { useTripEnquiry } from "@/hooks/useTripEnquiry";
 
 // ── Figma-downloaded assets ──────────────────────────────────────────────────
 /* Same on/off switch art the listing page uses for its "Show Features" toggle. */
@@ -70,33 +73,13 @@ const CAP_ICO_WOMEN = `${MG}captain-icon-women.svg`;
 
 const TI = "/figma/trip-info/";
 
-type PackageType = "hotel" | "hostel";
-
-const HL_ICON = "/figma/itin-highlights/";
-
-/** Meals and activities per night on the full route, used to size those counts
- *  for a shorter selection. Everything else comes from the selection itself. */
-const PER_NIGHT = {
-  hotel:  { meals: 12 / 18, activities: 12 / 18 },
-  hostel: { meals:  8 / 18, activities: 12 / 18 },
-};
-
-function packageServices(type: PackageType, trip: SelectedTrip) {
-  const per = PER_NIGHT[type];
-  const count = (rate: number) => Math.max(1, Math.round(rate * trip.nights));
-  const stay = type === "hotel" ? "Hotel" : "Hostel";
-  return [
-    { icon: `${HL_ICON}icon-accommodation.svg`, label: `${trip.nights}N ${stay} Accommodation` },
-    { icon: `${HL_ICON}icon-meals.svg`, label: `${count(per.meals)} Meals` },
-    // Hotel packages pick you up and drop you off; hostel packages do not.
-    ...(type === "hotel"
-      ? [{ icon: `${HL_ICON}icon-transfers.svg`, label: "Airport Transfer" }]
-      : []),
-    { icon: `${HL_ICON}icon-transfers.svg`, label: `${trip.legs} Shared Transfers` },
-    { icon: `${HL_ICON}icon-activities.svg`, label: `${count(per.activities)} Activities` },
-    { icon: `${HL_ICON}icon-guides.svg`, label: "Trip Captains, Local Guides" },
-  ];
-}
+// Package Type selector (Figma 8173:11469 / 8794:10882) — SCHEMA_TODO.md #3.
+type PackageType = "budget" | "standard" | "premium";
+const PACKAGE_TIERS: { key: PackageType; label: string }[] = [
+  { key: "budget", label: "Budget" },
+  { key: "standard", label: "Standard" },
+  { key: "premium", label: "Premium" },
+];
 
 export interface TripDetailViewProps {
   /** Route slug — a prop (not react-router's useParams()) so this view is
@@ -124,6 +107,10 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
   // Itinerary customiser sheet (interactive train model). `tripSel` holds
   // the trip start/end chosen in the sheet; null = full mother itinerary.
   const [customiserOpen, setCustomiserOpen] = useState(false);
+  // Private (customised) trips have no batches: the CTA is "Enquire Now",
+  // and turns into a disabled "Enquiry Submitted" once the form is sent.
+  const [enquireOpen, setEnquireOpen] = useState(false);
+  const enquiry = useTripEnquiry(routeSlug);
   const [tripSel, setTripSel] = useState<{ start: number; end: number } | null>(null);
 
   // Everything the page quotes — price, duration, service counts — describes
@@ -167,14 +154,22 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
 
   const [wishlisted, setWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState(0);
-  const [activeDay, setActiveDay] = useState(0);
+  // "Trip at a Glance" (default) and "Itinerary" are two views of the same
+  // slot; the remaining tabs are scroll anchors into the sections below.
+  const [itinView, setItinView] = useState<"glance" | "itinerary">("glance");
+  const [activeAnchor, setActiveAnchor] = useState(0);
   const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set([0]));
   const [openDays, setOpenDays] = useState<Set<number>>(new Set([0]));
   const [showItineraryMap, setShowItineraryMap] = useState(false);
   const transfers = useMemo(() => itineraryTransfers(data), [data]);
-  const [packageType, setPackageType] = useState<PackageType>("hotel");
-  const [inclOpen, setInclOpen] = useState(false);
-  const [exclOpen, setExclOpen] = useState(false);
+  const anchors = useMemo(() => cityAnchors(data.itinerary), [data]);
+  const glance = useMemo(() => tripGlance(data), [data]);
+  const [packageType, setPackageType] = useState<PackageType>("budget");
+  // Inclusions / Exclusions: both closed by default; opening one closes the other.
+  const [openList, setOpenList] = useState<"incl" | "excl" | null>(null);
+  const inclOpen = openList === "incl";
+  const exclOpen = openList === "excl";
+  const toggleList = (which: "incl" | "excl") => setOpenList(cur => (cur === which ? null : which));
 
   // Gallery sheet
   const [galleryOpen, setGalleryOpen] = useState(false);
@@ -203,22 +198,70 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
 
 
 
-  const tabs = ["Itinerary", "Inclusions", "Exclusions", "Reviews", "Trip Captains"];
-  const TAB_SECTIONS = ["section-itin", "section-incl", "section-excl", "section-reviews", "section-captains"];
+  const tabs = ["Trip at a Glance", "Itinerary", "Inclusions", "Exclusions", "Reviews", "Trip Captains"];
+  const TAB_SECTIONS = ["section-itin", "section-itin", "section-incl", "section-excl", "section-reviews", "section-captains"];
 
   function scrollToSection(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  function scrollToDay(i: number) {
-    setActiveDay(i);
-    document.getElementById(`day-${i}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  function selectTab(i: number) {
+    setActiveTab(i);
+    if (i === 0) setItinView("glance");
+    if (i === 1) setItinView("itinerary");
+    // Switching views re-renders the slot — scroll once the new content is laid out.
+    requestAnimationFrame(() => scrollToSection(TAB_SECTIONS[i]));
   }
+
+  // City anchor → first day in that city: expand it and bring it into view.
+  const spyPaused = useRef(false);
+  const spyTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  function scrollToAnchor(i: number) {
+    const dayIndex = anchors[i]?.firstDay;
+    if (dayIndex == null) return;
+    setActiveAnchor(i);
+    setOpenDays(prev => (prev.has(dayIndex) ? prev : new Set(prev).add(dayIndex)));
+    // Keep the scroll-spy from fighting the smooth scroll it just triggered.
+    spyPaused.current = true;
+    clearTimeout(spyTimer.current);
+    spyTimer.current = setTimeout(() => { spyPaused.current = false; }, 900);
+    requestAnimationFrame(() =>
+      document.getElementById(`day-${dayIndex}`)?.scrollIntoView({ behavior: "smooth", block: "start" })
+    );
+  }
+
+  // Scroll-spy: highlight the anchor for whichever day sits under the sticky tab bar.
+  useEffect(() => {
+    if (itinView !== "itinerary" || !anchors.length) return;
+    const onScroll = () => {
+      if (spyPaused.current) return;
+      let current = 0;
+      for (let d = 0; d < data.itinerary.length; d++) {
+        const el = document.getElementById(`day-${d}`);
+        if (el && el.getBoundingClientRect().top <= 200) current = d;
+      }
+      setActiveAnchor(anchorForDay(anchors, current));
+    };
+    return onAppScroll(onScroll);
+  }, [itinView, anchors, data.itinerary.length]);
+
+  // Keep the active anchor chip visible inside its horizontally-scrolling strip.
+  const anchorStripRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const strip = anchorStripRef.current;
+    const chip = strip?.children[activeAnchor] as HTMLElement | undefined;
+    if (!strip || !chip) return;
+    const left = chip.offsetLeft - 16;
+    if (left < strip.scrollLeft || chip.offsetLeft + chip.offsetWidth > strip.scrollLeft + strip.clientWidth) {
+      strip.scrollTo({ left, behavior: "smooth" });
+    }
+  }, [activeAnchor]);
 
 
   // Related trips filtered by this product's destination (last breadcrumb).
   const productDest = data.breadcrumbs[data.breadcrumbs.length - 1] ?? "";
-  const relatedTrips = getRelatedTrips(productDest, routeSlug).slice(0, 6);
+  const { items: destTrips } = useProductList({ destination: productDest });
+  const relatedTrips = destTrips.filter(t => t.slug !== routeSlug).slice(0, 6);
   const moreVmA = relatedTrips[0]?.image ?? MORE_TRIP_A;
   const moreVmB = relatedTrips[1]?.image ?? MORE_TRIP_B;
   const moreHref = `/search?destination=${encodeURIComponent(productDest)}`;
@@ -235,7 +278,7 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
       {/* ── Hero (Figma 4518:31778) ─────────────────────────────────────── */}
       <div className="tdp2-hero">
         {/* Background image + gradient */}
-        <img
+        <img loading="lazy"
           src={data.heroImages[0] || "/figma/trip-hero/hero-bg.png"}
           alt={data.title}
           className="tdp2-hero-img"
@@ -325,14 +368,31 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
             onClick={() => setCustomiserOpen(true)}
             onKeyDown={e => { if (e.key === "Enter" || e.key === " ") setCustomiserOpen(true); }}
           >
-            {trip.cities.map((city, i) => (
-              <span key={city} className="tdp2-sk-item">
+            {/* "2N Leh → 2N Nubra Valley → …" (Figma 8173:11477) */}
+            {anchors.map((a, i) => (
+              <span key={`${a.city}-${a.firstDay}`} className="tdp2-sk-item">
                 {i > 0 && (
                   <img src="/figma/train/route-arrow.svg" alt="" aria-hidden className="tdp2-sk-arrow" loading="lazy" />
                 )}
-                <span className="tdp2-sk-city">{city}</span>
+                <span className="tdp2-sk-city">{`${a.nights}N ${a.city}`}</span>
               </span>
             ))}
+          </div>
+        )}
+
+        {/* Trip Start / Trip End (Figma 9462:24999) — first/last itinerary
+            stop until products carry pickup/drop points (SCHEMA_TODO.md #4). */}
+        {anchors.length > 0 && (
+          <div className="tdp2-ends">
+            <div className="tdp2-end">
+              <span className="tdp2-end-label">Trip Start</span>
+              <span className="tdp2-end-place">{anchors[0].city}</span>
+            </div>
+            <div className="tdp2-end">
+              <span className="tdp2-end-label">Trip End</span>
+              <span className="tdp2-end-place">{anchors[anchors.length - 1].city}</span>
+            </div>
+            <img src="/figma/trip-glance/icon-trip-ends.svg" className="tdp2-ends-icon" width={30} height={30} alt="" aria-hidden />
           </div>
         )}
 
@@ -357,40 +417,30 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
       <section className="tdp2-package-type" aria-labelledby="tdp2-package-type-title">
         <h2 id="tdp2-package-type-title" className="tdp2-package-type-title">Package Type</h2>
         <div className="tdp2-package-type-options">
-          {(["hotel", "hostel"] as PackageType[]).map(type => {
+          {PACKAGE_TIERS.map(({ key: type, label }) => {
             const selected = packageType === type;
             return (
               <button
                 key={type}
                 type="button"
-                className={`tdp2-package-type-btn${selected ? " active" : ""}`}
+                className={`tdp2-package-type-btn tdp2-package-type-btn--${type}${selected ? " active" : ""}`}
                 aria-pressed={selected}
                 onClick={() => setPackageType(type)}
               >
                 {selected && (
-                  <img
+                  <img loading="lazy"
                     src="/figma/itin-highlights/package-type-check.svg"
                     alt=""
                     className="tdp2-package-type-check"
                     aria-hidden
                   />
                 )}
-                {type === "hotel" ? "Hotel" : "Hostel"}
+                {label}
               </button>
             );
           })}
         </div>
       </section>
-      <div className="tdp2-separator"/>
-      <div className="tdp2-services-strip" aria-live="polite">
-        {packageServices(packageType, trip).map(service => (
-          <div className="tdp2-inc-chip" key={service.label}>
-            <img src={service.icon} alt="" className="tdp2-inc-chip-icon" aria-hidden loading="lazy" />
-            <span className="tdp2-inc-chip-text">{service.label}</span>
-          </div>
-        ))}
-      </div>
-
       {/* ── Tab Bar + Day Chips (Figma 4049:22964) ─────────────────── */}
       <div className="tdp2-separator"/>
       <div className="tdp2-tabs-wrap">
@@ -399,31 +449,41 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
             <button
               key={t}
               className={`tdp2-tab${activeTab === i ? " active" : ""}`}
-              onClick={() => { setActiveTab(i); scrollToSection(TAB_SECTIONS[i]); }}
+              aria-pressed={activeTab === i}
+              onClick={() => selectTab(i)}
             >
-              {i === 0 && (
-                <img src="/figma/itin-highlights/icon-overview-key.svg" alt="" className="tdp2-tab-icon" aria-hidden loading="lazy" />
+              {activeTab === i && (
+                <img src="/figma/trip-glance/icon-overview-key.svg" alt="" className="tdp2-tab-icon" aria-hidden loading="lazy" />
               )}
               {t}
             </button>
           ))}
         </div>
-        <div className="tdp2-day-strip">
-          {data.itinerary.map((_day, i) => (
-            <button
-              key={i}
-              className={`tdp2-day-chip-btn${activeDay === i ? " active" : ""}`}
-              onClick={() => scrollToDay(i)}
-            >
-              {`Day-${i + 1}`}
-            </button>
-          ))}
-        </div>
+        {itinView === "itinerary" && anchors.length > 0 && (
+          <div className="tdp2-day-strip" ref={anchorStripRef} aria-label="Jump to city">
+            {anchors.map((a, i) => (
+              <button
+                key={`${a.city}-${a.firstDay}`}
+                type="button"
+                className={`tdp2-day-chip-btn${activeAnchor === i ? " active" : ""}`}
+                aria-current={activeAnchor === i ? "true" : undefined}
+                onClick={() => scrollToAnchor(i)}
+              >
+                {`${a.city} ${a.nights}N`}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
 
       {/* ── Itinerary placeholder anchor ─────────────────────────────── */}
       <div className="tdp2-separator"/>
+      {itinView === "glance" ? (
+      <section id="section-itin" className="tdp2-itin-section tdp2-glance-section" aria-label="Trip at a Glance">
+        <TripGlance glance={glance} captain={data.captain} premiumSelected={packageType === "premium"} />
+      </section>
+      ) : (
       <section id="section-itin" className="tdp2-itin-section">
         <ToggleSwitch
           checked={showItineraryMap}
@@ -466,23 +526,16 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
 
         <p className="tdp2-end-journey">End of the Journey</p>
       </section>
-
-      {/* ── Download Itinerary (Figma 3014:13922) ───────────────── */}
-      <div className="tdp2-dl-itin-wrap">
-        <button className="tdp2-dl-itin-btn">
-          <span className="tdp2-dl-itin-label">Download Itinerary</span>
-          <img src="/figma/itin-section/download-icon.svg" alt="" className="tdp2-dl-itin-icon" aria-hidden loading="lazy" />
-        </button>
-      </div>
+      )}
 
       {/* ── Inclusions (Figma 3268:10174) ───────────────────────────── */}
       <div className="tdp2-separator"/>
       <section id="section-incl" className="tdp2-incl-section">
-        <button className="tdp2-incl-header" onClick={() => setInclOpen(o => !o)}>
+        <button className="tdp2-incl-header" aria-expanded={inclOpen} onClick={() => toggleList("incl")}>
           <img src="/figma/itin-highlights/icon-overview-key.svg" alt="" className="tdp2-incl-hd-icon" aria-hidden loading="lazy" />
           <span className="tdp2-incl-hd-label">Inclusions</span>
           <img
-            src="/figma/itin-section/day-chevron-dropdown.svg"
+            src="/figma/desktop-pdp/icon-arrow-drop.svg"
             alt=""
             className={`tdp2-incl-hd-chevron${inclOpen ? " open" : ""}`}
             aria-hidden
@@ -516,11 +569,11 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
       {/* ── Exclusions (Figma 3268:10067 / 3268:10077) ─────────────── */}
       <div className="tdp2-separator"/>
       <section id="section-excl" className="tdp2-excl-section">
-        <button className="tdp2-incl-header" onClick={() => setExclOpen(o => !o)}>
+        <button className="tdp2-incl-header" aria-expanded={exclOpen} onClick={() => toggleList("excl")}>
           <img src="/figma/itin-highlights/icon-overview-key.svg" alt="" className="tdp2-incl-hd-icon" aria-hidden loading="lazy" />
           <span className="tdp2-incl-hd-label">Exclusions</span>
           <img
-            src="/figma/itin-section/day-chevron-dropdown.svg"
+            src="/figma/desktop-pdp/icon-arrow-drop.svg"
             alt=""
             className={`tdp2-incl-hd-chevron${exclOpen ? " open" : ""}`}
             aria-hidden
@@ -599,10 +652,10 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
         </div>
       </section>
 
-      {/* ── Create Moments carousel (Figma 3014:14121) ─────────────── */}
+      {/* ── Postcards from 11,000 feet (Figma 8173:11096) ──────────── */}
       <div className="tdp2-separator"/>
       <section className="tdp2-moments-section">
-        <p className="tdp2-moments-title">Create<br/>moments you<br/>wish existed</p>
+        <p className="tdp2-moments-title">Postcards from 11,000 feet</p>
         <div className="tdp2-moments-track-wrap">
           <div className="tdp2-moments-track">
             {([0, 1] as number[]).flatMap((_, rep) =>
@@ -666,7 +719,7 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
             rel="noreferrer"
             aria-label="Chat on WhatsApp"
           >
-            <img src="/figma/nav/whatsapp-btn.svg" alt="" aria-hidden className="tdp2-wa-fab-img" />
+            <img loading="lazy" src="/figma/nav/whatsapp-btn.svg" alt="" aria-hidden className="tdp2-wa-fab-img" />
           </a>
         )}
 
@@ -677,7 +730,7 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
             type="button"
             onClick={() => nav.push("/compare")}
           >
-            <img
+            <img loading="lazy"
               src="/figma/nav2/icon-compare.svg"
               alt=""
               aria-hidden
@@ -687,10 +740,10 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
           </button>
         )}
 
-        {selectedBatch && (
+        {selectedBatch && !data.isCustomised && (
           <div className="tdp2-sticky-tag">
             <div className="tdp2-sticky-tag-left">
-              <img
+              <img loading="lazy"
                 className="tdp2-sticky-tag-icon"
                 src="/figma/batches/icon-your-trips.svg"
                 alt=""
@@ -719,14 +772,26 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
             </div>
             <span className="tdp2-sticky-label">Starting price per person</span>
           </div>
-          <CtaButton
-            className="tdp2-sticky-btn"
-            onClick={selectedBatch ? handleContinueBook : () => setBatchesOpen(true)}
-          >
-            <span className="tdp2-sticky-btn-label">
-              {selectedBatch ? "Continue to Book" : "View Batches"}
-            </span>
-          </CtaButton>
+          {data.isCustomised ? (
+            <CtaButton
+              className="tdp2-sticky-btn"
+              onClick={() => setEnquireOpen(true)}
+              disabled={enquiry.submitted}
+            >
+              <span className="tdp2-sticky-btn-label">
+                {enquiry.submitted ? "Enquiry Submitted" : "Enquire Now"}
+              </span>
+            </CtaButton>
+          ) : (
+            <CtaButton
+              className="tdp2-sticky-btn"
+              onClick={selectedBatch ? handleContinueBook : () => setBatchesOpen(true)}
+            >
+              <span className="tdp2-sticky-btn-label">
+                {selectedBatch ? "Continue to Book" : "View Batches"}
+              </span>
+            </CtaButton>
+          )}
         </div>
       </div>
 
@@ -759,6 +824,15 @@ export function TripDetailView({ slug: routeSlug, initialData, navState }: TripD
         initialSelection={tripSel}
         onSelectionChange={(start, end) => setTripSel({ start, end })}
       />
+
+      {data.isCustomised && (
+        <ContactFormSheet
+          isOpen={enquireOpen}
+          onClose={() => setEnquireOpen(false)}
+          onSubmitted={enquiry.markSubmitted}
+          defaultDestination={data.breadcrumbs?.[0]}
+        />
+      )}
 
       <BatchesSheet
         isOpen={batchesOpen}

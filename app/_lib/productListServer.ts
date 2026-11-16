@@ -8,7 +8,7 @@
 import "server-only";
 
 import { getProductsCollection } from "../../api/_lib/mongo";
-import { filterSortPaginate, PAGE_SIZE, type ProductListQuery } from "../../api/_lib/products";
+import { filterSortPaginate, listProducts, PAGE_SIZE, type ProductListQuery } from "../../api/_lib/products";
 import { toTrip } from "../../src/repositories/productRepository";
 import type { Trip } from "../../src/types";
 
@@ -27,7 +27,7 @@ export async function getProductListServer(
 ): Promise<ProductListServerResult> {
   try {
     const collection = await getProductsCollection();
-    const all = await collection.find({}).toArray();
+    const all = await listProducts(collection);
     const result = filterSortPaginate(all, query);
     return { ...result, items: result.items.map(toTrip) };
   } catch (err) {

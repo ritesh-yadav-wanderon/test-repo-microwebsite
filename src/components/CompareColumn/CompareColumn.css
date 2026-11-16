@@ -1,0 +1,149 @@
+/* Compare trip column — mobile type scale (Figma 3032:20964). Desktop
+   overrides live in DesktopCompare.css under `.dcmp`. */
+.cmpx-col {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  font-family: "Roboto", system-ui, sans-serif;
+}
+.cmpx-img {
+  position: relative;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f2f2f2;
+}
+.cmpx-img > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cmpx-bin {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  display: flex;
+  padding: 6px;
+  border: 0;
+  border-radius: 75px;
+  background: #fff;
+  cursor: pointer;
+}
+.cmpx-head { display: flex; flex-direction: column; gap: 6px; padding: 10px 0; }
+.cmpx-title {
+  margin: 0;
+  min-height: 63px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #202020;
+}
+.cmpx-price-wrap { display: flex; flex-direction: column; gap: 6px; }
+.cmpx-price-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.06px;
+  color: #757575;
+}
+.cmpx-price { font-size: 14px; font-weight: 500; line-height: 21px; color: #121212; }
+
+.cmpx-sec { display: flex; flex-direction: column; }
+.cmpx-sec--tall { min-height: 100px; }
+.cmpx-sec-hd {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+  padding: 0 4px;
+  background: #f5f5f5;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.06px;
+  color: #757575;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.cmpx-sec-hd img { flex-shrink: 0; }
+.cmpx-sec-body { padding: 10px 0; }
+.cmpx-val { margin: 0; font-size: 12px; line-height: 16px; color: #202020; }
+.cmpx-empty { font-size: 12px; color: #9e9e9e; }
+
+.cmpx-itin { display: flex; flex-direction: column; gap: 4px; }
+.cmpx-itin-row {
+  display: flex;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #202020;
+}
+.cmpx-itin-row span:first-child { flex-shrink: 0; }
+.cmpx-more {
+  align-self: flex-end;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #202020;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.cmpx-stay { display: flex; flex-direction: column; gap: 4px; }
+.cmpx-stay-name { font-size: 14px; line-height: 21px; color: #3d3d3d; }
+.cmpx-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 12px;
+  color: #3d3d3d;
+}
+.cmpx-transfers {
+  margin: 0;
+  padding-left: 21px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  list-style: disc;
+  font-size: 14px;
+  line-height: 21px;
+  color: #3d3d3d;
+}
+
+.cmpx-exps { display: flex; flex-direction: column; gap: 4px; }
+.cmpx-exp { display: flex; align-items: flex-start; gap: 8px; }
+.cmpx-exp img, .cmpx-exp-ph {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  object-fit: cover;
+  background: #f2f2f2;
+}
+.cmpx-exp p { margin: 0; flex: 1; min-width: 0; font-size: 12px; line-height: 16px; color: #202020; }
+
+.cmpx-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  margin-top: auto;
+  padding: 8px 16px;
+  border-radius: 73px;
+  background: #121212;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 14px;
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Highlights Differences */
+/* Highlights Differences — same teal tint the compare page used before */
+.cmpx-diff {
+  background: rgba(1, 95, 116, 0.1);
+  border-radius: 4px;
+  box-shadow: 0 0 0 4px rgba(1, 95, 116, 0.1);
+}

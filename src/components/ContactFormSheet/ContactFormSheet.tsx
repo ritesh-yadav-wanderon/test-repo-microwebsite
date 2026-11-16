@@ -11,13 +11,17 @@ const M = "/figma/menu/";
 interface ContactFormSheetProps {
   isOpen: boolean;
   onClose: () => void;
+  /** Called once a valid enquiry is submitted (before the sheet closes). */
+  onSubmitted?: () => void;
+  /** Pre-selected destination, e.g. the trip whose page opened the form. */
+  defaultDestination?: string;
 }
 
-export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetProps) {
+export default function ContactFormSheet({ isOpen, onClose, onSubmitted, defaultDestination }: ContactFormSheetProps) {
   const isDesktop = useIsDesktop();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [destination, setDestination] = useState("");
+  const [destination, setDestination] = useState(defaultDestination ?? "");
   const [destOpen, setDestOpen] = useState(false);
   const [expandedRegion, setExpandedRegion] = useState("india");
   const [country, setCountry] = useState<Country>(COUNTRIES[0]);
@@ -92,6 +96,10 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // An enquiry needs a name and a full phone number before it counts.
+    if (!name.trim()) return nameRef.current?.focus();
+    if (phone.length < country.digits[0]) return phoneRef.current?.focus();
+    onSubmitted?.();
     onClose();
   };
 
@@ -108,10 +116,10 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
     >
       {/* Hero image header */}
       <div className="cfs-hero">
-        <img src="/figma/enquire/form-hero.jpg" alt="" className="cfs-hero-img" />
+        <img loading="lazy" src="/figma/enquire/form-hero.jpg" alt="" className="cfs-hero-img" />
         <div className="cfs-hero-overlay" aria-hidden />
         <div className="cfs-hero-bar">
-          <img src="/figma/nav-logo.png" alt="WanderOn" className="cfs-logo" />
+          <img loading="lazy" src="/figma/nav-logo.png" alt="WanderOn" className="cfs-logo" />
           <button
             className="cfs-close"
             type="button"
@@ -135,7 +143,7 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
         {/* Desktop modal header — colored logo + grey close (Figma 5154:26476).
             Hidden on mobile, where the hero bar carries these. */}
         <div className="cfs-body-bar" aria-hidden={!isDesktop}>
-          <img src="/figma/desktop/nav-logo-color.png" alt="WanderOn" className="cfs-body-logo" />
+          <img loading="lazy" src="/figma/desktop/nav-logo-color.png" alt="WanderOn" className="cfs-body-logo" />
           <button
             className="cfs-close cfs-close--grey"
             type="button"
@@ -185,7 +193,7 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
                   aria-label={`Country code: ${country.name} ${country.code}`}
                 >
                   <span>{country.code}</span>
-                  <img
+                  <img loading="lazy"
                     src="/figma/enquire/arrow.svg"
                     alt=""
                     className={`cfs-cc-arrow${countryOpen ? " cfs-cc-arrow--open" : ""}`}
@@ -243,7 +251,7 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
                 aria-expanded={destOpen}
               >
                 <span>{destination || "select destination"}</span>
-                <img
+                <img loading="lazy"
                   src="/figma/enquire/arrow.svg"
                   alt=""
                   className={`cfs-dest-arrow${destOpen ? " cfs-dest-arrow--open" : ""}`}
@@ -276,7 +284,7 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
                               </span>
                               {dest.trending && (
                                 <span className="cfs-dest-trending">
-                                  <img
+                                  <img loading="lazy"
                                     src={`${M}trending-sparkle-left.png`}
                                     width={12}
                                     height={8}
@@ -286,7 +294,7 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
                                   <span className="cfs-dest-trending-text">
                                     Trending
                                   </span>
-                                  <img
+                                  <img loading="lazy"
                                     src={`${M}trending-sparkle-right.png`}
                                     width={12}
                                     height={8}
@@ -307,7 +315,7 @@ export default function ContactFormSheet({ isOpen, onClose }: ContactFormSheetPr
                           <span className="cfs-dest-region-label">
                             {region.label}
                           </span>
-                          <img
+                          <img loading="lazy"
                             src={`${M}icon-arrow-forward.svg`}
                             width={16}
                             height={16}

@@ -31,106 +31,6 @@
   font-family: "Roboto", system-ui, sans-serif;
 }
 
-/* ── Product title + meta + services (Figma 5652:12023) ──────────────────── */
-.dtdp-ptitle {
-  max-width: var(--dtdp-max);
-  margin: 0 auto;
-  padding: 28px var(--dtdp-pad) 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.dtdp-title-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-}
-.dtdp-title {
-  margin: 0;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 34px;
-  color: #3d3d3d;
-}
-.dtdp-title-actions {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-shrink: 0;
-}
-.dtdp-pill-action {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4.7px;
-  height: 29px;
-  padding: 0 15px;
-  border: 0.789px solid rgba(117, 117, 117, 0.5);
-  border-radius: 48px;
-  background: #fff;
-  color: #757575;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.dtdp-pill-action img,
-.dtdp-pill-action svg { width: 13px; height: 13px; }
-.dtdp-icon-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 29px;
-  height: 29px;
-  border: 0.789px solid rgba(117, 117, 117, 0.5);
-  border-radius: 50%;
-  background: #fff;
-  color: #757575;
-  cursor: pointer;
-  padding: 0;
-}
-.dtdp-icon-btn img,
-.dtdp-icon-btn svg { width: 13px; height: 13px; }
-/* Saved: the solid glyph in plain white, on a filled button so it reads
-   against the light title bar. */
-.dtdp-icon-btn--saved {
-  border: none;
-  background: var(--brand-green);
-  color: #fff;
-}
-/* The mobile hero icons are white (built for a dark image) — recolor to grey so
-   they're visible on the light desktop title bar. */
-.dtdp-title-actions img { filter: brightness(0) saturate(100%) invert(48%); }
-.dtdp-meta-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.dtdp-meta-chip {
-  padding: 4px 8px;
-  border: 1px solid #dedede;
-  border-radius: 4px;
-  font-size: 12px;
-  color: #757575;
-  white-space: nowrap;
-}
-.dtdp-services {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px 14px;
-}
-.dtdp-service {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 12px;
-  color: #287686;
-  white-space: nowrap;
-}
-.dtdp-service-icon { width: 12px; height: 12px; }
-
 /* ── Hero gallery (Figma 5652:12023) ─────────────────────────────────────── */
 .dtdp-gallery {
   max-width: var(--dtdp-max);
@@ -211,20 +111,6 @@
   flex-direction: column;
   gap: 29px;
 }
-.dtdp-book {
-  width: 357px;
-  flex-shrink: 0;
-  position: sticky;
-  top: 92px;
-  /* Start flush with the bottom of the product title (cancels .dtdp-body top pad). */
-  margin-top: -60px;
-  transition: top 0.2s ease;
-}
-/* When the tab bar is stuck (fixed at top:72px, height 44px → bottom 116px),
-   drop the booking card to leave a 20px gap below it. */
-.dtdp-book.tabs-stuck {
-  top: 136px;
-}
 
 /* Nights breakdown (Figma 6228:8489) */
 .dtdp-nights {
@@ -284,154 +170,6 @@
 .dtdp-nights-label { font-size: 12px; line-height: 12px; color: #757575; }
 .dtdp-nights-city { font-size: 14px; line-height: 14px; color: #121212; }
 
-/* Route selection card (Figma 7852:34451) */
-.dtdp-route-wrap {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-.dtdp-route-coverage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 38px;
-  margin-bottom: -10px;
-  padding: 6px 8px 16px;
-  border-radius: 8px 8px 0 0;
-  background: #fff8f2;
-  color: #864129;
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 16px;
-  letter-spacing: 0.36px;
-  text-align: center;
-  box-sizing: border-box;
-}
-.dtdp-route-card {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  width: 100%;
-  height: 111px;
-  padding: 20px;
-  overflow: hidden;
-  border: 0;
-  border-radius: 8px;
-  background: #fff;
-  box-shadow: 0 4px 10.95px rgba(0, 0, 0, 0.11);
-  color: inherit;
-  text-align: left;
-  cursor: pointer;
-}
-.dtdp-route-card:focus-visible {
-  outline: 2px solid #0048ac;
-  outline-offset: 2px;
-}
-.dtdp-route-content {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  width: 100%;
-}
-.dtdp-route-points {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex: 1 1 auto;
-  min-width: 0;
-  height: 40px;
-}
-.dtdp-route-point {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  justify-content: center;
-  width: 58px;
-  gap: 1px;
-  background: #fff;
-  font-weight: 400;
-}
-.dtdp-route-label {
-  color: #8b8b8b;
-  font-size: 12px;
-  line-height: 12px;
-}
-.dtdp-route-city {
-  overflow: hidden;
-  color: #333;
-  font-size: 12px;
-  line-height: 16px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-.dtdp-route-connector {
-  position: absolute;
-  left: 112px;
-  right: 78px;
-  top: 20px;
-  height: 1px;
-  background: repeating-linear-gradient(
-    90deg,
-    #aad6d8 0 2px,
-    transparent 2px 4px
-  );
-}
-.dtdp-route-connector::before,
-.dtdp-route-connector::after {
-  content: "";
-  position: absolute;
-  top: -1px;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #aad6d8;
-}
-.dtdp-route-connector::before { left: 0; }
-.dtdp-route-connector::after { right: 0; }
-.dtdp-route-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 26px;
-  background: #dfebfb;
-  color: #0048ac;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 21px;
-  white-space: nowrap;
-}
-/* Figma lays the 22x114 rail segment end to end down the card; tiling it keeps
-   the sleeper pitch fixed instead of stretching one copy across the width. */
-.dtdp-route-rail {
-  position: absolute;
-  z-index: 1;
-  left: 0;
-  right: 0;
-  bottom: 16px;
-  height: 22px;
-  background: url("/figma/train/card-rail-horizontal-tile.png") repeat-x left center;
-  background-size: 107px 22px;
-  pointer-events: none;
-}
-.dtdp-route-train-img {
-  position: absolute;
-  left: 4px;
-  top: 3px;
-  width: 96px;
-  max-width: none;
-  height: 15px;
-  object-fit: cover;
-}
-
 /* Vibes reuse mobile TiFitRow (.tdp2-ti-fit-row) */
 .dtdp-vibes {
   display: flex;
@@ -470,7 +208,7 @@
   margin: 0 auto;
   display: flex;
   align-items: center;
-  gap: 49px;
+  gap: 30px;
   height: 44px;
   padding: 0 6px;
   overflow-x: auto;
@@ -499,6 +237,7 @@
 
 /* ── Itinerary: Day Plan rail + content ──────────────────────────────────── */
 .dtdp-itin {
+  scroll-margin-top: 132px;
   display: flex;
   align-items: flex-start;
   gap: 20px;
@@ -506,54 +245,66 @@
 .dtdp-dayplan {
   position: sticky;
   top: 132px;
-  flex: 0 0 120px;
-  width: 120px;
-  padding-top: 50px;
-}
-.dtdp-dayplan-title {
-  margin: 0 0 16px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #3d3d3d;
-}
-.dtdp-dayplan-list {
-  position: relative;
+  flex: 0 0 164px;
+  width: 164px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding-left: 4px;
 }
-.dtdp-dayplan-list::before {
-  content: "";
-  position: absolute;
-  left: 7.5px;
-  top: 6px;
-  bottom: 6px;
-  width: 1px;
-  background: #e3e3e3;
+.dtdp-dayplan .dtdp-dayplan-map { padding: 0; justify-content: flex-start; }
+.dtdp-dayplan-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dtdp-dayplan-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+  color: #3d3d3d;
+}
+.dtdp-dayplan-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
 }
 .dtdp-dayplan-item {
   position: relative;
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 8px;
+  padding: 4px 12px 4px 8px;
   border: none;
+  border-radius: 30px;
   background: none;
-  padding: 0;
   font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
   color: #757575;
+  white-space: nowrap;
   cursor: pointer;
+  text-align: left;
 }
-.dtdp-dayplan-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #c9c9c9;
-  flex-shrink: 0;
-  z-index: 1;
+.dtdp-dayplan-item img { position: relative; z-index: 1; flex-shrink: 0; }
+/* Rail segment from this dot down to the next one (grey; blue once passed). */
+.dtdp-dayplan-item:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 11.5px;
+  top: 50%;
+  height: calc(100% + 10px);
+  width: 1px;
+  background: #757575;
 }
-.dtdp-dayplan-item.active { color: #01afd1; font-weight: 600; }
-.dtdp-dayplan-item.active .dtdp-dayplan-dot { background: #01afd1; }
+.dtdp-dayplan-item.passed::after { background: #0048ac; }
+.dtdp-dayplan-item.active {
+  background: #dce8f8;
+  font-size: 14px;
+  line-height: 21px;
+  color: #0048ac;
+}
 
 .dtdp-itin-content {
   flex: 1 1 0;
@@ -568,62 +319,264 @@
 .dtdp-itin-content .tdp2-itin-city-group { padding: 0; }
 .dtdp-itin-content .tdp2-day-hotel-photo { height: 180px; }
 
-/* ── Inclusions / Exclusions accordions ──────────────────────────────────── */
-.dtdp-accordion {
-  border: 1px solid #ededed;
-  border-radius: 12px;
-  overflow: hidden;
+/* ── FAQs ────────────────────────────────────────────────────────────────── */
+.dtdp-faq {
+  max-width: var(--dtdp-max);
+  margin: 40px auto 0;
+  padding: 0 var(--dtdp-pad);
 }
-.dtdp-accordion-head {
+.dtdp-faq-head { text-align: center; margin-bottom: 32px; }
+.dtdp-faq-title { margin: 0 0 8px; font-size: 24px; font-weight: 600; color: #3d3d3d; }
+.dtdp-faq-sub { margin: 0; font-size: 16px; color: #757575; }
+
+/* The rows are the mobile accordion (.tdp2-faq-*); only the scale changes here. */
+.dtdp-faq .tdp2-faq-list { padding: 0; }
+.dtdp-faq .tdp2-faq-row { gap: 20px; padding: 16px 24px; }
+.dtdp-faq .tdp2-faq-row.open { padding: 24px; }
+.dtdp-faq .tdp2-faq-item:not(.open) .tdp2-faq-row:hover { background: rgba(117, 117, 117, 0.05); }
+.dtdp-faq .tdp2-faq-num { width: 52px; font-size: 32px; }
+.dtdp-faq .tdp2-faq-q { font-size: 16px; line-height: 24px; }
+.dtdp-faq .tdp2-faq-a { font-size: 15px; line-height: 24px; }
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Reused mobile itinerary blocks (.tdp2-*) — widen for the desktop column.
+   These only apply while nested inside .dtdp so the mobile page is untouched.
+   ══════════════════════════════════════════════════════════════════════════ */
+.dtdp .tdp2-itin-map { width: 100%; height: 100%; }
+
+
+/* ── Product title + breadcrumb (Figma 10948:66319) ──────────────────────── */
+.dtdp-ptitle {
+  max-width: var(--dtdp-max);
+  margin: 0 auto;
+  padding: 40px var(--dtdp-pad) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dtdp-title {
+  margin: 0;
+  /* Leaves room for the actions row that sits beside it in the right column. */
+  max-width: 742px;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 34px;
+  color: #3d3d3d;
+}
+.dtdp-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  line-height: 21px;
+  color: #757575;
+}
+.dtdp-crumb-home { display: inline-flex; }
+.dtdp-crumb { color: #757575; text-decoration: underline; }
+.dtdp-crumb-sep { color: #757575; }
+
+/* ── Trip start / Trip End (Figma 10703:19899) ───────────────────────────── */
+.dtdp-ends {
+  display: flex;
+  align-items: center;
+}
+.dtdp-end {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.dtdp-end--right { align-items: flex-end; text-align: right; }
+.dtdp-end-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 16px;
+  color: #757575;
+}
+.dtdp-end-place {
+  max-width: 192px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #121212;
+}
+.dtdp-ends-line {
+  flex: 0 0 414px;
+  width: 414px;
+  height: 1px;
+  background: url("/figma/desktop-pdp/route-dash.svg") no-repeat center / 100% 1px;
+}
+
+/* ── Package Type (Figma 10703:19980) ────────────────────────────────────── */
+.dtdp-pkg {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 16px;
+}
+.dtdp-pkg-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 21px;
+  color: #333;
+}
+.dtdp-pkg-options { display: flex; gap: 10px; }
+.dtdp-pkg-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 8px 16px;
+  border: 1px solid;
+  border-radius: 8px;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  cursor: pointer;
+}
+.dtdp-pkg-btn--budget { border-color: #015f74; color: #015f74; }
+.dtdp-pkg-btn--standard { border-color: #0048ac; color: #0048ac; }
+.dtdp-pkg-btn--premium { border-color: #af914d; color: #af914d; }
+.dtdp-pkg-btn.active {
+  background: #f6fcfe;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.16), inset 0 0 5px 1px rgba(0, 0, 0, 0.12);
+}
+.dtdp-pkg-check { position: absolute; left: -1px; top: -1px; }
+
+/* ── Trip at a Glance on desktop: full 742px column, no side gutter ─────── */
+.dtdp-glance {
+  scroll-margin-top: 132px;
+  padding-top: 20px;
+}
+.dtdp-glance .tdp2-glance { padding: 0; }
+.dtdp-glance .tdp2-glance-divider { margin: 0; }
+
+/* ── Inclusions / Exclusions cards (Figma 10973:68720 / 10973:68782) ─────── */
+.dtdp-ie {
+  scroll-margin-top: 132px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 14px 21px;
+  background: #fff;
+  border-radius: 12px;
+  filter: drop-shadow(0 4px 14.85px rgba(0, 0, 0, 0.06));
+}
+.dtdp-ie-head {
   display: flex;
   align-items: center;
   gap: 10px;
   width: 100%;
-  padding: 16px 20px;
-  border: none;
-  background: #fff;
-  font-size: 16px;
-  font-weight: 600;
-  color: #3d3d3d;
+  padding: 0;
+  border: 0;
+  background: none;
   cursor: pointer;
+  text-align: left;
 }
-.dtdp-accordion-head img { width: 18px; height: 18px; }
-.dtdp-accordion-chev {
-  margin-left: auto;
-  display: inline-flex;
-  transition: transform 0.2s ease;
+.dtdp-ie-title {
+  flex: 1 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 21px;
+  color: #3d3d3d;
 }
-.dtdp-accordion-chev.open { transform: rotate(180deg); }
-.dtdp-accordion-body { padding: 0 20px 20px; }
-.dtdp-incl-list {
-  list-style: none;
+/* Figma flips the drop-down arrow (-scale-y) while the card is open. */
+.dtdp-ie-chev { flex-shrink: 0; transition: transform 0.2s ease; }
+.dtdp-ie-chev.open { transform: scaleY(-1); }
+.dtdp-ie-body {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 12px 0;
+}
+.dtdp-ie-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin: 0;
   padding: 0;
-  columns: 2;
-  column-gap: 40px;
+  list-style: none;
 }
-.dtdp-incl-item {
+.dtdp-ie-item {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  break-inside: avoid;
-  margin-bottom: 12px;
+  gap: 8px;
   font-size: 14px;
-  line-height: 21px;
-  color: #4e4e4e;
+  line-height: 19.6px;
 }
-.dtdp-incl-item img { width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; }
-.dtdp-incl-insurance {
-  margin-top: 12px;
-  padding: 16px;
-  background: #f7f7f7;
-  border-radius: 8px;
+.dtdp-ie-item img { flex-shrink: 0; margin-top: 2px; object-fit: cover; }
+.dtdp-ie-item--yes { color: #4e4e4e; }
+.dtdp-ie-item--no { color: #3d3d3d; }
+.dtdp-ie-insurance {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  background: #fdf7ee;
+  border: 1px solid #ffe5d6;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(14, 14, 14, 0.06);
 }
-.dtdp-incl-ins-title { margin: 0 0 6px; font-size: 14px; font-weight: 600; color: #3d3d3d; }
-.dtdp-incl-ins-body { margin: 0; font-size: 13px; line-height: 20px; color: #757575; }
+.dtdp-ie-ins-title { margin: 0; font-size: 14px; font-weight: 500; line-height: 21px; color: #3d3d3d; }
+.dtdp-ie-ins-body { margin: 0; font-size: 12px; line-height: 16px; color: #575757; }
 
-/* ── Sticky booking card (Figma 5788:7351) ───────────────────────────────── */
+/* ── Actions + sticky booking card (Figma 10703:20180) ───────────────────── */
+.dtdp-book {
+  width: 358px;
+  flex-shrink: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* The actions row lines up with the product title (Figma y = -82). */
+  margin-top: -82px;
+}
+.dtdp-book-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 0 16px;
+}
+.dtdp-wish {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.dtdp-wish--saved { border: 1px solid #757575; background: #fff; }
+.dtdp-wish--saved svg { width: 16px; height: 16px; }
+.dtdp-pill-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 8px 16px;
+  border: 1px solid #757575;
+  border-radius: 30px;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 14px;
+  letter-spacing: 0.03px;
+  color: #757575;
+  white-space: nowrap;
+  cursor: pointer;
+}
 .dtdp-book-card {
+  position: sticky;
+  top: 92px;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -633,29 +586,97 @@
   border-radius: 12px;
   overflow: hidden; /* clips the flush women bar under the rounded corners */
   box-shadow: 0 4px 82.3px rgba(0, 0, 0, 0.08);
+  transition: top 0.2s ease;
 }
-/* Divider under the head (Figma 6245:8626) — shown with the revealed head. */
-.dtdp-book-divider {
-  width: 100%;
-  height: 1px;
-  background: #ededed;
-}
-/* Hidden (and removed from layout) until the product title scrolls out of view. */
+/* Tab bar stuck (fixed at 72px, 44px tall) → keep a 20px gap below it. */
+.dtdp-book.tabs-stuck .dtdp-book-card { top: 136px; }
 .dtdp-book-head {
-  display: none;
-  flex-direction: column;
-  gap: 2px;
-  padding: 0 12px;
-}
-.dtdp-book-head.show-title {
   display: flex;
+  flex-direction: column;
+  padding: 0 12px;
 }
 .dtdp-book-title {
   margin: 0;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 24px;
   color: #3d3d3d;
+}
+
+/* ── Meet your trip captain (Figma 10948:65821) ──────────────────────────── */
+.dtdp-captain {
+  scroll-margin-top: 132px;
+  max-width: var(--dtdp-max);
+  margin: 95px auto 0;
+  padding: 0 var(--dtdp-pad);
+}
+.dtdp-captain-title {
+  margin: 0 0 38px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #015f74;
+}
+.dtdp-captain-cols {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+}
+.dtdp-captain-left {
+  flex: 0 0 463px;
+  width: 463px;
+  min-height: 203px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+}
+.dtdp-captain-avstack { display: flex; }
+/* Each avatar PNG has its drop shadow baked in, so it overflows the 101px
+   circle exactly as in the design (inset -65% / -71.67% / -78.33%). */
+.dtdp-captain-av {
+  position: relative;
+  width: 101px;
+  height: 101px;
+  flex-shrink: 0;
+}
+.dtdp-captain-av:not(:last-child) { margin-right: -16.833px; }
+.dtdp-captain-av img {
+  position: absolute;
+  top: -65%;
+  right: -71.67%;
+  bottom: -78.33%;
+  left: -71.67%;
+  width: calc(100% + 143.34%);
+  height: calc(100% + 143.33%);
+  max-width: none;
+  display: block;
+}
+.dtdp-captain-desc {
+  margin: 0;
+  font-size: 14px;
+  line-height: 21px;
+  color: #4e4e4e;
+  text-align: justify;
+}
+.dtdp-captain-right {
+  flex: 0 0 591px;
+  width: 591px;
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+}
+.dtdp-captain-bullet { display: flex; align-items: flex-start; gap: 18px; }
+.dtdp-captain-bullet-icon { width: 24px; height: 24px; flex-shrink: 0; }
+.dtdp-captain-bullet-title { margin: 0; font-size: 16px; font-weight: 500; line-height: 19.6px; color: #4e4e4e; }
+.dtdp-captain-bullet-body { margin: 0; font-size: 14px; line-height: 19.6px; color: #4e4e4e; }
+
+/* Booking card body (restored; Figma 10703:20190–20205) */
+.dtdp-book-divider {
+  width: 100%;
+  height: 1px;
+  background: #ededed;
 }
 .dtdp-book-dur {
   display: flex;
@@ -664,8 +685,6 @@
 }
 .dtdp-book-dur img { width: 20px; height: 20px; }
 .dtdp-book-dur span { font-size: 14px; color: #757575; }
-
-/* Repositioned to the bottom of the card — always visible (Figma 6234:17889). */
 .dtdp-book-women {
   display: flex;
   align-items: center;
@@ -677,7 +696,6 @@
 }
 .dtdp-book-women img { width: 13px; height: 13px; }
 .dtdp-book-women span { font-size: 12px; color: #c458fe; white-space: nowrap; }
-
 .dtdp-book-price {
   display: flex;
   align-items: flex-end;
@@ -727,97 +745,11 @@
   box-shadow: var(--cta-shadow), -2px 4px 10px rgba(0, 0, 0, 0.12);
 }
 
-.dtdp-book-departures {
-  display: block;
-  width: 100%;
-  margin-top: 10px;
-  padding: 0;
-  border: none;
-  background: none;
-  color: #01afd1;
-  font-size: 14px;
-  font-weight: 600;
-  text-align: center;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  cursor: pointer;
+/* In-flow tab strip (Figma 10703:19997): #fafafa band, rounded top corners. */
+.dtdp-tabs-wrap:not(.stuck) .dtdp-tabs-bar {
+  padding-top: 12px;
+  background: #fafafa;
+  border-radius: 12px 12px 0 0;
 }
-
-/* ── Meet your trip captain ──────────────────────────────────────────────── */
-.dtdp-captain {
-  max-width: var(--dtdp-max);
-  margin: 60px auto 0;
-  padding: 0 var(--dtdp-pad);
-}
-.dtdp-captain-title {
-  margin: 0 0 24px;
-  font-size: 20px;
-  font-weight: 600;
-  color: #015f74;
-}
-.dtdp-captain-cols {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 48px;
-}
-.dtdp-captain-left {
-  flex: 0 0 460px;
-  width: 460px;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-.dtdp-captain-avstack { display: flex; }
-.dtdp-captain-av {
-  width: 101px;
-  height: 101px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 3px solid #fff;
-}
-.dtdp-captain-av:not(:first-child) { margin-left: -17px; }
-.dtdp-captain-av img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.dtdp-captain-desc {
-  margin: 0;
-  font-size: 14px;
-  line-height: 21px;
-  color: #4e4e4e;
-  text-align: justify;
-}
-.dtdp-captain-right {
-  flex: 1 1 0;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 23px;
-}
-.dtdp-captain-bullet { display: flex; align-items: flex-start; gap: 18px; }
-.dtdp-captain-bullet-icon { width: 24px; height: 24px; flex-shrink: 0; }
-.dtdp-captain-bullet-title { margin: 0 0 2px; font-size: 16px; font-weight: 600; color: #4e4e4e; }
-.dtdp-captain-bullet-body { margin: 0; font-size: 14px; line-height: 19.6px; color: #4e4e4e; }
-
-/* ── FAQs ────────────────────────────────────────────────────────────────── */
-.dtdp-faq {
-  max-width: var(--dtdp-max);
-  margin: 40px auto 0;
-  padding: 0 var(--dtdp-pad);
-}
-.dtdp-faq-head { text-align: center; margin-bottom: 32px; }
-.dtdp-faq-title { margin: 0 0 8px; font-size: 24px; font-weight: 600; color: #3d3d3d; }
-.dtdp-faq-sub { margin: 0; font-size: 16px; color: #757575; }
-
-/* The rows are the mobile accordion (.tdp2-faq-*); only the scale changes here. */
-.dtdp-faq .tdp2-faq-list { padding: 0; }
-.dtdp-faq .tdp2-faq-row { gap: 20px; padding: 16px 24px; }
-.dtdp-faq .tdp2-faq-row.open { padding: 24px; }
-.dtdp-faq .tdp2-faq-item:not(.open) .tdp2-faq-row:hover { background: rgba(117, 117, 117, 0.05); }
-.dtdp-faq .tdp2-faq-num { width: 52px; font-size: 32px; }
-.dtdp-faq .tdp2-faq-q { font-size: 16px; line-height: 24px; }
-.dtdp-faq .tdp2-faq-a { font-size: 15px; line-height: 24px; }
-
-/* ══════════════════════════════════════════════════════════════════════════
-   Reused mobile itinerary blocks (.tdp2-*) — widen for the desktop column.
-   These only apply while nested inside .dtdp so the mobile page is untouched.
-   ══════════════════════════════════════════════════════════════════════════ */
-.dtdp .tdp2-itin-map { width: 100%; height: 100%; }
+/* The shared compare icon is white; tint it to the pill's #757575. */
+.dtdp-pill-icon--tint { filter: brightness(0) saturate(100%) invert(48%); }

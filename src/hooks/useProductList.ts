@@ -22,16 +22,15 @@ export function useProductList(params: ProductListParams, enabled = true, initia
   const [hasMore, setHasMore] = useState(initialData?.hasMore ?? false);
   const [loading, setLoading] = useState(!initialData);
   const requestId = useRef(0);
-  const initialDataConsumed = useRef(false);
+  // Params whose page 1 is already in state. Seeded with the server-rendered
+  // params, so neither the first mount nor React's dev double-effect run
+  // refetches the page the server just sent; any real filter change differs.
+  const loadedKey = useRef<string | null>(initialData ? paramsKey : null);
 
   useEffect(() => {
     if (!enabled) return;
-    if (initialData && !initialDataConsumed.current) {
-      // First mount already has server-provided page 1 for these exact
-      // params — skip the redundant client refetch.
-      initialDataConsumed.current = true;
-      return;
-    }
+    if (loadedKey.current === paramsKey) return;
+    loadedKey.current = paramsKey;
     const id = ++requestId.current;
     setLoading(true);
     getProductList({ ...params, page: 1 }).then((res) => {
