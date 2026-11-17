@@ -20,6 +20,8 @@ export interface ProductListParams {
   to?: string;
   bucketList?: string;
   sort?: SortKey;
+  /** "private" (customised) or "group" (fixed departure); omitted → both. */
+  tripType?: "private" | "group";
 }
 
 export interface ProductListResult {
@@ -129,6 +131,7 @@ function buildQuery(params: ProductListParams): string {
   if (params.to) qs.set("to", params.to);
   if (params.bucketList) qs.set("bucketList", params.bucketList);
   if (params.sort) qs.set("sort", params.sort);
+  if (params.tripType) qs.set("tripType", params.tripType);
   return qs.toString();
 }
 

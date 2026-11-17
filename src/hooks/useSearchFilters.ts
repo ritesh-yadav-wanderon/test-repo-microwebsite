@@ -1,5 +1,6 @@
 import { useAppNav } from "@/hooks/useAppNav";
 import { useAppSearchParams } from "@/hooks/useAppSearchParams";
+import { useTripMode } from "@/context/TripModeContext";
 import { fmtDate, fmtMonthLabel, withoutParams, withoutParamValue } from "@/utils/searchResults";
 
 export interface FilterChip {
@@ -19,6 +20,7 @@ export interface FilterChip {
 export function useSearchFilters() {
   const nav = useAppNav();
   const searchParams = useAppSearchParams();
+  const tripMode = useTripMode();
 
   const destination = searchParams.get("destination") ?? "";
   const dateFrom = searchParams.get("from") ?? "";
@@ -50,12 +52,17 @@ export function useSearchFilters() {
     nav.push(`/search?${withoutParamValue(searchParams, key, value)}`);
   }
 
-  const hasActiveFilters = !!(
+  const hasActiveFilters = tripMode.isPrivate || !!(
     destination || monthsParam || (!monthsParam && (dateFrom || dateTo)) ||
     category || planningWith || addons || fromCity || accommodation || bucketList
   );
 
   const chips: FilterChip[] = [];
+  // Private-trip mode shows only customised trips; removing this chip leaves
+  // the mode and the results switch to group trips.
+  if (tripMode.isPrivate) {
+    chips.push({ key: "private", label: "Private trips", onRemove: () => tripMode.setPrivate(false) });
+  }
   if (destination) chips.push({ key: "dest", label: destination, onRemove: () => removeParam("destination") });
   if (monthsParam) {
     selMonths.forEach((ym) =>

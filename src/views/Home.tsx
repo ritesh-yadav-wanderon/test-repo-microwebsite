@@ -14,6 +14,7 @@ import BottomNav from "@/components/BottomNav";
 import { useProductList } from "@/hooks/useProductList";
 import DesktopHome from "@/components/desktop/DesktopHome";
 import { useIsDesktop } from "@/hooks/useIsDesktop";
+import { useTripMode } from "@/context/TripModeContext";
 import "./Home.css";
 
 export interface HomeViewProps {
@@ -29,6 +30,8 @@ export interface HomeViewProps {
  *  fetches `trips` server-side instead of via useProductList. */
 export function HomeView({ trips, loading, source, isDesktop }: HomeViewProps) {
   const [activeCategory, setActiveCategory] = useState(0);
+  // Private-trip mode: no category tabs, trips section is "Top picked choices".
+  const { isPrivate } = useTripMode();
 
   if (isDesktop) {
     return <DesktopHome trips={trips} loading={loading} source={source} />;
@@ -39,8 +42,14 @@ export function HomeView({ trips, loading, source, isDesktop }: HomeViewProps) {
       <HeroSection
         onSearchClick={() => window.dispatchEvent(new CustomEvent("wanderon:open-search"))}
       />
-      <DestinationStrip activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
-      <UpcomingTrips trips={trips} loading={loading} source={source} activeCategory={activeCategory} />
+      <DestinationStrip activeCategory={activeCategory} onCategoryChange={setActiveCategory} hideCategories={isPrivate} />
+      <UpcomingTrips
+        trips={trips}
+        loading={loading}
+        source={source}
+        activeCategory={isPrivate ? 0 : activeCategory}
+        title={isPrivate ? "Top picked choices" : undefined}
+      />
       <OriginalsSection />
       <TribeStories />
       <PlotBanner />

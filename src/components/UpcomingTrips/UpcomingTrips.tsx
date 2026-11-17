@@ -12,11 +12,13 @@ export interface UpcomingTripsProps {
   loading: boolean;
   source: ApiSource | null;
   activeCategory: number;
+  /** Section heading — "Top picked choices" in private-trip mode. */
+  title?: string;
 }
 
 const CATEGORY_NAMES = ["All Trips","Adventure","Luxury","Culture","Festival","Wellness","Weekend"];
 
-function UpcomingTrips({ trips, loading, source: _source, activeCategory }: UpcomingTripsProps) {
+function UpcomingTrips({ trips, loading, source: _source, activeCategory, title = "Upcoming Group trips" }: UpcomingTripsProps) {
   const nav = useAppNav();
   const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
 
@@ -36,7 +38,7 @@ function UpcomingTrips({ trips, loading, source: _source, activeCategory }: Upco
     <section className="up">
       <div className="up-header">
         <div className="up-header-row">
-          <p className="up-title">Upcoming Group trips</p>
+          <p className="up-title">{title}</p>
           <button className="up-header-arrow" type="button" aria-label="View all upcoming trips">
             <img src="/figma/trips/arrow-right.svg" width={16} height={16} alt="" aria-hidden loading="lazy" />
           </button>

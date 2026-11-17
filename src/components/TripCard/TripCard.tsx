@@ -7,6 +7,7 @@ import HeartIcon from "@/components/ui/HeartIcon";
 import "./TripCard.css";
 import CtaButton from "@/components/ui/CtaButton";
 import { tripHref } from "@/utils/tripUrl";
+import { isPrivateTrip, PRIVATE_DATES_LABEL } from "@/utils/tripType";
 
 function fmtDate(d: string): string {
   const dt = new Date(d);
@@ -116,6 +117,7 @@ function TripCard({ trip, onSeeAllDates, eager, showFeatures = true }: TripCardP
   // Strike price is not part of the API response yet — static per design.
   const strikeDisplay = STATIC_STRIKE;
 
+  const isPrivate = isPrivateTrip(trip);
   const goToTrip = () => nav.push(tripHref(trip));
 
   return (
@@ -172,13 +174,20 @@ function TripCard({ trip, onSeeAllDates, eager, showFeatures = true }: TripCardP
               </span>
               <span className="tc-meta-dur">{durationLabel}</span>
               <span className="tc-meta-dot" aria-hidden />
-              <button className="tc-meta-dates" type="button" onClick={() => onSeeAllDates?.(trip)}>
-                {datesLine}
-              </button>
+              {isPrivate ? (
+                <span className="tc-meta-dates">{PRIVATE_DATES_LABEL}</span>
+              ) : (
+                <button className="tc-meta-dates" type="button" onClick={() => onSeeAllDates?.(trip)}>
+                  {datesLine}
+                </button>
+              )}
             </div>
-            <button className="tc-see-all" type="button" onClick={() => onSeeAllDates?.(trip)}>
-              See All Departures
-            </button>
+            {/* Private trips have no departures to list. */}
+            {!isPrivate && (
+              <button className="tc-see-all" type="button" onClick={() => onSeeAllDates?.(trip)}>
+                See All Departures
+              </button>
+            )}
           </div>
 
           <div className="tc-route">{route}</div>

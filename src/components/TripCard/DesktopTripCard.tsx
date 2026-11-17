@@ -5,6 +5,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import { IMAGE_WIDTHS, sizedImageUrl } from "@/repositories";
 import HeartIcon from "@/components/ui/HeartIcon";
 import { tripHref } from "@/utils/tripUrl";
+import { isPrivateTrip, PRIVATE_DATES_LABEL } from "@/utils/tripType";
 
 const T = "/figma/trips";
 
@@ -67,7 +68,12 @@ const DesktopTripCard = memo(function DesktopTripCard({ trip, onMoreDates }: Des
           {trip.duration.nights}N/{trip.duration.days}D
         </p>
       )}
-      {shown && (
+      {isPrivateTrip(trip) ? (
+        <p className="dtrips__duration">
+          <img loading="lazy" src="/figma/compare/v2/icon-calendar.svg" alt="" />
+          {PRIVATE_DATES_LABEL}
+        </p>
+      ) : shown && (
         <p className="dtrips__dates">
           <span className="dtrips__dates-list">
             {shown}

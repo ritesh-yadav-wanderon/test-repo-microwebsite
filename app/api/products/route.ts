@@ -26,6 +26,7 @@ export async function GET(request: Request) {
       to: q("to"),
       bucketList: q("bucketList"),
       sort: q("sort"),
+      tripType: q("tripType"),
     });
 
     // No HTTP-level caching — see api/products.ts for why (a browser

@@ -7,6 +7,7 @@ import { useProductList } from "@/hooks/useProductList";
 import { useAppNav } from "@/hooks/useAppNav";
 import { useAppSearchParams } from "@/hooks/useAppSearchParams";
 import { useSearchFilters } from "@/hooks/useSearchFilters";
+import { useTripTypeParam } from "@/context/TripModeContext";
 import { tripHref } from "@/utils/tripUrl";
 import TripCard from "@/components/TripCard";
 import DesktopFilterSheet from "./DesktopFilterSheet";
@@ -38,10 +39,9 @@ export default function DesktopSearchResults({ initialData }: DesktopSearchResul
   const [batchesTrip, setBatchesTrip] = useState<Trip | null>(null);
   const [showFeatures, setShowFeatures] = useState(true);
 
-  // "private-trips" is a client-only routing marker (the bottom nav's
-  // Private trips tab) — the real product API's category taxonomy doesn't
-  // recognize it, so forwarding it would always return zero results.
-  // Private trips shows the full, unfiltered trip list instead.
+  // Private vs group trips comes from the trip mode (TripModeContext), not
+  // the URL. A legacy "private-trips" category is ignored.
+  const tripType = useTripTypeParam();
   const rawCategory = searchParams.get("category") ?? undefined;
   const apiCategory = rawCategory === "private-trips" ? undefined : rawCategory;
 
@@ -49,6 +49,7 @@ export default function DesktopSearchResults({ initialData }: DesktopSearchResul
     {
       destination: searchParams.get("destination") ?? undefined,
       category: apiCategory,
+      tripType,
       months: searchParams.get("months") ?? undefined,
       from: searchParams.get("from") ?? undefined,
       to: searchParams.get("to") ?? undefined,

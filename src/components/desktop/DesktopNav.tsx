@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAppNav } from "@/hooks/useAppNav";
+import { useTripMode } from "@/context/TripModeContext";
 import { useAuth } from "@/context/AuthContext";
 import { openLoginSheet } from "@/utils/login";
 import { getScrollTop, onAppScroll } from "@/utils/scroll";
@@ -98,6 +99,7 @@ interface DesktopNavProps {
  *  Transparent over the hero on load; fills white once the page scrolls or
  *  the destinations dropdown opens (black blur instead when `dark`). */
 export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = false, dark = false }: DesktopNavProps) {
+  const { isPrivate, setPrivate } = useTripMode();
   const nav = useAppNav();
   const { isLoggedIn, logout } = useAuth();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -153,6 +155,17 @@ export default function DesktopNav({ alwaysShowSearch = false, alwaysSolid = fal
           <img src={`${BASE}/${lightAssets ? "nav-logo.png" : "nav-logo-color.png"}`} alt="WanderOn" />
         </button>
         <div className="dnav__right">
+          {/* Trip-mode switch: "Private trips" enters private mode; in private
+              mode it reads "Group trips" and switches back. */}
+          <button
+            className="dnav__link"
+            onClick={() => {
+              setPrivate(!isPrivate);
+              nav.push("/");
+            }}
+          >
+            {isPrivate ? "Group trips" : "Private trips"}
+          </button>
           <button className="dnav__link" onClick={() => nav.push("/search")}>
             MICE
           </button>

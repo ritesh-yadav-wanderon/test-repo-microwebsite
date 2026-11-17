@@ -1,5 +1,6 @@
 import { useSyncExternalStore, type MouseEvent, type ReactNode } from "react";
 import { useAppNav } from "@/hooks/useAppNav";
+import { useTripMode } from "@/context/TripModeContext";
 import "./BottomNav.css";
 
 interface BottomNavProps {
@@ -40,19 +41,24 @@ const subscribeNoop = () => () => {};
  *  styling and client-side navigation, routed through useAppNav() so this
  *  works identically under Next.js (no <BrowserRouter> ancestor there). */
 function NavItem({
-  to, end, className, ariaLabel, children,
+  to, end, className, ariaLabel, children, isActive, onNavigate,
 }: {
   to: string; end?: boolean; className: string; ariaLabel: string; children: ReactNode;
+  /** Overrides the path-based active match (trip-mode tabs share "/"). */
+  isActive?: boolean;
+  /** Runs before navigating (e.g. switching trip mode). */
+  onNavigate?: () => void;
 }) {
   const nav = useAppNav();
   // Server snapshot is null (no window.location) so the first client render
   // matches the SSR markup; the query-param match applies right after hydration.
   const search = useSyncExternalStore(subscribeNoop, () => window.location.search, () => null);
-  const active = isActivePath(nav.pathname, search, to, end);
+  const active = isActive ?? isActivePath(nav.pathname, search, to, end);
 
   function handleClick(e: MouseEvent<HTMLAnchorElement>) {
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
     e.preventDefault();
+    onNavigate?.();
     nav.push(to);
   }
 
@@ -75,6 +81,10 @@ function NavItem({
 export default function BottomNav({ variant = "light" }: BottomNavProps) {
   const dark = variant === "dark";
   const P = "/figma/nav2/";
+  const nav = useAppNav();
+  const { isPrivate, setPrivate } = useTripMode();
+  // Private and Group trips both open the home page, in their own trip mode.
+  const onHome = nav.pathname === "/";
 
   return (
     <nav className={`bottom-nav${dark ? " bottom-nav--dark" : ""}`} aria-label="Primary">
@@ -90,21 +100,39 @@ export default function BottomNav({ variant = "light" }: BottomNavProps) {
 
       <div className={`bn-pill${dark ? " bn-pill--dark" : ""}`}>
 
-        <NavItem to="/search?category=private-trips" className="bn-item" ariaLabel="Private trips">
+        <NavItem
+          to="/"
+          className="bn-item"
+          ariaLabel="Private trips"
+          isActive={onHome && isPrivate}
+          onNavigate={() => setPrivate(true)}
+        >
           <span className="bn-ico">
             <img src={`${P}icon-private-trips.svg`} width={20} height={20} alt="" aria-hidden loading="eager" />
           </span>
           <span className="bn-label">Private trips</span>
         </NavItem>
 
-        <NavItem to="/search?category=weekend-trips" className="bn-item bn-item--weekend" ariaLabel="Weekend trips">
+        <NavItem
+          to="/search?category=weekend-trips"
+          className="bn-item bn-item--weekend"
+          ariaLabel="Weekend trips"
+          onNavigate={() => setPrivate(false)}
+        >
           <span className="bn-ico">
             <img src={`${P}icon-weekend-trips.svg`} width={20} height={20} alt="" aria-hidden loading="eager" />
           </span>
           <span className="bn-label">Weekend trips</span>
         </NavItem>
 
-        <NavItem to="/" end className="bn-item" ariaLabel="Group trips">
+        <NavItem
+          to="/"
+          end
+          className="bn-item"
+          ariaLabel="Group trips"
+          isActive={onHome && !isPrivate}
+          onNavigate={() => setPrivate(false)}
+        >
           <span className="bn-ico">
             <img src={`${P}icon-group-trips.svg`} width={20} height={20} alt="" aria-hidden loading="eager" />
           </span>

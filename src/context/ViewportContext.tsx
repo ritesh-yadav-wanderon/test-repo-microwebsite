@@ -2,9 +2,8 @@
 
 import { createContext, useContext, useEffect } from "react";
 
-/** Cookie remembering the last real viewport ("d" desktop / "m" mobile), so
- *  the server can render the right layout on the next request. */
-export const VIEWPORT_COOKIE = "wo_vp";
+import { VIEWPORT_COOKIE } from "@/utils/cookies";
+
 export const DESKTOP_QUERY = "(min-width: 1024px)";
 
 const ViewportHintContext = createContext(false);

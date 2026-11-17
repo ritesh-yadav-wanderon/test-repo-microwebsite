@@ -207,6 +207,17 @@ describe("filterSortPaginate — URL slug categories and destination matching", 
     expect(ids({ category: "romantic-escapes" })).toEqual(["adv"]);
   });
 
+  it("filters by trip type: private → Customised, group → Fixed Departure", () => {
+    const mixed = [
+      makeProduct({ productId: "fixed", packageType: "Fixed Departure" }),
+      makeProduct({ productId: "custom", packageType: "Customised" }),
+    ];
+    const typeIds = (tripType?: string) => filterSortPaginate(mixed, { tripType }).items.map((d) => d.productId);
+    expect(typeIds("private")).toEqual(["custom"]);
+    expect(typeIds("group")).toEqual(["fixed"]);
+    expect(typeIds(undefined)).toHaveLength(2);
+  });
+
   it("ignores unknown category markers instead of returning zero trips", () => {
     expect(ids({ category: "private-trips" })).toHaveLength(all.length);
   });

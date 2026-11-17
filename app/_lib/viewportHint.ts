@@ -1,5 +1,5 @@
 import { cookies, headers } from "next/headers";
-import { VIEWPORT_COOKIE } from "../../src/context/ViewportContext";
+import { VIEWPORT_COOKIE } from "../../src/utils/cookies";
 
 /** Server guess of whether this request will render the desktop layout.
  *  1. the `wo_vp` cookie written by the client from the real viewport;

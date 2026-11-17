@@ -6,6 +6,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import { IMAGE_WIDTHS, sizedImageUrl } from "@/repositories";
 import HeartIcon from "@/components/ui/HeartIcon";
 import { tripHref } from "@/utils/tripUrl";
+import { isPrivateTrip, PRIVATE_DATES_LABEL } from "@/utils/tripType";
 import "./UpcomingTrips.css";
 import "./TripCardItem.css";
 
@@ -86,7 +87,12 @@ export const TripCardItem = memo(function TripCardItem({ trip, batchesText, href
             <span>{dur}</span>
           </div>
         )}
-        {parts.dates && (
+        {isPrivateTrip(trip) ? (
+          <div className="tdp2-more-cv2-dur tdp2-more-cv2-private">
+            <img loading="lazy" src="/figma/compare/v2/icon-calendar.svg" width={12} height={12} alt="" aria-hidden />
+            <span>{PRIVATE_DATES_LABEL}</span>
+          </div>
+        ) : parts.dates && (
           <div className="tdp2-more-cv2-batches">
             <span className="tdp2-more-cv2-dates">{parts.dates}</span>
             {parts.more && (

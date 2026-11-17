@@ -5,6 +5,8 @@ import AppProviders from "./AppProviders";
 import SiteChromeClient from "./SiteChromeClient";
 import { ViewportProvider } from "../src/context/ViewportContext";
 import { getViewportHint } from "./_lib/viewportHint";
+import { TripModeProvider } from "../src/context/TripModeContext";
+import { getIsPrivateMode } from "./_lib/tripMode";
 
 export const metadata: Metadata = {
   title: "WanderOn — Travel Community",
@@ -22,6 +24,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   // Server guess of desktop vs mobile, so the first paint uses the right
   // layout instead of flashing mobile before hydration swaps to desktop.
   const isDesktop = await getViewportHint();
+  const isPrivate = await getIsPrivateMode();
 
   return (
     <html lang="en">
@@ -44,12 +47,14 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body>
         <div className="app-shell">
           <ViewportProvider isDesktop={isDesktop}>
+          <TripModeProvider initialPrivate={isPrivate}>
             <AppProviders>
               <NextNavProvider>
                 <SiteChromeClient />
                 {children}
               </NextNavProvider>
             </AppProviders>
+          </TripModeProvider>
           </ViewportProvider>
         </div>
       </body>

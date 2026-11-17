@@ -173,6 +173,9 @@ export interface ProductListQuery {
   to?: string | null;
   bucketList?: string | null;
   sort?: string | null;
+  /** "private" → customised trips only, "group" → fixed departures only,
+   *  absent → both. */
+  tripType?: string | null;
 }
 
 export interface ProductListResult {
@@ -181,6 +184,12 @@ export interface ProductListResult {
   pageSize: number;
   total: number;
   hasMore: boolean;
+}
+
+/** Private trips are stored as `packageType: "Customised"`; group trips as
+ *  "Fixed Departure". */
+export function isCustomisedDoc(doc: ProductDoc): boolean {
+  return typeof doc.packageType === "string" && /custom/i.test(doc.packageType);
 }
 
 /** Apply the listing page's filters, sort, and 6-per-page pagination in memory. */
@@ -194,6 +203,11 @@ export function filterSortPaginate(all: ProductDoc[], query: ProductListQuery): 
   const page = Math.max(1, Number(query.page) || 1);
 
   let filtered = all.filter((doc) => doc.visibility !== false);
+
+  if (query.tripType === "private" || query.tripType === "group") {
+    const wantPrivate = query.tripType === "private";
+    filtered = filtered.filter((doc) => isCustomisedDoc(doc) === wantPrivate);
+  }
 
   if (destinations.length) {
     filtered = filtered.filter((doc) => {

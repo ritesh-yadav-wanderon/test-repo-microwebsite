@@ -12,6 +12,7 @@ import DesktopOriginals from "./DesktopOriginals";
 import DesktopQuery from "./DesktopQuery";
 import EndMark from "@/components/ui/EndMark";
 import DesktopFooter from "./DesktopFooter";
+import { useTripMode } from "@/context/TripModeContext";
 import "./DesktopHome.css";
 
 interface Props {
@@ -24,14 +25,16 @@ interface Props {
  *  instead of the mobile tree; the mobile layout is untouched. */
 export default function DesktopHome({ trips, loading }: Props) {
   const [category, setCategory] = useState(1);
+  // Private-trip mode: no category tabs, trips section is "Top picked choices".
+  const { isPrivate } = useTripMode();
 
   return (
     <div className="dhome">
       <DesktopNav />
       <DesktopHero />
-      <DesktopCategoryTabs active={category} onChange={setCategory} />
+      {!isPrivate && <DesktopCategoryTabs active={category} onChange={setCategory} />}
       <DesktopDestinations />
-      <DesktopTrips trips={trips} loading={loading} />
+      <DesktopTrips trips={trips} loading={loading} title={isPrivate ? "Top picked choices" : undefined} />
       <DesktopWhyChooseUs />
       <DesktopOriginals />
       <DesktopPlot />

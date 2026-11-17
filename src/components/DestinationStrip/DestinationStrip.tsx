@@ -50,9 +50,11 @@ function DestItem({ dest }: { dest: MonumentDestination }) {
 interface Props {
   activeCategory: number;
   onCategoryChange: (idx: number) => void;
+  /** Hide the category tab bar (private-trip mode). */
+  hideCategories?: boolean;
 }
 
-export default function DestinationStrip({ activeCategory, onCategoryChange }: Props) {
+export default function DestinationStrip({ activeCategory, onCategoryChange, hideCategories = false }: Props) {
   const nav = useAppNav();
   const sentinelRef = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLElement>(null);
@@ -83,7 +85,7 @@ export default function DestinationStrip({ activeCategory, onCategoryChange }: P
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
-  }, []);
+  }, [hideCategories]);
 
   // Measure the tab bar height so we can reserve its space when it goes fixed.
   useEffect(() => {
@@ -91,11 +93,14 @@ export default function DestinationStrip({ activeCategory, onCategoryChange }: P
     measure();
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
-  }, []);
+  }, [hideCategories]);
 
   return (
     <>
     <div className="dest-section">
+      {/* Private-trip mode has no trip categories (themes). */}
+      {!hideCategories && (
+      <>
       <div ref={sentinelRef} className="dest-cats-sentinel" />
       {/* Category tabs — fixed once scrolled so they stay pinned for the whole page */}
       <nav ref={navRef} className={`dest-cats${stuck ? " dest-cats--stuck" : ""}`} aria-label="Trip categories">
@@ -129,6 +134,8 @@ export default function DestinationStrip({ activeCategory, onCategoryChange }: P
       </nav>
       {/* Reserve the tab bar's space once it's lifted into a fixed position. */}
       {stuck && <div className="dest-cats-spacer" style={{ height: navH }} aria-hidden />}
+      </>
+      )}
 
       {/* Domestic */}
       <div className="dest-block">
