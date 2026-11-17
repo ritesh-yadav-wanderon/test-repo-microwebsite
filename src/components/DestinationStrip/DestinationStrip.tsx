@@ -97,7 +97,7 @@ export default function DestinationStrip({ activeCategory, onCategoryChange, hid
 
   return (
     <>
-    <div className="dest-section">
+    <div className={`dest-section${hideCategories ? " dest-section--no-cats" : ""}`}>
       {/* Private-trip mode has no trip categories (themes). */}
       {!hideCategories && (
       <>

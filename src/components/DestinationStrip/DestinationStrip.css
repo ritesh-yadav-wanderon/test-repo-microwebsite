@@ -14,6 +14,11 @@
   z-index: 3;
 }
 
+/* Private-trip mode: no category tabs, so Domestic Destinations sits 20px below the top. */
+.dest-section--no-cats {
+  padding-top: 20px;
+}
+
 /* ── Category tabs — Figma 5532:6013 ── */
 .dest-cats {
   display: flex;
